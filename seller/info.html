@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Seller Profile & Info - rorraxy Ecosystem</title>
+    
+    <script src="/ecosystem-core.js"></script>
+   
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-retail: #000000;
+            --card-retail: #08080c;
+            --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
+            --gold-solid: #d4af37;
+            --text-white: #ffffff;
+            --text-gray: #a0a0ab;
+            --font-main: 'Poppins', sans-serif;
+            --required-red: #ff4d4d;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        html, body { width: 100%; overflow-x: hidden; background: var(--bg-retail) !important; color: var(--text-white); font-family: var(--font-main); min-height: 100vh; font-size: 14px; }
+        body { padding: 24px 16px 90px 16px; text-transform: uppercase; }
+
+        .main-container { width: 100%; max-width: 900px; margin: 0 auto; }
+        .dashboard-header { text-align: center; margin-bottom: 25px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+        .header-logo-img { width: 90px; height: 90px; object-fit: contain; filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.6)); }
+        .dashboard-header h1 { font-size: 1.5rem; font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .info-card, .profile-summary-card { background: var(--card-retail); border-radius: 18px; padding: 24px 20px; margin-bottom: 25px; border: 1px solid rgba(212, 175, 55, 0.15); }
+        .info-card.hidden { display: none; }
+        .profile-summary-card { display: none; }
+
+        .section-title { font-size: 0.85rem; font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(212, 175, 55, 0.15); padding-bottom: 8px; }
+
+        .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 20px; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .form-group.full-width { grid-column: span 2; }
+        .form-group label { font-size: 0.72rem; font-weight: 700; color: var(--text-gray); display: flex; justify-content: space-between; }
+        .char-counter { font-size: 0.62rem; color: var(--text-gray); text-transform: none; }
+        .req-star { color: var(--required-red); margin-left: 3px; }
+
+        .form-control, .form-select, textarea.form-control { width: 100%; background: #040407; border: none; border-radius: 12px; padding: 12px 16px; color: var(--text-white); font-size: 0.8rem; outline: none; font-family: var(--font-main); text-transform: none; }
+        .form-select option { background: #08080c; color: #fff; }
+
+        .avatar-upload-container { display: flex; align-items: center; gap: 16px; background: #040407; padding: 14px 16px; border-radius: 12px; margin-bottom: 20px; }
+        .avatar-preview { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid var(--gold-solid); }
+        .avatar-upload-lbl { background: rgba(212, 175, 55, 0.1); border: 1px solid rgba(212, 175, 55, 0.4); padding: 8px 14px; border-radius: 10px; color: var(--gold-solid); font-size: 0.72rem; font-weight: 700; cursor: pointer; }
+        .file-input-hidden { display: none; }
+
+        .save-btn, .edit-profile-btn { width: 100%; background: var(--gold-gradient); border: none; border-radius: 14px; padding: 14px; color: #000; font-weight: 800; font-size: 0.85rem; cursor: pointer; text-transform: uppercase; }
+
+        .summary-brand-box { display: flex; align-items: center; gap: 16px; margin-bottom: 18px; background: #040407; padding: 16px; border-radius: 14px; }
+        .summary-avatar { width: 65px; height: 65px; border-radius: 50%; object-fit: cover; border: 2px solid var(--gold-solid); }
+        .summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 20px; }
+        .summary-item { background: #040407; padding: 12px 14px; border-radius: 12px; display: flex; flex-direction: column; gap: 4px; }
+        .summary-item.full-width { grid-column: span 2; }
+        .summary-item label { font-size: 0.62rem; color: var(--gold-solid); font-weight: 700; }
+        .summary-item span { font-size: 0.78rem; color: var(--text-white); text-transform: none; word-break: break-all; }
+
+        .seller-bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(3, 3, 5, 0.95); border-top: 1px solid rgba(212, 175, 55, 0.15); display: flex; justify-content: space-around; align-items: center; padding: 12px 6px; z-index: 1000; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; background: none; border: none; cursor: pointer; }
+        .nav-item.active i, .nav-item.active span { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .nav-item i { font-size: 1.25rem; margin-bottom: 4px; color: var(--text-gray); }
+        .nav-item span { font-size: 0.62rem; font-weight: 700; color: var(--text-gray); }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        <header class="dashboard-header">
+            <img src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png" alt="Logo" class="header-logo-img">
+            <h1>SELLER PROFILE & INFO</h1>
+        </header>
+
+        <section class="info-card" id="infoFormCard">
+            <form id="sellerInfoForm">
+                <div class="section-title"><i class="fa-solid fa-store"></i><span>BRAND & BUSINESS DETAILS</span></div>
+                <div class="form-grid">
+                    <div class="form-group"><label>BRAND NAME<span class="req-star">*</span></label><input type="text" class="form-control" id="brandName" placeholder="rorraxy store" required></div>
+                    <div class="form-group"><label>FULL NAME<span class="req-star">*</span></label><input type="text" class="form-control" id="fullName" placeholder="Owner full name..." required></div>
+                    <div class="form-group full-width">
+                        <label><span>BUSINESS DESCRIPTION<span class="req-star">*</span></span><span class="char-counter" id="charCount">0/200</span></label>
+                        <textarea class="form-control" id="businessDesc" rows="3" maxlength="200" placeholder="Briefly describe products..." required></textarea>
+                    </div>
+                    <div class="form-group"><label>EMAIL<span class="req-star">*</span></label><input type="email" class="form-control" id="emailAddr" placeholder="name@gmail.com..." required></div>
+                    <div class="form-group"><label>WHATSAPP<span class="req-star">*</span></label><input type="tel" class="form-control" id="whatsappNum" placeholder="+8801700000000" required></div>
+                    <div class="form-group"><label>PHONE<span class="req-star">*</span></label><input type="tel" class="form-control" id="phoneNum" placeholder="+8801800000000" required></div>
+                    <div class="form-group"><label>COUNTRY<span class="req-star">*</span></label><input type="text" class="form-control" id="detectedCountry" readonly></div>
+                    <div class="form-group full-width"><label>ADDRESS<span class="req-star">*</span></label><input type="text" class="form-control" id="fullAddress" placeholder="District, Postal Code..." required></div>
+                </div>
+
+                <div class="section-title"><i class="fa-solid id-card"></i><span>IDENTITY VERIFICATION</span></div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>DOCUMENT TYPE<span class="req-star">*</span></label>
+                        <select class="form-select" id="docTypeSelect" required>
+                            <option value="NID">National ID (NID)</option>
+                            <option value="BirthCert">Birth Certificate</option>
+                            <option value="TradeLicense">Trade License</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="docNumGroup">
+                        <label id="docNumLabel">NID NUMBER<span class="req-star">*</span></label>
+                        <input type="text" class="form-control" id="docNumberInput" placeholder="Enter NID..." required>
+                    </div>
+                </div>
+
+                <div class="section-title"><i class="fa-solid fa-wallet"></i><span>DEFAULT PAYOUT SETUP</span></div>
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label>PREFERRED METHOD<span class="req-star">*</span></label>
+                        <select class="form-select" id="defaultPayMethod" required>
+                            <option value="bKash">bKash</option>
+                            <option value="Nagad">Nagad</option>
+                            <option value="Bank">Bank Transfer</option>
+                            <option value="Payoneer">Payoneer</option>
+                        </select>
+                    </div>
+                    <div class="form-grid full-width" id="payDetailsGrid" style="margin-bottom: 0;">
+                        <div class="form-group full-width"><label>BKASH NUMBER<span class="req-star">*</span></label><input type="text" class="form-control" id="bkashNumInput" placeholder="11-digit bKash number..." required></div>
+                    </div>
+                </div>
+
+                <div class="section-title"><i class="fa-solid fa-image"></i><span>BRAND LOGO<span class="req-star">*</span></span></div>
+                <div class="avatar-upload-container">
+                    <img src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png" alt="Logo" class="avatar-preview" id="avatarPreview">
+                    <div class="avatar-upload-info">
+                        <label for="profilePhotoInput" class="avatar-upload-lbl"><i class="fa-solid fa-upload"></i> UPLOAD LOGO</label>
+                        <input type="file" id="profilePhotoInput" class="file-input-hidden" accept="image/*">
+                    </div>
+                </div>
+
+                <button type="submit" class="save-btn">SAVE & COMPLETE SELLER INFO</button>
+            </form>
+        </section>
+
+        <section class="profile-summary-card" id="profileSummaryCard">
+            <div class="section-title">VERIFIED SELLER PROFILE <span style="color:#4ade80; margin-left:auto;">ACTIVE</span></div>
+            <div class="summary-brand-box">
+                <img src="" alt="Logo" class="summary-avatar" id="sumAvatar">
+                <div class="summary-brand-info">
+                    <h3 id="sumBrandName" style="background:var(--gold-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;"></h3>
+                    <p id="sumDesc" style="color:var(--text-gray); font-size:0.75rem; text-transform:none;"></p>
+                </div>
+            </div>
+            <div class="summary-grid">
+                <div class="summary-item"><label>OWNER</label><span id="sumFullName"></span></div>
+                <div class="summary-item"><label>EMAIL</label><span id="sumEmail"></span></div>
+                <div class="summary-item"><label>WHATSAPP</label><span id="sumWhatsapp"></span></div>
+                <div class="summary-item"><label>PHONE</label><span id="sumPhone"></span></div>
+                <div class="summary-item"><label>COUNTRY</label><span id="sumCountry"></span></div>
+                <div class="summary-item"><label>DOC</label><span id="sumDoc"></span></div>
+                <div class="summary-item full-width"><label>ADDRESS</label><span id="sumAddress"></span></div>
+                <div class="summary-item full-width"><label>PAYOUT</label><span id="sumPayout"></span></div>
+            </div>
+            <button type="button" class="edit-profile-btn" id="editProfileBtn"><i class="fa-solid fa-pen-to-square"></i> EDIT SELLER INFO</button>
+        </section>
+    </div>
+
+    <nav class="seller-bottom-nav">
+        <a href="list.html" class="nav-item"><i class="fa-solid fa-list-check"></i><span>LIST</span></a>
+        <a href="payout.html" class="nav-item"><i class="fa-solid fa-hand-holding-dollar"></i><span>PAYOUT</span></a>
+        <button type="button" class="nav-item" onclick="location.href='dashboard.html'"><i class="fa-solid fa-house"></i><span>HOME</span></button>
+        <a href="shipment.html" class="nav-item"><i class="fa-solid fa-truck-fast"></i><span>SHIPMENT</span></a>
+        <a href="info.html" class="nav-item active"><i class="fa-solid fa-user"></i><span>INFO</span></a>
+    </nav>
+
+    <script>
+        const API_BASE_URL = 'https://s.rorraxybd.workers.dev';
+        const businessDesc = document.getElementById('businessDesc');
+        const charCount = document.getElementById('charCount');
+        businessDesc.addEventListener('input', () => { charCount.innerText = `${businessDesc.value.length}/200`; });
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const countryInput = document.getElementById('detectedCountry');
+            countryInput.value = "🇧🇩 Bangladesh";
+
+            let savedData = JSON.parse(localStorage.getItem('rorraxy_seller_profile') || 'null');
+            if (savedData) renderSummaryCard(savedData);
+        });
+
+        let compressedAvatarData = "https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png";
+        document.getElementById('profilePhotoInput').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 300; canvas.height = 300;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, 300, 300);
+                    compressedAvatarData = canvas.toDataURL('image/webp', 0.85);
+                    document.getElementById('avatarPreview').src = compressedAvatarData;
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        document.getElementById('sellerInfoForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const profileData = {
+                brandName: document.getElementById('brandName').value,
+                fullName: document.getElementById('fullName').value,
+                businessDesc: businessDesc.value,
+                email: document.getElementById('emailAddr').value,
+                whatsapp: document.getElementById('whatsappNum').value,
+                phone: document.getElementById('phoneNum').value,
+                address: document.getElementById('fullAddress').value,
+                country: document.getElementById('detectedCountry').value,
+                docType: document.getElementById('docTypeSelect').value,
+                docNum: document.getElementById('docNumberInput').value,
+                payout: document.getElementById('defaultPayMethod').value,
+                logo: compressedAvatarData
+            };
+
+            localStorage.setItem('rorraxy_seller_profile', JSON.stringify(profileData));
+            renderSummaryCard(profileData);
+            alert('SELLER INFO SAVED SUCCESSFULLY!');
+        });
+
+        function renderSummaryCard(data) {
+            document.getElementById('sumBrandName').innerText = data.brandName;
+            document.getElementById('sumDesc').innerText = data.businessDesc;
+            document.getElementById('sumFullName').innerText = data.fullName;
+            document.getElementById('sumEmail').innerText = data.email;
+            document.getElementById('sumWhatsapp').innerText = data.whatsapp;
+            document.getElementById('sumPhone').innerText = data.phone;
+            document.getElementById('sumAddress').innerText = data.address;
+            document.getElementById('sumCountry').innerText = data.country;
+            document.getElementById('sumDoc').innerText = `${data.docType}: ${data.docNum}`;
+            document.getElementById('sumPayout').innerText = data.payout;
+            document.getElementById('sumAvatar').src = data.logo;
+
+            document.getElementById('infoFormCard').classList.add('hidden');
+            document.getElementById('profileSummaryCard').style.display = 'block';
+        }
+
+        document.getElementById('editProfileBtn').addEventListener('click', () => {
+            document.getElementById('profileSummaryCard').style.display = 'none';
+            document.getElementById('infoFormCard').classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>
