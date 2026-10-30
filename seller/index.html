@@ -75,7 +75,7 @@
             border: 1px solid rgba(212, 175, 55, 0.15); 
             transition: transform 0.3s ease;
             width: 100%;
-            min-width: 0; /* Ensures grid items don't overflow */
+            min-width: 0;
         }
 
         .stat-card:hover { transform: translateY(-4px); border-color: rgba(212, 175, 55, 0.4); }
@@ -174,7 +174,6 @@
             <i class="fa-solid fa-hand-holding-dollar"></i>
             <span>PAYOUT</span>
         </a>
-        <!-- ডাইরেক্ট আপলোড পেজে রিডাইরেক্ট -->
         <a href="/seller/upload.html" class="nav-item">
             <i class="fa-solid fa-plus"></i>
             <span>UPLOAD</span>
@@ -214,37 +213,74 @@
         </div>
     </div>
 
-    <!-- Scripts -->
+    <!-- 100% Cloud D1 Pure Real-Time Synchronized Logic -->
     <script>
-        const WORKER_GET_API = "https://s.rorraxybd.workers.dev/api/get?table=seller_stats";
+        const API_BASE_URL = 'https://s.rorraxybd.workers.dev';
 
         window.onload = function() {
-            loadCloudflareDashboardStats();
-            setInterval(loadCloudflareDashboardStats, 3000);
+            loadPureCloudDashboardStats();
+            // প্রতি ৩ সেকেন্ড পর পর অটোমেটিক ক্লাউড থেকে আপডেট চেক করবে (Real-time polling)
+            setInterval(loadPureCloudDashboardStats, 3000);
         };
 
-        async function loadCloudflareDashboardStats() {
+        async function loadPureCloudDashboardStats() {
             try {
-                const response = await fetch(WORKER_GET_API);
-                const result = await response.json();
+                // ১. ক্লাউড D1 থেকে সরাসরি প্রোডাক্ট সংখ্যা আনা
+                const prodResponse = await fetch(`${API_BASE_URL}/api/get?table=products`);
+                const prodResult = await prodResponse.json();
                 
-                if (result.success && result.data && result.data.length > 0) {
-                    const stats = result.data[0];
-                    document.getElementById('statProductsVal').innerText = stats.total_products || 0;
-                    document.getElementById('statOrdersVal').innerText = stats.total_orders || 0;
-                    document.getElementById('statRevenueVal').innerText = `$${(stats.total_revenue || 0).toFixed(2)}`;
-                    document.getElementById('statBalanceVal').innerText = `$0.00`;
-                } else {
-                    document.getElementById('statProductsVal').innerText = '0';
-                    document.getElementById('statOrdersVal').innerText = '0';
-                    document.getElementById('statRevenueVal').innerText = '$0.00';
-                    document.getElementById('statBalanceVal').innerText = '$0.00';
+                let productCount = 0;
+                if (prodResult.success && Array.isArray(prodResult.data)) {
+                    productCount = prodResult.data.length;
+                } else if (Array.isArray(prodResult)) {
+                    productCount = prodResult.length;
                 }
-            } catch(e) {
-                document.getElementById('statProductsVal').innerText = '0';
-                document.getElementById('statOrdersVal').innerText = '0';
-                document.getElementById('statRevenueVal').innerText = '$0.00';
-                document.getElementById('statBalanceVal').innerText = '$0.00';
+
+                // ২. ক্লাউড D1 থেকে সমস্ত অর্ডার ও রেভিনিউ তথ্য ফেচ করা (Retail, Wholesale, Dropship)
+                let totalOrders = 0;
+                let totalRevenue = 0.00;
+
+                const tables = ['retail_orders', 'wholesale_orders', 'dropship_orders'];
+                
+                for (let table of tables) {
+                    try {
+                        const orderRes = await fetch(`${API_BASE_URL}/api/get?table=${table}`);
+                        const orderResData = await orderRes.json();
+                        
+                        let ordersList = [];
+                        if (orderResData.success && Array.isArray(orderResData.data)) {
+                            ordersList = orderResData.data;
+                        } else if (Array.isArray(orderResData)) {
+                            ordersList = orderResData;
+                        }
+
+                        totalOrders += ordersList.length;
+
+                        ordersList.forEach(ord => {
+                            if (ord.items) {
+                                let itemsArr = typeof ord.items === 'string' ? JSON.parse(ord.items) : ord.items;
+                                if (Array.isArray(itemsArr)) {
+                                    itemsArr.forEach(item => {
+                                        let priceNum = parseFloat((item.price || "0").toString().replace('$', '')) || 0;
+                                        totalRevenue += priceNum * (item.qty || 1);
+                                    });
+                                }
+                            }
+                        });
+                    } catch (err) {
+                        console.warn(`Table ${table} fetch warning:`, err);
+                    }
+                }
+
+                // ৩. ড্যাশবোর্ডে ক্লাউডের রিয়েল-টাইম তথ্য আপডেট
+                document.getElementById('statProductsVal').innerText = productCount;
+                document.getElementById('statOrdersVal').innerText = totalOrders;
+                document.getElementById('statRevenueVal').innerText = `$${totalRevenue.toFixed(2)}`;
+                // ব্যালেন্স হিসেবে ৯০% (অটো হিসাব)
+                document.getElementById('statBalanceVal').innerText = `$${(totalRevenue * 0.9).toFixed(2)}`;
+
+            } catch (e) {
+                console.error("Cloud D1 Real-time Sync Error:", e);
             }
         }
 
