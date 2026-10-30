@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <title>Seller Dashboard - rorraxy Ecosystem</title>
+   
+    <!-- সেন্ট্রাল স্ক্রিপ্ট ট্যাগ -->
+    <script src="/ecosystem-core.js"></script>
+
+    <!-- Google Fonts & FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Chart.js & QR Code Generator -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+
+    <style>
+        :root {
+            --bg-retail: #000000;
+            --card-retail: #08080c;
+            --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
+            --gold-solid: #d4af37;
+            --pink-love: #ff2a85;
+            --text-white: #ffffff;
+            --text-gray: #a0a0ab;
+            --font-main: 'Poppins', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        html, body { width: 100%; overflow-x: hidden; background: var(--bg-retail) !important; color: var(--text-white); font-family: var(--font-main); min-height: 100vh; font-size: 14px; -webkit-font-smoothing: antialiased; }
+        body { padding: 24px 16px 110px 16px; text-transform: uppercase; }
+        .main-container { width: 100%; max-width: 1200px; margin: 0 auto; }
+
+        /* Header Section */
+        .dashboard-header { text-align: center; margin-bottom: 30px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+        .header-logo-img { width: 90px; height: 90px; object-fit: contain; background: transparent !important; mix-blend-mode: screen; filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.6)); animation: logoLuxuryGlow 3s infinite alternate ease-in-out; }
+        @keyframes logoLuxuryGlow { 0% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.4)); } 100% { transform: scale(1.05); filter: drop-shadow(0 0 35px rgba(212, 175, 55, 0.85)); } }
+        .dashboard-header h1 { font-size: 1.75rem; font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 0.8px; }
+
+        .header-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+        .header-email-box, .sync-device-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--card-retail); padding: 8px 16px; border-radius: 25px; text-decoration: none; font-size: 0.78rem; color: var(--text-gray); transition: all 0.3s ease; cursor: pointer; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8); border: 1px solid rgba(212, 175, 55, 0.2); }
+        .header-email-box { text-transform: lowercase; }
+        .sync-device-btn { text-transform: uppercase; color: var(--gold-solid); font-weight: 700; }
+        .header-email-box:hover, .sync-device-btn:hover { background: #12121c; transform: translateY(-2px); border-color: rgba(212, 175, 55, 0.5); }
+        .header-email-box i, .sync-device-btn i { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .header-email-box span { color: var(--text-white); font-weight: 600; }
+
+        /* Stats Grid Section */
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 30px; width: 100%; }
+        .stat-card { background: var(--card-retail); border-radius: 18px; padding: 20px 14px 14px 14px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 8px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8); border: 1px solid rgba(212, 175, 55, 0.15); min-width: 0; }
+        .stat-card h3 { font-size: 0.72rem; color: var(--text-gray); font-weight: 600; letter-spacing: 0.5px; white-space: nowrap; }
+        .stat-card .value { font-size: 1.35rem; font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .graph-container { width: 100%; height: 60px; margin-top: 6px; position: relative; }
+
+        /* Bottom Fixed Navigation Menu */
+        .seller-bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(3, 3, 5, 0.95); backdrop-filter: blur(20px); border-top: 1px solid rgba(212, 175, 55, 0.15); display: flex; justify-content: space-around; align-items: center; padding: 12px 6px; z-index: 1000; box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.9); }
+        .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; transition: transform 0.2s ease; flex: 1; background: none; border: none; cursor: pointer; }
+        .nav-item:hover { transform: translateY(-2px); }
+        .nav-item i { font-size: 1.25rem; margin-bottom: 4px; color: var(--text-gray); }
+        .nav-item span { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.5px; color: var(--text-gray); }
+
+        /* Modal Overlay */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px); display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: all 0.3s ease; z-index: 2000; padding: 20px; }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .upload-modal { background: var(--card-retail); border: 1px solid rgba(212, 175, 55, 0.25); border-radius: 24px; width: 100%; max-width: 460px; padding: 32px 24px 28px 24px; text-align: center; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.95); transform: scale(0.9); transition: transform 0.3s ease; position: relative; }
+        .modal-overlay.active .upload-modal { transform: scale(1); }
+        .modal-title { font-size: 1.3rem; font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; }
+        .modal-subtitle-info { font-size: 0.78rem; color: var(--text-gray); margin-bottom: 24px; line-height: 1.5; }
+        .upload-options { display: flex; flex-direction: column; gap: 14px; }
+        .upload-opt-btn { display: flex; align-items: center; justify-content: space-between; background: #040407; border: 1px solid rgba(212, 175, 55, 0.2); padding: 16px 20px; border-radius: 16px; color: var(--text-white); text-decoration: none; font-size: 0.85rem; font-weight: 700; transition: all 0.25s ease; }
+        .upload-opt-btn:hover { border-color: rgba(212, 175, 55, 0.6); background: #0d0d14; }
+        .upload-opt-btn .btn-text-group { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; }
+        .upload-opt-btn .btn-title { font-size: 0.88rem; color: var(--text-white); }
+        .upload-opt-btn .btn-desc { font-size: 0.68rem; color: var(--text-gray); font-weight: 500; }
+        .upload-opt-btn i { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.3rem; }
+        .modal-close-btn { position: absolute; top: 18px; right: 20px; background: none; border: none; color: var(--text-gray); font-size: 1.25rem; cursor: pointer; }
+        .modal-close-btn:hover { color: var(--gold-solid); }
+
+        #qrCodeContainer { background: #fff; padding: 15px; border-radius: 12px; display: inline-block; margin: 15px 0; }
+
+        @media (max-width: 1200px) { .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; } }
+        @media (max-width: 600px) { body { padding: 16px 12px 100px 12px; } .stats-grid { grid-template-columns: 1fr; gap: 12px; } }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        
+        <!-- Header -->
+        <header class="dashboard-header">
+            <img src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png" alt="rorraxy Logo" class="header-logo-img">
+            <h1>SELLER DASHBOARD</h1>
+            
+            <div class="header-actions">
+                <a href="mailto:seller@rorraxy.com?subject=Seller%20Support%20Query" class="header-email-box">
+                    <i class="fa-solid fa-envelope"></i>
+                    <span>seller@rorraxy.com</span>
+                </a>
+                <button type="button" class="sync-device-btn" id="openSyncModal">
+                    <i class="fa-solid fa-qrcode"></i> <span>Link Mobile / PC</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Stats Overview (রিয়েল-টাইম ক্লাউডফ্লেয়ার D1 সিঙ্ক যুক্ত) -->
+        <section class="stats-grid">
+            <div class="stat-card">
+                <h3>TOTAL REVENUE</h3>
+                <div class="value" id="statRevenueVal">$0.00</div>
+                <div class="graph-container"><canvas id="chartRevenue"></canvas></div>
+            </div>
+            <div class="stat-card">
+                <h3>TOTAL BALANCE</h3>
+                <div class="value" id="statBalanceVal">$0.00</div>
+                <div class="graph-container"><canvas id="chartBalance"></canvas></div>
+            </div>
+            <div class="stat-card">
+                <h3>TOTAL PRODUCT</h3>
+                <div class="value" id="statProductsVal">0</div>
+                <div class="graph-container"><canvas id="chartProducts"></canvas></div>
+            </div>
+            <div class="stat-card">
+                <h3>TOTAL ORDER</h3>
+                <div class="value" id="statOrdersVal">0</div>
+                <div class="graph-container"><canvas id="chartOrders"></canvas></div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Seller Bottom Navigation Menu -->
+    <nav class="seller-bottom-nav">
+        <a href="/seller/list.html" class="nav-item">
+            <i class="fa-solid fa-list-check"></i>
+            <span>LIST</span>
+        </a>
+        <a href="/seller/payout.html" class="nav-item">
+            <i class="fa-solid fa-hand-holding-dollar"></i>
+            <span>PAYOUT</span>
+        </a>
+        <button type="button" class="nav-item" id="openUploadModal">
+            <i class="fa-solid fa-plus"></i>
+            <span>UPLOAD</span>
+        </button>
+        <a href="/seller/shipment.html" class="nav-item">
+            <i class="fa-solid fa-truck-fast"></i>
+            <span>SHIPMENT</span>
+        </a>
+        <a href="/seller/info.html" class="nav-item">
+            <i class="fa-solid fa-user"></i>
+            <span>INFO</span>
+        </a>
+    </nav>
+
+    <!-- Upload Choice Modal Popup -->
+    <div class="modal-overlay" id="uploadModalOverlay">
+        <div class="upload-modal">
+            <button class="modal-close-btn" id="closeUploadModal"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="modal-title">SELECT UPLOAD TYPE</h3>
+            <p class="modal-subtitle-info">"Upload products with shipping costs included in the item price."</p>
+            <div class="upload-options">
+                <a href="upload/rupload.html" class="upload-opt-btn">
+                    <div class="btn-text-group">
+                        <span class="btn-title"> UPLOAD</span>                    
+                    </div>
+                    <i class="fa-solid fa-store"></i>
+                </a>
+                <a href="/seller/upload.html" class="upload-opt-btn">
+                    <div class="btn-text-group">
+                        <span class="btn-title">UPLOAD</span>
+                    </div>
+                    <i class="fa-solid fa-boxes-stacked"></i>
+              
+                    </div>
+                    <i class="fa-solid fa-layer-group"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cross-Device Sync QR Modal -->
+    <div class="modal-overlay" id="syncModalOverlay">
+        <div class="upload-modal">
+            <button class="modal-close-btn" id="closeSyncModal"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="modal-title">CROSS-DEVICE SYNC</h3>
+            <p class="modal-subtitle-info">Scan this QR code or use the sync link from your other mobile/PC to securely access your account instantly.</p>
+            <div id="qrCodeContainer">
+                <canvas id="syncCanvasQR"></canvas>
+            </div>
+            <p id="syncTokenText" style="font-size: 0.7rem; color: var(--text-gray); word-break: break-all; margin-top: 10px;"></p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        const WORKER_GET_API = "https://s.rorraxybd.workers.dev/api/get?table=seller_stats";
+
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const tokenFromUrl = urlParams.get('sync_token');
+            if (tokenFromUrl) {
+                localStorage.setItem('rorraxy_active_sync_token', tokenFromUrl);
+            }
+
+            loadCloudflareDashboardStats();
+            setInterval(loadCloudflareDashboardStats, 3000);
+        };
+
+        async function loadCloudflareDashboardStats() {
+            try {
+                const response = await fetch(WORKER_GET_API);
+                const result = await response.json();
+                
+                if (result.success && result.data && result.data.length > 0) {
+                    const stats = result.data[0];
+                    document.getElementById('statProductsVal').innerText = stats.total_products || 0;
+                    document.getElementById('statOrdersVal').innerText = stats.total_orders || 0;
+                    document.getElementById('statRevenueVal').innerText = `$${(stats.total_revenue || 0).toFixed(2)}`;
+                    document.getElementById('statBalanceVal').innerText = `$${(stats.total_balance || 0).toFixed(2)}`;
+                } else {
+                    // Fallback to local storage
+                    let productsList = JSON.parse(localStorage.getItem('rorraxy_seller_products') || '[]');
+                    document.getElementById('statProductsVal').innerText = productsList.length;
+                    let sellerNotifs = JSON.parse(localStorage.getItem('rorraxy_seller_notifications') || '[]');
+                    document.getElementById('statOrdersVal').innerText = sellerNotifs.length;
+                    let totalRevenue = 0;
+                    sellerNotifs.forEach(item => {
+                        let priceNum = parseFloat(String(item.price || '10').replace('$', ''));
+                        totalRevenue += priceNum * (item.qty || 1);
+                    });
+                    document.getElementById('statRevenueVal').innerText = `$${totalRevenue.toFixed(2)}`;
+                    document.getElementById('statBalanceVal').innerText = `$${(totalRevenue * 0.90).toFixed(2)}`;
+                }
+            } catch(e) {
+                console.warn("Cloudflare D1 stats sync fallback active.");
+            }
+        }
+
+        // Upload Popup Modal Logic
+        const openModalBtn = document.getElementById('openUploadModal');
+        const closeModalBtn = document.getElementById('closeUploadModal');
+        const modalOverlay = document.getElementById('uploadModalOverlay');
+
+        openModalBtn.addEventListener('click', () => modalOverlay.classList.add('active'));
+        closeModalBtn.addEventListener('click', () => modalOverlay.classList.remove('active'));
+        modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) modalOverlay.classList.remove('active'); });
+
+        // Cross-Device QR & URL Sync Modal Logic
+        const openSyncModal = document.getElementById('openSyncModal');
+        const closeSyncModal = document.getElementById('closeSyncModal');
+        const syncModalOverlay = document.getElementById('syncModalOverlay');
+
+        openSyncModal.addEventListener('click', () => {
+            const uniqueSyncId = 'rorraxy_sync_' + Math.random().toString(36).substring(2, 10) + Date.now().toString(36);
+            localStorage.setItem('rorraxy_active_sync_token', uniqueSyncId);
+
+            const currentDomain = window.location.origin;
+            const currentPath = window.location.pathname;
+            const syncTargetUrl = `${currentDomain}${currentPath}?sync_token=${uniqueSyncId}`;
+
+            document.getElementById('syncTokenText').innerText = "Sync URL: " + syncTargetUrl;
+            const canvas = document.getElementById('syncCanvasQR');
+            
+            QRCode.toCanvas(canvas, syncTargetUrl, { width: 180, margin: 1 }, function (error) {
+                if (error) console.error("QR Generation Error:", error);
+            });
+
+            syncModalOverlay.classList.add('active');
+        });
+
+        closeSyncModal.addEventListener('click', () => syncModalOverlay.classList.remove('active'));
+        syncModalOverlay.addEventListener('click', (e) => { if (e.target === syncModalOverlay) syncModalOverlay.classList.remove('active'); });
+
+        // Sparkline Graph Generator
+        function createDynamicSparkline(canvasId, dataPoints, isBar = false) {
+            const canvas = document.getElementById(canvasId);
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            const gradient = ctx.createLinearGradient(0, 0, 0, 60);
+            gradient.addColorStop(0, 'rgba(252, 246, 186, 0.65)');
+            gradient.addColorStop(1, 'rgba(212, 175, 55, 0.0)');
+
+            return new Chart(ctx, {
+                type: isBar ? 'bar' : 'line',
+                data: {
+                    labels: dataPoints.map((_, i) => `T${i + 1}`),
+                    datasets: [{
+                        data: dataPoints,
+                        borderColor: '#fcf6ba',
+                        borderWidth: 2,
+                        fill: true,
+                        backgroundColor: gradient,
+                        tension: 0.4,
+                        pointRadius: 0,
+                        borderRadius: isBar ? 4 : 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false }, tooltip: { enabled: false } },
+                    scales: { x: { display: false }, y: { display: false } }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            createDynamicSparkline('chartRevenue', [12, 19, 14, 28, 42, 65, 90, 110]);
+            createDynamicSparkline('chartBalance', [40, 35, 55, 48, 70, 62, 88, 95]);
+            createDynamicSparkline('chartProducts', [15, 22, 18, 30, 45, 40, 60, 75], true);
+            createDynamicSparkline('chartOrders', [5, 12, 8, 20, 15, 38, 55, 85]);
+        });
+    </script>
+</body>
+</html>
