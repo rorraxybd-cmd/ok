@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <title>Affiliate Link Generator - rorraxy Ecosystem</title>
+    
+    <!-- সেন্ট্রাল স্ক্রিপ্ট ট্যাগ -->
+    <script src="/ecosystem-core.js"></script>
+   
+    <!-- Google Fonts & FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-retail: #000000;
+            --card-retail: #08080c;
+            --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
+            --gold-solid: #d4af37;
+            --pink-love: #ff2a85;
+            --text-white: #ffffff;
+            --text-gray: #a0a0ab;
+            --font-main: 'Poppins', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            background: var(--bg-retail) !important;
+            color: var(--text-white);
+            font-family: var(--font-main);
+            min-height: 100vh;
+            font-size: 14px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            padding: 24px 16px 110px 16px;
+            text-transform: uppercase;
+        }
+
+        .main-container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Header Section */
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-logo-img {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.6));
+            animation: logoLuxuryGlow 3s infinite alternate ease-in-out;
+        }
+
+        @keyframes logoLuxuryGlow {
+            0% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.4)); }
+            100% { transform: scale(1.05); filter: drop-shadow(0 0 35px rgba(212, 175, 55, 0.85)); }
+        }
+
+        .dashboard-header h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 0.8px;
+        }
+
+        .header-email-box {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--card-retail);
+            padding: 6px 16px;
+            border-radius: 25px;
+            text-decoration: none;
+            text-transform: lowercase;
+            font-size: 0.78rem;
+            color: var(--text-gray);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
+        }
+
+        .header-email-box:hover {
+            background: #12121c;
+            transform: translateY(-2px);
+        }
+
+        .header-email-box i {
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-email-box span {
+            color: var(--text-white);
+            font-weight: 600;
+        }
+
+        /* Link Generator Card */
+        .generator-card {
+            background: var(--card-retail);
+            border-radius: 18px;
+            padding: 24px 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+            margin-bottom: 25px;
+            border: 1px solid rgba(212, 175, 55, 0.15);
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--text-gray);
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .form-control, .form-select {
+            width: 100%;
+            background: #040407;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 16px;
+            color: var(--text-white);
+            font-size: 0.8rem;
+            outline: none;
+            font-family: var(--font-main);
+            text-transform: none;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.8);
+            transition: box-shadow 0.2s;
+        }
+
+        .form-control:focus, .form-select:focus {
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.8), 0 0 10px rgba(212,175,55,0.25);
+        }
+
+        .form-select option {
+            background: #08080c;
+            color: var(--text-white);
+        }
+
+        .generate-btn {
+            width: 100%;
+            background: var(--gold-gradient);
+            border: none;
+            border-radius: 14px;
+            padding: 14px;
+            color: #000000;
+            font-weight: 800;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
+        }
+
+        .generate-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Result Section */
+        .result-box {
+            margin-top: 20px;
+            background: #040407;
+            border-radius: 14px;
+            padding: 18px;
+            display: none;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.8);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .result-box.active {
+            display: block;
+        }
+
+        .result-label {
+            font-size: 0.72rem;
+            color: var(--gold-solid);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .result-flex {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .result-input {
+            flex: 1;
+            background: #000000;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 14px;
+            color: var(--text-white);
+            font-size: 0.78rem;
+            outline: none;
+            text-transform: none;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.8);
+        }
+
+        .copy-btn {
+            background: var(--gold-gradient);
+            border: none;
+            border-radius: 10px;
+            padding: 0 16px;
+            color: #000000;
+            font-weight: 800;
+            font-size: 0.78rem;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .copy-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Product Image & Download Preview Box */
+        .product-media-preview {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: #08080c;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 15px;
+        }
+
+        .preview-thumb {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: contain;
+        }
+
+        .preview-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .preview-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-white);
+            text-transform: none;
+        }
+
+        .download-img-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--gold-gradient);
+            padding: 6px 12px;
+            border-radius: 8px;
+            color: #000000;
+            text-decoration: none;
+            font-size: 0.68rem;
+            font-weight: 800;
+            width: fit-content;
+            box-shadow: 0 2px 8px rgba(212,175,55,0.3);
+        }
+
+        /* Direct Share Options */
+        .share-channels {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .share-ch-btn {
+            flex: 1;
+            background: #08080c;
+            border-radius: 10px;
+            padding: 10px 6px;
+            color: var(--text-white);
+            text-decoration: none;
+            font-size: 0.62rem;
+            font-weight: 700;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            transition: transform 0.2s ease;
+        }
+
+        .share-ch-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .share-ch-btn i {
+            font-size: 1.1rem;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Bottom Fixed Navigation Menu (5 Sub-items) */
+        .affiliate-bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(3, 3, 5, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(212, 175, 55, 0.15);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 12px 6px;
+            z-index: 1000;
+            box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.9);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            transition: transform 0.2s ease;
+            flex: 1;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .nav-item:hover {
+            transform: translateY(-2px);
+        }
+
+        .nav-item.active i, .nav-item.active span {
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-item i {
+            font-size: 1.2rem;
+            margin-bottom: 4px;
+            color: var(--text-gray);
+        }
+
+        .nav-item span {
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: var(--text-gray);
+        }
+
+        /* Floating Live Chat Button */
+        .chat-widget-btn {
+            position: fixed;
+            bottom: 80px;
+            right: 18px;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: var(--card-retail);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 1500;
+            transition: transform 0.3s ease;
+        }
+
+        .chat-widget-btn:hover {
+            transform: scale(1.08);
+        }
+
+        .chat-widget-btn i {
+            font-size: 1.35rem;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Admin Chat Box Window */
+        .chat-box-container {
+            position: fixed;
+            bottom: 145px;
+            right: 18px;
+            width: 330px;
+            height: 410px;
+            background: var(--card-retail);
+            border-radius: 18px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.95);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 1500;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px) scale(0.95);
+            transition: all 0.3s ease;
+            text-transform: none;
+        }
+
+        .chat-box-container.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+        .chat-header {
+            background: #030305;
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chat-header-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chat-status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--pink-love);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--pink-love);
+        }
+
+        .chat-header h4 {
+            font-size: 0.85rem;
+            font-weight: 800;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+        }
+
+        .chat-close-btn {
+            background: none;
+            border: none;
+            color: var(--text-gray);
+            font-size: 1.15rem;
+            cursor: pointer;
+        }
+
+        .chat-close-btn:hover {
+            color: var(--gold-solid);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 14px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: #000000;
+        }
+
+        .chat-msg {
+            max-width: 82%;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 0.78rem;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+        .msg-admin {
+            align-self: flex-start;
+            background: #08080c;
+            color: var(--text-white);
+            border-top-left-radius: 2px;
+        }
+
+        .msg-affiliate {
+            align-self: flex-end;
+            background: var(--gold-gradient);
+            color: #000000;
+            font-weight: 600;
+            border-top-right-radius: 2px;
+        }
+
+        .chat-input-area {
+            padding: 12px;
+            background: #030305;
+            display: flex;
+            gap: 8px;
+        }
+
+        .chat-input-area input {
+            flex: 1;
+            background: #000000;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 16px;
+            color: var(--text-white);
+            font-size: 0.78rem;
+            outline: none;
+            font-family: var(--font-main);
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.8);
+        }
+
+        .chat-send-btn {
+            background: var(--gold-gradient);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(212,175,55,0.3);
+        }
+
+        @media (max-width: 768px) {
+            .chat-box-container {
+                right: 12px;
+                left: 12px;
+                width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        
+        <!-- Header -->
+        <header class="dashboard-header">
+            <img src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png" alt="rorraxy Logo" class="header-logo-img">
+            <h1>AFFILIATE LINK GENERATOR</h1>
+            
+            <a href="mailto:affiliate@rorraxy.com?subject=Affiliate%20Link%20Query" class="header-email-box">
+                <i class="fa-solid fa-envelope"></i>
+                <span>affiliate@rorraxy.com</span>
+            </a>
+        </header>
+
+        <!-- Link Generator Card -->
+        <section class="generator-card">
+            <div class="form-group">
+                <label>OPTION 1: SELECT SERVICE / STORE</label>
+                <select class="form-select" id="platformSelect">
+                    <option value="https://rorraxy.com/retail/">RETAIL STORE (7% COMMISSION)</option>
+                    <option value="https://b2b.rorraxy.com">WHOLESALE STORE (2% COMMISSION)</option>
+                    <option value="https://solutions.rorraxy.com">BUSINESS SOLUTIONS (10% COMMISSION)</option>
+                    <option value="https://a.rorraxy.com">RORRAXY SCI-TECH ACADEMY (10% COMMISSION)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>OPTION 2: OR PASTE COPIED PRODUCT LINK (FROM PRODUCT PAGE)</label>
+                <input type="text" class="form-control" id="targetUrlInput" placeholder="Paste product link copied from store share button...">
+            </div>
+
+            <button type="button" class="generate-btn" id="generateBtn">GENERATE TRACKING LINK</button>
+
+            <!-- Result Box -->
+            <div class="result-box" id="resultBox">
+                <div class="result-label">YOUR UNIQUE AFFILIATE LINK:</div>
+                <div class="result-flex">
+                    <input type="text" class="result-input" id="generatedLinkOutput" readonly>
+                    <button type="button" class="copy-btn" id="copyBtn">COPY</button>
+                </div>
+
+                <!-- Product Image & Download Preview -->
+                <div class="product-media-preview" id="mediaPreviewBox">
+                    <img src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png" alt="Product Preview" class="preview-thumb" id="previewThumbImg">
+                    <div class="preview-info">
+                        <span class="preview-title" id="previewTitleText">rorraxy Ecosystem Promotional Banner</span>
+                        <a href="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png" download="rorraxy-affiliate-promo.png" class="download-img-btn" id="downloadImgBtn" target="_blank">
+                            <i class="fa-solid fa-download"></i> DOWNLOAD IMAGE
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Direct Sharing Channels -->
+                <div class="share-channels">
+                    <a href="#" id="shareWhatsapp" target="_blank" class="share-ch-btn">
+                        <i class="fa-brands fa-whatsapp"></i>
+                        <span>WHATSAPP</span>
+                    </a>
+                    <a href="#" id="shareMessenger" target="_blank" class="share-ch-btn">
+                        <i class="fa-brands fa-facebook-messenger"></i>
+                        <span>MESSENGER</span>
+                    </a>
+                    <a href="#" id="shareTelegram" target="_blank" class="share-ch-btn">
+                        <i class="fa-brands fa-telegram"></i>
+                        <span>TELEGRAM</span>
+                    </a>
+                    <a href="#" id="shareImo" target="_blank" class="share-ch-btn">
+                        <i class="fa-solid fa-comment-sms"></i>
+                        <span>IMO</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Affiliate Bottom Navigation Menu (5 Sub-items) -->
+    <nav class="affiliate-bottom-nav">
+        <a href="dashboard.html" class="nav-item">
+            <i class="fa-solid fa-chart-pie"></i>
+            <span>DASHBOARD</span>
+        </a>
+        <a href="payout.html" class="nav-item">
+            <i class="fa-solid fa-hand-holding-dollar"></i>
+            <span>PAYOUT</span>
+        </a>
+        <a href="report.html" class="nav-item">
+            <i class="fa-solid fa-chart-column"></i>
+            <span>REPORT</span>
+        </a>
+        <a href="link.html" class="nav-item active">
+            <i class="fa-solid fa-link"></i>
+            <span>LINK</span>
+        </a>
+        <a href="info.html" class="nav-item">
+            <i class="fa-solid fa-user"></i>
+            <span>INFO</span>
+        </a>
+    </nav>
+
+    <!-- Floating Live Support Chat Button -->
+    <div class="chat-widget-btn" id="toggleChatBtn">
+        <i class="fa-solid fa-headset"></i>
+    </div>
+
+    <!-- Admin Direct Chat Box Window -->
+    <div class="chat-box-container" id="adminChatContainer">
+        <div class="chat-header">
+            <div class="chat-header-info">
+                <div class="chat-status-dot"></div>
+                <h4>ADMIN SUPPORT</h4>
+            </div>
+            <button class="chat-close-btn" id="closeChatBtn"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="chat-msg msg-admin">
+                Welcome to rorraxy Affiliate Support. Need help with generating links?
+            </div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chatInput" placeholder="Type your issue..." />
+            <button class="chat-send-btn" id="sendMsgBtn"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        const generateBtn = document.getElementById('generateBtn');
+        const platformSelect = document.getElementById('platformSelect');
+        const targetUrlInput = document.getElementById('targetUrlInput');
+        const resultBox = document.getElementById('resultBox');
+        const generatedLinkOutput = document.getElementById('generatedLinkOutput');
+        const copyBtn = document.getElementById('copyBtn');
+
+        generateBtn.addEventListener('click', () => {
+            const selectedPlatformUrl = platformSelect.value;
+            const pastedUrl = targetUrlInput.value.trim();
+            
+            // সেভড অ্যাফিলিয়েট আইডি ফেচ করা
+            const affInfo = JSON.parse(localStorage.getItem('rorraxy_affiliate_info') || '{}');
+            const affId = affInfo.affiliateId || "aff777"; 
+
+            let finalTrackingLink = "";
+
+            if (pastedUrl !== "") {
+                if (pastedUrl.includes('?')) {
+                    finalTrackingLink = `${pastedUrl}&ref=${affId}`;
+                } else {
+                    finalTrackingLink = `${pastedUrl}?ref=${affId}`;
+                }
+            } else {
+                finalTrackingLink = `${selectedPlatformUrl}?ref=${affId}`;
+            }
+
+            generatedLinkOutput.value = finalTrackingLink;
+            resultBox.classList.add('active');
+
+            const shareText = encodeURIComponent(`Check out this amazing product/service on rorraxy: ${finalTrackingLink}`);
+            document.getElementById('shareWhatsapp').href = `https://api.whatsapp.com/send?text=${shareText}`;
+            document.getElementById('shareMessenger').href = `https://wa.me/?text=${shareText}`;
+            document.getElementById('shareTelegram').href = `https://t.me/share/url?url=${encodeURIComponent(finalTrackingLink)}&text=${shareText}`;
+            document.getElementById('shareImo').href = `https://imo.im`;
+        });
+
+        copyBtn.addEventListener('click', () => {
+            generatedLinkOutput.select();
+            navigator.clipboard.writeText(generatedLinkOutput.value);
+            copyBtn.innerText = "COPIED!";
+            setTimeout(() => {
+                copyBtn.innerText = "COPY";
+            }, 2000);
+        });
+
+        // Live Chat Widget Toggle & Interaction
+        const toggleChatBtn = document.getElementById('toggleChatBtn');
+        const closeChatBtn = document.getElementById('closeChatBtn');
+        const adminChatContainer = document.getElementById('adminChatContainer');
+        const sendMsgBtn = document.getElementById('sendMsgBtn');
+        const chatInput = document.getElementById('chatInput');
+        const chatMessages = document.getElementById('chatMessages');
+
+        toggleChatBtn.addEventListener('click', () => adminChatContainer.classList.toggle('active'));
+        closeChatBtn.addEventListener('click', () => adminChatContainer.classList.remove('active'));
+
+        function sendAffiliateMessage() {
+            const text = chatInput.value.trim();
+            if (text !== "") {
+                const msgDiv = document.createElement('div');
+                msgDiv.className = 'chat-msg msg-affiliate';
+                msgDiv.innerText = text;
+                chatMessages.appendChild(msgDiv);
+                chatInput.value = "";
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        }
+
+        sendMsgBtn.addEventListener('click', sendAffiliateMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendAffiliateMessage();
+        });
+    </script>
+</body>
+</html>
