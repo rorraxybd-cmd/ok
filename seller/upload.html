@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <title>rorraxy - Universal Master Product Upload Portal</title>
+    
+    <!-- সেন্ট্রাল স্ক্রিপ্ট ট্যাগ -->
+    <script src="/ecosystem-core.js"></script>
+
+    <link rel="icon" type="image/png" href="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            --bg-black: #000000;
+            --surface-bg: #050508;
+            --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
+            --gold-solid: #d4af37;
+            --text-white: #ffffff;
+            --text-gray: #a0a0ac;
+            --font-main: 'Poppins', sans-serif;
+            --required-red: #ff4d4d;
+            --success-green: #2ed573;
+        }
+
+        html, body { 
+            width: 100%; max-width: 100%; overflow-x: hidden; 
+            background: var(--bg-black) !important; 
+            color: var(--text-white); font-family: var(--font-main); 
+            min-height: 100vh; font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        body { padding: 12px 12px 100px 12px; text-transform: uppercase; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        header.app-header {
+            display: flex; padding: 16px 20px; align-items: center; justify-content: space-between;
+            background: var(--surface-bg); position: fixed; top: 0; left: 0; z-index: 1000;
+            width: 100%; border-bottom: 1px solid rgba(212,175,55,0.1);
+        }
+        .back-home-btn { background: #000; color: #fff; padding: 8px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 6px; }
+        .brand-title-main { font-size: 1.1rem; font-weight: 700; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: lowercase; }
+
+        .form-container { width: 100%; max-width: 100%; margin: 70px 0 0 0; padding: 0; }
+        
+        .step-progress-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            width: 100%; margin-bottom: 25px; padding: 15px 12px; background: var(--surface-bg); border-radius: 10px;
+        }
+        .step-item {
+            display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; position: relative;
+        }
+        .step-item:not(:last-child)::after {
+            content: ''; position: absolute; top: 18px; left: 50%; width: 100%; height: 2px;
+            background: rgba(212,175,55,0.15); z-index: 1;
+        }
+        .step-item.active:not(:last-child)::after, .step-item.completed:not(:last-child)::after {
+            background: var(--gold-solid);
+        }
+        .step-circle {
+            width: 38px; height: 38px; border-radius: 50%; background: #000;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.95rem; font-weight: 700; color: var(--text-gray); z-index: 2;
+        }
+        .step-item.active .step-circle { background: var(--gold-solid); color: #000; }
+        .step-item.completed .step-circle { background: var(--gold-gradient); color: #000; }
+        .step-title { font-size: 0.75rem; font-weight: 600; color: var(--text-gray); text-align: center; }
+        .step-item.active .step-title { color: var(--gold-solid); }
+
+        .form-section-full { background: var(--surface-bg); border-radius: 12px; padding: 25px 20px; margin-bottom: 20px; width: 100%; }
+        .form-section-full h3 { font-size: 1.1rem; color: var(--text-white); margin-bottom: 20px; padding-bottom: 10px; font-weight: 700; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(212,175,55,0.15); }
+        
+        .gold-gradient-text { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .mode-grid, .category-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; width: 100%; }
+        @media(min-width: 600px) { .mode-grid, .category-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media(min-width: 992px) { .mode-grid { grid-template-columns: repeat(4, 1fr); } .category-grid { grid-template-columns: repeat(5, 1fr); } }
+        @media(min-width: 1400px) { .category-grid { grid-template-columns: repeat(6, 1fr); gap: 18px; } }
+
+        .cat-box, .mode-box { background: #000000; border-radius: 10px; padding: 22px 12px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; width: 100%; min-height: 110px; }
+        .cat-box:hover, .mode-box:hover, .cat-box.clicked, .mode-box.clicked { background: #121008; }
+        .cat-box.clicked span, .mode-box.clicked span { color: var(--gold-solid); }
+        .cat-box i, .mode-box i { font-size: 2.2rem; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .cat-box span, .mode-box span { font-size: 0.85rem; font-weight: 600; color: var(--text-white); }
+
+        .back-cat-btn { background: #000; color: var(--gold-solid); padding: 10px 18px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; margin-bottom: 18px; display: inline-flex; align-items: center; gap: 8px; border: none; cursor: pointer; }
+
+        .row-grid, .triple-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; width: 100%; }
+        .triple-grid { grid-template-columns: repeat(3, 1fr); }
+        @media(max-width: 768px) { .triple-grid, .row-grid { grid-template-columns: 1fr; } }
+
+        .input-group { margin-bottom: 18px; width: 100%; }
+        .input-group:last-child { margin-bottom: 0; }
+        .input-group label { display: block; font-size: 0.82rem; color: var(--text-gray); margin-bottom: 8px; font-weight: 600; }
+        .input-group input, .input-group select, .input-group textarea {
+            width: 100%; background: #000000; border: none; border-radius: 8px;
+            padding: 14px 18px; color: var(--text-white); font-family: var(--font-main); font-size: 0.95rem; outline: none;
+        }
+        .input-group input#product_title { text-transform: uppercase; }
+        .input-group textarea, .input-group select { text-transform: none; }
+        .input-group select option { background: #08080c; color: #fff; }
+
+        .required-star { color: var(--required-red); margin-left: 3px; font-weight: 700; }
+
+        .preview-container { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; width: 100%; }
+        .preview-card { position: relative; width: 90px; height: 90px; border-radius: 10px; overflow: hidden; background: #000; flex-shrink: 0; }
+        .preview-card img, .preview-card video { width: 100%; height: 100%; object-fit: cover; }
+
+        .upload-box { border: 1px dashed rgba(212,175,55,0.3); border-radius: 10px; padding: 25px 20px; text-align: center; cursor: pointer; background: #000; width: 100%; }
+        .upload-box i { font-size: 2.2rem; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; }
+        .upload-box p { font-size: 0.85rem; color: var(--text-gray); font-weight: 500; }
+
+        .info-box { background: #000000; border-radius: 8px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; font-size: 0.9rem; color: #fbf5b7; font-weight: 600; }
+        
+        .checkbox-container { display: flex; align-items: center; gap: 12px; background: #000000; border-radius: 8px; padding: 14px 18px; margin-bottom: 16px; cursor: pointer; }
+        .checkbox-container input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--gold-solid); cursor: pointer; }
+        .checkbox-container label { font-size: 0.9rem; color: var(--text-white); font-weight: 600; cursor: pointer; }
+
+        .btn-nav-container { display: flex; justify-content: space-between; gap: 16px; margin-top: 20px; }
+        .action-btn {
+            flex: 1; background: var(--gold-gradient); color: #000000; border: none; padding: 16px;
+            border-radius: 8px; font-size: 0.95rem; font-weight: 700; cursor: pointer; text-transform: uppercase;
+            letter-spacing: 0.5px; text-align: center;
+        }
+        .action-btn.secondary { background: #000000; color: #fff; }
+
+        .step-section { display: none; }
+        .step-section.active-step { display: block; }
+
+        #success-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.95); z-index: 9999; display: none; align-items: center; justify-content: center;
+            flex-direction: column; text-align: center; padding: 20px;
+        }
+        .success-card { background: var(--surface-bg); border-radius: 16px; padding: 40px 30px; max-width: 400px; width: 100%; }
+    </style>
+</head>
+<body>
+
+    <div id="success-overlay">
+        <div class="success-card">
+            <div style="font-size: 3.5rem; color: var(--gold-solid); margin-bottom: 12px;"><i class="fa-solid fa-circle-check"></i></div>
+            <div style="font-size: 1.1rem; font-weight: 700; margin-bottom: 8px;">PRODUCT PUBLISHED SUCCESSFULLY!</div>
+            <div style="font-size: 0.8rem; color: var(--text-gray);">SAVING TO D1 DATABASE & REDIRECTING...</div>
+        </div>
+    </div>
+
+    <header class="app-header">
+        <a href="dashboard.html" class="back-home-btn"><i class="fa-solid fa-arrow-left"></i> DASHBOARD</a>
+        <span class="brand-title-main">rorraxy upload portal</span>
+        <div style="width: 60px;"></div>
+    </header>
+
+    <main class="form-container">
+        <div class="step-progress-bar">
+            <div class="step-item active" id="step-ind-1"><div class="step-circle">1</div><div class="step-title">MODE</div></div>
+            <div class="step-item" id="step-ind-2"><div class="step-circle">2</div><div class="step-title">CATEGORY</div></div>
+            <div class="step-item" id="step-ind-3"><div class="step-circle">3</div><div class="step-title">MEDIA</div></div>
+            <div class="step-item" id="step-ind-4"><div class="step-circle">4</div><div class="step-title">PRICING</div></div>
+            <div class="step-item" id="step-ind-5"><div class="step-circle">5</div><div class="step-title">DETAILS</div></div>
+        </div>
+
+        <form id="masterUniversalForm" onsubmit="submitMasterForm(event)">
+            
+            <!-- STEP 1: UPLOAD MODE -->
+            <div class="step-section active-step" id="step-1">
+                <div class="form-section-full">
+                    <h3><i class="fa-solid fa-layer-group gold-gradient-text"></i> SELECT UPLOAD MODE <span class="required-star">*</span></h3>
+                    <div class="mode-grid">
+                        <div class="mode-box" onclick="selectUploadMode('dropshipping', this)"><i class="fa-solid fa-truck-fast"></i><span>DROPSHIPPING</span></div>
+                        <div class="mode-box" onclick="selectUploadMode('retail', this)"><i class="fa-solid fa-store"></i><span>RETAIL</span></div>
+                        <div class="mode-box" onclick="selectUploadMode('wholesale', this)"><i class="fa-solid fa-boxes-stacked"></i><span>WHOLESALE</span></div>
+                        <div class="mode-box" onclick="selectUploadMode('both', this)"><i class="fa-solid fa-circle-nodes"></i><span>BOTH (ALL 3 MODES)</span></div>
+                    </div>
+                </div>
+                <div class="btn-nav-container">
+                    <div></div>
+                    <button type="button" class="action-btn" onclick="nextStep(2)">NEXT <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <!-- STEP 2: CATEGORY & SUB-CATEGORY -->
+            <div class="step-section" id="step-2">
+                <div class="form-section-full">
+                    <h3><i class="fa-solid fa-border-all gold-gradient-text"></i> SELECT CATEGORY <span class="required-star">*</span></h3>
+                    
+                    <div id="main-categories" class="category-grid">
+                        <div class="cat-box" onclick="showSubCategories(this, 'womens')"><i class="fa-solid fa-person-dress"></i><span>WOMEN'S FASHION</span></div>
+                        <div class="cat-box" onclick="showSubCategories(this, 'mens')"><i class="fa-solid fa-user-tie"></i><span>MEN'S FASHION</span></div>
+                        <div class="cat-box" onclick="showSubCategories(this, 'boys')"><i class="fa-solid fa-child"></i><span>BOYS' FASHION</span></div>
+                        <div class="cat-box" onclick="showSubCategories(this, 'girls')"><i class="fa-solid fa-child-dress"></i><span>GIRLS' FASHION</span></div>
+                        <div class="cat-box" onclick="showSubCategories(this, 'luxury')"><i class="fa-solid fa-gift"></i><span>LUXURY GIFTS</span></div>
+                        <div class="cat-box" onclick="showSubCategories(this, 'matching')"><i class="fa-solid fa-people-group"></i><span>MATCHING SETS</span></div>
+                        <div class="cat-box" onclick="showSubCategories(this, 'baby')"><i class="fa-solid fa-baby-carriage"></i><span>MOTHER & BABY</span></div>
+                    </div>
+
+                    <div id="sub-categories" style="display: none;">
+                        <button type="button" class="back-cat-btn" onclick="backToMainCategories()"><i class="fa-solid fa-arrow-left"></i> BACK TO MAIN CATEGORIES</button>
+                        <div id="sub-cat-content" class="category-grid" style="margin-top: 15px;"></div>
+                    </div>
+                </div>
+                <div class="btn-nav-container">
+                    <button type="button" class="action-btn secondary" onclick="prevStep(1)"><i class="fa-solid fa-arrow-left"></i> PREVIOUS</button>
+                    <button type="button" class="action-btn" onclick="nextStep(3)">NEXT <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <!-- STEP 3: MEDIA & SOCIAL LINKS -->
+            <div class="step-section" id="step-3">
+                <div class="form-section-full">
+                    <h3><i class="fa-solid fa-images gold-gradient-text"></i> PRODUCT IMAGES <span class="required-star">*</span></h3>
+                    <div class="preview-container" id="image-preview"></div>
+                    <div class="upload-box" onclick="document.getElementById('image-file-input').click();">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                        <p>CLICK TO UPLOAD IMAGES (AUTO-OPTIMIZED & SAVED TO R2)</p>
+                        <input type="file" id="image-file-input" accept="image/*" multiple style="display: none;" onchange="handleImageSelection(event)">
+                    </div>
+                </div>
+
+                <div class="form-section-full">
+                    <h3><i class="fa-solid fa-video gold-gradient-text"></i> UPLOAD VIDEO FILE</h3>
+                    <div class="preview-container" id="video-preview"></div>
+                    <div class="upload-box" onclick="document.getElementById('video-file-input').click();">
+                        <i class="fa-solid fa-file-video"></i>
+                        <p>CLICK TO UPLOAD VIDEO FILE (SAVED TO VIDEO BUCKET)</p>
+                        <input type="file" id="video-file-input" accept="video/*" style="display: none;" onchange="handleVideoSelection(event)">
+                    </div>
+                </div>
+
+                <div class="form-section-full">
+                    <h3><i class="fa-brands fa-youtube gold-gradient-text"></i> SOCIAL & LIVE LINKS</h3>
+                    <div class="input-group">
+                        <label for="product_video">YOUTUBE VIDEO URL</label>
+                        <input type="url" id="product_video" placeholder="https://www.youtube.com/watch?v=...">
+                    </div>
+                    <div class="row-grid" style="margin-top: 15px;">
+                        <div class="input-group">
+                            <label for="youtube_live">YOUTUBE LIVE URL</label>
+                            <input type="url" id="youtube_live" placeholder="https://www.youtube.com/watch?v=...">
+                        </div>
+                        <div class="input-group">
+                            <label for="facebook_live">FACEBOOK LIVE URL</label>
+                            <input type="url" id="facebook_live" placeholder="https://www.facebook.com/watch/live/?v=...">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="btn-nav-container">
+                    <button type="button" class="action-btn secondary" onclick="prevStep(2)"><i class="fa-solid fa-arrow-left"></i> PREVIOUS</button>
+                    <button type="button" class="action-btn" onclick="nextStep(4)">NEXT <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <!-- STEP 4: PRICING & STOCK -->
+            <div class="step-section" id="step-4">
+                <div class="form-section-full">
+                    <h3><i class="fa-solid fa-tag gold-gradient-text"></i> PRICING, MOQ & STOCK</h3>
+                    
+                    <div class="row-grid" id="retail-price-row">
+                        <div class="input-group">
+                            <label for="selling_price">RETAIL SELLING PRICE ($)<span class="required-star">*</span></label>
+                            <input type="number" step="0.01" min="0" id="selling_price" placeholder="100.00">
+                        </div>
+                        <div class="input-group">
+                            <label for="market_price">MARKET PRICE ($)<span class="required-star">*</span></label>
+                            <input type="number" step="0.01" min="0" id="market_price" placeholder="180.00">
+                        </div>
+                    </div>
+
+                    <div class="row-grid" id="dropshipping-price-row" style="margin-top: 15px;">
+                        <div class="input-group">
+                            <label for="dropship_base_price">DROPSHIP BASE PRICE ($)<span class="required-star">*</span></label>
+                            <input type="number" step="0.01" min="0" id="dropship_base_price" placeholder="80.00">
+                        </div>
+                        <div class="input-group">
+                            <label for="dropship_resell_price">RECOMMENDED RESELL PRICE ($)</label>
+                            <input type="number" step="0.01" min="0" id="dropship_resell_price" placeholder="120.00">
+                        </div>
+                    </div>
+
+                    <div class="triple-grid" id="wholesale-price-row" style="margin-top: 15px;">
+                        <div class="input-group">
+                            <label for="price_sample">SAMPLE PRICE ($)</label>
+                            <input type="number" step="0.01" min="0" id="price_sample" placeholder="100.00">
+                        </div>
+                        <div class="input-group">
+                            <label for="price_min_whole">WHOLESALE PRICE ($)</label>
+                            <input type="number" step="0.01" min="0" id="price_min_whole" placeholder="85.00">
+                        </div>
+                        <div class="input-group">
+                            <label for="price_bulk">BULK PRICE ($)</label>
+                            <input type="number" step="0.01" min="0" id="price_bulk" placeholder="70.00">
+                        </div>
+                    </div>
+
+                    <div class="row-grid" style="margin-top: 15px;">
+                        <div class="input-group">
+                            <label for="target_country">SELECT COUNTRY<span class="required-star">*</span></label>
+                            <select id="target_country" required>
+                                <option value="Bangladesh" selected>🇧🇩 BANGLADESH</option>
+                                <option value="United States">🇺🇸 UNITED STATES</option>
+                                <option value="United Kingdom">🇬🇧 UNITED KINGDOM</option>
+                                <option value="United Arab Emirates">🇦🇪 UNITED ARAB EMIRATES</option>
+                                <option value="Saudi Arabia">🇸🇦 SAUDI ARABIA</option>
+                                <option value="Canada">🇨🇦 CANADA</option>
+                                <option value="India">🇮🇳 INDIA</option>
+                                <option value="Malaysia">🇲🇾 MALAYSIA</option>
+                                <option value="Singapore">🇸🇬 SINGAPORE</option>
+                                <option value="Australia">🇦🇺 AUSTRALIA</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="discount_rate">DISCOUNT RATE (%)<span class="required-star">*</span></label>
+                            <input type="number" min="0" max="100" id="discount_rate" placeholder="10" required>
+                        </div>
+                    </div>
+
+                    <div class="row-grid" style="margin-top: 15px;">
+                        <div class="input-group" id="moq-input-group">
+                            <label for="moq_units">MINIMUM ORDER QTY (MOQ)</label>
+                            <input type="number" min="1" id="moq_units" placeholder="10">
+                        </div>
+                        <div class="input-group">
+                            <label for="stock_count">TOTAL STOCK UNITS<span class="required-star">*</span></label>
+                            <input type="number" min="1" id="stock_count" placeholder="1000" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="btn-nav-container">
+                    <button type="button" class="action-btn secondary" onclick="prevStep(3)"><i class="fa-solid fa-arrow-left"></i> PREVIOUS</button>
+                    <button type="button" class="action-btn" onclick="nextStep(5)">NEXT <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <!-- STEP 5: PRODUCT INFORMATION & CUSTOM OPTIONS -->
+            <div class="step-section" id="step-5">
+                <div class="form-section-full">
+                    <h3><i class="fa-solid fa-comments gold-gradient-text"></i> CUSTOMER INTERACTION</h3>
+                    <div class="info-box">
+                        <span><i class="fa-solid fa-circle-check" style="color: var(--success-green); margin-right: 8px;"></i> CHAT WITH SELLER</span>
+                        <span style="font-size: 0.8rem; background: rgba(46,213,115,0.15); color: var(--success-green); padding: 5px 12px; border-radius: 6px; font-weight: 600;">ENABLED</span>
+                    </div>
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="custom_size_note" checked>
+                        <label for="custom_size_note">ENABLE CUSTOM SIZE / NOTE BOX FOR CUSTOMERS</label>
+                    </div>
+                </div>
+
+                <div class="form-section-full">
+                    <h3><i class="fa-solid fa-circle-info gold-gradient-text"></i> PRODUCT DETAILS</h3>
+                    <div class="input-group">
+                        <label for="product_title">PRODUCT TITLE (MAX 25 CHARS)<span class="required-star">*</span></label>
+                        <input type="text" id="product_title" maxlength="25" placeholder="LUXURY PRODUCT ITEM" required>
+                    </div>
+                    <div class="input-group" style="margin-top: 15px; margin-bottom: 0;">
+                        <label for="product_description">DETAILS (SIZE, MATERIAL, COLOR, FEATURES)<span class="required-star">*</span></label>
+                        <textarea id="product_description" rows="5" placeholder="PASTE PRODUCT DETAILS, SPECIFICATIONS AND FIT INFORMATION HERE..." required></textarea>
+                    </div>
+                </div>
+
+                <div class="btn-nav-container">
+                    <button type="button" class="action-btn secondary" onclick="prevStep(4)"><i class="fa-solid fa-arrow-left"></i> PREVIOUS</button>
+                    <button type="submit" class="action-btn"><i class="fa-solid fa-check"></i> FINISH & PUBLISH PRODUCT</button>
+                </div>
+            </div>
+
+        </form>
+    </main>
+
+    <script>
+        const WORKER_BASE_URL = 'https://s.rorraxybd.workers.dev';
+        let currentStep = 1;
+        let selectedModeValue = "";
+        let selectedCategoryValue = "";
+        let uploadedImageUrls = [];
+        let uploadedVideoUrl = "";
+
+        const subCategoriesData = {
+            womens: [
+                {name: "CLOTHING", icon: "fa-solid fa-shirt"},
+                {name: "HANDBAGS", icon: "fa-solid fa-bag-shopping"},
+                {name: "SHOES", icon: "fa-solid fa-shoe-prints"},
+                {name: "JEWELRY", icon: "fa-solid fa-gem"},
+                {name: "WATCHES", icon: "fa-solid fa-clock"},
+                {name: "LINGERIE", icon: "fa-solid fa-heart"},
+                {name: "BEAUTY", icon: "fa-solid fa-spray-can-sparkles"},
+                {name: "ACTIVEWEAR", icon: "fa-solid fa-person-running"},
+                {name: "TRADITIONAL", icon: "fa-solid fa-vest"},
+                {name: "ACCESSORIES", icon: "fa-solid fa-glasses"}
+            ],
+            mens: [
+                {name: "SUITS & BLAZERS", icon: "fa-solid fa-user-tie"},
+                {name: "SHIRTS & POLOS", icon: "fa-solid fa-shirt"},
+                {name: "TRADITIONAL WEAR", icon: "fa-solid fa-vest"},
+                {name: "MEN'S SHOES", icon: "fa-solid fa-socks"},
+                {name: "LUXURY WATCHES", icon: "fa-solid fa-clock"},
+                {name: "WALLETS & BELTS", icon: "fa-solid fa-wallet"},
+                {name: "HEADWEAR", icon: "fa-solid fa-hat-cowboy"},
+                {name: "EYEWEAR", icon: "fa-solid fa-glasses"},
+                {name: "OFFICE BAGS", icon: "fa-solid fa-briefcase"}
+            ],
+            boys: [
+                {name: "CLOTHING SETS", icon: "fa-solid fa-child"},
+                {name: "T-SHIRTS", icon: "fa-solid fa-shirt"},
+                {name: "FOOTWEAR", icon: "fa-solid fa-socks"},
+                {name: "PARTY WEAR", icon: "fa-solid fa-hat-wizard"},
+                {name: "SPORTSWEAR", icon: "fa-solid fa-baseball-bat-ball"}
+            ],
+            girls: [
+                {name: "PARTY DRESSES", icon: "fa-solid fa-child-dress"},
+                {name: "CASUAL TOPS", icon: "fa-solid fa-shirt"},
+                {name: "FOOTWEAR", icon: "fa-solid fa-shoe-prints"},
+                {name: "HAIR ACCESSORIES", icon: "fa-solid fa-crown"},
+                {name: "MINI HANDBAGS", icon: "fa-solid fa-bag-shopping"},
+                {name: "JEWELRY SETS", icon: "fa-solid fa-gem"},
+                {name: "ETHNIC WEAR", icon: "fa-solid fa-vest"}
+            ],
+            luxury: [
+                {name: "VIP CORPORATE", icon: "fa-solid fa-briefcase"},
+                {name: "GIFT HAMPERS", icon: "fa-solid fa-gift"},
+                {name: "FINE JEWELRY", icon: "fa-solid fa-gem"},
+                {name: "LUXURY TIMEPIECES", icon: "fa-solid fa-clock"},
+                {name: "CRYSTAL & DECOR", icon: "fa-solid fa-champagne-glasses"},
+                {name: "PERFUMES & SCENTS", icon: "fa-solid fa-spray-can-sparkles"}
+            ],
+            matching: [
+                {name: "FAMILY OUTFITS", icon: "fa-solid fa-people-group"},
+                {name: "COUPLE SETS", icon: "fa-solid fa-shirt"},
+                {name: "MOM & ME SETS", icon: "fa-solid fa-child-reaching"},
+                {name: "DAD & SON SETS", icon: "fa-solid fa-user-gear"}
+            ],
+            baby: [
+                {name: "BABY CLOTHING", icon: "fa-solid fa-child-reaching"},
+                {name: "STROLLERS & GEAR", icon: "fa-solid fa-baby-carriage"},
+                {name: "FEEDING ESSENTIALS", icon: "fa-solid fa-bottle-water"},
+                {name: "BABY CARE", icon: "fa-solid fa-bath"},
+                {name: "NURSERY & BEDDING", icon: "fa-solid fa-bed"}
+            ]
+        };
+
+        function updateStepUI(step) {
+            document.querySelectorAll('.step-section').forEach(sec => sec.classList.remove('active-step'));
+            document.getElementById(`step-${step}`).classList.add('active-step');
+
+            for (let i = 1; i <= 5; i++) {
+                const item = document.getElementById(`step-ind-${i}`);
+                if (i < step) {
+                    item.className = 'step-item completed';
+                } else if (i === step) {
+                    item.className = 'step-item active';
+                } else {
+                    item.className = 'step-item';
+                }
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function nextStep(targetStep) {
+            if (targetStep === 2 && !selectedModeValue) {
+                alert("PLEASE SELECT AN UPLOAD MODE FIRST!");
+                return;
+            }
+            if (targetStep === 3 && !selectedCategoryValue) {
+                alert("PLEASE SELECT A CATEGORY AND SUB-CATEGORY!");
+                return;
+            }
+            if (targetStep === 4 && uploadedImageUrls.length === 0) {
+                alert("PLEASE UPLOAD AT LEAST ONE PRODUCT IMAGE.");
+                return;
+            }
+            currentStep = targetStep;
+            updateStepUI(currentStep);
+        }
+
+        function prevStep(targetStep) {
+            currentStep = targetStep;
+            updateStepUI(currentStep);
+        }
+
+        function selectUploadMode(mode, element) {
+            document.querySelectorAll('.mode-box').forEach(box => box.classList.remove('clicked'));
+            element.classList.add('clicked');
+            selectedModeValue = mode;
+
+            const retailRow = document.getElementById('retail-price-row');
+            const dropshipRow = document.getElementById('dropshipping-price-row');
+            const wholesaleRow = document.getElementById('wholesale-price-row');
+            const moqGroup = document.getElementById('moq-input-group');
+
+            if (mode === 'dropshipping') {
+                retailRow.style.display = 'grid';
+                dropshipRow.style.display = 'grid';
+                wholesaleRow.style.display = 'none';
+                moqGroup.style.display = 'none';
+            } else if (mode === 'wholesale') {
+                retailRow.style.display = 'none';
+                dropshipRow.style.display = 'none';
+                wholesaleRow.style.display = 'grid';
+                moqGroup.style.display = 'block';
+            } else if (mode === 'both') {
+                retailRow.style.display = 'grid';
+                dropshipRow.style.display = 'grid';
+                wholesaleRow.style.display = 'grid';
+                moqGroup.style.display = 'block';
+            } else {
+                retailRow.style.display = 'grid';
+                dropshipRow.style.display = 'none';
+                wholesaleRow.style.display = 'none';
+                moqGroup.style.display = 'none';
+            }
+        }
+
+        function showSubCategories(element, categoryKey) {
+            document.querySelectorAll('#main-categories .cat-box').forEach(box => box.classList.remove('clicked'));
+            element.classList.add('clicked');
+
+            document.getElementById('main-categories').style.display = 'none';
+            const subContainer = document.getElementById('sub-categories');
+            subContainer.style.display = 'block';
+
+            const contentDiv = document.getElementById('sub-cat-content');
+            contentDiv.innerHTML = '';
+
+            subCategoriesData[categoryKey].forEach(item => {
+                const box = document.createElement('div');
+                box.className = 'cat-box';
+                box.onclick = () => {
+                    document.querySelectorAll('#sub-cat-content .cat-box').forEach(b => b.classList.remove('clicked'));
+                    box.classList.add('clicked');
+                    selectedCategoryValue = item.name;
+                };
+                box.innerHTML = `<i class="${item.icon}"></i><span>${item.name}</span>`;
+                contentDiv.appendChild(box);
+            });
+        }
+
+        function backToMainCategories() {
+            document.getElementById('sub-categories').style.display = 'none';
+            document.getElementById('main-categories').style.display = 'grid';
+            document.querySelectorAll('#main-categories .cat-box').forEach(box => box.classList.remove('clicked'));
+            selectedCategoryValue = "";
+        }
+
+        // ============================================================================
+        // অপ্টিমাইজড ইমেজ কম্প্রেশন (Canvas ভিত্তিক)
+        // ============================================================================
+        async function optimizeAndCompressImage(file) {
+            return new Promise((resolve) => {
+                if (!file || !file.type.startsWith('image/')) return resolve(file);
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.src = e.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
+                        const maxWidth = 1200;
+
+                        if (width > maxWidth) {
+                            height = Math.round((height * maxWidth) / width);
+                            width = maxWidth;
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        canvas.toBlob((blob) => {
+                            if (!blob) return resolve(file);
+                            const optimizedFile = new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".jpg", {
+                                type: "image/jpeg",
+                                lastModified: Date.now()
+                            });
+                            resolve(optimizedFile);
+                        }, "image/jpeg", 0.8);
+                    };
+                    img.onerror = () => resolve(file);
+                };
+                reader.onerror = () => resolve(file);
+            });
+        }
+
+        // ============================================================================
+        // ইমেজ আপলোড উইথ অপ্টিমাইজেশন অ্যান্ড R2 রেসপন্স হ্যান্ডলিং
+        // ============================================================================
+        window.handleImageSelection = async function(event) {
+            const files = event.target.files;
+            if (!files || files.length === 0) return;
+            const previewContainer = document.getElementById('image-preview');
+
+            for (let i = 0; i < files.length; i++) {
+                let file = files[i];
+                const card = document.createElement('div');
+                card.className = 'preview-card';
+                card.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--gold-solid);"><i class="fa-solid fa-spinner fa-spin"></i></div>`;
+                previewContainer.appendChild(card);
+
+                try {
+                    // ১. ছবি কম্প্রেশন ও সাইজ রিডিউস
+                    file = await optimizeAndCompressImage(file);
+
+                    // ২. ক্লাউডফ্লেয়ার R2 বাকেটে আপলোড করা
+                    const response = await fetch(`${WORKER_BASE_URL}/api/upload?type=image`, {
+                        method: "POST",
+                        headers: { "X-File-Name": file.name || `img_${Date.now()}.jpg` },
+                        body: file
+                    });
+                    const data = await response.json();
+
+                    if (data.success && data.url) {
+                        uploadedImageUrls.push(data.url);
+
+                        const img = document.createElement('img');
+                        img.src = data.url;
+                        
+                        const deleteBtn = document.createElement('button');
+                        deleteBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+                        deleteBtn.style.cssText = "position:absolute; top:2px; right:2px; background:rgba(0,0,0,0.8); color:#fff; border:none; border-radius:50%; width:20px; height:20px; cursor:pointer; font-size:10px; display:flex; align-items:center; justify-content:center; z-index:10;";
+                        
+                        deleteBtn.onclick = function() {
+                            card.remove();
+                            uploadedImageUrls = uploadedImageUrls.filter(url => url !== data.url);
+                        };
+
+                        card.innerHTML = '';
+                        card.appendChild(img);
+                        card.appendChild(deleteBtn);
+                    } else {
+                        throw new Error("Upload failed");
+                    }
+                } catch (err) {
+                    card.remove();
+                    alert("IMAGE UPLOAD FAILED.");
+                }
+            }
+        };
+
+        // ============================================================================
+        // ভিডিও আপলোড (সরাসরি R2 Video Bucket-এ)
+        // ============================================================================
+        window.handleVideoSelection = async function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const previewContainer = document.getElementById('video-preview');
+            previewContainer.innerHTML = "";
+
+            const card = document.createElement('div');
+            card.className = 'preview-card';
+            card.style.width = "100px";
+            card.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--gold-solid);"><i class="fa-solid fa-spinner fa-spin"></i></div>`;
+            previewContainer.appendChild(card);
+
+            try {
+                const response = await fetch(`${WORKER_BASE_URL}/api/upload?type=video`, {
+                    method: "POST",
+                    headers: { "X-File-Name": file.name || `vid_${Date.now()}.mp4` },
+                    body: file
+                });
+                const data = await response.json();
+
+                if (data.success && data.url) {
+                    uploadedVideoUrl = data.url;
+                    const vid = document.createElement('video');
+                    vid.src = data.url;
+                    vid.controls = true;
+                    
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+                    deleteBtn.style.cssText = "position:absolute; top:2px; right:2px; background:rgba(0,0,0,0.8); color:#fff; border:none; border-radius:50%; width:20px; height:20px; cursor:pointer; font-size:10px; display:flex; align-items:center; justify-content:center; z-index:10;";
+                    
+                    deleteBtn.onclick = function() {
+                        card.remove();
+                        uploadedVideoUrl = "";
+                    };
+
+                    card.innerHTML = '';
+                    card.appendChild(vid);
+                    card.appendChild(deleteBtn);
+                } else {
+                    card.remove();
+                    alert("VIDEO UPLOAD FAILED.");
+                }
+            } catch (err) {
+                card.remove();
+                alert("VIDEO UPLOAD FAILED.");
+            }
+        };
+
+        // ============================================================================
+        // ফর্ম সাবমিট এবং D1 ডাটাবেজের 'products' টেবিলে সেভ
+        // ============================================================================
+        window.submitMasterForm = async function(event) {
+            event.preventDefault();
+
+            if (uploadedImageUrls.length === 0) {
+                alert("PLEASE UPLOAD AT LEAST ONE PRODUCT IMAGE.");
+                return;
+            }
+
+            const productPayload = {
+                product_code: `PROD_${Date.now()}`,
+                title: document.getElementById('product_title').value.toUpperCase(),
+                upload_mode: selectedModeValue,
+                category: selectedCategoryValue,
+                price: parseFloat(document.getElementById('selling_price').value) || parseFloat(document.getElementById('dropship_base_price').value) || parseFloat(document.getElementById('price_sample').value) || 0,
+                market_price: parseFloat(document.getElementById('market_price').value) || 0,
+                dropship_base_price: parseFloat(document.getElementById('dropship_base_price').value) || 0,
+                dropship_resell_price: parseFloat(document.getElementById('dropship_resell_price').value) || 0,
+                price_sample: parseFloat(document.getElementById('price_sample').value) || 0,
+                price_min_whole: parseFloat(document.getElementById('price_min_whole').value) || 0,
+                price_bulk: parseFloat(document.getElementById('price_bulk').value) || 0,
+                stock: parseInt(document.getElementById('stock_count').value) || 1,
+                moq: parseInt(document.getElementById('moq_units')?.value) || 1,
+                image_url: uploadedImageUrls[0] || "",
+                images_json: JSON.stringify(uploadedImageUrls),
+                video_url: uploadedVideoUrl,
+                youtube_video: document.getElementById('product_video').value.trim(),
+                youtube_live: document.getElementById('youtube_live').value.trim(),
+                facebook_live: document.getElementById('facebook_live').value.trim(),
+                target_country: document.getElementById('target_country').value,
+                discount_rate: parseFloat(document.getElementById('discount_rate').value) || 0,
+                allow_custom_note: document.getElementById('custom_size_note').checked ? 1 : 0,
+                chat_with_seller: 1,
+                description: document.getElementById('product_description').value,
+                created_at: new Date().toISOString()
+            };
+
+            const submitBtn = event.target.querySelector('.action-btn:not(.secondary)');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> PUBLISHING TO D1...';
+
+            try {
+                await fetch(`${WORKER_BASE_URL}/api/save`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        table: 'products',
+                        data: productPayload
+                    })
+                });
+
+                let sellerProducts = JSON.parse(localStorage.getItem('rorraxy_seller_products')) || [];
+                sellerProducts.unshift(productPayload);
+                localStorage.setItem('rorraxy_seller_products', JSON.stringify(sellerProducts));
+
+            } catch (e) {
+                console.error("D1 Sync Error:", e);
+            }
+
+            document.getElementById('success-overlay').style.display = 'flex';
+
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 120,
+                    spread: 80,
+                    origin: { y: 0.6 },
+                    colors: ['#bf953f', '#fcf6ba', '#b38728', '#ffffff']
+                });
+            }
+
+            setTimeout(() => {
+                window.location.href = "list.html";
+            }, 1200);
+        };
+    </script>
+</body>
+</html>
