@@ -494,7 +494,7 @@
             }
         }
 
-        // Render Dynamic Products from Cloudflare D1 Database
+        // Render Dynamic Products from Cloudflare D1 Database (Fixed Image URL Resolver)
         function renderProductCards(products) {
             const feedContainer = document.getElementById('productFeed');
             feedContainer.innerHTML = '';
@@ -506,7 +506,25 @@
                 const discount = item.discount_rate || item.discountRate || '50';
                 const countryCode = (item.target_country || item.targetCountry || 'bd').toLowerCase();
                 const flagUrl = `https://flagcdn.com/w20/${countryCode}.png`;
-                const imageUrl = item.image_url || item.imageUrl || 'https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/Multi-pocket%20Skinny%20Pants%20(10).webp';
+                
+                // সঠিক ইমেজ ইউআরএল বা পাথ বের করার অ্যাডভান্সড লজিক (images_json অ্যারে অথবা image_url হ্যান্ডেলিং)
+                let resolvedImageUrl = 'https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/Multi-pocket%20Skinny%20Pants%20(10).webp';
+                if (item.image_url) {
+                    resolvedImageUrl = item.image_url;
+                } else if (item.imageUrl) {
+                    resolvedImageUrl = item.imageUrl;
+                } else if (item.images_json) {
+                    try {
+                        const parsedImages = JSON.parse(item.images_json);
+                        if (Array.isArray(parsedImages) && parsedImages.length > 0) {
+                            resolvedImageUrl = parsedImages[0];
+                        }
+                    } catch (e) {
+                        if (typeof item.images_json === 'string' && item.images_json.trim() !== '') {
+                            resolvedImageUrl = item.images_json.split(',')[0].trim();
+                        }
+                    }
+                }
 
                 const cardHtml = `
                     <div class="product-card" data-product-id="${productId}" onclick="openProductDetails('${productId}')">
@@ -514,7 +532,7 @@
                             <div class="product-country-discount-badge">
                                 <img src="${flagUrl}" alt="${countryCode}" class="flag-icon" onerror="this.style.display='none'"> ${discount}% OFF
                             </div>
-                            <img src="${imageUrl}" alt="${title}" loading="lazy">
+                            <img src="${resolvedImageUrl}" alt="${title}" loading="lazy" onerror="this.src='https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/Multi-pocket%20Skinny%20Pants%20(10).webp'">
                         </div>
                         <div class="card-footer-actions" onclick="event.stopPropagation()">
                             <span class="product-price-tag">${price}</span>
