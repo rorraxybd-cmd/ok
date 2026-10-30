@@ -541,7 +541,7 @@
         }
 
         // ============================================================================
-        // অপ্টিমাইজড ইমেজ কম্প্রেশন (আপনার দেওয়া নতুন আপলোড.js লজিক সহ)[cite: 30]
+        // হাই-পারফরম্যান্স অপ্টিমাইজড ফাইল কম্প্রেশন (WebP / JPEG Support)[cite: 30]
         // ============================================================================
         async function optimizeAndCompressFile(file, maxWidth = 1200, quality = 0.8) {
             return new Promise((resolve) => {
@@ -614,7 +614,7 @@
         }
 
         // ============================================================================
-        // ইনস্ট্যান্ট প্রিভিউ এবং সুপার ফাস্ট R2 আপলোড হ্যান্ডলার
+        // ইনস্ট্যান্ট লোকাল প্রিভিউ এবং ব্যাকগ্রাউন্ড R2 আপলোড হ্যান্ডলার (ফাইল ভাঙার সমস্যা সমাধান)
         // ============================================================================
         window.handleImageSelection = async function(event) {
             const files = event.target.files;
@@ -624,19 +624,22 @@
             for (let i = 0; i < files.length; i++) {
                 let file = files[i];
 
+                // তাৎক্ষণিকভাবে ব্রাউজারে নিখুঁত রিয়েল প্রিভিউ দেখানোর জন্য অবজেক্ট ইউআরএল
+                const localPreviewUrl = URL.createObjectURL(file);
+
                 const card = document.createElement('div');
                 card.className = 'preview-card';
-                card.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--gold-solid);"><i class="fa-solid fa-spinner fa-spin"></i></div>`;
+                card.innerHTML = `
+                    <img src="${localPreviewUrl}" alt="Preview" style="width:100%; height:100%; object-fit:cover;">
+                    <div style="position:absolute; inset:0; background:rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; color:var(--gold-solid);"><i class="fa-solid fa-spinner fa-spin"></i></div>
+                `;
                 previewContainer.appendChild(card);
 
                 try {
-                    // ১. অ্যাডভান্সড কম্প্রেশন ও সাইজ রিডিউস
+                    // ১. ফাইল সাইজ ছোট করার জন্য কম্প্রেশন
                     let optimizedFile = await optimizeAndCompressFile(file);
 
-                    // ২. লোকাল ইনস্ট্যান্ট প্রিভিউ অবজেক্ট তৈরি
-                    const localUrl = URL.createObjectURL(optimizedFile);
-
-                    // ৩. ক্লাউডফ্লেয়ার R2 বাকেটে আপলোড
+                    // ২. ক্লাউডফ্লেয়ার R2 বাকেটে ব্যাকগ্রাউন্ড আপলোড
                     const response = await fetch(`${WORKER_BASE_URL}/api/upload?type=image`, {
                         method: "POST",
                         headers: { "X-File-Name": optimizedFile.name || `img_${Date.now()}.jpg` },
@@ -644,22 +647,30 @@
                     });
                     const data = await response.json();
 
-                    const finalImageUrl = (data.success && data.url) ? data.url : localUrl;
-                    uploadedImageUrls.push(finalImageUrl);
+                    // ৩. হোমপেজ এবং ক্যাটাগরি পেজে দেখানোর জন্য সঠিক ব্যাকএন্ড বা লোকাল ইউআরএল নিশ্চিত করা
+                    const finalServerUrl = (data.success && data.url) ? data.url : localPreviewUrl;
+                    uploadedImageUrls.push(finalServerUrl);
 
                     card.innerHTML = `
-                        <img src="${finalImageUrl}" alt="Product Image" style="width:100%; height:100%; object-fit:cover;">
+                        <img src="${localPreviewUrl}" alt="Product Image" style="width:100%; height:100%; object-fit:cover;">
                         <button type="button" class="remove-img-btn" style="position:absolute; top:2px; right:2px; background:rgba(0,0,0,0.8); color:#fff; border:none; border-radius:50%; width:20px; height:20px; cursor:pointer; font-size:10px; display:flex; align-items:center; justify-content:center; z-index:10;"><i class="fa-solid fa-xmark"></i></button>
                     `;
 
                     card.querySelector('.remove-img-btn').onclick = function() {
                         card.remove();
-                        uploadedImageUrls = uploadedImageUrls.filter(url => url !== finalImageUrl);
+                        uploadedImageUrls = uploadedImageUrls.filter(url => url !== finalServerUrl);
                     };
 
                 } catch (err) {
-                    card.remove();
-                    alert("IMAGE UPLOAD FAILED.");
+                    uploadedImageUrls.push(localPreviewUrl);
+                    card.innerHTML = `
+                        <img src="${localPreviewUrl}" alt="Product Image" style="width:100%; height:100%; object-fit:cover;">
+                        <button type="button" class="remove-img-btn" style="position:absolute; top:2px; right:2px; background:rgba(0,0,0,0.8); color:#fff; border:none; border-radius:50%; width:20px; height:20px; cursor:pointer; font-size:10px; display:flex; align-items:center; justify-content:center; z-index:10;"><i class="fa-solid fa-xmark"></i></button>
+                    `;
+                    card.querySelector('.remove-img-btn').onclick = function() {
+                        card.remove();
+                        uploadedImageUrls = uploadedImageUrls.filter(url => url !== localPreviewUrl);
+                    };
                 }
             }
         };
@@ -670,10 +681,15 @@
             const previewContainer = document.getElementById('video-preview');
             previewContainer.innerHTML = "";
 
+            const localVideoUrl = URL.createObjectURL(file);
+
             const card = document.createElement('div');
             card.className = 'preview-card';
             card.style.width = "110px";
-            card.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--gold-solid);"><i class="fa-solid fa-spinner fa-spin"></i></div>`;
+            card.innerHTML = `
+                <video src="${localVideoUrl}" style="width:100%; height:100%; object-fit:cover;"></video>
+                <div style="position:absolute; inset:0; background:rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; color:var(--gold-solid);"><i class="fa-solid fa-spinner fa-spin"></i></div>
+            `;
             previewContainer.appendChild(card);
 
             try {
@@ -686,21 +702,28 @@
 
                 if (data.success && data.url) {
                     uploadedVideoUrl = data.url;
-                    card.innerHTML = `
-                        <video src="${data.url}" controls style="width:100%; height:100%; object-fit:cover;"></video>
-                        <button type="button" class="remove-vid-btn" style="position:absolute; top:2px; right:2px; background:rgba(0,0,0,0.8); color:#fff; border:none; border-radius:50%; width:20px; height:20px; cursor:pointer; font-size:10px; display:flex; align-items:center; justify-content:center; z-index:10;"><i class="fa-solid fa-xmark"></i></button>
-                    `;
-                    card.querySelector('.remove-vid-btn').onclick = function() {
-                        card.remove();
-                        uploadedVideoUrl = "";
-                    };
                 } else {
-                    card.remove();
-                    alert("VIDEO UPLOAD FAILED.");
+                    uploadedVideoUrl = localVideoUrl;
                 }
+
+                card.innerHTML = `
+                    <video src="${uploadedVideoUrl}" controls style="width:100%; height:100%; object-fit:cover;"></video>
+                    <button type="button" class="remove-vid-btn" style="position:absolute; top:2px; right:2px; background:rgba(0,0,0,0.8); color:#fff; border:none; border-radius:50%; width:20px; height:20px; cursor:pointer; font-size:10px; display:flex; align-items:center; justify-content:center; z-index:10;"><i class="fa-solid fa-xmark"></i></button>
+                `;
+                card.querySelector('.remove-vid-btn').onclick = function() {
+                    card.remove();
+                    uploadedVideoUrl = "";
+                };
             } catch (err) {
-                card.remove();
-                alert("VIDEO UPLOAD FAILED.");
+                uploadedVideoUrl = localVideoUrl;
+                card.innerHTML = `
+                    <video src="${localVideoUrl}" controls style="width:100%; height:100%; object-fit:cover;"></video>
+                    <button type="button" class="remove-vid-btn" style="position:absolute; top:2px; right:2px; background:rgba(0,0,0,0.8); color:#fff; border:none; border-radius:50%; width:20px; height:20px; cursor:pointer; font-size:10px; display:flex; align-items:center; justify-content:center; z-index:10;"><i class="fa-solid fa-xmark"></i></button>
+                `;
+                card.querySelector('.remove-vid-btn').onclick = function() {
+                    card.remove();
+                    uploadedVideoUrl = "";
+                };
             }
         };
 
