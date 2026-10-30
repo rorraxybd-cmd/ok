@@ -450,10 +450,17 @@
                 console.warn("Cloudflare Fetch Warning:", err);
             }
 
-            if (products.length === 0) {
-                products = JSON.parse(localStorage.getItem('rorraxy_seller_products')) || [];
-            }
+            // LocalStorage থেকে ব্যাকআপ প্রোডাক্ট ফেচ করা (যাতে আপলোড করার সাথে সাথে লোকাল ও ক্লাউড ডেটা সিঙ্ক থাকে)
+            let localProducts = JSON.parse(localStorage.getItem('rorraxy_seller_products')) || [];
+            
+            // ক্লাউড এবং লোকাল ডেটা মার্জ করা (ডুপ্লিকেট এড়িয়ে)
+            let mergedMap = new Map();
+            [...localProducts, ...products].forEach(p => {
+                let pId = p.id || p.product_id || p.product_code || p.title;
+                if(pId) mergedMap.set(String(pId), p);
+            });
 
+            products = Array.from(mergedMap.values());
             renderProductsList(products);
         }
 
@@ -476,7 +483,25 @@
                 const pCat = p.category || 'General';
                 const pPrice = p.price ? `$${parseFloat(p.price).toFixed(2)}` : '$0.00';
                 const pStock = `${p.stock || 1} Pcs`;
-                const pImg = p.image_url || 'https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png';
+                
+                // ইমেজের সঠিক প্রপার্টি (image_url, imageUrl বা images_json অ্যারে) রেন্ডার করার লজিক
+                let pImg = 'https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png';
+                if (p.image_url) {
+                    pImg = p.image_url;
+                } else if (p.imageUrl) {
+                    pImg = p.imageUrl;
+                } else if (p.images_json) {
+                    try {
+                        let parsed = JSON.parse(p.images_json);
+                        if (Array.isArray(parsed) && parsed.length > 0) pImg = parsed[0];
+                    } catch (e) {
+                        if (typeof p.images_json === 'string' && p.images_json.trim() !== '') {
+                            pImg = p.images_json.split(',')[0].trim();
+                        }
+                    }
+                }
+
+                const uniqueEditKey = p.id || p.product_code || index;
 
                 desktopHtml += `
                     <tr>
@@ -491,8 +516,8 @@
                         <td>${pStock}</td>
                         <td><span class="status-badge approved">APPROVED</span></td>
                         <td>
-                            <a href="upload.html?edit=${p.id || index}" class="action-icon-btn" title="Edit"><i class="fa-solid fa-pen"></i></a>
-                            <button class="action-icon-btn delete" title="Delete" onclick="deleteProductRow(this, '${p.id || index}')"><i class="fa-solid fa-trash"></i></button>
+                            <a href="upload.html?edit=${uniqueEditKey}" class="action-icon-btn" title="Edit"><i class="fa-solid fa-pen"></i></a>
+                            <button class="action-icon-btn delete" title="Delete" onclick="deleteProductRow(this, '${uniqueEditKey}')"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
                 `;
@@ -509,8 +534,8 @@
                         <div class="mobile-card-right">
                             <span class="mobile-card-price">${pPrice}</span>
                             <div class="mobile-card-actions">
-                                <a href="upload.html?edit=${p.id || index}" class="action-icon-btn" title="Edit"><i class="fa-solid fa-pen"></i></a>
-                                <button class="action-icon-btn delete" title="Delete" onclick="deleteProductRow(this, '${p.id || index}')"><i class="fa-solid fa-trash"></i></button>
+                                <a href="upload.html?edit=${uniqueEditKey}" class="action-icon-btn" title="Edit"><i class="fa-solid fa-pen"></i></a>
+                                <button class="action-icon-btn delete" title="Delete" onclick="deleteProductRow(this, '${uniqueEditKey}')"><i class="fa-solid fa-trash"></i></button>
                             </div>
                         </div>
                     </div>
@@ -523,6 +548,10 @@
 
         function deleteProductRow(btn, id) {
             if (confirm("ARE YOU SURE YOU WANT TO DELETE THIS PRODUCT?")) {
+                let localProducts = JSON.parse(localStorage.getItem('rorraxy_seller_products')) || [];
+                localProducts = localProducts.filter((p, idx) => String(p.id || p.product_code || idx) !== String(id));
+                localStorage.setItem('rorraxy_seller_products', JSON.stringify(localProducts));
+
                 const tr = btn.closest('tr');
                 const card = btn.closest('.mobile-prod-card');
                 if (tr) tr.remove();
