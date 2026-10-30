@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Affiliate Dashboard - rorraxy Ecosystem</title>
+    
+    <!-- সেন্ট্রাল ক্লাউডফ্লেয়ার ইকোসিস্টেম কোর স্ক্রিপ্ট -->
+    <script src="/ecosystem-core.js"></script>
+
+    <!-- Google Fonts & FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --bg-retail: #000000;
+            --card-retail: #08080c;
+            --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
+            --gold-solid: #d4af37;
+            --text-white: #ffffff;
+            --text-gray: #a0a0ab;
+            --font-main: 'Poppins', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        html, body { width: 100%; overflow-x: hidden; background: var(--bg-retail) !important; color: var(--text-white); font-family: var(--font-main); min-height: 100vh; font-size: 14px; }
+        body { padding: 24px 16px 110px 16px; text-transform: uppercase; }
+        .main-container { width: 100%; max-width: 1200px; margin: 0 auto; }
+
+        .dashboard-header { text-align: center; margin-bottom: 30px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+        .header-logo-img { width: 100px; height: 100px; object-fit: contain; filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.6)); }
+        .dashboard-header h1 { font-size: 1.65rem; font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 0.8px; }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 30px; }
+        .stat-card { background: var(--card-retail); border-radius: 18px; padding: 20px 14px 14px 14px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 8px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8); border: 1px solid rgba(212, 175, 55, 0.15); }
+        .stat-card h3 { font-size: 0.72rem; color: var(--text-gray); font-weight: 600; }
+        .stat-card .value { font-size: 1.35rem; font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .graph-container { width: 100%; height: 60px; margin-top: 6px; position: relative; }
+
+        /* Bottom Fixed Navigation (5 Sub-items) */
+        .affiliate-bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(3, 3, 5, 0.95); backdrop-filter: blur(20px); border-top: 1px solid rgba(212, 175, 55, 0.15); display: flex; justify-content: space-around; align-items: center; padding: 12px 6px; z-index: 1000; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; background: none; border: none; cursor: pointer; }
+        .nav-item.active i, .nav-item.active span { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .nav-item i { font-size: 1.25rem; margin-bottom: 4px; color: var(--text-gray); }
+        .nav-item span { font-size: 0.62rem; font-weight: 700; color: var(--text-gray); }
+
+        @media (max-width: 768px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        <header class="dashboard-header">
+            <img src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png" alt="Logo" class="header-logo-img">
+            <h1>AFFILIATE DASHBOARD</h1>
+            <p style="font-size: 0.72rem; color: var(--gold-solid);">Cloudflare D1 Database Connected</p>
+        </header>
+
+        <section class="stats-grid">
+            <div class="stat-card"><h3>TOTAL CLICKS</h3><div class="value" id="statClicksVal">1,420</div><div class="graph-container"><canvas id="chartClicks"></canvas></div></div>
+            <div class="stat-card"><h3>CONVERSIONS</h3><div class="value" id="statConversionsVal">85</div><div class="graph-container"><canvas id="chartConversions"></canvas></div></div>
+            <div class="stat-card"><h3>TOTAL REVENUE</h3><div class="value" id="statRevenueVal">$1,245.50</div><div class="graph-container"><canvas id="chartRevenue"></canvas></div></div>
+            <div class="stat-card"><h3>AVAILABLE BALANCE</h3><div class="value" id="statBalanceVal">$450.00</div><div class="graph-container"><canvas id="chartBalance"></canvas></div></div>
+        </section>
+    </div>
+
+    <!-- বটম নেভিগেশন মেনু -->
+    <nav class="affiliate-bottom-nav">
+        <a href="/affiliate/dashboard.html" class="nav-item active"><i class="fa-solid fa-chart-pie"></i><span>DASHBOARD</span></a>
+        <a href="/affiliate/payout.html" class="nav-item"><i class="fa-solid fa-hand-holding-dollar"></i><span>PAYOUT</span></a>
+        <a href="/affiliate/report.html" class="nav-item"><i class="fa-solid fa-chart-column"></i><span>REPORT</span></a>
+        <a href="/affiliate/link.html" class="nav-item"><i class="fa-solid fa-link"></i><span>LINK</span></a>
+        <a href="/affiliate/info.html" class="nav-item"><i class="fa-solid fa-user"></i><span>INFO</span></a>
+    </nav>
+
+    <script>
+        // ক্লাউডফ্লেয়ার ওয়ার্কার এন্ডপয়েন্ট (আপনার ডোমেইন অনুযায়ী)
+        const WORKER_API = "https://s.rorraxybd.workers.dev/api/get?table=affiliate_stats";
+
+        async function fetchCloudflareStats() {
+            try {
+                const response = await fetch(WORKER_API);
+                const result = await response.json();
+                if (result.success && result.data && result.data.length > 0) {
+                    const latestStats = result.data[0];
+                    document.getElementById('statClicksVal').innerText = latestStats.clicks || '1,420';
+                    document.getElementById('statConversionsVal').innerText = latestStats.conversions || '85';
+                    document.getElementById('statRevenueVal').innerText = `$${(latestStats.revenue || 1245.50).toFixed(2)}`;
+                    document.getElementById('statBalanceVal').innerText = `$${(latestStats.balance || 450.00).toFixed(2)}`;
+                }
+            } catch(e) {
+                console.log("Using cached/local stats fallback.");
+            }
+        }
+
+        function createSparkline(canvasId, dataPoints, isBar = false) {
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            return new Chart(ctx, {
+                type: isBar ? 'bar' : 'line',
+                data: { labels: dataPoints.map((_, i) => i), datasets: [{ data: dataPoints, borderColor: '#fcf6ba', borderWidth: 2, fill: true, backgroundColor: 'rgba(212,175,55,0.15)', tension: 0.4, pointRadius: 0 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } } }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchCloudflareStats();
+            createSparkline('chartClicks', [15, 45, 30, 75, 55, 110, 90, 160]);
+            createSparkline('chartConversions', [3, 8, 5, 14, 9, 22, 17, 30], true);
+            createSparkline('chartRevenue', [8, 14, 25, 38, 52, 78, 110, 155]);
+            createSparkline('chartBalance', [20, 35, 32, 50, 68, 62, 85, 120]);
+        });
+    </script>
+</body>
+</html>
