@@ -549,12 +549,16 @@
                 if (!item.trackingId) item.trackingId = generateUniqueId('TRK');
                 if (!item.sellerId) item.sellerId = item.seller || 'RRX-MAIN-SELLER';
 
+                // কার্ট আইটেমের সঠিক ইমেজ পাথ রেন্ডার করার জন্য লজিক
+                let itemImgUrl = item.img || item.image_url || item.imageUrl || 'https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/Multi-pocket%20Skinny%20Pants%20(10).webp';
+                let itemTitleText = item.title || item.product_title || 'Product Item';
+
                 html += `
                 <div class="cart-row-item">
-                    <img src="${item.img || ''}" class="cart-img">
+                    <img src="${itemImgUrl}" class="cart-img" onerror="this.src='https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/Multi-pocket%20Skinny%20Pants%20(10).webp'">
                     <div style="flex:1; text-align:left; min-width:0;">
-                        <div style="font-size:0.72rem; font-weight:700; color:#ffffff; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${item.title || 'Product'}</div>
-                        <div style="font-size:0.58rem; color:var(--gold-solid); font-weight:600; margin-top:1px;">SIZE: ${item.size || 'N/A'}</div>
+                        <div style="font-size:0.72rem; font-weight:700; color:#ffffff; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${itemTitleText}</div>
+                        <div style="font-size:0.58rem; color:var(--gold-solid); font-weight:600; margin-top:1px;">SIZE: ${item.size || 'STANDARD'}</div>
                     </div>
                     <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
                         <button class="btn-qty-minus" data-index="${index}" style="background:var(--gold-gradient); border:none; color:#000; font-weight:800; width:20px; height:20px; border-radius:50%; cursor:pointer;">-</button>
@@ -795,7 +799,6 @@
             orderPayload.timestamp = new Date().toISOString();
             orderPayload.mainOrderId = 'RRX-' + currentEcosystemMode.toUpperCase().slice(0, 3) + '-' + Math.floor(100000 + Math.random() * 900000);
 
-            // Determine target table based on mode (`retail_orders`, `wholesale_orders`, `dropship_orders`)
             let targetTable = 'retail_orders';
             if (currentEcosystemMode === 'wholesale') targetTable = 'wholesale_orders';
             else if (currentEcosystemMode === 'dropshipping') targetTable = 'dropship_orders';
