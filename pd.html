@@ -225,7 +225,7 @@
 
     <div class="ecommerce-main-wrapper" id="mainStoreContainer">
         
-        <!-- Affiliate Referral Generator Banner (যদি অ্যাফিলিয়েট অ্যাকাউন্ট লগইন থাকে) -->
+        <!-- Affiliate Referral Generator Banner -->
         <div class="affiliate-link-generator-box" id="affiliateBannerBox">
             <div class="aff-top-info">
                 <span class="aff-title"><i class="fa-solid fa-handshake"></i> AFFILIATE MARKETING LINK</span>
@@ -488,13 +488,47 @@
 
             const strip = document.getElementById('productThumbnailsStrip');
             
+            // নিখুঁত ইমেজ ও ভিডিও লিস্ট এক্সট্রাক্ট করার অ্যাডভান্সড লজিক
             let mediaList = [];
-            if(prod.image_url) mediaList.push({ type: 'image', url: prod.image_url });
-            if(prod.imageUrl) mediaList.push({ type: 'image', url: prod.imageUrl });
-            if(prod.video_url) mediaList.push({ type: 'video', url: prod.video_url });
             
+            // ১. মূল একক ইমেজ হ্যান্ডেলিং
+            let primaryImg = prod.image_url || prod.imageUrl || prod.img || "";
+            if (primaryImg) {
+                mediaList.push({ type: 'image', url: primaryImg });
+            }
+
+            // ২. images_json অ্যারে বা স্ট্রিং হ্যান্ডেলিং
+            if (prod.images_json) {
+                try {
+                    let parsedImages = JSON.parse(prod.images_json);
+                    if (Array.isArray(parsedImages)) {
+                        parsedImages.forEach(imgUrl => {
+                            if (imgUrl && !mediaList.some(m => m.url === imgUrl)) {
+                                mediaList.push({ type: 'image', url: imgUrl });
+                            }
+                        });
+                    }
+                } catch (e) {
+                    if (typeof prod.images_json === 'string' && prod.images_json.trim() !== '') {
+                        prod.images_json.split(',').forEach(imgUrl => {
+                            let cleanUrl = imgUrl.trim();
+                            if (cleanUrl && !mediaList.some(m => m.url === cleanUrl)) {
+                                mediaList.push({ type: 'image', url: cleanUrl });
+                            }
+                        });
+                    }
+                }
+            }
+
+            // ৩. ভিডিও ফাইল হ্যান্ডেলিং
+            let videoFileUrl = prod.video_url || prod.videoUrl || "";
+            if (videoFileUrl) {
+                mediaList.push({ type: 'video', url: videoFileUrl });
+            }
+
+            // যদি কোনো ছবি বা ভিডিও না পাওয়া যায় তবে ফলব্যাক ডিফল্ট ইমেজ
             if(mediaList.length === 0) {
-                mediaList.push({ type: 'image', url: prod.img || "https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/Multi-pocket%20Skinny%20Pants%20(10).webp" });
+                mediaList.push({ type: 'image', url: "https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/Multi-pocket%20Skinny%20Pants%20(10).webp" });
             }
 
             updateMainViewport(mediaList[0]);
@@ -511,7 +545,7 @@
                 } else {
                     thumbHtml += `
                         <div class="thumb-item ${activeCls}" onclick='switchMediaView(${JSON.stringify(m)}, this)'>
-                            <img src="${m.url}" alt="Thumb ${idx+1}">
+                            <img src="${m.url}" alt="Thumb ${idx+1}" onerror="this.src='https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/Multi-pocket%20Skinny%20Pants%20(10).webp'">
                         </div>
                     `;
                 }
@@ -528,7 +562,7 @@
             if(mediaObj.type === 'video') {
                 viewport.innerHTML = `<video src="${mediaObj.url}" class="main-media-element" controls autoplay muted loop playsinline></video>`;
             } else {
-                viewport.innerHTML = `<img src="${mediaObj.url}" class="main-media-element" alt="Product View">`;
+                viewport.innerHTML = `<img src="${mediaObj.url}" class="main-media-element" alt="Product View" onerror="this.src='https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/Multi-pocket%20Skinny%20Pants%20(10).webp'">`;
             }
         }
 
@@ -644,7 +678,6 @@
             if (!currentActiveProduct) return;
             let chosenSize = savedCustomNote !== "" ? savedCustomNote : (document.getElementById('customSizeInputField').value.trim() || "STANDARD");
             
-            // Mode-based Cart Storage
             let cartKey = 'rorraxy_cart';
             if (currentEcosystemMode === 'dropshipping') cartKey = 'rorraxy_dropship_cart';
             if (currentEcosystemMode === 'wholesale') cartKey = 'rorraxy_wholesale_cart';
@@ -654,6 +687,7 @@
             let existingItem = cart.find(item => item.productId === prodId && item.size === chosenSize);
             
             let priceNum = parseFloat(currentActiveProduct.price) || 0.00;
+            let primaryImgUrl = currentActiveProduct.image_url || currentActiveProduct.imageUrl || currentActiveProduct.img || "";
 
             if(existingItem) {
                 existingItem.qty += currentItemQuantity;
@@ -666,7 +700,7 @@
                     qty: currentItemQuantity,
                     size: chosenSize,
                     mode: currentEcosystemMode,
-                    img: currentActiveProduct.image_url || currentActiveProduct.imageUrl || currentActiveProduct.img || ""
+                    img: primaryImgUrl
                 });
             }
             localStorage.setItem(cartKey, JSON.stringify(cart));
