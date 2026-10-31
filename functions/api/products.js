@@ -14,7 +14,7 @@ export async function onRequest(context) {
   try {
     const url = new URL(request.url);
     
-    // ১. GET রিকোয়েস্ট: সমস্ত প্রোডাক্ট, মোড (retail/wholesale/dropshipping) অথবা নির্দিষ্ট কোড অনুযায়ী দেখার জন্য
+    // ১. GET রিকোয়েস্ট: প্রোডাক্ট বা মোড (retail/wholesale/dropshipping) অনুযায়ী ডাটা ফেচ করার জন্য
     if (request.method === "GET") {
       const productCode = url.searchParams.get("code") || url.searchParams.get("id");
       const sellerId = url.searchParams.get("seller_id");
@@ -128,7 +128,7 @@ export async function onRequest(context) {
       });
     }
 
-    // ৩. PUT রিকোয়েস্ট: হোমপেজে কেউ লাইক করলে like_count বাড়িয়ে নেওয়ার জন্য
+    // ৩. PUT রিকোয়েস্ট: লাইক কাউন্ট আপডেট করার জন্য
     if (request.method === "PUT") {
       const body = await request.json();
       const { product_code } = body;
