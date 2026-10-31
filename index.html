@@ -193,8 +193,27 @@
         }
         .product-card:hover { border-color: rgba(212,175,55,0.35); }
 
-        .product-media-box { position: relative; width: 100%; background: #050508; overflow: hidden; display: flex; align-items: center; justify-content: center; aspect-ratio: 1/1; }
-        .product-media-box img { width: 100%; height: 100%; display: block; object-fit: cover; background: #050508; }
+        /* অপ্টিমাইজড মিডিয়া বক্স ও ইমেজ ওভারলে ফিক্স (শেপ বা বক্সের নিচে ছবি ঢাকা পড়া রোধ করতে) */
+        .product-media-box { 
+            position: relative; 
+            width: 100%; 
+            background: #050508; 
+            overflow: hidden; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            aspect-ratio: 1/1; 
+            z-index: 1;
+        }
+        .product-media-box img { 
+            width: 100%; 
+            height: 100%; 
+            display: block; 
+            object-fit: contain; /* ছবি যেন কেটে না যায় বা ব্ল্যাক বক্সের নিচে না হারায় */
+            background: #050508; 
+            position: relative;
+            z-index: 2;
+        }
         
         .product-country-discount-badge {
             position: absolute; top: 8px; left: 8px; z-index: 10;
@@ -212,6 +231,8 @@
             display: flex; justify-content: space-between; align-items: center; padding: 10px; 
             background: #06060a !important; border-top: 1px solid rgba(255,255,255,0.05); gap: 4px; 
             margin-top: auto;
+            position: relative;
+            z-index: 5;
         }
         .product-price-tag { font-size: 0.85rem; font-weight: 600; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
@@ -466,7 +487,6 @@
 
         // Fetch products dynamically using Cloudflare Worker API & D1 Database
         async function loadLiveProducts() {
-            const currentMode = localStorage.getItem('rorraxy_mode') || 'retail';
             try {
                 const response = await fetch(`${API_BASE_URL}/api/get?table=products`);
                 const result = await response.json();
@@ -502,7 +522,7 @@
                 const countryCode = (item.target_country || item.targetCountry || 'bd').toLowerCase();
                 const flagUrl = `https://flagcdn.com/w20/${countryCode}.png`;
                 
-                // নিখুঁত ও সুরক্ষিত ইমেজ ইউআরএল পার্সিং লজিক (যা ডাটাবেজের যেকোনো ফরম্যাট থেকে সঠিক লিংক বের করে নেবে)
+                // নিখুঁত ও সুরক্ষিত ইমেজ ইউআরএল পার্সিং লজিক
                 let resolvedImageUrl = '';
                 
                 if (item.image_url && typeof item.image_url === 'string' && item.image_url.startsWith('http')) {
