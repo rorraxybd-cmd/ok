@@ -20,7 +20,6 @@
             --card-retail: #08080c;
             --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
             --gold-solid: #d4af37;
-            --pink-love: #ff2a85;
             --text-white: #ffffff;
             --text-gray: #a0a0ab;
             --font-main: 'Poppins', sans-serif;
@@ -71,13 +70,6 @@
             object-fit: contain;
             background: transparent !important;
             mix-blend-mode: screen;
-            filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.6));
-            animation: logoLuxuryGlow 3s infinite alternate ease-in-out;
-        }
-
-        @keyframes logoLuxuryGlow {
-            0% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.4)); }
-            100% { transform: scale(1.05); filter: drop-shadow(0 0 35px rgba(212, 175, 55, 0.85)); }
         }
 
         .dashboard-header h1 {
@@ -100,14 +92,7 @@
             text-transform: lowercase;
             font-size: 0.78rem;
             color: var(--text-gray);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
-        }
-
-        .header-email-box:hover {
-            background: #12121c;
-            transform: translateY(-2px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
         }
 
         .header-email-box i {
@@ -125,7 +110,7 @@
             background: var(--card-retail);
             border-radius: 18px;
             padding: 24px 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(212, 175, 55, 0.15);
             margin-bottom: 25px;
         }
 
@@ -141,24 +126,32 @@
             align-items: center;
             justify-content: space-between;
             border-bottom: 1px solid rgba(212, 175, 55, 0.15);
-            padding-bottom: 8px;
+            padding-bottom: 12px;
         }
 
+        /* ADD NEW বাটন ফিক্স (টেক্সট স্পষ্ট করার জন্য) */
         .add-new-btn {
             background: var(--gold-gradient);
-            color: #000;
-            padding: 6px 14px;
+            color: #000000 !important;
+            -webkit-text-fill-color: #000000 !important;
+            padding: 8px 16px;
             border-radius: 20px;
             text-decoration: none;
-            font-size: 0.72rem;
-            font-weight: 800;
+            font-size: 0.75rem;
+            font-weight: 900;
             display: inline-flex;
             align-items: center;
             gap: 6px;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+            transition: transform 0.2s;
+        }
+
+        .add-new-btn:hover {
+            transform: scale(1.05);
         }
 
         .scrollable-product-container {
-            max-height: 550px;
+            max-height: 600px;
             overflow-y: auto;
             padding-right: 4px;
             display: flex;
@@ -170,15 +163,14 @@
             width: 100%;
             border-collapse: collapse;
             text-align: left;
-            font-size: 0.75rem;
+            font-size: 0.78rem;
         }
 
         .desktop-table-view th {
             color: var(--gold-solid);
-            padding: 12px 14px;
+            padding: 14px 16px;
             border-bottom: 1px solid rgba(212, 175, 55, 0.2);
             font-weight: 700;
-            letter-spacing: 0.5px;
             background: #040407;
             position: sticky;
             top: 0;
@@ -186,8 +178,8 @@
         }
 
         .desktop-table-view td {
-            padding: 12px 14px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            padding: 14px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             color: var(--text-white);
             text-transform: none;
             vertical-align: middle;
@@ -196,30 +188,32 @@
         .prod-info-cell {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 16px;
         }
 
+        /* ঝকঝকে ও স্পষ্টভাবে বড় ছবি */
         .prod-thumb {
-            width: 42px;
-            height: 42px;
-            border-radius: 8px;
+            width: 65px;
+            height: 65px;
+            border-radius: 10px;
             object-fit: cover;
-            border: 1px solid rgba(212, 175, 55, 0.3);
+            border: 1px solid rgba(212, 175, 55, 0.4);
             background: #000;
+            flex-shrink: 0;
         }
 
         .prod-name-txt {
             font-weight: 700;
             color: var(--text-white);
             text-transform: uppercase;
-            font-size: 0.78rem;
+            font-size: 0.85rem;
         }
 
         .status-badge {
             display: inline-block;
-            padding: 3px 10px;
+            padding: 4px 10px;
             border-radius: 20px;
-            font-size: 0.62rem;
+            font-size: 0.65rem;
             font-weight: 700;
             text-transform: uppercase;
         }
@@ -234,22 +228,30 @@
             background: rgba(212, 175, 55, 0.1);
             border: 1px solid rgba(212, 175, 55, 0.3);
             color: var(--gold-solid);
-            width: 28px;
-            height: 28px;
-            border-radius: 6px;
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
             display: inline-flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            transition: all 0.2s ease;
-            margin-right: 4px;
+            margin-right: 6px;
             text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .action-icon-btn:hover {
+            background: rgba(212, 175, 55, 0.25);
         }
 
         .action-icon-btn.delete {
             background: rgba(255, 77, 77, 0.1);
             border-color: rgba(255, 77, 77, 0.3);
             color: #ff4d4d;
+        }
+
+        .action-icon-btn.delete:hover {
+            background: rgba(255, 77, 77, 0.25);
         }
 
         .mobile-card-view {
@@ -261,23 +263,23 @@
         .mobile-prod-card {
             background: #040407;
             border-radius: 12px;
-            padding: 12px;
+            padding: 14px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 12px;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.8);
+            border: 1px solid rgba(212, 175, 55, 0.15);
         }
 
         .mobile-card-left {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 14px;
             overflow: hidden;
         }
 
         .mobile-card-info h4 {
-            font-size: 0.78rem;
+            font-size: 0.85rem;
             font-weight: 700;
             color: var(--text-white);
             text-transform: uppercase;
@@ -288,22 +290,22 @@
         }
 
         .mobile-card-info p {
-            font-size: 0.65rem;
+            font-size: 0.68rem;
             color: var(--text-gray);
             text-transform: none;
-            margin-top: 2px;
+            margin-top: 3px;
         }
 
         .mobile-card-right {
             display: flex;
             flex-direction: column;
             align-items: flex-end;
-            gap: 6px;
+            gap: 8px;
             white-space: nowrap;
         }
 
         .mobile-card-price {
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             font-weight: 800;
             background: var(--gold-gradient);
             -webkit-background-clip: text;
@@ -317,14 +319,12 @@
             width: 100%;
             background: rgba(3, 3, 5, 0.95);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             border-top: 1px solid rgba(212, 175, 55, 0.15);
             display: flex;
             justify-content: space-around;
             align-items: center;
             padding: 12px 6px;
             z-index: 1000;
-            box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.9);
         }
 
         .nav-item {
@@ -332,7 +332,6 @@
             flex-direction: column;
             align-items: center;
             text-decoration: none;
-            transition: transform 0.2s ease;
             flex: 1;
             background: none;
             border: none;
@@ -450,10 +449,8 @@
                 console.warn("Cloudflare Fetch Warning:", err);
             }
 
-            // LocalStorage থেকে ব্যাকআপ প্রোডাক্ট ফেচ করা (যাতে আপলোড করার সাথে সাথে লোকাল ও ক্লাউড ডেটা সিঙ্ক থাকে)
             let localProducts = JSON.parse(localStorage.getItem('rorraxy_seller_products')) || [];
             
-            // ক্লাউড এবং লোকাল ডেটা মার্জ করা (ডুপ্লিকেট এড়িয়ে)
             let mergedMap = new Map();
             [...localProducts, ...products].forEach(p => {
                 let pId = p.id || p.product_id || p.product_code || p.title;
@@ -469,9 +466,9 @@
             const mobileContainer = document.getElementById('mobileCardContainer');
 
             if (products.length === 0) {
-                const emptyText = `<tr><td colspan="6" style="text-align:center; padding:30px; color:var(--text-gray);">NO PRODUCTS FOUND. CLICK 'ADD NEW' TO PUBLISH.</td></tr>`;
+                const emptyText = `<tr><td colspan="6" style="text-align:center; padding:40px; color:var(--text-gray);">NO PRODUCTS FOUND. CLICK 'ADD NEW' TO PUBLISH.</td></tr>`;
                 tableBody.innerHTML = emptyText;
-                mobileContainer.innerHTML = `<div style="text-align:center; padding:30px; color:var(--text-gray);">NO PRODUCTS FOUND. CLICK 'ADD NEW' TO PUBLISH.</div>`;
+                mobileContainer.innerHTML = `<div style="text-align:center; padding:40px; color:var(--text-gray);">NO PRODUCTS FOUND. CLICK 'ADD NEW' TO PUBLISH.</div>`;
                 return;
             }
 
@@ -484,7 +481,6 @@
                 const pPrice = p.price ? `$${parseFloat(p.price).toFixed(2)}` : '$0.00';
                 const pStock = `${p.stock || 1} Pcs`;
                 
-                // ইমেজের সঠিক প্রপার্টি (image_url, imageUrl বা images_json অ্যারে) রেন্ডার করার লজিক
                 let pImg = 'https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png';
                 if (p.image_url) {
                     pImg = p.image_url;
