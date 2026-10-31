@@ -101,8 +101,8 @@
                     </div>
                     <div class="form-grid full-width" id="payoutDetailsGrid" style="margin-bottom: 0;">
                         <div class="form-group full-width">
-                            <label>BKASH PERSONAL NUMBER<span class="req-star">*</span></label>
-                            <input type="text" class="form-control" id="bkashAccInput" placeholder="Enter 11-digit bKash number..." required>
+                            <label>BKASH ACCOUNT NUMBER<span class="req-star">*</span></label>
+                            <input type="text" class="form-control" id="payoutAccNum" placeholder="Enter bKash number..." required>
                         </div>
                     </div>
                 </div>
@@ -128,16 +128,35 @@
         <a href="payout.html" class="nav-item active"><i class="fa-solid fa-hand-holding-dollar"></i><span>PAYOUT</span></a>
         <button type="button" class="nav-item" onclick="location.href='dashboard.html'"><i class="fa-solid fa-house"></i><span>HOME</span></button>
         <a href="shipment.html" class="nav-item"><i class="fa-solid fa-truck-fast"></i><span>SHIPMENT</span></a>
-        <a href="info.html" class="nav-item"><i class="fa-solid fa-user"></i><span>INFO</span></a>
+        <a href="info.html" class="nav-item"><i class="fa-solid fa-user-gear"></i><span>SETTING</span></a>
     </nav>
 
     <script>
-        window.onload = function() {
+        window.addEventListener('DOMContentLoaded', () => {
             loadPayoutRealtimeData();
-            setInterval(loadPayoutRealtimeData, 2000);
-        };
+        });
 
-        function loadPayoutRealtimeData() {
+        async function loadPayoutRealtimeData() {
+            let payoutRequests = [];
+            try {
+                // সরাসরি ক্লাউডফ্লেয়ার পেজেস ফাংশন এপিআই রুট ব্যবহার করা হয়েছে
+                const response = await fetch(`/api/get?table=payouts`);
+                const result = await response.json();
+                if (result.success && Array.isArray(result.data)) {
+                    payoutRequests = result.data;
+                }
+            } catch (err) {
+                console.warn("API fetch warning, fallback to local:", err);
+            }
+
+            let localPayouts = JSON.parse(localStorage.getItem('rorraxy_seller_payouts') || '[]');
+            let mergedMap = new Map();
+            [...localPayouts, ...payoutRequests].forEach(p => {
+                let key = `${p.date || p.created_at}_${p.amount}_${p.method}`;
+                mergedMap.set(key, p);
+            });
+            payoutRequests = Array.from(mergedMap.values());
+
             try {
                 let sellerNotifs = JSON.parse(localStorage.getItem('rorraxy_seller_notifications') || '[]');
                 let totalEarned = 0, pendingClearance = 0;
@@ -153,10 +172,9 @@
 
                 let netEarned = totalEarned * 0.90;
                 let availBalance = netEarned; 
-                let payoutRequests = JSON.parse(localStorage.getItem('rorraxy_seller_payouts') || '[]');
                 
                 payoutRequests.forEach(req => {
-                    if (req.status === 'PAID' || req.status === 'PENDING') availBalance -= req.amount;
+                    if (req.status === 'PAID' || req.status === 'PENDING') availBalance -= parseFloat(req.amount || 0);
                 });
 
                 if (availBalance < 0) availBalance = 0;
@@ -164,9 +182,9 @@
                 document.getElementById('totalEarn').innerText = `$${netEarned.toFixed(2)}`;
                 document.getElementById('availBal').innerText = `$${availBalance.toFixed(2)}`;
                 document.getElementById('pendBal').innerText = `$${(pendingClearance * 0.90).toFixed(2)}`;
-
-                renderPayoutHistory(payoutRequests);
             } catch(e) { console.error(e); }
+
+            renderPayoutHistory(payoutRequests);
         }
 
         function renderPayoutHistory(payoutRequests) {
@@ -176,8 +194,11 @@
                 html = `<tr><td colspan="5" style="text-align:center; color:var(--text-gray); padding:16px;">NO PAYOUT HISTORY FOUND.</td></tr>`;
             } else {
                 payoutRequests.forEach(req => {
-                    let badgeClass = req.status === 'PAID' ? 'paid' : 'pending';
-                    html += `<tr><td>${req.date}</td><td>${req.method}</td><td>${req.details}</td><td>$${req.amount.toFixed(2)}</td><td><span class="status-badge ${badgeClass}">${req.status}</span></td></tr>`;
+                    let badgeClass = (req.status === 'PAID') ? 'paid' : 'pending';
+                    let reqDate = req.date || req.created_at || 'Today';
+                    let reqAmount = parseFloat(req.amount || 0).toFixed(2);
+                    let reqDetails = req.details || req.account_details || 'N/A';
+                    html += `<tr><td>${reqDate}</td><td>${req.method}</td><td>${reqDetails}</td><td>$${reqAmount}</td><td><span class="status-badge ${badgeClass}">${req.status || 'PENDING'}</span></td></tr>`;
                 });
             }
             tbody.innerHTML = html;
@@ -188,22 +209,51 @@
 
         payoutMethod.addEventListener('change', () => {
             const val = payoutMethod.value;
-            if (val === 'bKash') {
-                payoutDetailsGrid.innerHTML = `<div class="form-group full-width"><label>BKASH NUMBER<span class="req-star">*</span></label><input type="text" class="form-control" id="bkashAccInput" placeholder="Enter bKash number..." required></div>`;
-            } else if (val === 'Nagad') {
-                payoutDetailsGrid.innerHTML = `<div class="form-group full-width"><label>NAGAD NUMBER<span class="req-star">*</span></label><input type="text" class="form-control" id="nagadAccInput" placeholder="Enter Nagad number..." required></div>`;
+            if (val === 'bKash' || val === 'Nagad') {
+                payoutDetailsGrid.innerHTML = `<div class="form-group full-width"><label><span class="label-text">${val.toUpperCase()} ACCOUNT NUMBER<span class="req-star">*</span></span></label><input type="text" class="form-control" id="payoutAccNum" placeholder="Enter ${val} number..." required></div>`;
             } else if (val === 'Bank') {
-                payoutDetailsGrid.innerHTML = `<div class="form-group"><label>BANK NAME<span class="req-star">*</span></label><input type="text" class="form-control" id="bankNameInput" placeholder="Bank name..." required></div><div class="form-group"><label>ACC NUMBER<span class="req-star">*</span></label><input type="text" class="form-control" id="accNumberInput" placeholder="Account number..." required></div>`;
+                payoutDetailsGrid.innerHTML = `
+                    <div class="form-group full-width"><label><span class="label-text">BANK NAME<span class="req-star">*</span></span></label><input type="text" class="form-control" id="bankNameInput" placeholder="Bank name..." required></div>
+                    <div class="form-group full-width"><label><span class="label-text">ACCOUNT HOLDER NAME<span class="req-star">*</span></span></label><input type="text" class="form-control" id="bankAccName" placeholder="Full name..." required></div>
+                    <div class="form-group full-width"><label><span class="label-text">ACCOUNT NUMBER / IBAN<span class="req-star">*</span></span></label><input type="text" class="form-control" id="bankAccNum" placeholder="Account number..." required></div>
+                    <div class="form-group full-width"><label><span class="label-text">ROUTING / SWIFT CODE<span class="req-star">*</span></span></label><input type="text" class="form-control" id="bankRouting" placeholder="Routing code..." required></div>
+                `;
             } else if (val === 'Payoneer') {
-                payoutDetailsGrid.innerHTML = `<div class="form-group full-width"><label>PAYONEER EMAIL<span class="req-star">*</span></label><input type="email" class="form-control" id="payoneerEmailInput" placeholder="Payoneer email..." required></div>`;
+                payoutDetailsGrid.innerHTML = `<div class="form-group full-width"><label><span class="label-text">PAYONEER EMAIL<span class="req-star">*</span></span></label><input type="email" class="form-control" id="payoneerEmailInput" placeholder="Payoneer email..." required></div>`;
             }
         });
 
-        document.getElementById('payoutForm').addEventListener('submit', (e) => {
+        document.getElementById('payoutForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+
+            // সেটিং প্রোফাইল ও বায়োমেট্রিক ভেরিফিকেশন চেক
+            const savedProfile = JSON.parse(localStorage.getItem('rorraxy_seller_profile') || 'null');
+            const isBiometricVerified = localStorage.getItem('rorraxy_biometric_verified');
+
+            if (!savedProfile || !savedProfile.brandName) {
+                alert('PLEASE COMPLETE YOUR BUSINESS INFORMATION IN SETTINGS FIRST!');
+                window.location.href = 'info.html';
+                return;
+            }
+
+            if (isBiometricVerified !== 'true') {
+                alert('MANDATORY: PLEASE COMPLETE BIOMETRIC & 2-STEP VERIFICATION IN SETTINGS BEFORE WITHDRAWING!');
+                window.location.href = 'info.html';
+                return;
+            }
+
             const amount = parseFloat(document.getElementById('withdrawAmount').value);
             const method = payoutMethod.value;
-            let detailText = method === 'bKash' ? document.getElementById('bkashAccInput').value : (method === 'Nagad' ? document.getElementById('nagadAccInput').value : 'Bank/Payoneer');
+            let detailText = '';
+
+            if (method === 'bKash' || method === 'Nagad') {
+                detailText = document.getElementById('payoutAccNum').value;
+            } else if (method === 'Bank') {
+                detailText = `${document.getElementById('bankNameInput').value} - ${document.getElementById('bankAccName').value} - ${document.getElementById('bankAccNum').value}`;
+            } else if (method === 'Payoneer') {
+                detailText = document.getElementById('payoneerEmailInput').value;
+            }
+
             let currentAvail = parseFloat(document.getElementById('availBal').innerText.replace('$', ''));
 
             if (amount < 10) { alert('MINIMUM WITHDRAWAL IS $10!'); return; }
@@ -211,8 +261,19 @@
 
             const today = new Date().toLocaleDateString();
             let newRequest = { date: today, method: method, details: detailText, amount: amount, status: 'PENDING' };
-            let payoutRequests = JSON.parse(localStorage.getItem('rorraxy_seller_payouts') || '[]');
             
+            try {
+                // সরাসরি ফাংশন এপিআই রাউটে পোস্ট রিকোয়েস্ট পাঠানো
+                await fetch(`/api/post`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'payouts', ...newRequest })
+                });
+            } catch (err) {
+                console.warn("API sync error:", err);
+            }
+
+            let payoutRequests = JSON.parse(localStorage.getItem('rorraxy_seller_payouts') || '[]');
             payoutRequests.unshift(newRequest);
             localStorage.setItem('rorraxy_seller_payouts', JSON.stringify(payoutRequests));
 
