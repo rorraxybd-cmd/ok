@@ -397,7 +397,7 @@
     <!-- Main Feed Container loaded dynamically from Cloudflare D1 database -->
     <main class="feed-container" id="productFeed">
         <!-- Loading Spinner Placeholder -->
-        <div style="grid-column: 1 / -1; text-align: center; padding: 50px 0; color: var(--gold-solid);">
+        <div style="grid-column: 1 / -1; text-align: center; padding: 50px 0; color: var(--gold-solid);" id="loadingPlaceholder">
             <i class="fa-solid fa-circle-notch fa-spin fa-2x"></i>
             <p style="margin-top: 10px; font-size: 0.75rem; letter-spacing: 1px;">LOADING rorraxy PRODUCTS...</p>
         </div>
@@ -431,7 +431,6 @@
     </nav>
 
     <script>
-        // Updated API Endpoint pointing directly to rorraxy.com domain functions
         const API_BASE_URL = 'https://rorraxy.com';
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -453,7 +452,6 @@
             }, 1000);
         });
 
-        // Initialize User Selected Mode in Dropdown Selector
         function initSelectedMode() {
             const currentMode = localStorage.getItem('rorraxy_mode') || 'retail';
             const selector = document.getElementById('userModeSelector');
@@ -462,31 +460,47 @@
             }
         }
 
-        // Switch Ecosystem Mode (Retail B2C, Wholesale B2B, Dropshipping)
         function switchEcosystemMode(selectedMode) {
             localStorage.setItem('rorraxy_mode', selectedMode);
-            console.log(`rorraxy Mode switched to: ${selectedMode}`);
-            loadLiveProducts(); // Reload products matching the selected ecosystem mode
+            loadLiveProducts();
         }
 
-        // Fetch products dynamically using Cloudflare Pages Functions API & D1 Database
         async function loadLiveProducts() {
             const currentMode = localStorage.getItem('rorraxy_mode') || 'retail';
+            const feedContainer = document.getElementById('productFeed');
+            
+            // Show loading state
+            feedContainer.innerHTML = `
+                <div style="grid-column: 1 / -1; text-align: center; padding: 50px 0; color: var(--gold-solid);">
+                    <i class="fa-solid fa-circle-notch fa-spin fa-2x"></i>
+                    <p style="margin-top: 10px; font-size: 0.75rem; letter-spacing: 1px;">LOADING rorraxy PRODUCTS...</p>
+                </div>
+            `;
+
             try {
                 const response = await fetch(`${API_BASE_URL}/api/products?mode=${currentMode}`);
                 const result = await response.json();
                 if (result.success && Array.isArray(result.data) && result.data.length > 0) {
                     renderProductCards(result.data);
                 } else {
-                    renderFallbackProducts();
+                    feedContainer.innerHTML = `
+                        <div style="grid-column: 1 / -1; text-align: center; padding: 50px 0; color: var(--text-gray);">
+                            <i class="fa-solid fa-box-open fa-2x" style="margin-bottom: 10px;"></i>
+                            <p style="font-size: 0.75rem; letter-spacing: 1px;">NO PRODUCTS FOUND IN THIS MODE.</p>
+                        </div>
+                    `;
                 }
             } catch (error) {
                 console.error('Failed to load products from Cloudflare backend:', error);
-                renderFallbackProducts();
+                feedContainer.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 50px 0; color: var(--pink-love);">
+                        <i class="fa-solid fa-triangle-exclamation fa-2x" style="margin-bottom: 10px;"></i>
+                        <p style="font-size: 0.75rem; letter-spacing: 1px;">FAILED TO LOAD LIVE PRODUCTS.</p>
+                    </div>
+                `;
             }
         }
 
-        // Render Dynamic Products from Cloudflare D1 Database (Fixed Image URL Resolver)
         function renderProductCards(products) {
             const feedContainer = document.getElementById('productFeed');
             feedContainer.innerHTML = '';
@@ -495,12 +509,12 @@
                 const productId = item.id || item.product_id || item.product_code || '101';
                 const title = item.title || 'rorraxy Luxury Item';
                 const price = item.price ? `$${parseFloat(item.price).toFixed(2)}` : '$0.00';
-                const discount = item.discount_rate || item.discountRate || '50';
+                const discount = item.discount_rate || item.discountRate || '0';
                 const countryCode = (item.target_country || item.targetCountry || 'bd').toLowerCase();
                 const flagUrl = `https://flagcdn.com/w20/${countryCode}.png`;
                 
                 // সঠিক ইমেজ ইউআরএল বা পাথ হ্যান্ডেল করার লজিক
-                let resolvedImageUrl = 'https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/Multi-pocket%20Skinny%20Pants%20(10).webp';
+                let resolvedImageUrl = 'https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png';
                 if (item.image_url) {
                     resolvedImageUrl = item.image_url;
                 } else if (item.imageUrl) {
@@ -518,19 +532,27 @@
                     }
                 }
 
+                const discountBadgeHtml = parseInt(discount) > 0 ? `
+                    <div class="product-country-discount-badge">
+                        <img src="${flagUrl}" alt="${countryCode}" class="flag-icon" onerror="this.style.display='none'"> ${discount}% OFF
+                    </div>
+                ` : `
+                    <div class="product-country-discount-badge">
+                        <img src="${flagUrl}" alt="${countryCode}" class="flag-icon" onerror="this.style.display='none'"> ${countryCode.toUpperCase()}
+                    </div>
+                `;
+
                 const cardHtml = `
                     <div class="product-card" data-product-id="${productId}" onclick="openProductDetails('${productId}')">
                         <div class="product-media-box">
-                            <div class="product-country-discount-badge">
-                                <img src="${flagUrl}" alt="${countryCode}" class="flag-icon" onerror="this.style.display='none'"> ${discount}% OFF
-                            </div>
-                            <img src="${resolvedImageUrl}" alt="${title}" loading="lazy" onerror="this.src='https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/Multi-pocket%20Skinny%20Pants%20(10).webp'">
+                            ${discountBadgeHtml}
+                            <img src="${resolvedImageUrl}" alt="${title}" loading="lazy" onerror="this.src='https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png'">
                         </div>
                         <div class="card-footer-actions" onclick="event.stopPropagation()">
                             <span class="product-price-tag">${price}</span>
                             <div class="card-sub-actions">
                                 <div class="love-action card-love-btn" onclick="toggleLove(event, this)">
-                                    <i class="fa-solid fa-heart"></i> <span class="love-count">${item.like_count || 128}</span>
+                                    <i class="fa-solid fa-heart"></i> <span class="love-count">${item.like_count || 0}</span>
                                 </div>
                                 <button class="share-action-btn" onclick="triggerAutoShare(event, '${productId}', '${title.replace(/'/g, "\\'")}')">
                                     <i class="fa-solid fa-share-nodes"></i> Share
@@ -541,32 +563,6 @@
                 `;
                 feedContainer.insertAdjacentHTML('beforeend', cardHtml);
             });
-        }
-
-        // Fallback Demo Products if API is temporarily empty
-        function renderFallbackProducts() {
-            const feedContainer = document.getElementById('productFeed');
-            feedContainer.innerHTML = `
-                <div class="product-card" data-product-id="101" onclick="openProductDetails('101')">
-                    <div class="product-media-box">
-                        <div class="product-country-discount-badge">
-                            <img src="https://flagcdn.com/w20/bd.png" alt="BD" class="flag-icon"> 50% OFF
-                        </div>
-                        <img src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/Multi-pocket%20Skinny%20Pants%20(10).webp" alt="Multi-pocket Skinny Pants" loading="lazy">
-                    </div>
-                    <div class="card-footer-actions" onclick="event.stopPropagation()">
-                        <span class="product-price-tag">$35.00</span>
-                        <div class="card-sub-actions">
-                            <div class="love-action card-love-btn" onclick="toggleLove(event, this)">
-                                <i class="fa-solid fa-heart"></i> <span class="love-count">128</span>
-                            </div>
-                            <button class="share-action-btn" onclick="triggerAutoShare(event, '101', 'Multi-pocket Skinny Pants')">
-                                <i class="fa-solid fa-share-nodes"></i> Share
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
         }
 
         function openProductDetails(productId) {
@@ -598,16 +594,15 @@
             let card = btn.closest('.product-card');
             let productId = card.getAttribute('data-product-id');
             let countSpan = btn.querySelector('.love-count');
-            let currentLikes = parseInt(countSpan.innerText);
+            let currentLikes = parseInt(countSpan.innerText) || 0;
 
             if(btn.classList.contains('gold-active')) {
                 btn.classList.remove('gold-active');
-                countSpan.innerText = currentLikes - 1;
+                countSpan.innerText = Math.max(0, currentLikes - 1);
             } else {
                 btn.classList.add('gold-active');
                 countSpan.innerText = currentLikes + 1;
                 
-                // Backend API call to increment like count
                 try {
                     await fetch(`${API_BASE_URL}/api/products`, {
                         method: 'PUT',
