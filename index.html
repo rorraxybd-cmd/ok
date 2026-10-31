@@ -167,7 +167,7 @@
         .explore-subtxt { font-size: 0.60rem; font-weight: 400; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
         .btn-right-arrow { font-size: 0.75rem; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* Feed Container Layout Optimizations (Fixed Box Alignment) */
+        /* Feed Container Layout Optimizations */
         .feed-container {
             padding: 10px 8px; 
             display: grid; 
@@ -195,7 +195,6 @@
         }
         .product-card:hover { border-color: rgba(212,175,55,0.35); }
 
-        /* Fixed Media Box Height to Prevent Layout Shifting/Floating Boxes */
         .product-media-box { 
             position: relative; 
             width: 100%; 
@@ -518,14 +517,15 @@
             }
         }
 
-        // উন্নত ইমেজ পাথ রিজলভার (যদি শুধু ফাইলের নাম থাকে তবে R2 বা CDN লিংক যুক্ত করে সম্পূর্ণ করবে)
+        // ফিক্সড স্মার্ট ইমেজ রিজলভার: ডাটাবেজে ফাইলের নাম বা পূর্ণাঙ্গ লিংক যাই থাকুক না কেন সঠিক R2 বাকেট লিঙ্ক তৈরি করবে
         function resolveImageUrl(rawUrl) {
-            if (!rawUrl) return 'https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png';
+            if (!rawUrl || typeof rawUrl !== 'string' || rawUrl.trim() === '') {
+                return ''; // কোনো ইমেজ না থাকলে খালি স্ট্রিং রিটার্ন করবে যাতে ফলব্যাক লোগো না আসে
+            }
             let trimmed = rawUrl.trim();
             if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
                 return trimmed;
             }
-            // যদি ডাটাবেজে শুধু ফাইলের নাম বা স্টোরেজ পাথ থাকে
             return `https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/${trimmed}`;
         }
 
@@ -552,6 +552,9 @@
                 }
                 const resolvedImageUrl = resolveImageUrl(rawImg);
 
+                // যদি ডাটাবেজে কোনো ছবি না থাকে তবে ডিফল্ট লোগো দেখাবে, অন্যترwise আপলোড করা ছবিটি দেখাবে
+                const finalImgSrc = resolvedImageUrl !== '' ? resolvedImageUrl : 'https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png';
+
                 const discountBadgeHtml = parseInt(discount) > 0 ? `
                     <div class="product-country-discount-badge">
                         <img src="${flagUrl}" alt="${countryCode}" class="flag-icon" onerror="this.style.display='none'"> ${discount}% OFF
@@ -566,7 +569,7 @@
                     <div class="product-card" data-product-id="${productId}" onclick="openProductDetails('${productId}')">
                         <div class="product-media-box">
                             ${discountBadgeHtml}
-                            <img src="${resolvedImageUrl}" alt="${title}" loading="lazy" onerror="this.src='https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png'">
+                            <img src="${finalImgSrc}" alt="${title}" loading="lazy" onerror="this.src='https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png'">
                         </div>
                         <div class="card-footer-actions" onclick="event.stopPropagation()">
                             <span class="product-price-tag">${price}</span>
