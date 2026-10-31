@@ -362,7 +362,7 @@
             loadLiveProducts();
         }
 
-        // রিয়েল-টাইম ডাইরেক্ট ক্লাউড ফেচ
+        // ক্লাউডফ্লেয়ার ওয়ার্কার এপিআই থেকে ডেটা ফেচ করা
         async function loadLiveProducts() {
             try {
                 const response = await fetch(`${API_BASE_URL}/api/get?table=products`);
@@ -389,7 +389,7 @@
             }
         }
 
-        // শতভাগ ট্রাবলফ্রি ও রিয়েল ইমেজ রেন্ডারার
+        // একেবারে সুরক্ষিত ইমেজ রেন্ডারিং লজিক
         function renderProductCards(products) {
             const feedContainer = document.getElementById('productFeed');
             feedContainer.innerHTML = '';
@@ -413,7 +413,6 @@
                     }
                 }
 
-                // যদি লিংকে স্পেশাল আন্ডারস্কোর বা ইস্যু থাকে সেটিকে রিঅ্যাডজাস্ট করা
                 let resolvedImageUrl = rawImg ? rawImg.trim() : '';
 
                 const cardHtml = `
