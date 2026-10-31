@@ -11,6 +11,15 @@ export async function onRequest(context) {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // অটো-ডিটেক্ট D1 ডাটাবেজ বাইন্ডিং (retail অথবা DB)
+  const db = env.retail || env.DB;
+  if (!db) {
+    return new Response(JSON.stringify({ success: false, error: "Database binding not found in environment (env.retail or env.DB)" }), {
+      status: 500,
+      headers: { ...corsHeaders, "Content-Type": "application/json" }
+    });
+  }
+
   try {
     const url = new URL(request.url);
     
@@ -45,7 +54,7 @@ export async function onRequest(context) {
 
       query += " ORDER BY created_at DESC";
 
-      const stmt = env.retail.prepare(query).bind(...params);
+      const stmt = db.prepare(query).bind(...params);
       const { results } = await stmt.all();
 
       return new Response(JSON.stringify({ success: true, data: results }), {
@@ -95,7 +104,7 @@ export async function onRequest(context) {
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, datetime('now'))
       `;
 
-      await env.retail.prepare(insertQuery).bind(
+      await db.prepare(insertQuery).bind(
         seller_id || null,
         product_code || null,
         title || null,
@@ -146,7 +155,7 @@ export async function onRequest(context) {
         WHERE product_code = ? OR id = ?
       `;
 
-      await env.retail.prepare(updateQuery).bind(product_code, product_code).run();
+      await db.prepare(updateQuery).bind(product_code, product_code).run();
 
       return new Response(JSON.stringify({ success: true, message: "Like count updated successfully!" }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" }
