@@ -93,7 +93,6 @@
             letter-spacing: 0.5px;
             height: 28px;
             z-index: 1001;
-            box-shadow: 0 0 8px rgba(212, 175, 55, 0.2);
         }
         .mode-selector-corner option {
             background: #0a0a0f;
@@ -196,8 +195,8 @@
         }
         .product-card:hover { border-color: rgba(212,175,55,0.35); }
 
-        .product-media-box { position: relative; width: 100%; background: #050508; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-        .product-media-box img { width: 100%; height: auto; display: block; object-fit: contain; background: #050508; }
+        .product-media-box { position: relative; width: 100%; background: #050508; overflow: hidden; display: flex; align-items: center; justify-content: center; aspect-ratio: 1/1; }
+        .product-media-box img { width: 100%; height: 100%; display: block; object-fit: cover; background: #050508; }
         
         .product-country-discount-badge {
             position: absolute; top: 8px; left: 8px; z-index: 10;
@@ -452,7 +451,6 @@
             }, 1000);
         });
 
-        // Initialize User Selected Mode in Dropdown Selector
         function initSelectedMode() {
             const currentMode = localStorage.getItem('rorraxy_mode') || 'retail';
             const selector = document.getElementById('userModeSelector');
@@ -461,40 +459,47 @@
             }
         }
 
-        // Switch Ecosystem Mode (Retail B2C, Wholesale B2B, Dropshipping)
         function switchEcosystemMode(selectedMode) {
             localStorage.setItem('rorraxy_mode', selectedMode);
-            console.log(`rorraxy Mode switched to: ${selectedMode}`);
-            loadLiveProducts(); // Reload products matching the selected ecosystem mode
+            loadLiveProducts();
         }
 
-        // Fetch products dynamically using Cloudflare Worker API & D1 Database
+        // Fetch products dynamically using Cloudflare Worker API & D1 Database (Pure Cloud Real-time)
         async function loadLiveProducts() {
             const currentMode = localStorage.getItem('rorraxy_mode') || 'retail';
             try {
-                if (window.rorraxyCloud && typeof window.rorraxyCloud.smartFetch === 'function') {
-                    const products = await window.rorraxyCloud.smartFetch(`${API_BASE_URL}/api/get?table=products&mode=${currentMode}`);
-                    if (products && products.data && Array.isArray(products.data) && products.data.length > 0) {
-                        renderProductCards(products.data);
-                        return;
-                    }
-                }
-                
-                // Direct Universal Worker API Call
-                const response = await fetch(`${API_BASE_URL}/api/get?table=products`);
+                const response = await fetch(`${API_BASE_URL}/api/get?table=products&mode=${currentMode}`);
                 const result = await response.json();
-                if (result.success && Array.isArray(result.data) && result.data.length > 0) {
-                    renderProductCards(result.data);
+                
+                let productsList = [];
+                if (result.success && Array.isArray(result.data)) {
+                    productsList = result.data;
+                } else if (Array.isArray(result)) {
+                    productsList = result;
+                }
+
+                if (productsList.length > 0) {
+                    renderProductCards(productsList);
                 } else {
-                    renderFallbackProducts();
+                    document.getElementById('productFeed').innerHTML = `
+                        <div style="grid-column: 1 / -1; text-align: center; padding: 50px 0; color: var(--text-gray);">
+                            <i class="fa-solid fa-box-open fa-2x" style="color:var(--gold-solid);"></i>
+                            <p style="margin-top: 10px; font-size: 0.75rem; letter-spacing: 1px;">NO PRODUCTS FOUND IN CLOUD DATABASE.</p>
+                        </div>
+                    `;
                 }
             } catch (error) {
                 console.error('Failed to load products from Cloudflare backend:', error);
-                renderFallbackProducts();
+                document.getElementById('productFeed').innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 50px 0; color: var(--pink-love);">
+                        <i class="fa-solid fa-triangle-exclamation fa-2x"></i>
+                        <p style="margin-top: 10px; font-size: 0.75rem; letter-spacing: 1px;">FAILED TO CONNECT CLOUD BACKEND.</p>
+                    </div>
+                `;
             }
         }
 
-        // Render Dynamic Products from Cloudflare D1 Database (Fixed Image URL Resolver)
+        // Render Dynamic Products with Universal Media Handler & Super Fast Lazy Loading (No Demos)
         function renderProductCards(products) {
             const feedContainer = document.getElementById('productFeed');
             feedContainer.innerHTML = '';
@@ -507,12 +512,14 @@
                 const countryCode = (item.target_country || item.targetCountry || 'bd').toLowerCase();
                 const flagUrl = `https://flagcdn.com/w20/${countryCode}.png`;
                 
-                // সঠিক ইমেজ ইউআরএল বা পাথ বের করার অ্যাডভান্সড লজিক (images_json অ্যারে অথবা image_url হ্যান্ডেলিং)
-                let resolvedImageUrl = 'https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/Multi-pocket%20Skinny%20Pants%20(10).webp';
+                // Universal Image URL / Array Resolver
+                let resolvedImageUrl = 'https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png';
                 if (item.image_url) {
                     resolvedImageUrl = item.image_url;
                 } else if (item.imageUrl) {
                     resolvedImageUrl = item.imageUrl;
+                } else if (item.img) {
+                    resolvedImageUrl = item.img;
                 } else if (item.images_json) {
                     try {
                         const parsedImages = JSON.parse(item.images_json);
@@ -532,7 +539,7 @@
                             <div class="product-country-discount-badge">
                                 <img src="${flagUrl}" alt="${countryCode}" class="flag-icon" onerror="this.style.display='none'"> ${discount}% OFF
                             </div>
-                            <img src="${resolvedImageUrl}" alt="${title}" loading="lazy" onerror="this.src='https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/Multi-pocket%20Skinny%20Pants%20(10).webp'">
+                            <img src="${resolvedImageUrl}" alt="${title}" loading="lazy" decoding="async" fetchpriority="low" onerror="this.src='https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png'">
                         </div>
                         <div class="card-footer-actions" onclick="event.stopPropagation()">
                             <span class="product-price-tag">${price}</span>
@@ -549,51 +556,6 @@
                 `;
                 feedContainer.insertAdjacentHTML('beforeend', cardHtml);
             });
-        }
-
-        // Fallback Demo Products if API is temporarily empty
-        function renderFallbackProducts() {
-            const feedContainer = document.getElementById('productFeed');
-            feedContainer.innerHTML = `
-                <div class="product-card" data-product-id="101" onclick="openProductDetails('101')">
-                    <div class="product-media-box">
-                        <div class="product-country-discount-badge">
-                            <img src="https://flagcdn.com/w20/bd.png" alt="BD" class="flag-icon"> 50% OFF
-                        </div>
-                        <img src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/Multi-pocket%20Skinny%20Pants%20(10).webp" alt="Multi-pocket Skinny Pants" loading="lazy">
-                    </div>
-                    <div class="card-footer-actions" onclick="event.stopPropagation()">
-                        <span class="product-price-tag">$35.00</span>
-                        <div class="card-sub-actions">
-                            <div class="love-action card-love-btn" onclick="toggleLove(event, this)">
-                                <i class="fa-solid fa-heart"></i> <span class="love-count">128</span>
-                            </div>
-                            <button class="share-action-btn" onclick="triggerAutoShare(event, '101', 'Multi-pocket Skinny Pants')">
-                                <i class="fa-solid fa-share-nodes"></i> Share
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="product-card" data-product-id="102" onclick="openProductDetails('102')">
-                    <div class="product-media-box">
-                        <div class="product-country-discount-badge">
-                            <img src="https://flagcdn.com/w20/bd.png" alt="BD" class="flag-icon"> 40% OFF
-                        </div>
-                        <img src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/Multi-pocket%20Skinny%20Pants%20(11).webp" alt="Multi-pocket Skinny Pants" loading="lazy">
-                    </div>
-                    <div class="card-footer-actions" onclick="event.stopPropagation()">
-                        <span class="product-price-tag">$38.00</span>
-                        <div class="card-sub-actions">
-                            <div class="love-action card-love-btn" onclick="toggleLove(event, this)">
-                                <i class="fa-solid fa-heart"></i> <span class="love-count">94</span>
-                            </div>
-                            <button class="share-action-btn" onclick="triggerAutoShare(event, '102', 'Multi-pocket Skinny Pants')">
-                                <i class="fa-solid fa-share-nodes"></i> Share
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
         }
 
         function openProductDetails(productId) {
