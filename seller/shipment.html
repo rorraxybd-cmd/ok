@@ -16,7 +16,7 @@
         :root {
             --bg-body: #000000;
             --card-bg: #08080c;
-            --border-color: rgba(212, 175, 55, 0.2);
+            --border-color: rgba(212, 175, 55, 0.15);
             --gold-color: #d4af37;
             --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
             --text-main: #ffffff;
@@ -27,10 +27,12 @@
         }
 
         * { box-sizing: border-box !important; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--bg-body); color: var(--text-main); font-family: var(--font-family); min-height: 100vh; width: 100%; overflow-x: hidden; padding: 16px 16px 90px 16px; text-transform: uppercase !important; }
+        html, body { width: 100%; min-height: 100vh; background: var(--bg-body) !important; color: var(--text-main); font-family: var(--font-family); overflow-x: hidden; padding: 16px 16px 90px 16px; text-transform: uppercase !important; }
 
         .seller-wrapper { width: 100%; max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 18px; }
-        .seller-header { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        
+        /* শ্যাডো ও ইফেক্ট মুক্ত মিনিমাল ক্লীন লেআউট */
+        .seller-header { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
         .seller-brand { display: flex; align-items: center; gap: 12px; }
         .seller-brand img { width: 38px; height: 38px; object-fit: contain; }
         .seller-brand h1 { font-size: 0.95rem; font-weight: 900; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 1px; }
@@ -40,13 +42,13 @@
         .stat-card label { font-size: 0.60rem; color: var(--text-muted); font-weight: 700; }
         .stat-card span { font-size: 1.10rem; font-weight: 900; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        .shipment-section { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 18px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.7); }
+        .shipment-section { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 18px; display: flex; flex-direction: column; gap: 14px; }
         .section-title { font-size: 0.82rem; font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 0.8px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 8px; }
 
         .table-responsive { width: 100%; overflow-x: auto; }
         .seller-table { width: 100%; border-collapse: collapse; font-size: 0.68rem; text-align: left; white-space: nowrap; }
         .seller-table th, .seller-table td { padding: 10px 8px; border-bottom: 1px solid rgba(255,255,255,0.06); }
-        .seller-table th { color: var(--gold-color); font-weight: 800; background: rgba(18, 18, 26, 0.8); }
+        .seller-table th { color: var(--gold-color); font-weight: 800; background: #040407; }
 
         .badge-status { padding: 3px 6px; border-radius: 5px; font-size: 0.55rem; font-weight: 800; display: inline-block; }
         .badge-pending { background: rgba(255, 193, 7, 0.15); color: #ffc107; border: 1px solid rgba(255, 193, 7, 0.3); }
@@ -54,9 +56,9 @@
         .badge-delivered { background: rgba(0, 176, 155, 0.15); color: #00b09b; border: 1px solid rgba(0, 176, 155, 0.3); }
         .badge-cancelled { background: rgba(255, 59, 48, 0.15); color: var(--accent-red); border: 1px solid rgba(255, 59, 48, 0.3); }
 
-        .btn-shipment-action { background: var(--gold-gradient); color: #000; border: none; padding: 6px 12px; border-radius: 14px; font-size: 0.60rem; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
+        .btn-shipment-action { background: var(--gold-gradient); color: #000; border: none; padding: 6px 12px; border-radius: 10px; font-size: 0.60rem; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
         
-        .seller-bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(3, 3, 5, 0.95); backdrop-filter: blur(20px); border-top: 1px solid rgba(212, 175, 55, 0.15); display: flex; justify-content: space-around; align-items: center; padding: 12px 6px; z-index: 1000; box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.9); }
+        .seller-bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(3, 3, 5, 0.95); border-top: 1px solid rgba(212, 175, 55, 0.15); display: flex; justify-content: space-around; align-items: center; padding: 12px 6px; z-index: 1000; }
         .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; background: none; border: none; cursor: pointer; }
         .nav-item.active i, .nav-item.active span { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .nav-item i { font-size: 1.25rem; margin-bottom: 4px; color: var(--text-muted); }
@@ -110,19 +112,38 @@
         <a href="payout.html" class="nav-item"><i class="fa-solid fa-hand-holding-dollar"></i><span>PAYOUT</span></a>
         <button type="button" class="nav-item" onclick="location.href='dashboard.html'"><i class="fa-solid fa-house"></i><span>HOME</span></button>
         <a href="shipment.html" class="nav-item active"><i class="fa-solid fa-truck-fast"></i><span>SHIPMENT</span></a>
-        <a href="info.html" class="nav-item"><i class="fa-solid fa-user"></i><span>INFO</span></a>
+        <a href="info.html" class="nav-item"><i class="fa-solid fa-user-gear"></i><span>SETTING</span></a>
     </nav>
 
     <script>
-        window.onload = function() {
+        window.addEventListener('DOMContentLoaded', () => {
             loadSellerShipmentData();
-            setInterval(loadSellerShipmentData, 2000);
-        };
+            setInterval(loadSellerShipmentData, 3000);
+        });
 
-        function loadSellerShipmentData() {
-            const sellerNotifsRaw = localStorage.getItem('rorraxy_seller_notifications');
+        async function loadSellerShipmentData() {
+            let orders = [];
+            try {
+                // ক্লাউডফ্লেয়ার পেজেস ফাংশন এপিআই থেকে রিয়েল-টাইম ডেটা ফেচ করা
+                const response = await fetch(`/api/get?table=orders`);
+                const result = await response.json();
+                if (result.success && Array.isArray(result.data)) {
+                    orders = result.data;
+                }
+            } catch (err) {
+                console.warn("API fetch warning, fallback to local:", err);
+            }
+
+            let localOrders = JSON.parse(localStorage.getItem('rorraxy_seller_notifications') || '[]');
+            let mergedMap = new Map();
+            [...localOrders, ...orders].forEach(o => {
+                let key = o.subOrderId || o.id || `${o.created_at}_${o.productId}`;
+                mergedMap.set(key, o);
+            });
+            orders = Array.from(mergedMap.values());
+
             const tbody = document.getElementById('sellerOrdersTableBody');
-            if (!sellerNotifsRaw) {
+            if (orders.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--text-muted); padding:24px;">NO INCOMING SHIPMENT REQUESTS AVAILABLE.</td></tr>`;
                 document.getElementById('statPendingShipments').innerText = "0";
                 document.getElementById('statCompletedOrders').innerText = "0";
@@ -131,17 +152,11 @@
             }
 
             try {
-                let sellerNotifs = JSON.parse(sellerNotifsRaw);
                 let pendingCount = 0, completedCount = 0, totalEarned = 0, tableHtml = '';
 
-                if (sellerNotifs.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--text-muted); padding:24px;">NO ACTIVE SHIPMENTS FOUND.</td></tr>`;
-                    return;
-                }
-
-                sellerNotifs.forEach((item, index) => {
-                    const status = item.status || 'New Order Pending Shipment';
-                    const timeStr = item.timestamp ? new Date(item.timestamp).toLocaleString() : 'N/A';
+                orders.forEach((item, index) => {
+                    const status = item.status || item.fulfillmentStatus || 'New Order Pending Shipment';
+                    const timeStr = item.timestamp || item.created_at ? new Date(item.timestamp || item.created_at).toLocaleString() : 'N/A';
                     let badgeClass = 'badge-pending';
 
                     if (status.includes('Shipped') || status.includes('En Route')) {
@@ -159,12 +174,12 @@
                     tableHtml += `
                         <tr>
                             <td style="color:var(--text-muted); font-size:0.58rem;"><i class="fa-regular fa-clock"></i> ${timeStr}</td>
-                            <td style="font-weight:800; color:var(--gold-color);">${item.subOrderId || 'N/A'}</td>
+                            <td style="font-weight:800; color:var(--gold-color);">${item.subOrderId || item.id || 'N/A'}</td>
                             <td>${item.productId || 'N/A'}</td>
                             <td>${item.title || 'Luxury Product'}</td>
                             <td>x${item.qty || 1}</td>
                             <td>
-                                <button class="btn-shipment-action" onclick="markAsShippedBySeller('${item.subOrderId}', ${index})">
+                                <button class="btn-shipment-action" onclick="markAsShippedBySeller('${item.subOrderId || item.id}', ${index})">
                                     <i class="fa-solid fa-box-archive"></i> CONFIRM SHIPMENT
                                 </button>
                             </td>
@@ -180,31 +195,26 @@
             } catch (err) { console.error(err); }
         }
 
-        function markAsShippedBySeller(subOrderId, index) {
+        async function markAsShippedBySeller(subOrderId, index) {
             let sellerNotifs = JSON.parse(localStorage.getItem('rorraxy_seller_notifications') || '[]');
             if(sellerNotifs[index]) {
                 sellerNotifs[index].status = "Shipped & En Route";
                 localStorage.setItem('rorraxy_seller_notifications', JSON.stringify(sellerNotifs));
             }
 
-            let adminOrders = JSON.parse(localStorage.getItem('rorraxy_admin_all_orders') || '[]');
-            adminOrders.forEach(master => {
-                (master.subOrders || []).forEach(sub => {
-                    if(sub.subOrderId === subOrderId) sub.fulfillmentStatus = 'Shipped';
+            try {
+                // ক্লাউডফ্লেয়ার পেজেস ফাংশন এপিআই এর মাধ্যমে স্ট্যাটাস আপডেট পাঠানো
+                await fetch(`/api/post`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'orders', subOrderId: subOrderId, status: 'Shipped' })
                 });
-            });
-            localStorage.setItem('rorraxy_admin_all_orders', JSON.stringify(adminOrders));
-
-            let lastOrder = JSON.parse(localStorage.getItem('rorraxy_last_order') || '{}');
-            if(lastOrder.subOrders) {
-                lastOrder.subOrders.forEach(sub => {
-                    if(sub.subOrderId === subOrderId) sub.fulfillmentStatus = 'Shipped';
-                });
-                localStorage.setItem('rorraxy_last_order', JSON.stringify(lastOrder));
+            } catch (err) {
+                console.warn("API sync error:", err);
             }
 
             loadSellerShipmentData();
-            alert(`Shipment Confirmed for Order: ${subOrderId}`);
+            alert(`SHIPMENT CONFIRMED FOR ORDER: ${subOrderId}`);
         }
     </script>
 </body>
