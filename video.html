@@ -7,10 +7,11 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev">
+    <link rel="preconnect" href="https://img.rorraxy.com">
+    <link rel="preconnect" href="https://vid.rorraxy.com">
 
-    <link rel="icon" type="image/png" sizes="32x32" href="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png">
-    <link rel="apple-touch-icon" href="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://img.rorraxy.com/rorraxyfree/mr%20masudar%20logo%20(3).png">
+    <link rel="apple-touch-icon" href="https://img.rorraxy.com/rorraxyfree/mr%20masudar%20logo%20(3).png">
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -19,8 +20,6 @@
     <script src="/ecosystem-core.js"></script>
 
     <script>
-        const API_BASE_URL = 'https://rorraxy.com';
-
         let globalVideoList = [];
         let currentIndex = 0;
         let currentSellerPage = 1;
@@ -95,29 +94,43 @@
             }, {passive: true});
         });
 
-        // Fetch live videos dynamically from Cloudflare D1 database based on ecosystem mode (retail, wholesale, dropshipping)
+        // ক্লাউডফ্লেয়ার D1 ডাটাবেজ থেকে ডাইরেক্ট মোড অনুযায়ী ভিডিও ফেচ করা
         async function loadLiveVideosFromBackend() {
             const currentMode = localStorage.getItem('rorraxy_mode') || 'retail';
-            const feedContainer = document.getElementById('videoFeed');
             
             try {
-                const response = await fetch(`${API_BASE_URL}/api/products?mode=${currentMode}`);
+                const response = await fetch(`/api/products?mode=${currentMode}`);
                 const result = await response.json();
                 
-                if (result.success && Array.isArray(result.data) && result.data.length > 0) {
-                    // শুধু যেগুলোতে ভিডিও বা ভিডিওর লিংক রয়েছে সেগুলোকে ফিল্টার করা অথবা সমস্ত প্রোডাক্ট থেকে ভিডিও বের করা
-                    globalVideoList = result.data.map(item => ({
-                        id: item.id || item.product_id || '101',
-                        videoUrl: item.video_url || item.videoUrl || 'https://www.w3schools.com/html/mov_bbb.mp4',
-                        price: item.price ? `$${parseFloat(item.price).toFixed(2)}` : '$85.00',
-                        baseLikes: item.like_count || 5200,
-                        baseShares: 180,
-                        discount: (item.discount_rate || '30') + '% OFF',
-                        category: 'video',
-                        sellerName: item.brand_name || 'Rorraxy Verified Merchant',
-                        sellerAvatar: item.logo_url || 'https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png',
-                        sellerDesc: item.business_desc || 'Verified enterprise merchant on Rorraxy ecosystem.'
-                    }));
+                let productsList = [];
+                if (result && result.success && Array.isArray(result.data)) {
+                    productsList = result.data;
+                } else if (Array.isArray(result)) {
+                    productsList = result;
+                }
+
+                if (productsList.length > 0) {
+                    globalVideoList = productsList.map(item => {
+                        let rawVid = item.video_url || item.youtube_video || '';
+                        
+                        // পুরনো r2.dev লিংক থাকলে নতুন কাস্টম ডোমেইন vid.rorraxy.com দিয়ে রিপ্লেস করা
+                        if (rawVid.includes('.r2.dev')) {
+                            rawVid = rawVid.replace(/https:\/\/[^/]+\.r2\.dev/, 'https://vid.rorraxy.com');
+                        }
+
+                        return {
+                            id: item.id || item.product_code || '101',
+                            videoUrl: rawVid || 'https://www.w3schools.com/html/mov_bbb.mp4',
+                            price: item.price ? `$${parseFloat(item.price).toFixed(2)}` : '$85.00',
+                            baseLikes: item.like_count || 5200,
+                            baseShares: 180,
+                            discount: (item.discount_rate || '30') + '% OFF',
+                            category: item.category || 'video',
+                            sellerName: item.brand_name || 'Rorraxy Verified Merchant',
+                            sellerAvatar: 'https://img.rorraxy.com/rorraxyfree/mr%20masudar%20logo%20(3).png',
+                            sellerDesc: 'Verified enterprise merchant on Rorraxy ecosystem.'
+                        };
+                    });
                     renderBatchVideos();
                 } else {
                     renderFallbackVideos();
@@ -130,7 +143,7 @@
 
         function renderFallbackVideos() {
             globalVideoList = [
-                { id: 'RRX-001', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', price: '$85.00', baseLikes: 5200, baseShares: 180, discount: '30% OFF', category: 'video', sellerName: 'Rorraxy Hub', sellerAvatar: 'https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png', sellerDesc: 'Primary supplier across global digital ecosystem.' }
+                { id: 'RRX-001', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', price: '$85.00', baseLikes: 5200, baseShares: 180, discount: '30% OFF', category: 'video', sellerName: 'Rorraxy Hub', sellerAvatar: 'https://img.rorraxy.com/rorraxyfree/mr%20masudar%20logo%20(3).png', sellerDesc: 'Primary supplier across global digital ecosystem.' }
             ];
             renderBatchVideos();
         }
@@ -240,7 +253,7 @@
         function updateBottomSellerProfile(product) {
             const avatarImg = document.getElementById('bottomSellerAvatar');
             if(avatarImg && product) {
-                avatarImg.src = product.sellerAvatar || 'https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png';
+                avatarImg.src = product.sellerAvatar || 'https://img.rorraxy.com/rorraxyfree/mr%20masudar%20logo%20(3).png';
             }
         }
 
@@ -250,7 +263,7 @@
             let currentProduct = activeList[currentIndex] || activeList[0];
 
             let sName = currentProduct.sellerName || 'Rorraxy Merchant';
-            let sAvatar = currentProduct.sellerAvatar || 'https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png';
+            let sAvatar = currentProduct.sellerAvatar || 'https://img.rorraxy.com/rorraxyfree/mr%20masudar%20logo%20(3).png';
             let sDesc = currentProduct.sellerDesc || 'Verified merchant on Rorraxy ecosystem.';
 
             let sellerVideos = globalVideoList.filter(p => (p.sellerName || 'Rorraxy Hub') === sName);
@@ -626,7 +639,7 @@
 
     <nav class="bottom-nav-bar">
         <div id="bottomSellerBtn" class="bottom-nav-item">
-            <img id="bottomSellerAvatar" src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png">
+            <img id="bottomSellerAvatar" src="https://img.rorraxy.com/rorraxyfree/mr%20masudar%20logo%20(3).png">
             <span>SELLER</span>
         </div>
         <div id="bottomHomeBtn" class="bottom-nav-item"><i class="fa-solid fa-house"></i><span>HOME</span></div>
