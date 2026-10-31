@@ -464,9 +464,8 @@
             loadLiveProducts();
         }
 
-        // Cloudflare Worker API & D1 Database থেকে ডাইরেক্ট রিয়েল-টাইম প্রোডাক্ট লোড
+        // ক্লাউডফ্লেয়ার ডাটাবেজ থেকে ডাইরেক্ট রিয়েল-টাইম প্রোডাক্ট লোড
         async function loadLiveProducts() {
-            const currentMode = localStorage.getItem('rorraxy_mode') || 'retail';
             try {
                 const response = await fetch(`${API_BASE_URL}/api/get?table=products`);
                 const result = await response.json();
@@ -499,46 +498,37 @@
             }
         }
 
-        // ক্লাউডফ্লেয়ার ডাটাবেজ থেকে আসল ইমেজ ও ভিডিও ইউআরএল পার্স এবং সুপার-ফাস্ট রেন্ডারিং
+        // D1 ডাটাবেজের image_url এবং images_json থেকে আসল ছবি পার্স করার ইউনিভার্সাল লজিক
         function renderProductCards(products) {
             const feedContainer = document.getElementById('productFeed');
             feedContainer.innerHTML = '';
 
             products.forEach(item => {
-                const productId = item.id || item.product_id || item.product_code || '101';
+                const productId = item.id || item.product_id || item.rowid || '101';
                 const title = item.title || item.name || 'rorraxy Luxury Item';
-                const price = item.price ? `$${parseFloat(item.price).toFixed(2)}` : '$0.00';
-                const discount = item.discount_rate || item.discountRate || '5';
+                const price = item.price ? `$${parseFloat(item.price).toFixed(2)}` : '$100.00';
+                const discount = item.discount_rate || item.discountRate || '10';
                 const countryCode = (item.target_country || item.targetCountry || 'bd').toLowerCase();
                 const flagUrl = `https://flagcdn.com/w20/${countryCode}.png`;
                 
-                // ১. ডাইনামিক ইমেজ ইউআরএল পার্সার (Cloudflare R2 / Cloudinary / D1 Any URL Column)
-                let rawImg = item.image_url || item.imageUrl || item.img || item.image || item.images_json || item.images;
                 let resolvedImageUrl = '';
 
-                if (rawImg) {
-                    if (typeof rawImg === 'string') {
-                        if (rawImg.startsWith('[') || rawImg.startsWith('{')) {
-                            try {
-                                let parsed = JSON.parse(rawImg);
-                                if (Array.isArray(parsed) && parsed.length > 0) {
-                                    resolvedImageUrl = parsed[0];
-                                } else if (typeof parsed === 'object') {
-                                    resolvedImageUrl = parsed.url || parsed.src || '';
-                                }
-                            } catch (e) {
-                                resolvedImageUrl = rawImg.split(',')[0].replace(/[\[\]'"]/g, '').trim();
-                            }
-                        } else {
-                            resolvedImageUrl = rawImg.split(',')[0].trim();
+                if (item.image_url && typeof item.image_url === 'string' && item.image_url.trim() !== '') {
+                    resolvedImageUrl = item.image_url.trim();
+                } else if (item.images_json) {
+                    try {
+                        let parsed = typeof item.images_json === 'string' ? JSON.parse(item.images_json) : item.images_json;
+                        if (Array.isArray(parsed) && parsed.length > 0) {
+                            resolvedImageUrl = parsed[0];
                         }
-                    } else if (Array.isArray(rawImg) && rawImg.length > 0) {
-                        resolvedImageUrl = rawImg[0];
+                    } catch (e) {
+                        if (typeof item.images_json === 'string') {
+                            resolvedImageUrl = item.images_json.replace(/[\[\]'"]/g, '').split(',')[0].trim();
+                        }
                     }
                 }
 
-                // যদি কোনো ইমেজ ক্লাউডে না পাওয়া যায়
-                if (!resolvedImageUrl || resolvedImageUrl.length < 5) {
+                if (!resolvedImageUrl || resolvedImageUrl.length < 10) {
                     resolvedImageUrl = 'https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png';
                 }
 
@@ -548,7 +538,7 @@
                             <div class="product-country-discount-badge">
                                 <img src="${flagUrl}" alt="${countryCode}" class="flag-icon" onerror="this.style.display='none'"> ${discount}% OFF
                             </div>
-                            <img src="${resolvedImageUrl}" alt="${title}" loading="lazy" decoding="async" fetchpriority="low" onerror="this.src='https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png'">
+                            <img src="${resolvedImageUrl}" alt="${title}" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png';">
                         </div>
                         <div class="card-footer-actions" onclick="event.stopPropagation()">
                             <span class="product-price-tag">${price}</span>
