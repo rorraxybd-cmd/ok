@@ -167,22 +167,21 @@
         .explore-subtxt { font-size: 0.60rem; font-weight: 400; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
         .btn-right-arrow { font-size: 0.75rem; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* Feed Container Layout Optimizations */
+        /* Feed Container Layout Optimizations (Fixed Box Alignment) */
         .feed-container {
-            padding: 8px 6px; 
+            padding: 10px 8px; 
             display: grid; 
             grid-template-columns: repeat(2, 1fr); 
-            gap: 8px; 
+            gap: 12px; 
             width: 100%; 
             max-width: 1400px; 
             margin: 0 auto;
-            contain: layout style paint;
         }
         @media (min-width: 768px) { 
             .feed-container { 
                 grid-template-columns: repeat(4, 1fr); 
-                gap: 12px; 
-                padding: 12px; 
+                gap: 16px; 
+                padding: 16px; 
             } 
         }
 
@@ -191,13 +190,32 @@
             border-radius: 14px; overflow: hidden; 
             display: flex; flex-direction: column; width: 100%; 
             border: 1px solid rgba(212,175,55,0.12); position: relative;
-            transform: translateZ(0); cursor: pointer;
-            contain: content;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
         .product-card:hover { border-color: rgba(212,175,55,0.35); }
 
-        .product-media-box { position: relative; width: 100%; background: #050508; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-        .product-media-box img { width: 100%; height: auto; display: block; object-fit: contain; background: #050508; }
+        /* Fixed Media Box Height to Prevent Layout Shifting/Floating Boxes */
+        .product-media-box { 
+            position: relative; 
+            width: 100%; 
+            height: 220px; 
+            background: #050508; 
+            overflow: hidden; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+        }
+        @media (min-width: 768px) {
+            .product-media-box { height: 280px; }
+        }
+        .product-media-box img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            display: block; 
+            background: #050508; 
+        }
         
         .product-country-discount-badge {
             position: absolute; top: 8px; left: 8px; z-index: 10;
@@ -212,7 +230,7 @@
         }
 
         .card-footer-actions { 
-            display: flex; justify-content: space-between; align-items: center; padding: 10px; 
+            display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; 
             background: #06060a !important; border-top: 1px solid rgba(255,255,255,0.05); gap: 4px; 
             margin-top: auto;
         }
@@ -469,7 +487,6 @@
             const currentMode = localStorage.getItem('rorraxy_mode') || 'retail';
             const feedContainer = document.getElementById('productFeed');
             
-            // Show loading state
             feedContainer.innerHTML = `
                 <div style="grid-column: 1 / -1; text-align: center; padding: 50px 0; color: var(--gold-solid);">
                     <i class="fa-solid fa-circle-notch fa-spin fa-2x"></i>
@@ -501,6 +518,17 @@
             }
         }
 
+        // উন্নত ইমেজ পাথ রিজলভার (যদি শুধু ফাইলের নাম থাকে তবে R2 বা CDN লিংক যুক্ত করে সম্পূর্ণ করবে)
+        function resolveImageUrl(rawUrl) {
+            if (!rawUrl) return 'https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png';
+            let trimmed = rawUrl.trim();
+            if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+                return trimmed;
+            }
+            // যদি ডাটাবেজে শুধু ফাইলের নাম বা স্টোরেজ পাথ থাকে
+            return `https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/${trimmed}`;
+        }
+
         function renderProductCards(products) {
             const feedContainer = document.getElementById('productFeed');
             feedContainer.innerHTML = '';
@@ -513,24 +541,16 @@
                 const countryCode = (item.target_country || item.targetCountry || 'bd').toLowerCase();
                 const flagUrl = `https://flagcdn.com/w20/${countryCode}.png`;
                 
-                // সঠিক ইমেজ ইউআরএল বা পাথ হ্যান্ডেল করার লজিক
-                let resolvedImageUrl = 'https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png';
-                if (item.image_url) {
-                    resolvedImageUrl = item.image_url;
-                } else if (item.imageUrl) {
-                    resolvedImageUrl = item.imageUrl;
-                } else if (item.images_json) {
+                let rawImg = item.image_url || item.imageUrl;
+                if (!rawImg && item.images_json) {
                     try {
-                        const parsedImages = JSON.parse(item.images_json);
-                        if (Array.isArray(parsedImages) && parsedImages.length > 0) {
-                            resolvedImageUrl = parsedImages[0];
-                        }
-                    } catch (e) {
-                        if (typeof item.images_json === 'string' && item.images_json.trim() !== '') {
-                            resolvedImageUrl = item.images_json.split(',')[0].trim();
-                        }
+                        let parsed = JSON.parse(item.images_json);
+                        if (Array.isArray(parsed) && parsed.length > 0) rawImg = parsed[0];
+                    } catch(e) {
+                        rawImg = item.images_json.split(',')[0];
                     }
                 }
+                const resolvedImageUrl = resolveImageUrl(rawImg);
 
                 const discountBadgeHtml = parseInt(discount) > 0 ? `
                     <div class="product-country-discount-badge">
@@ -610,7 +630,7 @@
                         body: JSON.stringify({ product_code: productId })
                     });
                 } catch (err) {
-                    console.error('Failed to update like count:', err);
+                    console.error('Failed to update like, error:', err);
                 }
             }
         }
@@ -628,7 +648,7 @@
                 try {
                     await navigator.share(shareData);
                 } catch (err) {
-                    console.log('Share canceled or failed silently:', err);
+                    console.log('Share canceled:', err);
                 }
             } else if (navigator.clipboard) {
                 try {
