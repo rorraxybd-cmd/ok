@@ -1,667 +1,654 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
-    <title>rorraxy - Multi-Mode E-Commerce Platform</title>
+    <title>rorraxy - Reels & Live Feed</title>
     
-    <!-- Central Script Tag -->
-    <script src="/ecosystem-core.js"></script>
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev">
 
-    <!-- Icons -->
     <link rel="icon" type="image/png" sizes="32x32" href="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png">
     <link rel="apple-touch-icon" href="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png">
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <style>
-        :root {
-            --bg-retail: #000000;
-            --card-retail: #0a0a0f;
-            --header-retail: rgba(0, 0, 0, 0.85);
-            --footer-retail: rgba(4, 4, 6, 0.95);
-            --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
-            --gold-solid: #d4af37;
-            --pink-love: #ff2a85;
-            --text-white: #ffffff;
-            --text-gray: #a0a0b5;
-            --font-main: 'Poppins', sans-serif;
-        }
-
-        html, body { 
-            width: 100%; max-width: 100%; overflow-x: hidden; 
-            background: var(--bg-retail) !important; 
-            color: var(--text-white); font-family: var(--font-main); 
-            min-height: 100vh; font-size: 15px;
-            -webkit-font-smoothing: antialiased;
-            -webkit-overflow-scrolling: touch;
-            scroll-behavior: smooth;
-        }
-        
-        body { padding-top: 38px; padding-bottom: 75px; text-transform: uppercase !important; }
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-        header.app-header {
-            position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
-            background: var(--header-retail); backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            display: flex; flex-direction: row; align-items: center; justify-content: space-between;
-            border: none !important; box-shadow: none !important;
-            transform: translateZ(0); padding-right: 8px;
-        }
-
-        .trending-marquee-bar {
-            overflow: hidden; white-space: nowrap; font-size: 0.70rem; font-weight: 500; text-transform: uppercase;
-            flex: 1; display: flex; align-items: center; height: 38px; position: relative; background: #040406;
-            border: none !important;
-            transform: translateZ(0);
-        }
-        
-        .marquee-container { 
-            display: flex; width: max-content; 
-            animation: smoothMarquee 35s linear infinite; 
-            will-change: transform; 
-            backface-visibility: hidden;
-        }
-
-        .marquee-group { display: flex; align-items: center; gap: 35px; padding-right: 35px; flex-shrink: 0; }
-        .marquee-group span { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; color: var(--text-gray); }
-        .txt-gold { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-        @keyframes smoothMarquee {
-            0% { transform: translate3d(0, 0, 0); }
-            100% { transform: translate3d(-50%, 0, 0); }
-        }
-
-        /* Mode Selector Top Right Dropdown Box */
-        .mode-selector-corner {
-            background: #0d0d14;
-            border: 1px solid rgba(212, 175, 55, 0.4);
-            color: #d4af37;
-            font-size: 0.65rem;
-            font-weight: 600;
-            padding: 4px 8px;
-            border-radius: 8px;
-            outline: none;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            height: 28px;
-            z-index: 1001;
-            box-shadow: 0 0 8px rgba(212, 175, 55, 0.2);
-        }
-        .mode-selector-corner option {
-            background: #0a0a0f;
-            color: #ffffff;
-            font-weight: 500;
-            padding: 6px;
-        }
-
-        /* Luxury Modal Overlay */
-        .luxury-center-modal-overlay {
-            display: none; position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important;
-            background: rgba(0, 0, 0, 0.85) !important; z-index: 99999 !important; backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            align-items: center; justify-content: center; padding: 16px; box-sizing: border-box;
-        }
-        .luxury-center-modal-box {
-            background: #0d0d12; width: 100%; max-width: 450px; border-radius: 24px; 
-            padding: 28px 20px; display: flex; flex-direction: column; align-items: center; text-align: center; 
-            position: relative; border: 1px solid rgba(212,175,55,0.2); max-height: 90vh; overflow-y: auto;
-            scrollbar-width: thin; scrollbar-color: var(--gold-solid) transparent;
-            -webkit-overflow-scrolling: touch;
-        }
-        .luxury-modal-close-btn { 
-            position: absolute; top: 16px; right: 16px;
-            background: rgba(212,175,55,0.08); border: 1px solid rgba(212,175,55,0.2); color: var(--gold-solid); 
-            font-size: 1rem; width: 34px; height: 34px; border-radius: 50%; cursor: pointer; 
-            display: flex; align-items: center; justify-content: center; transition: 0.2s; z-index: 10;
-        }
-        .luxury-modal-close-btn:hover { background: rgba(212,175,55,0.2); }
-
-        .luxury-modal-logo-large { width: 75px; height: 75px; object-fit: contain; margin-bottom: 12px; cursor: pointer; }
-        
-        .modal-material-info-text {
-            font-size: 0.68rem; font-weight: 600; color: var(--text-gray) !important; text-align: center;
-            margin-bottom: 12px; line-height: 1.4; text-transform: uppercase; letter-spacing: 2px;
-            padding: 0 10px; display: block !important;
-        }
-
-        .modal-marquee-wrapper {
-            width: 100%; overflow: hidden; white-space: nowrap; margin-bottom: 18px;
-            background: rgba(255, 255, 255, 0.03); padding: 8px 0; border-radius: 12px;
-            border: 1px solid rgba(212, 175, 55, 0.1); display: block !important;
-        }
-        .modal-marquee-container {
-            display: flex; width: max-content;
-            animation: smoothMarquee 30s linear infinite; 
-        }
-        .modal-marquee-group {
-            display: flex; align-items: center; gap: 20px; padding-right: 20px; font-size: 0.68rem; font-weight: 500; color: var(--text-gray);
-        }
-
-        .luxury-modal-title-top {
-            font-size: 1rem; font-weight: 600; background: var(--gold-gradient);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 2px;
-            margin-bottom: 16px; text-transform: uppercase; cursor: pointer;
-        }
-        .luxury-options-fullstack { display: flex; flex-direction: column; gap: 10px; width: 100%; align-items: center; }
-        .luxury-action-btn-item {
-            background: #121218; color: var(--text-white); padding: 14px 18px; border-radius: 14px; text-decoration: none; 
-            display: flex; align-items: center; justify-content: space-between;
-            border: 1px solid rgba(212,175,55,0.12); transition: background 0.2s; width: 100%; cursor: pointer;
-        }
-        .luxury-action-btn-item:hover {
-            border-color: rgba(212,175,55,0.4);
-            background: #181822;
-        }
-        .luxury-action-btn-item .btn-left-part { display: flex; align-items: center; gap: 12px; }
-        .luxury-action-btn-item i { font-size: 1.1rem; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; width: 22px; text-align: center; }
-        .btn-text-stack { display: flex; flex-direction: column; align-items: flex-start; text-align: left; }
-        .btn-main-title { font-size: 0.82rem; font-weight: 500; color: var(--text-white); text-transform: uppercase; line-height: 1.2; }
-        .explore-subtxt { font-size: 0.60rem; font-weight: 400; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
-        .btn-right-arrow { font-size: 0.75rem; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-        /* Feed Container Layout Optimizations */
-        .feed-container {
-            padding: 8px 6px; 
-            display: grid; 
-            grid-template-columns: repeat(2, 1fr); 
-            gap: 8px; 
-            width: 100%; 
-            max-width: 1400px; 
-            margin: 0 auto;
-            contain: layout style paint;
-        }
-        @media (min-width: 768px) { 
-            .feed-container { 
-                grid-template-columns: repeat(4, 1fr); 
-                gap: 12px; 
-                padding: 12px; 
-            } 
-        }
-
-        .product-card {
-            background: var(--card-retail); 
-            border-radius: 14px; overflow: hidden; 
-            display: flex; flex-direction: column; width: 100%; 
-            border: 1px solid rgba(212,175,55,0.12); position: relative;
-            transform: translateZ(0); cursor: pointer;
-            contain: content;
-        }
-        .product-card:hover { border-color: rgba(212,175,55,0.35); }
-
-        .product-media-box { position: relative; width: 100%; background: #050508; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-        .product-media-box img { width: 100%; height: auto; display: block; object-fit: contain; background: #050508; }
-        
-        .product-country-discount-badge {
-            position: absolute; top: 8px; left: 8px; z-index: 10;
-            background: rgba(255, 42, 133, 0.9);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 3px 8px; border-radius: 8px; display: flex; align-items: center; gap: 5px;
-            font-size: 0.58rem; font-weight: 700; color: #ffffff !important;
-            text-transform: uppercase; letter-spacing: 0.5px;
-        }
-        .product-country-discount-badge img.flag-icon {
-            width: 13px; height: 9px; object-fit: cover; border-radius: 2px; display: inline-block;
-        }
-
-        .card-footer-actions { 
-            display: flex; justify-content: space-between; align-items: center; padding: 10px; 
-            background: #06060a !important; border-top: 1px solid rgba(255,255,255,0.05); gap: 4px; 
-            margin-top: auto;
-        }
-        .product-price-tag { font-size: 0.85rem; font-weight: 600; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        
-        .card-sub-actions { display: flex; align-items: center; gap: 12px; justify-content: center; }
-        
-        .love-action { display: flex; align-items: center; gap: 4px; cursor: pointer; font-size: 0.70rem; font-weight: 500; color: var(--text-gray) !important; transition: 0.15s; }
-        .love-action:hover { color: var(--text-white) !important; }
-        .love-action i { color: var(--pink-love); }
-        .love-action.gold-active { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 600; }
-        .love-action.gold-active i { background: var(--gold-gradient) !important; -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; }
-        
-        .share-action-btn { background: none; border: none; font-size: 0.70rem; font-weight: 500; cursor: pointer; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; display: flex; align-items: center; gap: 4px; }
-
-        /* Clean Fixed Bottom Navigation Bar */
-        nav.bottom-nav {
-            position: fixed; bottom: 0; left: 0; width: 100%; background: var(--footer-retail);
-            display: flex; justify-content: space-around; align-items: center; padding: 8px 4px 10px 4px;
-            z-index: 1000; backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: none !important; border-top: none !important; box-shadow: none !important;
-            transform: translateZ(0);
-        }
-        .nav-item {
-            display: flex; flex-direction: column; align-items: center; text-decoration: none;
-            font-size: 0.50rem; font-weight: 600; cursor: pointer; text-align: center; gap: 3px; flex: 1; position: relative;
-            text-transform: uppercase; background: none; border: none;
-        }
-        
-        .nav-item i { 
-            font-size: 1.25rem; 
-            background: var(--gold-gradient);
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-            line-height: 1;
-        }
-        
-        .nav-item span {
-            color: #ffffff !important;
-            -webkit-text-fill-color: #ffffff !important;
-            font-size: 0.50rem;
-            letter-spacing: 0.5px;
-            line-height: 1;
-            font-weight: 600;
-        }
-
-        .cart-icon-box { position: relative; display: inline-flex; align-items: center; justify-content: center; }
-        
-        .cart-badge-circle {
-            position: absolute; top: -5px; right: -8px; 
-            background: var(--pink-love); color: #ffffff !important;
-            font-size: 0.50rem; font-weight: 700; width: 15px; height: 15px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; 
-            z-index: 5;
-        }
-        .cart-badge-circle.empty-badge { display: none !important; }
-        .cart-custom-svg { width: 22px; height: 22px; fill: url(#goldGradientSvg); }
-    </style>
-</head>
-<body id="mainBody">
-
-    <!-- Global SVG Gradient Definition -->
-    <svg style="width:0;height:0;position:absolute;" aria-hidden="true" focusable="false">
-      <linearGradient id="goldGradientSvg" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#bf953f" />
-        <stop offset="25%" stop-color="#fcf6ba" />
-        <stop offset="50%" stop-color="#b38728" />
-        <stop offset="75%" stop-color="#fbf5b7" />
-        <stop offset="100%" stop-color="#aa771c" />
-      </linearGradient>
-    </svg>
-
-    <!-- Header Section -->
-    <header class="app-header" id="mainHeader">
-        <div class="trending-marquee-bar">
-            <div class="marquee-container" id="marqueeContainer1">
-                <div class="marquee-group">
-                    <span class="txt-gold"><i class="fa-solid fa-crown"></i> Women Fashion</span>
-                    <span class="txt-gold"><i class="fa-solid fa-gem"></i> Baby Fashion</span>
-                    <span class="txt-gold"><i class="fa-solid fa-star"></i> Girls Fashion</span>
-                    <span class="txt-gold"><i class="fa-solid fa-fire"></i> Boy Fashion</span>
-                    <span class="txt-gold"><i class="fa-solid fa-bolt"></i> Men Fashion</span>
-                    <span class="txt-gold"><i class="fa-solid fa-gift"></i> Luxury Gift</span>
-                    <span class="txt-gold"><i class="fa-solid fa-shirt"></i> Matching Set</span>
-                    <span class="txt-gold"><i class="fa-solid fa-plane"></i> New Products</span>
-                    <span class="txt-gold"><i class="fa-solid fa-chart-line"></i> Trending Collections</span>
-                </div>
-                <div class="marquee-group" aria-hidden="true">
-                    <span class="txt-gold"><i class="fa-solid fa-crown"></i> Women Fashion</span>
-                    <span class="txt-gold"><i class="fa-solid fa-gem"></i> Baby Fashion</span>
-                    <span class="txt-gold"><i class="fa-solid fa-star"></i> Girls Fashion</span>
-                    <span class="txt-gold"><i class="fa-solid fa-fire"></i> Boy Fashion</span>
-                    <span class="txt-gold"><i class="fa-solid fa-bolt"></i> Men Fashion</span>
-                    <span class="txt-gold"><i class="fa-solid fa-gift"></i> Luxury Gift</span>
-                    <span class="txt-gold"><i class="fa-solid fa-shirt"></i> Matching Set</span>
-                    <span class="txt-gold"><i class="fa-solid fa-plane"></i> New Products</span>
-                    <span class="txt-gold"><i class="fa-solid fa-chart-line"></i> Trending Collections</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Mode Selector Switcher at Top Right Corner -->
-        <select class="mode-selector-corner" id="userModeSelector" onchange="switchEcosystemMode(this.value)">
-            <option value="retail">RETAIL (B2C)</option>
-            <option value="wholesale">WHOLESALE (B2B)</option>
-            <option value="dropshipping">DROPSHIPPING</option>
-        </select>
-    </header>
-
-    <!-- You Portal Navigation Modal -->
-    <div id="youMenuModalOverlay" class="luxury-center-modal-overlay">
-        <div class="luxury-center-modal-box" onclick="event.stopPropagation()">
-            <button class="luxury-modal-close-btn" onclick="closeYouMenuModal()"><i class="fa-solid fa-xmark"></i></button>
-            <img src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png" alt="Logo" class="luxury-modal-logo-large" onclick="navigateTo('https://rorraxy.com/')">
-            
-            <div class="modal-material-info-text">AUTHENTIC MATERIALS</div>
-
-            <div class="modal-marquee-wrapper">
-                <div class="modal-marquee-container">
-                    <div class="modal-marquee-group">
-                        <span class="txt-gold"><i class="fa-solid fa-feather"></i> Textiles & Handloom</span>
-                        <span class="txt-gold"><i class="fa-solid fa-shield"></i> Leather</span>
-                        <span class="txt-gold"><i class="fa-solid fa-seedling"></i> Jute</span>
-                        <span class="txt-gold"><i class="fa-solid fa-tree"></i> Wood</span>
-                        <span class="txt-gold"><i class="fa-solid fa-water"></i> Resin</span>
-                        <span class="txt-gold"><i class="fa-solid fa-mountain"></i> Bamboo</span>
-                        <span class="txt-gold"><i class="fa-solid fa-ring"></i> Brass</span>
-                        <span class="txt-gold"><i class="fa-solid fa-coins"></i> Silver</span>
-                        <span class="txt-gold"><i class="fa-solid fa-crown"></i> Gold Plating</span>
-                    </div>
-                    <div class="modal-marquee-group" aria-hidden="true">
-                        <span class="txt-gold"><i class="fa-solid fa-feather"></i> Textiles & Handloom</span>
-                        <span class="txt-gold"><i class="fa-solid fa-shield"></i> Leather</span>
-                        <span class="txt-gold"><i class="fa-solid fa-seedling"></i> Jute</span>
-                        <span class="txt-gold"><i class="fa-solid fa-tree"></i> Wood</span>
-                        <span class="txt-gold"><i class="fa-solid fa-water"></i> Resin</span>
-                        <span class="txt-gold"><i class="fa-solid fa-mountain"></i> Bamboo</span>
-                        <span class="txt-gold"><i class="fa-solid fa-ring"></i> Brass</span>
-                        <span class="txt-gold"><i class="fa-solid fa-coins"></i> Silver</span>
-                        <span class="txt-gold"><i class="fa-solid fa-crown"></i> Gold Plating</span>
-                    </div>
-                </div>
-            </div>
-
-            <h2 class="luxury-modal-title-top" onclick="navigateTo('/account.html')">USER PORTAL</h2>
-            <div class="luxury-options-fullstack">
-                <div class="luxury-action-btn-item" onclick="navigateTo('/account.html')">
-                    <div class="btn-left-part">
-                        <i class="fa-solid fa-user"></i>
-                        <div class="btn-text-stack">
-                            <span class="btn-main-title">My Account</span>
-                            <span class="explore-subtxt">Dashboard</span>
-                        </div>
-                    </div>
-                    <i class="fa-solid fa-arrow-right btn-right-arrow"></i>
-                </div>
-                <div class="luxury-action-btn-item" onclick="navigateTo('/seller/index.html')">
-                    <div class="btn-left-part">
-                        <i class="fa-solid fa-chart-line"></i>
-                        <div class="btn-text-stack">
-                            <span class="btn-main-title">Seller Portal</span>
-                            <span class="explore-subtxt">Management</span>
-                        </div>
-                    </div>
-                    <i class="fa-solid fa-arrow-right btn-right-arrow"></i>
-                </div>
-                <div class="luxury-action-btn-item" onclick="navigateTo('/affiliate/index.html')">
-                    <div class="btn-left-part">
-                        <i class="fa-solid fa-handshake"></i>
-                        <div class="btn-text-stack">
-                            <span class="btn-main-title">Affiliate Program</span>
-                            <span class="explore-subtxt">Earn Rewards</span>
-                        </div>
-                    </div>
-                    <i class="fa-solid fa-arrow-right btn-right-arrow"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Main Feed Container loaded dynamically from Cloudflare D1 database -->
-    <main class="feed-container" id="productFeed">
-        <!-- Loading Spinner Placeholder -->
-        <div style="grid-column: 1 / -1; text-align: center; padding: 50px 0; color: var(--gold-solid);">
-            <i class="fa-solid fa-circle-notch fa-spin fa-2x"></i>
-            <p style="margin-top: 10px; font-size: 0.75rem; letter-spacing: 1px;">LOADING rorraxy PRODUCTS...</p>
-        </div>
-    </main>
-
-    <!-- Optimized Bottom Navigation Bar -->
-    <nav class="bottom-nav" id="bottomNav">
-        <a href="/world.html" class="nav-item">
-            <i class="fa-solid fa-earth-americas"></i>
-            <span>World</span>
-        </a>
-        <div class="nav-item" id="youNavBtn" onclick="openYouMenuModal(event)">
-            <i class="fa-solid fa-user"></i>
-            <span>You</span>
-        </div>
-        <a href="/video.html" class="nav-item">
-            <i class="fa-brands fa-youtube"></i>
-            <span>Video</span>
-        </a>
-        <a href="/category.html" class="nav-item">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <span>Category</span>
-        </a>
-        <a href="/cart.html" class="nav-item">
-            <div class="cart-icon-box">
-                <svg class="cart-custom-svg" viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
-                <span class="cart-badge-circle empty-badge" id="floatingCartItemCountBadge">0</span>
-            </div>
-            <span>Cart</span>
-        </a>
-    </nav>
+    <!-- rorraxy Ecosystem - Master Core Loader -->
+    <script src="/ecosystem-core.js"></script>
 
     <script>
-        // Updated API Endpoint pointing directly to rorraxy.com domain functions
         const API_BASE_URL = 'https://rorraxy.com';
 
-        window.addEventListener('DOMContentLoaded', () => {
-            initSelectedMode();
-            updateCartBadgeCount();
-            loadLiveProducts();
+        let globalVideoList = [];
+        let currentIndex = 0;
+        let currentSellerPage = 1;
+        const itemsPerPage = 20;
+        let isGlobalMuted = true;
 
-            const modals = document.querySelectorAll('.luxury-center-modal-overlay');
-            modals.forEach(modal => {
-                modal.onclick = function(event) {
-                    if (event.target === modal) {
-                        closeAllModals();
+        window.addEventListener('DOMContentLoaded', () => {
+            loadLiveVideosFromBackend();
+
+            const bottomSearchBtn = document.getElementById('bottomSearchBtn');
+            const bottomHomeBtn = document.getElementById('bottomHomeBtn');
+            const bottomBuyInfoBtn = document.getElementById('bottomBuyInfoBtn');
+            const bottomSellerBtn = document.getElementById('bottomSellerBtn');
+            const searchModal = document.getElementById('searchModal');
+            const searchInput = document.getElementById('modalSearchInput');
+            const searchBtn = document.getElementById('modalSearchBtn');
+            const sellerFullscreenOverlay = document.getElementById('sellerFullscreenOverlay');
+
+            if(bottomHomeBtn) {
+                bottomHomeBtn.addEventListener('click', () => { window.location.href = "index.html"; });
+            }
+
+            if(bottomSearchBtn && searchModal) {
+                bottomSearchBtn.addEventListener('click', () => {
+                    searchModal.style.display = searchModal.style.display === 'flex' ? 'none' : 'flex';
+                    if(searchInput) searchInput.focus();
+                });
+                searchModal.addEventListener('click', (e) => {
+                    if(e.target === searchModal) searchModal.style.display = 'none';
+                });
+            }
+
+            if(bottomSellerBtn && sellerFullscreenOverlay) {
+                bottomSellerBtn.addEventListener('click', () => {
+                    currentSellerPage = 1;
+                    openSellerFullscreenProfile();
+                });
+            }
+
+            if(bottomBuyInfoBtn) {
+                bottomBuyInfoBtn.addEventListener('click', () => {
+                    let activeList = globalVideoList;
+                    if(activeList.length > 0 && activeList[currentIndex]) {
+                        window.location.href = `pd.html?id=${encodeURIComponent(activeList[currentIndex].id || activeList[currentIndex].product_id)}`;
                     }
-                };
+                });
+            }
+
+            if(searchBtn && searchInput && searchModal) {
+                searchBtn.addEventListener('click', () => {
+                    executeSearch(searchInput.value);
+                    searchModal.style.display = 'none';
+                });
+                searchInput.addEventListener('keypress', (e) => {
+                    if(e.key === 'Enter') {
+                        executeSearch(searchInput.value);
+                        searchModal.style.display = 'none';
+                    }
+                });
+            }
+
+            window.addEventListener('keydown', (e) => {
+                if(e.key === 'ArrowDown') { e.preventDefault(); scrollVideo(1); }
+                else if(e.key === 'ArrowUp') { e.preventDefault(); scrollVideo(-1); }
             });
 
-            setInterval(() => {
-                updateCartBadgeCount();
-            }, 1000);
+            let touchStartY = 0;
+            window.addEventListener('touchstart', (e) => { touchStartY = e.touches[0].clientY; }, {passive: true});
+            window.addEventListener('touchend', (e) => {
+                let diff = touchStartY - e.changedTouches[0].clientY;
+                if (Math.abs(diff) > 50) diff > 0 ? scrollVideo(1) : scrollVideo(-1);
+            }, {passive: true});
         });
 
-        // Initialize User Selected Mode in Dropdown Selector
-        function initSelectedMode() {
+        // Fetch live videos dynamically from Cloudflare D1 database based on ecosystem mode (retail, wholesale, dropshipping)
+        async function loadLiveVideosFromBackend() {
             const currentMode = localStorage.getItem('rorraxy_mode') || 'retail';
-            const selector = document.getElementById('userModeSelector');
-            if (selector) {
-                selector.value = currentMode;
-            }
-        }
-
-        // Switch Ecosystem Mode (Retail B2C, Wholesale B2B, Dropshipping)
-        function switchEcosystemMode(selectedMode) {
-            localStorage.setItem('rorraxy_mode', selectedMode);
-            console.log(`rorraxy Mode switched to: ${selectedMode}`);
-            loadLiveProducts(); // Reload products matching the selected ecosystem mode
-        }
-
-        // Fetch products dynamically using Cloudflare Pages Functions API & D1 Database
-        async function loadLiveProducts() {
-            const currentMode = localStorage.getItem('rorraxy_mode') || 'retail';
+            const feedContainer = document.getElementById('videoFeed');
+            
             try {
                 const response = await fetch(`${API_BASE_URL}/api/products?mode=${currentMode}`);
                 const result = await response.json();
+                
                 if (result.success && Array.isArray(result.data) && result.data.length > 0) {
-                    renderProductCards(result.data);
+                    // শুধু যেগুলোতে ভিডিও বা ভিডিওর লিংক রয়েছে সেগুলোকে ফিল্টার করা অথবা সমস্ত প্রোডাক্ট থেকে ভিডিও বের করা
+                    globalVideoList = result.data.map(item => ({
+                        id: item.id || item.product_id || '101',
+                        videoUrl: item.video_url || item.videoUrl || 'https://www.w3schools.com/html/mov_bbb.mp4',
+                        price: item.price ? `$${parseFloat(item.price).toFixed(2)}` : '$85.00',
+                        baseLikes: item.like_count || 5200,
+                        baseShares: 180,
+                        discount: (item.discount_rate || '30') + '% OFF',
+                        category: 'video',
+                        sellerName: item.brand_name || 'Rorraxy Verified Merchant',
+                        sellerAvatar: item.logo_url || 'https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png',
+                        sellerDesc: item.business_desc || 'Verified enterprise merchant on Rorraxy ecosystem.'
+                    }));
+                    renderBatchVideos();
                 } else {
-                    renderFallbackProducts();
+                    renderFallbackVideos();
                 }
             } catch (error) {
-                console.error('Failed to load products from Cloudflare backend:', error);
-                renderFallbackProducts();
+                console.error('Failed to load videos from backend:', error);
+                renderFallbackVideos();
             }
         }
 
-        // Render Dynamic Products from Cloudflare D1 Database (Fixed Image URL Resolver)
-        function renderProductCards(products) {
-            const feedContainer = document.getElementById('productFeed');
-            feedContainer.innerHTML = '';
-
-            products.forEach(item => {
-                const productId = item.id || item.product_id || item.product_code || '101';
-                const title = item.title || 'rorraxy Luxury Item';
-                const price = item.price ? `$${parseFloat(item.price).toFixed(2)}` : '$0.00';
-                const discount = item.discount_rate || item.discountRate || '50';
-                const countryCode = (item.target_country || item.targetCountry || 'bd').toLowerCase();
-                const flagUrl = `https://flagcdn.com/w20/${countryCode}.png`;
-                
-                // সঠিক ইমেজ ইউআরএল বা পাথ হ্যান্ডেল করার লজিক
-                let resolvedImageUrl = 'https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/Multi-pocket%20Skinny%20Pants%20(10).webp';
-                if (item.image_url) {
-                    resolvedImageUrl = item.image_url;
-                } else if (item.imageUrl) {
-                    resolvedImageUrl = item.imageUrl;
-                } else if (item.images_json) {
-                    try {
-                        const parsedImages = JSON.parse(item.images_json);
-                        if (Array.isArray(parsedImages) && parsedImages.length > 0) {
-                            resolvedImageUrl = parsedImages[0];
-                        }
-                    } catch (e) {
-                        if (typeof item.images_json === 'string' && item.images_json.trim() !== '') {
-                            resolvedImageUrl = item.images_json.split(',')[0].trim();
-                        }
-                    }
-                }
-
-                const cardHtml = `
-                    <div class="product-card" data-product-id="${productId}" onclick="openProductDetails('${productId}')">
-                        <div class="product-media-box">
-                            <div class="product-country-discount-badge">
-                                <img src="${flagUrl}" alt="${countryCode}" class="flag-icon" onerror="this.style.display='none'"> ${discount}% OFF
-                            </div>
-                            <img src="${resolvedImageUrl}" alt="${title}" loading="lazy" onerror="this.src='https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/Multi-pocket%20Skinny%20Pants%20(10).webp'">
-                        </div>
-                        <div class="card-footer-actions" onclick="event.stopPropagation()">
-                            <span class="product-price-tag">${price}</span>
-                            <div class="card-sub-actions">
-                                <div class="love-action card-love-btn" onclick="toggleLove(event, this)">
-                                    <i class="fa-solid fa-heart"></i> <span class="love-count">${item.like_count || 128}</span>
-                                </div>
-                                <button class="share-action-btn" onclick="triggerAutoShare(event, '${productId}', '${title.replace(/'/g, "\\'")}')">
-                                    <i class="fa-solid fa-share-nodes"></i> Share
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                feedContainer.insertAdjacentHTML('beforeend', cardHtml);
-            });
+        function renderFallbackVideos() {
+            globalVideoList = [
+                { id: 'RRX-001', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', price: '$85.00', baseLikes: 5200, baseShares: 180, discount: '30% OFF', category: 'video', sellerName: 'Rorraxy Hub', sellerAvatar: 'https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png', sellerDesc: 'Primary supplier across global digital ecosystem.' }
+            ];
+            renderBatchVideos();
         }
 
-        // Fallback Demo Products if API is temporarily empty
-        function renderFallbackProducts() {
-            const feedContainer = document.getElementById('productFeed');
-            feedContainer.innerHTML = `
-                <div class="product-card" data-product-id="101" onclick="openProductDetails('101')">
-                    <div class="product-media-box">
-                        <div class="product-country-discount-badge">
-                            <img src="https://flagcdn.com/w20/bd.png" alt="BD" class="flag-icon"> 50% OFF
-                        </div>
-                        <img src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/Multi-pocket%20Skinny%20Pants%20(10).webp" alt="Multi-pocket Skinny Pants" loading="lazy">
+        function getDynamicEngagement(productId, baseVal, type) {
+            let storageKey = `rorraxy_${type}_${productId}`;
+            let storedData = localStorage.getItem(storageKey);
+            let currentTime = new Date().getTime();
+            let currentVal = baseVal;
+
+            if (storedData) {
+                let parsed = JSON.parse(storedData);
+                currentVal = parsed.value;
+            } else {
+                currentVal = baseVal + Math.floor(Math.random() * 300) + 100;
+                localStorage.setItem(storageKey, JSON.stringify({ value: currentVal, lastUpdated: currentTime }));
+            }
+
+            if (currentVal >= 1000) {
+                return (currentVal / 1000).toFixed(1) + 'K';
+            }
+            return currentVal.toString();
+        }
+
+        window.executeSearch = function(keyword) {
+            let query = keyword.toLowerCase().trim();
+            let foundIndex = globalVideoList.findIndex(p => 
+                (p.id && p.id.toLowerCase().includes(query)) ||
+                (p.sellerName && p.sellerName.toLowerCase().includes(query))
+            );
+            if (foundIndex !== -1) currentIndex = foundIndex;
+            renderBatchVideos();
+        };
+
+        window.toggleGlobalAudio = function() {
+            isGlobalMuted = !isGlobalMuted;
+            const activeVideo = document.querySelector('.reel-media-box video');
+            if (activeVideo) activeVideo.muted = isGlobalMuted;
+
+            const soundBtnIcon = document.getElementById('soundBtnIcon');
+            const soundItem = document.getElementById('soundActionItem');
+            if(soundBtnIcon && soundItem) {
+                if(isGlobalMuted) {
+                    soundBtnIcon.className = "fa-solid fa-volume-xmark action-pure-icon";
+                    soundItem.classList.remove('active-sound');
+                } else {
+                    soundBtnIcon.className = "fa-solid fa-volume-high action-pure-icon";
+                    soundItem.classList.add('active-sound');
+                }
+            }
+        };
+
+        window.toggleSaveItem = function(e, btn, pId) {
+            e.stopPropagation();
+            let savedIds = JSON.parse(localStorage.getItem('rorraxy_saved_videos') || '[]');
+            let index = savedIds.indexOf(pId);
+            if(index > -1) {
+                savedIds.splice(index, 1);
+                btn.classList.remove('active');
+            } else {
+                savedIds.push(pId);
+                btn.classList.add('active');
+            }
+            localStorage.setItem('rorraxy_saved_videos', JSON.stringify(savedIds));
+        };
+
+        window.openSavedGalleryModal = function() {
+            let savedIds = JSON.parse(localStorage.getItem('rorraxy_saved_videos') || '[]');
+            let savedVideos = globalVideoList.filter(p => savedIds.includes(p.id));
+            let overlay = document.getElementById('savedGalleryOverlay');
+            let containerBody = document.getElementById('savedGalleryBody');
+            if(!overlay || !containerBody) return;
+
+            if (savedVideos.length === 0) {
+                containerBody.innerHTML = `<div class="fs-profile-header-box"><h2 class="fs-profile-name">SAVED VIDEOS</h2></div><div style="text-align:center; color:#a0a0ab; padding:40px; font-size:0.85rem;">কোনো সংরক্ষিত ভিডিও নেই</div><div class="fs-bottom-back-action"><button class="fs-bottom-back-home-btn" onclick="closeSavedGallery()"><i class="fa-solid fa-house"></i> হোমে ফিরে যান</button></div>`;
+            } else {
+                let thumbsHtml = '';
+                savedVideos.forEach(v => {
+                    thumbsHtml += `<div class="saved-thumb-card" onclick="selectSavedVideo('${v.id}')"><div class="saved-thumb-preview"><i class="fa-solid fa-play"></i></div><div class="saved-thumb-footer"><span class="saved-thumb-title">ID: ${v.id}</span><button class="saved-clean-delete-btn" onclick="removeSavedVideo(event, '${v.id}')"><i class="fa-solid fa-trash"></i> ডিলিট</button></div></div>`;
+                });
+                containerBody.innerHTML = `<div class="fs-profile-header-box"><h2 class="fs-profile-name">SAVED VIDEOS</h2><div class="fs-stats-pill"><i class="fa-solid fa-video"></i> মোট সেভ করা: <strong>${savedVideos.length}</strong></div></div><div class="fs-videos-grid">${thumbsHtml}</div><div class="fs-bottom-back-action"><button class="fs-bottom-back-home-btn" onclick="closeSavedGallery()"><i class="fa-solid fa-house"></i> হোমে ফিরে যান</button></div>`;
+            }
+            overlay.style.display = 'flex';
+        };
+
+        window.closeSavedGallery = function() {
+            document.getElementById('savedGalleryOverlay').style.display = 'none';
+        };
+
+        window.selectSavedVideo = function(videoId) {
+            let foundIdx = globalVideoList.findIndex(p => p.id === videoId);
+            if(foundIdx !== -1) {
+                currentIndex = foundIdx;
+                document.getElementById('savedGalleryOverlay').style.display = 'none';
+                renderBatchVideos();
+            }
+        };
+
+        window.removeSavedVideo = function(e, videoId) {
+            e.stopPropagation();
+            let saved = JSON.parse(localStorage.getItem('rorraxy_saved_videos') || '[]');
+            saved = saved.filter(id => id !== videoId);
+            localStorage.setItem('rorraxy_saved_videos', JSON.stringify(saved));
+            openSavedGalleryModal();
+        };
+
+        function updateBottomSellerProfile(product) {
+            const avatarImg = document.getElementById('bottomSellerAvatar');
+            if(avatarImg && product) {
+                avatarImg.src = product.sellerAvatar || 'https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png';
+            }
+        }
+
+        window.openSellerFullscreenProfile = function() {
+            let activeList = globalVideoList;
+            if (activeList.length === 0) return;
+            let currentProduct = activeList[currentIndex] || activeList[0];
+
+            let sName = currentProduct.sellerName || 'Rorraxy Merchant';
+            let sAvatar = currentProduct.sellerAvatar || 'https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png';
+            let sDesc = currentProduct.sellerDesc || 'Verified merchant on Rorraxy ecosystem.';
+
+            let sellerVideos = globalVideoList.filter(p => (p.sellerName || 'Rorraxy Hub') === sName);
+            let containerBody = document.getElementById('sellerFullscreenBody');
+            if(!containerBody) return;
+
+            let totalPages = Math.ceil(sellerVideos.length / itemsPerPage) || 1;
+            if(currentSellerPage > totalPages) currentSellerPage = totalPages;
+
+            let startIndex = (currentSellerPage - 1) * itemsPerPage;
+            let currentBatchVideos = sellerVideos.slice(startIndex, startIndex + itemsPerPage);
+
+            let videosHtml = '';
+            currentBatchVideos.forEach((v) => {
+                videosHtml += `<div class="fullscreen-thumb-card" onclick="selectFullscreenSellerVideo('${v.id}')"><div class="fs-thumb-preview"><i class="fa-solid fa-play"></i></div><div class="fs-thumb-info"><span class="fs-thumb-title">ID: ${v.id}</span><span class="fs-thumb-price">${v.price || '$85.00'}</span></div></div>`;
+            });
+
+            let paginationHtml = '';
+            if(totalPages > 1) {
+                paginationHtml += `<div class="fs-pagination-box">`;
+                for(let i = 1; i <= totalPages; i++) {
+                    let activeCls = (i === currentSellerPage) ? 'active-page' : '';
+                    paginationHtml += `<button class="fs-page-btn ${activeCls}" onclick="changeSellerPage(${i})">${i}</button>`;
+                }
+                paginationHtml += `</div>`;
+            }
+
+            containerBody.innerHTML = `<div class="fs-profile-header-box"><img src="${sAvatar}" class="fs-profile-logo"><h2 class="fs-profile-name">${sName}</h2><p class="fs-profile-desc">${sDesc}</p><div class="fs-stats-pill"><i class="fa-solid fa-video"></i> মোট ভিডিও: <strong>${sellerVideos.length}</strong></div></div><div class="fs-videos-section-title">PRODUCT VIDEO GALLERY</div><div class="fs-videos-grid">${videosHtml}</div>${paginationHtml}<div class="fs-bottom-back-action"><button class="fs-bottom-back-home-btn" onclick="document.getElementById('sellerFullscreenOverlay').style.display='none'"><i class="fa-solid fa-house"></i> হোমে ফিরে যান</button></div>`;
+            document.getElementById('sellerFullscreenOverlay').style.display = 'flex';
+        };
+
+        window.changeSellerPage = function(pageNum) {
+            currentSellerPage = pageNum;
+            openSellerFullscreenProfile();
+        };
+
+        window.selectFullscreenSellerVideo = function(videoId) {
+            let foundIdx = globalVideoList.findIndex(p => p.id === videoId);
+            if(foundIdx !== -1) {
+                currentIndex = foundIdx;
+                document.getElementById('sellerFullscreenOverlay').style.display = 'none';
+                renderBatchVideos();
+            }
+        };
+
+        window.openProductDetail = function(productId) {
+            window.location.href = `pd.html?id=${encodeURIComponent(productId)}`;
+        };
+
+        window.scrollVideo = function(direction) {
+            let activeList = globalVideoList;
+            if (direction === 1 && currentIndex < activeList.length - 1) { currentIndex++; renderBatchVideos(); }
+            else if (direction === -1 && currentIndex > 0) { currentIndex--; renderBatchVideos(); }
+        };
+
+        function renderBatchVideos() {
+            const feedContainer = document.getElementById('videoFeed');
+            if(!feedContainer) return;
+
+            let activeList = globalVideoList;
+            if (activeList.length === 0) {
+                feedContainer.innerHTML = `<div style="height:calc(100vh - 65px); display:flex; align-items:center; justify-content:center; color:#a0a0ab; font-size:0.85rem;">কোনো ভিডিও পাওয়া যায়নি</div>`;
+                updateBottomSellerProfile(null);
+                return;
+            }
+
+            if (currentIndex >= activeList.length) currentIndex = Math.max(0, activeList.length - 1);
+
+            let product = activeList[currentIndex];
+            updateBottomSellerProfile(product);
+
+            let pId = product.id || '101';
+            let pVideo = product.videoUrl || 'https://www.w3schools.com/html/mov_bbb.mp4';
+            let pPrice = product.price ? product.price : '$85.00';
+            let pDiscount = product.discount || '30% OFF';
+
+            let pLikes = getDynamicEngagement(pId, product.baseLikes || 5200, 'likes');
+            let pShares = getDynamicEngagement(pId, product.baseShares || 180, 'shares');
+
+            let savedIds = JSON.parse(localStorage.getItem('rorraxy_saved_videos') || '[]');
+            let savedActiveClass = savedIds.includes(pId) ? 'active' : '';
+            let soundActiveClass = !isGlobalMuted ? 'active-sound' : '';
+
+            let mediaElement = `<video src="${pVideo}" autoplay loop ${isGlobalMuted ? 'muted' : ''} playsinline preload="auto"></video>`;
+            let soundIconClass = isGlobalMuted ? "fa-solid fa-volume-xmark" : "fa-solid fa-volume-high";
+
+            let htmlContent = `
+                <div class="reel-card" data-product-id="${pId}">
+                    <div class="reel-media-box" onclick="openProductDetail('${pId}')">
+                        ${mediaElement}
                     </div>
-                    <div class="card-footer-actions" onclick="event.stopPropagation()">
-                        <span class="product-price-tag">$35.00</span>
-                        <div class="card-sub-actions">
-                            <div class="love-action card-love-btn" onclick="toggleLove(event, this)">
-                                <i class="fa-solid fa-heart"></i> <span class="love-count">128</span>
-                            </div>
-                            <button class="share-action-btn" onclick="triggerAutoShare(event, '101', 'Multi-pocket Skinny Pants')">
-                                <i class="fa-solid fa-share-nodes"></i> Share
-                            </button>
+
+                    <div class="right-vertical-actions">
+                        <div class="side-action-item share-action-btn" onclick="openInlineShare(event, this)" title="Share">
+                            <i class="fa-solid fa-reply action-pure-icon share-flip"></i>
+                            <span class="side-count-text">${pShares}</span>
+                        </div>
+
+                        <div class="side-action-item love-action-btn" onclick="toggleLove(event, this)" title="Like">
+                            <i class="fa-solid fa-heart action-pure-icon love-icon-elem"></i>
+                            <span class="side-count-text love-count">${pLikes}</span>
+                        </div>
+
+                        <div class="side-action-item save-action-btn ${savedActiveClass}" onclick="toggleSaveItem(event, this, '${pId}')" title="Save">
+                            <i class="fa-solid fa-bookmark action-pure-icon"></i>
+                        </div>
+
+                        <div id="soundActionItem" class="side-action-item sound-action-btn ${soundActiveClass}" onclick="toggleGlobalAudio()" title="Sound Toggle">
+                            <i id="soundBtnIcon" class="${soundIconClass} action-pure-icon"></i>
+                        </div>
+                    </div>
+
+                    <div class="center-price-offer-box">
+                        <span class="product-price-tag">${pPrice}</span>
+                        <div class="image-style-discount-badge">
+                            <span class="offer-text">${pDiscount}</span>
+                        </div>
+                    </div>
+
+                    <div class="inline-card-share-popup">
+                        <div class="glass-popup-header">
+                            <span class="glass-popup-title">SHARE PRODUCT</span>
+                            <button class="glass-close-btn" onclick="closeInlineShare(event, this)"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                        <div class="glass-share-grid">
+                            <div class="glass-opt-btn" onclick="shareToSocial(this, 'whatsapp')"><i class="fa-brands fa-whatsapp"></i><span>WhatsApp</span></div>
+                            <div class="glass-opt-btn" onclick="shareToSocial(this, 'messenger')"><i class="fa-brands fa-facebook-messenger"></i><span>Messenger</span></div>
+                            <div class="glass-opt-btn" onclick="shareToSocial(this, 'telegram')"><i class="fa-brands fa-telegram"></i><span>Telegram</span></div>
+                            <div class="glass-opt-btn" onclick="shareToSocial(this, 'twitter')"><i class="fa-brands fa-x-twitter"></i><span>Twitter</span></div>
+                            <div class="glass-opt-btn" onclick="shareToSocial(this, 'linkedin')"><i class="fa-brands fa-linkedin-in"></i><span>LinkedIn</span></div>
+                            <div class="glass-opt-btn" onclick="shareToSocial(this, 'facebook')"><i class="fa-brands fa-facebook-f"></i><span>Facebook</span></div>
+                        </div>
+                        <div class="glass-copy-row">
+                            <input type="text" class="glass-copy-input lowercase-url" readonly value="pd.html?id=${pId}">
+                            <button class="glass-copy-btn" onclick="copyLinkDirectSilent(this)">COPY</button>
                         </div>
                     </div>
                 </div>
             `;
+
+            feedContainer.innerHTML = htmlContent;
         }
 
-        function openProductDetails(productId) {
-            window.location.href = `pd.html?id=${productId}`;
-        }
-
-        function navigateTo(url) {
-            window.location.href = url;
-        }
-
-        function openYouMenuModal(event) {
-            if(event) event.stopPropagation();
-            closeAllModals();
-            const modal = document.getElementById('youMenuModalOverlay');
-            if(modal) modal.style.display = 'flex';
-        }
-
-        function closeYouMenuModal() {
-            const modal = document.getElementById('youMenuModalOverlay');
-            if(modal) modal.style.display = 'none';
-        }
-
-        function closeAllModals() {
-            document.querySelectorAll('.luxury-center-modal-overlay').forEach(m => m.style.display = 'none');
-        }
-
-        async function toggleLove(event, btn) {
-            event.stopPropagation();
-            let card = btn.closest('.product-card');
-            let productId = card.getAttribute('data-product-id');
-            let countSpan = btn.querySelector('.love-count');
-            let currentLikes = parseInt(countSpan.innerText);
-
-            if(btn.classList.contains('gold-active')) {
-                btn.classList.remove('gold-active');
-                countSpan.innerText = currentLikes - 1;
+        window.toggleLove = function(e, btn) {
+            e.stopPropagation();
+            if(btn.classList.contains('liked-active')) {
+                btn.classList.remove('liked-active');
             } else {
-                btn.classList.add('gold-active');
-                countSpan.innerText = currentLikes + 1;
-                
-                // Backend API call to increment like count
-                try {
-                    await fetch(`${API_BASE_URL}/api/products`, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ product_code: productId })
-                    });
-                } catch (err) {
-                    console.error('Failed to update like count:', err);
-                }
+                btn.classList.add('liked-active');
             }
-        }
+        };
 
-        async function triggerAutoShare(event, productId, productTitle) {
-            event.stopPropagation();
-            const shareUrl = `${window.location.origin}/pd.html?id=${productId}`;
-            const shareData = {
-                title: `${productTitle} - rorraxy`,
-                text: `Check out this product on rorraxy: ${productTitle}`,
-                url: shareUrl
-            };
+        window.openInlineShare = function(e, btn) {
+            e.stopPropagation();
+            document.querySelectorAll('.inline-card-share-popup').forEach(p => p.style.display = 'none');
+            let card = btn.closest('.reel-card');
+            let popup = card.querySelector('.inline-card-share-popup');
+            if(popup) popup.style.display = 'flex';
+        };
 
-            if (navigator.share) {
-                try {
-                    await navigator.share(shareData);
-                } catch (err) {
-                    console.log('Share canceled or failed silently:', err);
-                }
-            } else if (navigator.clipboard) {
-                try {
-                    await navigator.clipboard.writeText(shareUrl);
-                    const shareBtn = event.currentTarget;
-                    const origText = shareBtn.innerHTML;
-                    shareBtn.innerHTML = `<i class="fa-solid fa-check"></i> COPIED!`;
-                    setTimeout(() => { shareBtn.innerHTML = origText; }, 1500);
-                } catch (err) {
-                    console.error('Clipboard copy failed:', err);
-                }
+        window.closeInlineShare = function(e, btn) {
+            e.stopPropagation();
+            let popup = btn.closest('.inline-card-share-popup');
+            if(popup) popup.style.display = 'none';
+        };
+
+        window.shareToSocial = function(btn, platform) {
+            let card = btn.closest('.reel-card');
+            let urlInput = card.querySelector('.glass-copy-input');
+            let shareUrl = urlInput ? `pd.html?id=${encodeURIComponent(card.dataset.productId)}` : window.location.href;
+            let text = "Check out this product on Rorraxy:";
+
+            let shareLink = "";
+            if (platform === 'whatsapp') shareLink = `https://api.whatsapp.com/send?text=${encodeURIComponent(text + " " + window.location.origin + "/" + shareUrl)}`;
+            else if (platform === 'messenger') shareLink = `https://www.facebook.com/dialog/send?link=${encodeURIComponent(window.location.origin + "/" + shareUrl)}&app_id=291494419107518`;
+            else if (platform === 'telegram') shareLink = `https://t.me/share/url?url=${encodeURIComponent(window.location.origin + "/" + shareUrl)}&text=${encodeURIComponent(text)}`;
+            else if (platform === 'twitter') shareLink = `https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.origin + "/" + shareUrl)}&text=${encodeURIComponent(text)}`;
+            else if (platform === 'linkedin') shareLink = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.origin + "/" + shareUrl)}`;
+            else if (platform === 'facebook') shareLink = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.origin + "/" + shareUrl)}`;
+
+            if (shareLink) window.open(shareLink, '_blank');
+        };
+
+        window.copyLinkDirectSilent = function(btn) {
+            let card = btn.closest('.reel-card');
+            let inputField = card.querySelector('.glass-copy-input');
+            if (inputField && navigator.clipboard) {
+                navigator.clipboard.writeText(window.location.origin + "/" + inputField.value).then(() => {
+                    let originalText = btn.innerText;
+                    btn.innerText = "COPIED!";
+                    setTimeout(() => { btn.innerText = originalText; let popup = card.querySelector('.inline-card-share-popup'); if(popup) popup.style.display = 'none'; }, 800);
+                });
             }
-        }
-
-        function updateCartBadgeCount() {
-            let cart = JSON.parse(localStorage.getItem('rorraxy_cart')) || [];
-            let totalQty = cart.reduce((sum, item) => sum + (parseInt(item.qty) || 0), 0);
-            
-            let badge = document.getElementById('floatingCartItemCountBadge');
-            if(badge) {
-                badge.innerText = totalQty;
-                if(totalQty > 0) {
-                    badge.classList.remove('empty-badge');
-                } else {
-                    badge.classList.add('empty-badge');
-                }
-            }
-        }
+        };
     </script>
+
+    <style>
+        :root {
+            --bg-wholesale: #000000;
+            --card-wholesale: #08080c;
+            --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
+            --gold-solid: #d4af37;
+            --pink-accent: #ff2a85;
+            --text-white: #ffffff;
+            --text-gray: #a0a0ab;
+            --font-main: 'Poppins', sans-serif;
+        }
+
+        html, body { 
+            width: 100%; max-width: 100%; overflow: hidden; 
+            background: var(--bg-wholesale) !important; 
+            color: var(--text-white); font-family: var(--font-main); 
+            height: 100vh; height: 100dvh; font-size: 15px;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        body { margin: 0; padding: 0 0 65px 0; text-transform: uppercase !important; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+
+        .feed-container { 
+            width: 100%; max-width: 440px; margin: 0 auto; 
+            height: calc(100vh - 65px); height: calc(100dvh - 65px); 
+        }
+        @media (min-width: 768px) {
+            .feed-container { max-width: 420px; }
+        }
+
+        .yt-nav-arrows {
+            position: fixed; right: 25px; top: 50%; transform: translateY(-50%);
+            z-index: 1200; display: flex; flex-direction: column; gap: 12px;
+        }
+        @media (max-width: 768px) { .yt-nav-arrows { display: none !important; } }
+        .yt-arrow-btn {
+            width: 46px; height: 46px; border-radius: 50%;
+            background: rgba(12, 12, 18, 0.85); backdrop-filter: blur(10px);
+            border: none; box-shadow: 0 6px 20px rgba(0,0,0,0.8);
+            color: #fff; font-size: 1.1rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: transform 0.2s;
+        }
+        .yt-arrow-btn:hover { transform: scale(1.08); }
+        .yt-arrow-btn i { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8)); }
+
+        .bottom-nav-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 65px;
+            background: rgba(3, 3, 5, 0.94); backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(212,175,55,0.15);
+            display: flex; justify-content: space-around; align-items: center;
+            z-index: 1500; padding: 0 6px;
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.9);
+        }
+        .bottom-nav-item {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            cursor: pointer; color: #a0a0ab; font-size: 0.55rem; font-weight: 600; gap: 3px;
+            width: 100%; height: 100%; text-align: center; transition: transform 0.2s;
+        }
+        .bottom-nav-item:hover { transform: translateY(-2px); }
+        .bottom-nav-item i { font-size: 1.15rem; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8)); }
+        .bottom-nav-item span { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 70px; }
+        .bottom-nav-item img { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 10px rgba(212,175,55,0.4); }
+
+        .seller-fullscreen-overlay, .saved-gallery-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; height: 100dvh;
+            background: #000000; z-index: 3000; overflow-y: auto; flex-direction: column; align-items: center;
+            padding: 30px 20px 95px 20px;
+        }
+        .seller-fullscreen-container { width: 100%; max-width: 900px; display: flex; flex-direction: column; align-items: center; position: relative; }
+        .fs-profile-header-box { display: flex; flex-direction: column; align-items: center; text-align: center; width: 100%; margin: 15px 0 25px 0; }
+        .fs-profile-logo { width: 85px; height: 85px; border-radius: 50%; object-fit: cover; margin-bottom: 14px; box-shadow: 0 0 20px rgba(212,175,55,0.3); }
+        .fs-profile-name { font-size: 1.35rem; font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 6px; }
+        .fs-profile-desc { font-size: 0.75rem; color: #a0a0ab; max-width: 550px; line-height: 1.5; margin-bottom: 14px; }
+        .fs-stats-pill { background: rgba(12, 12, 18, 0.8); border: 1px solid rgba(212,175,55,0.2); padding: 6px 16px; border-radius: 20px; font-size: 0.68rem; color: #fcf6ba; box-shadow: 0 4px 15px rgba(0,0,0,0.6); }
+        .fs-videos-section-title { font-size: 0.8rem; font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; align-self: flex-start; margin-bottom: 15px; border-bottom: 1px solid rgba(212,175,55,0.15); width: 100%; padding-bottom: 8px; }
+        .fs-videos-grid { width: 100%; display: grid; grid-template-columns: repeat(auto-fill, minmax(135px, 1fr)); gap: 12px; margin-bottom: 20px; }
+        .fullscreen-thumb-card, .saved-thumb-card { background: var(--card-wholesale); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,0.7); transition: transform 0.2s; }
+        .fullscreen-thumb-card:hover, .saved-thumb-card:hover { transform: translateY(-2px); }
+        .fs-thumb-preview, .saved-thumb-preview { width: 100%; height: 100px; background: #000; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--gold-solid); font-size: 1.1rem; }
+        .fs-thumb-info { display: flex; flex-direction: column; width: 100%; text-align: center; gap: 2px; }
+        .fs-thumb-title { font-size: 0.68rem; font-weight: 600; color: #fff; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .fs-thumb-price { font-size: 0.68rem; font-weight: 700; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .saved-thumb-footer { display: flex; flex-direction: column; width: 100%; align-items: center; gap: 6px; }
+        .saved-clean-delete-btn { background: var(--pink-accent); border: none; border-radius: 6px; color: #fff; font-size: 0.58rem; font-weight: 700; padding: 6px 8px; cursor: pointer; width: 100%; display: flex; align-items: center; justify-content: center; gap: 4px; box-shadow: 0 2px 8px rgba(255,42,133,0.4); }
+        .fs-pagination-box { display: flex; gap: 8px; justify-content: center; align-items: center; margin: 20px 0; width: 100%; }
+        .fs-page-btn { background: var(--card-wholesale); color: #a0a0ab; font-size: 0.75rem; font-weight: 700; width: 36px; height: 36px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.6); }
+        .fs-page-btn.active-page { background: var(--gold-gradient); color: #000; }
+        .fs-bottom-back-action { width: 100%; display: flex; justify-content: center; margin: 30px 0 20px 0; }
+        .fs-bottom-back-home-btn { background: var(--gold-gradient); border: none; border-radius: 30px; color: #000; font-size: 0.8rem; font-weight: 800; padding: 14px 32px; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 6px 20px rgba(212,175,55,0.3); }
+
+        .search-modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(3, 3, 5, 0.96); backdrop-filter: blur(15px); z-index: 2000; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+        .search-modal-box { position: relative; width: 100%; max-width: 480px; display: flex; gap: 12px; flex-direction: column; }
+        .search-modal-close { position: absolute; top: -50px; right: 0; background: none; border: none; color: #fff; font-size: 1.3rem; cursor: pointer; }
+        .modal-search-input { width: 100%; background: var(--card-wholesale); border-radius: 25px; padding: 14px 20px 14px 48px; color: #fff; font-size: 0.85rem; outline: none; box-shadow: inset 0 2px 6px rgba(0,0,0,0.8); }
+        .modal-search-icon { position: absolute; left: 18px; top: 16px; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1rem; }
+        .modal-search-submit { background: var(--gold-gradient); border: none; border-radius: 25px; color: #000; font-weight: 800; font-size: 0.8rem; padding: 14px; cursor: pointer; text-transform: uppercase; width: 100%; box-shadow: 0 4px 15px rgba(212,175,55,0.3); }
+
+        .reel-card { width: 100%; height: 100%; display: flex; flex-direction: column; position: relative; background: #000; }
+        .reel-media-box { position: relative; width: 100%; flex: 1; cursor: pointer; background: #000; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .reel-media-box video { width: 100%; height: 100%; display: block; object-fit: cover; background: #000; }
+
+        .right-vertical-actions {
+            position: absolute; right: 18px; bottom: 85px; z-index: 50;
+            display: flex; flex-direction: column; align-items: center; gap: 20px;
+        }
+        .side-action-item {
+            display: flex; flex-direction: column; align-items: center; cursor: pointer; gap: 3px;
+            transition: transform 0.2s ease;
+        }
+        .side-action-item:active { transform: scale(0.85); }
+        
+        .action-pure-icon {
+            font-size: 1.7rem;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.9));
+        }
+
+        .share-flip { transform: scaleX(-1); }
+
+        .side-count-text {
+            font-size: 0.72rem; font-weight: 700; color: #ffffff;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.9); letter-spacing: 0.2px;
+        }
+
+        .love-action-btn.liked-active .action-pure-icon { color: var(--pink-accent) !important; background: none !important; -webkit-background-clip: initial !important; -webkit-text-fill-color: initial !important; }
+        .love-action-btn.liked-active .side-count-text { color: var(--pink-accent) !important; }
+        
+        .save-action-btn.active .action-pure-icon { color: var(--pink-accent) !important; background: none !important; -webkit-background-clip: initial !important; -webkit-text-fill-color: initial !important; }
+
+        .active-sound .action-pure-icon { color: var(--pink-accent) !important; background: none !important; -webkit-background-clip: initial !important; -webkit-text-fill-color: initial !important; }
+
+        .center-price-offer-box {
+            position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%);
+            z-index: 40; display: flex; align-items: center; gap: 8px;
+            background: rgba(10, 10, 14, 0.88); backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 6px 14px 6px 18px; border-radius: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.8); white-space: nowrap;
+        }
+        .product-price-tag { font-size: 0.95rem; font-weight: 800; color: #ffffff; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .image-style-discount-badge {
+            background: var(--pink-accent); color: #ffffff; padding: 4px 12px; border-radius: 18px;
+            font-size: 0.68rem; font-weight: 700; display: flex; align-items: center; gap: 4px;
+            box-shadow: 0 2px 10px rgba(255,42,133,0.4);
+        }
+        .offer-text { color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; }
+
+        .inline-card-share-popup {
+            display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(3, 3, 5, 0.96); backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            z-index: 100; flex-direction: column; align-items: center; justify-content: center; padding: 16px;
+        }
+        .glass-popup-header { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 12px; }
+        .glass-popup-title { font-size: 0.78rem; font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8)); }
+        .glass-close-btn { background: none; border: none; color: #fff; font-size: 1rem; cursor: pointer; }
+        .glass-share-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; margin-bottom: 14px; }
+        .glass-opt-btn { background: var(--card-wholesale); border-radius: 10px; padding: 12px 6px; display: flex; flex-direction: column; align-items: center; cursor: pointer; color: #fff; font-size: 0.58rem; text-transform: uppercase; gap: 6px; box-shadow: 0 4px 15px rgba(0,0,0,0.6); transition: transform 0.2s; }
+        .glass-opt-btn:hover { transform: translateY(-2px); }
+        .glass-opt-btn i { font-size: 1.1rem; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8)); }
+        .glass-copy-row { display: flex; gap: 8px; width: 100%; }
+        .glass-copy-input { background: #000; border-radius: 8px; padding: 10px 12px; color: #fff; font-size: 0.68rem; width: 100%; outline: none; box-shadow: inset 0 2px 5px rgba(0,0,0,0.8); }
+        .glass-copy-btn { background: var(--gold-gradient); border: none; color: #000; font-weight: 800; font-size: 0.68rem; padding: 10px 16px; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 15px rgba(212,175,55,0.3); }
+    </style>
+</head>
+<body id="mainBody">
+
+    <div class="yt-nav-arrows">
+        <button class="yt-arrow-btn" onclick="scrollVideo(-1)"><i class="fa-solid fa-arrow-up"></i></button>
+        <button class="yt-arrow-btn" onclick="scrollVideo(1)"><i class="fa-solid fa-arrow-down"></i></button>
+    </div>
+
+    <nav class="bottom-nav-bar">
+        <div id="bottomSellerBtn" class="bottom-nav-item">
+            <img id="bottomSellerAvatar" src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png">
+            <span>SELLER</span>
+        </div>
+        <div id="bottomHomeBtn" class="bottom-nav-item"><i class="fa-solid fa-house"></i><span>HOME</span></div>
+        <div id="bottomSearchBtn" class="bottom-nav-item"><i class="fa-solid fa-magnifying-glass"></i><span>SEARCH</span></div>
+        <div id="bottomSavedBtn" class="bottom-nav-item" onclick="openSavedGalleryModal()"><i class="fa-solid fa-video"></i><span>SAVED</span></div>
+        <div id="bottomBuyInfoBtn" class="bottom-nav-item"><i class="fa-solid fa-cart-shopping"></i><span>BUY & INFO</span></div>
+    </nav>
+
+    <div id="savedGalleryOverlay" class="saved-gallery-overlay"><div class="seller-fullscreen-container" id="savedGalleryBody"></div></div>
+    <div id="sellerFullscreenOverlay" class="seller-fullscreen-overlay"><div class="seller-fullscreen-container" id="sellerFullscreenBody"></div></div>
+
+    <div id="searchModal" class="search-modal-overlay">
+        <div class="search-modal-box" onclick="event.stopPropagation()">
+            <button class="search-modal-close" onclick="document.getElementById('searchModal').style.display='none'"><i class="fa-solid fa-xmark"></i></button>
+            <div style="position: relative; width: 100%;">
+                <i class="fa-solid fa-magnifying-glass modal-search-icon"></i>
+                <input type="text" id="modalSearchInput" class="modal-search-input" placeholder="SEARCH BY PRODUCT OR SELLER...">
+            </div>
+            <button id="modalSearchBtn" class="modal-search-submit">SEARCH</button>
+        </div>
+    </div>
+
+    <main class="feed-container" id="videoFeed"></main>
 </body>
 </html>
