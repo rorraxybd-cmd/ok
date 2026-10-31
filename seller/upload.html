@@ -39,7 +39,7 @@
         header.app-header {
             display: flex; padding: 14px 16px; align-items: center; justify-content: space-between;
             background: var(--surface-bg); position: fixed; top: 0; left: 0; z-index: 1000;
-            width: 100%; border-bottom: 1px solid rgba(212,175,55,0.1);
+            width: 100%; border-bottom: 1px solid rgba(212,175,55,0.15);
         }
         .back-home-btn { background: #000; color: #fff; padding: 6px 12px; border-radius: 8px; font-size: 0.78rem; font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 6px; }
         .brand-title-main { font-size: 0.95rem; font-weight: 700; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: lowercase; }
@@ -73,17 +73,17 @@
         
         .gold-gradient-text { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        .mode-grid, .category-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 100%; }
-        @media(min-width: 600px) { .mode-grid, .category-grid { grid-template-columns: repeat(3, 1fr); } }
-        @media(min-width: 992px) { .mode-grid { grid-template-columns: repeat(4, 1fr); } .category-grid { grid-template-columns: repeat(5, 1fr); } }
+        .mode-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; }
+        .category-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 100%; }
+        @media(min-width: 768px) { .category-grid { grid-template-columns: repeat(4, 1fr); } }
 
-        .cat-box, .mode-box { background: #000000; border-radius: 10px; padding: 16px 10px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; width: 100%; min-height: 95px; border: 1px solid transparent; }
+        .cat-box, .mode-box { background: #000000; border-radius: 10px; padding: 16px 10px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; width: 100%; min-height: 100px; border: 1px solid transparent; transition: all 0.2s ease; }
         .cat-box:hover, .mode-box:hover, .cat-box.clicked, .mode-box.clicked { background: #121008; border-color: rgba(212,175,55,0.4); }
         .cat-box.clicked span, .mode-box.clicked span { color: var(--gold-solid); }
-        .cat-box i, .mode-box i { font-size: 1.8rem; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .cat-box span, .mode-box span { font-size: 0.75rem; font-weight: 600; color: var(--text-white); }
+        .cat-box i, .mode-box i { font-size: 1.9rem; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .cat-box span, .mode-box span { font-size: 0.72rem; font-weight: 600; color: var(--text-white); text-align: center; line-height: 1.2; }
 
-        .back-cat-btn { background: #000; color: var(--gold-solid); padding: 8px 14px; border-radius: 8px; font-size: 0.78rem; font-weight: 600; margin-bottom: 14px; display: inline-flex; align-items: center; gap: 6px; border: none; cursor: pointer; }
+        .back-cat-btn { background: #000; color: var(--gold-solid); padding: 8px 14px; border-radius: 8px; font-size: 0.78rem; font-weight: 600; margin-bottom: 14px; display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(212,175,55,0.3); cursor: pointer; }
 
         .row-grid, .triple-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; }
         .triple-grid { grid-template-columns: repeat(3, 1fr); }
@@ -101,15 +101,15 @@
 
         .required-star { color: var(--required-red); margin-left: 2px; font-weight: 700; }
 
-        /* ছোট ও স্পষ্ট প্রিভিউ কার্ড ডিজাইন */
-        .preview-container { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; width: 100%; }
-        .preview-card { position: relative; width: 85px; height: 85px; border-radius: 8px; overflow: hidden; background: #000; border: 1px solid rgba(212,175,55,0.3); flex-shrink: 0; }
+        /* বড় স্পষ্ট ও আকর্ষণীয় প্রিভিউ কার্ড */
+        .preview-container { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; width: 100%; }
+        .preview-card { position: relative; width: 140px; height: 140px; border-radius: 10px; overflow: hidden; background: #000; border: 1px solid rgba(212,175,55,0.4); flex-shrink: 0; }
         .preview-card img, .preview-card video { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-        /* ছোট আপলোড বক্স */
-        .upload-box { border: 1px dashed rgba(212,175,55,0.3); border-radius: 8px; padding: 16px 12px; text-align: center; cursor: pointer; background: #000; width: 100%; }
-        .upload-box i { font-size: 1.6rem; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 4px; }
-        .upload-box p { font-size: 0.75rem; color: var(--text-gray); font-weight: 500; }
+        /* মিনিমাল এবং পরিষ্কার আপলোড বক্স */
+        .upload-box { border: 1px dashed rgba(212,175,55,0.4); border-radius: 10px; padding: 22px 15px; text-align: center; cursor: pointer; background: #000; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; }
+        .upload-box i { font-size: 2.2rem; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .upload-box p { font-size: 0.78rem; color: var(--gold-solid); font-weight: 600; text-transform: uppercase; }
 
         .info-box { background: #000000; border-radius: 8px; padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; font-size: 0.82rem; color: #fbf5b7; font-weight: 600; }
         .checkbox-container { display: flex; align-items: center; gap: 10px; background: #000000; border-radius: 8px; padding: 12px 14px; margin-bottom: 14px; cursor: pointer; }
@@ -133,7 +133,7 @@
             background: rgba(0, 0, 0, 0.95); z-index: 9999; display: none; align-items: center; justify-content: center;
             flex-direction: column; text-align: center; padding: 20px;
         }
-        .success-card { background: var(--surface-bg); border-radius: 16px; padding: 35px 25px; max-width: 380px; width: 100%; }
+        .success-card { background: var(--surface-bg); border-radius: 16px; padding: 35px 25px; max-width: 380px; width: 100%; border: 1px solid rgba(212,175,55,0.3); }
     </style>
 </head>
 <body>
@@ -168,10 +168,9 @@
                 <div class="form-section-full">
                     <h3><i class="fa-solid fa-layer-group gold-gradient-text"></i> SELECT MODE <span class="required-star">*</span></h3>
                     <div class="mode-grid">
-                        <div class="mode-box" onclick="selectUploadMode('dropshipping', this)"><i class="fa-solid fa-truck-fast"></i><span>DROPSHIPPING</span></div>
                         <div class="mode-box" onclick="selectUploadMode('retail', this)"><i class="fa-solid fa-store"></i><span>RETAIL</span></div>
                         <div class="mode-box" onclick="selectUploadMode('wholesale', this)"><i class="fa-solid fa-boxes-stacked"></i><span>WHOLESALE</span></div>
-                        <div class="mode-box" onclick="selectUploadMode('both', this)"><i class="fa-solid fa-circle-nodes"></i><span>ALL 3 MODES</span></div>
+                        <div class="mode-box" onclick="selectUploadMode('dropshipping', this)"><i class="fa-solid fa-truck-fast"></i><span>DROPSHIPPING</span></div>
                     </div>
                 </div>
                 <div class="btn-nav-container">
@@ -180,29 +179,28 @@
                 </div>
             </div>
 
-            <!-- STEP 2: CATEGORY -->
+            <!-- STEP 2: CATEGORY (category.html অনুযায়ী সর্বমোট সাব-ক্যাটাগরি যুক্ত করা হয়েছে) -->
             <div class="step-section" id="step-2">
                 <div class="form-section-full">
                     <h3><i class="fa-solid fa-border-all gold-gradient-text"></i> SELECT CATEGORY <span class="required-star">*</span></h3>
                     
                     <div id="main-categories" class="category-grid">
-                        <div class="cat-box" onclick="showSubCategories(this, 'womens')"><i class="fa-solid fa-person-dress"></i><span>WOMEN'S</span></div>
-                        <div class="cat-box" onclick="showSubCategories(this, 'mens')"><i class="fa-solid fa-user-tie"></i><span>MEN'S</span></div>
-                        <div class="cat-box" onclick="showSubCategories(this, 'boys')"><i class="fa-solid fa-child"></i><span>BOYS'</span></div>
-                        <div class="cat-box" onclick="showSubCategories(this, 'girls')"><i class="fa-solid fa-child-dress"></i><span>GIRLS'</span></div>
-                        <div class="cat-box" onclick="showSubCategories(this, 'luxury')"><i class="fa-solid fa-gift"></i><span>GIFTS</span></div>
-                        <div class="cat-box" onclick="showSubCategories(this, 'matching')"><i class="fa-solid fa-people-group"></i><span>MATCHING</span></div>
-                        <div class="cat-box" onclick="showSubCategories(this, 'baby')"><i class="fa-solid fa-baby-carriage"></i><span>BABY</span></div>
+                        <div class="cat-box" onclick="showSubCategories(this, 'womens')"><i class="fa-solid fa-person-dress"></i><span>WOMEN'S FASHION</span></div>
+                        <div class="cat-box" onclick="showSubCategories(this, 'mens')"><i class="fa-solid fa-user-tie"></i><span>MEN'S FASHION</span></div>
+                        <div class="cat-box" onclick="showSubCategories(this, 'girls')"><i class="fa-solid fa-child-dress"></i><span>GIRLS' FASHION</span></div>
+                        <div class="cat-box" onclick="showSubCategories(this, 'boys')"><i class="fa-solid fa-child"></i><span>BOYS' FASHION</span></div>
+                        <div class="cat-box" onclick="showSubCategories(this, 'matching')"><i class="fa-solid fa-people-group"></i><span>MATCHING SETS</span></div>
+                        <div class="cat-box" onclick="showSubCategories(this, 'luxury')"><i class="fa-solid fa-gift"></i><span>LUXURY GIFTS</span></div>
+                        <div class="cat-box" onclick="showSubCategories(this, 'baby')"><i class="fa-solid fa-baby-carriage"></i><span>MOTHER & BABY</span></div>
                     </div>
 
                     <div id="sub-categories" style="display: none;">
-                        <button type="button" class="back-cat-btn" onclick="backToMainCategories()"><i class="fa-solid fa-arrow-left"></i> BACK</button>
+                        <button type="button" class="back-cat-btn" onclick="backToMainCategories()"><i class="fa-solid fa-arrow-left"></i> BACK TO MAIN CATEGORIES</button>
                         <div id="sub-cat-content" class="category-grid" style="margin-top: 12px;"></div>
                     </div>
                 </div>
                 <div class="btn-nav-container">
                     <button type="button" class="action-btn secondary" onclick="prevStep(1)"><i class="fa-solid fa-arrow-left"></i> BACK</button>
-                    <button type="button" id="next-btn-2" class="action-btn" onclick="nextStep(3)" disabled>NEXT <i class="fa-solid fa-arrow-right"></i></button>
                 </div>
             </div>
 
@@ -213,7 +211,7 @@
                     <div class="preview-container" id="image-preview"></div>
                     <div class="upload-box" onclick="document.getElementById('image-file-input').click();">
                         <i class="fa-solid fa-cloud-arrow-up"></i>
-                        <p>UPLOAD IMAGES</p>
+                        <p>IMAGE UPLOAD</p>
                         <input type="file" id="image-file-input" accept="image/*" multiple style="display: none;" onchange="handleImageSelection(event)">
                     </div>
                 </div>
@@ -223,7 +221,7 @@
                     <div class="preview-container" id="video-preview"></div>
                     <div class="upload-box" onclick="document.getElementById('video-file-input').click();">
                         <i class="fa-solid fa-file-video"></i>
-                        <p>UPLOAD VIDEO</p>
+                        <p>VIDEO UPLOAD</p>
                         <input type="file" id="video-file-input" accept="video/*" style="display: none;" onchange="handleVideoSelection(event)">
                     </div>
                 </div>
@@ -371,20 +369,80 @@
 
     <script>
         let currentStep = 1;
-        let selectedModeValue = "retail"; // ডিফল্ট রিটেইল সেট করা হলো যাতে বাটন কাজ করে
+        let selectedModeValue = "";
         let selectedCategoryValue = "";
         let uploadedImageUrls = [];
         let uploadedVideoUrl = "";
         let isUploadingMedia = false;
 
+        // category.html এর সকল সাব-ক্যাটাগরি ডেটা ম্যাপ করা হলো
         const subCategoriesData = {
-            womens: [{name: "CLOTHING", icon: "fa-solid fa-shirt"}, {name: "HANDBAGS", icon: "fa-solid fa-bag-shopping"}, {name: "SHOES", icon: "fa-solid fa-shoe-prints"}, {name: "JEWELRY", icon: "fa-solid fa-gem"}],
-            mens: [{name: "SUITS", icon: "fa-solid fa-user-tie"}, {name: "SHIRTS", icon: "fa-solid fa-shirt"}, {name: "SHOES", icon: "fa-solid fa-socks"}, {name: "WATCHES", icon: "fa-solid fa-clock"}],
-            boys: [{name: "SETS", icon: "fa-solid fa-child"}, {name: "T-SHIRTS", icon: "fa-solid fa-shirt"}, {name: "SHOES", icon: "fa-solid fa-socks"}],
-            girls: [{name: "DRESSES", icon: "fa-solid fa-child-dress"}, {name: "TOPS", icon: "fa-solid fa-shirt"}, {name: "SHOES", icon: "fa-solid fa-shoe-prints"}],
-            luxury: [{name: "GIFTS", icon: "fa-solid fa-gift"}, {name: "JEWELRY", icon: "fa-solid fa-gem"}, {name: "WATCHES", icon: "fa-solid fa-clock"}],
-            matching: [{name: "FAMILY", icon: "fa-solid fa-people-group"}, {name: "COUPLE", icon: "fa-solid fa-shirt"}],
-            baby: [{name: "CLOTHING", icon: "fa-solid fa-child-reaching"}, {name: "GEAR", icon: "fa-solid fa-baby-carriage"}]
+            womens: [
+                {name: "CLOTHING", icon: "fa-solid fa-shirt", key: "women-clothing"},
+                {name: "HANDBAGS", icon: "fa-solid fa-bag-shopping", key: "women-handbags"},
+                {name: "SHOES", icon: "fa-solid fa-shoe-prints", key: "women-shoes"},
+                {name: "JEWELRY", icon: "fa-solid fa-gem", key: "women-jewelry"},
+                {name: "WATCHES", icon: "fa-solid fa-clock", key: "women-watches"},
+                {name: "LINGERIE", icon: "fa-solid fa-heart", key: "women-lingerie"},
+                {name: "ACTIVEWEAR", icon: "fa-solid fa-person-running", key: "women-activewear"},
+                {name: "TRADITIONAL", icon: "fa-solid fa-vest", key: "women-traditional"},
+                {name: "CRAFTS & ACCENTS", icon: "fa-solid fa-feather", key: "women-crafts"},
+                {name: "ACCESSORIES", icon: "fa-solid fa-glasses", key: "women-accessories"}
+            ],
+            mens: [
+                {name: "MEN CLOTHING", icon: "fa-solid fa-shirt", key: "men-clothing"},
+                {name: "MEN SHOES", icon: "fa-solid fa-shoe-prints", key: "men-shoes"},
+                {name: "MEN WATCHES", icon: "fa-solid fa-clock", key: "men-watches"},
+                {name: "GROOMING & WALLETS", icon: "fa-solid fa-wallet", key: "men-grooming"},
+                {name: "MEN ACCESSORIES", icon: "fa-solid fa-glasses", key: "men-accessories"}
+            ],
+            girls: [
+                {name: "GIRLS CLOTHING", icon: "fa-solid fa-child-dress", key: "girls-clothing"},
+                {name: "GIRLS SHOES", icon: "fa-solid fa-shoe-prints", key: "girls-shoes"},
+                {name: "GIRLS BAGS", icon: "fa-solid fa-bag-shopping", key: "girls-bags"},
+                {name: "GIRLS JEWELRY", icon: "fa-solid fa-gem", key: "girls-jewelry"},
+                {name: "GIRLS WATCHES", icon: "fa-solid fa-clock", key: "girls-watches"},
+                {name: "HAIR ACCESSORIES", icon: "fa-solid fa-crown", key: "girls-hair-accessories"},
+                {name: "ACTIVEWEAR", icon: "fa-solid fa-person-running", key: "girls-activewear"},
+                {name: "SLEEPWEAR", icon: "fa-solid fa-bed", key: "girls-sleepwear"},
+                {name: "PARTY DRESSES", icon: "fa-solid fa-wand-magic-sparkles", key: "girls-party-dresses"},
+                {name: "GIRLS ACCESSORIES", icon: "fa-solid fa-glasses", key: "girls-accessories"}
+            ],
+            boys: [
+                {name: "BOYS CLOTHING", icon: "fa-solid fa-child", key: "boys-clothing"},
+                {name: "BOYS SHOES", icon: "fa-solid fa-shoe-prints", key: "boys-shoes"},
+                {name: "BOYS WATCHES", icon: "fa-solid fa-clock", key: "boys-watches"},
+                {name: "BAGS & WALLETS", icon: "fa-solid fa-bag-shopping", key: "boys-bags"},
+                {name: "BOYS ACCESSORIES", icon: "fa-solid fa-glasses", key: "boys-accessories"}
+            ],
+            matching: [
+                {name: "COUPLE SETS", icon: "fa-solid fa-people-arrows", key: "couple-matchingsets"},
+                {name: "FAMILY SETS", icon: "fa-solid fa-people-group", key: "family-matchingsets"},
+                {name: "MOM & ME SETS", icon: "fa-solid fa-child-reaching", key: "mom-me-sets"},
+                {name: "DAD & ME SETS", icon: "fa-solid fa-user-gear", key: "dad-me-sets"},
+                {name: "SIBLING SETS", icon: "fa-solid fa-children", key: "sibling-matchingsets"},
+                {name: "TEAM SETS", icon: "fa-solid fa-users", key: "team-matchingsets"},
+                {name: "BFF SETS", icon: "fa-solid fa-handshake-angle", key: "bff-matchingsets"},
+                {name: "PET & OWNER SETS", icon: "fa-solid fa-paw", key: "pet-owner-sets"},
+                {name: "HOLIDAY SETS", icon: "fa-solid fa-holly-berry", key: "holiday-matchingsets"},
+                {name: "VALUE BUNDLES", icon: "fa-solid fa-boxes-stacked", key: "value-bundles"}
+            ],
+            luxury: [
+                {name: "CORPORATE GIFTS", icon: "fa-solid fa-briefcase", key: "corporate-gifts"},
+                {name: "LUXURY GIFT ITEMS", icon: "fa-solid fa-gem", key: "luxury-giftitems"},
+                {name: "PREMIUM HANDICRAFTS", icon: "fa-solid fa-hand-holding-heart", key: "premium-handicrafts"},
+                {name: "WOOD & RESIN CRAFTS", icon: "fa-solid fa-tree", key: "wood-resincrafts"},
+                {name: "BAMBOO & BRASS DECOR", icon: "fa-solid fa-seedling", key: "bamboo-brass-decor"},
+                {name: "GIFT SETS & HAMPERS", icon: "fa-solid fa-gift", key: "gift-sets-hampers"}
+            ],
+            baby: [
+                {name: "MOTHER & BABY CLOTHING", icon: "fa-solid fa-shirt", key: "mother-baby-clothing"},
+                {name: "PREGNANCY & MATERNITY", icon: "fa-solid fa-venus", key: "pregnancy-maternity"},
+                {name: "BABY CARE & FEEDING", icon: "fa-solid fa-bottle-water", key: "baby-care-feeding"},
+                {name: "NURSERY & BABY GEAR", icon: "fa-solid fa-bed", key: "nursery-baby-gear"},
+                {name: "ECO BABY TOYS", icon: "fa-solid fa-puzzle-piece", key: "eco-baby-toys"},
+                {name: "ACCESSORIES", icon: "fa-solid fa-glasses", key: "mother-baby-accessories"}
+            ]
         };
 
         function updateStepUI(step) {
@@ -451,11 +509,6 @@
             } else if (mode === 'wholesale') {
                 wholesaleRow.style.display = 'grid';
                 moqGroup.style.display = 'block';
-            } else if (mode === 'both') {
-                retailRow.style.display = 'grid';
-                dropshipRow.style.display = 'grid';
-                wholesaleRow.style.display = 'grid';
-                moqGroup.style.display = 'block';
             } else {
                 retailRow.style.display = 'grid';
             }
@@ -478,8 +531,9 @@
                 box.onclick = () => {
                     document.querySelectorAll('#sub-cat-content .cat-box').forEach(b => b.classList.remove('clicked'));
                     box.classList.add('clicked');
-                    selectedCategoryValue = item.name;
-                    document.getElementById('next-btn-2').disabled = false;
+                    selectedCategoryValue = item.key || item.name;
+                    // সাব-ক্যাটাগরি সিলেক্ট করার সাথে সাথে ডাইরেক্ট মিডিয়া আপলোড স্টেপে চলে যাবে
+                    setTimeout(() => { nextStep(3); }, 200);
                 };
                 box.innerHTML = `<i class="${item.icon}"></i><span>${item.name}</span>`;
                 contentDiv.appendChild(box);
@@ -491,7 +545,6 @@
             document.getElementById('main-categories').style.display = 'grid';
             document.querySelectorAll('#main-categories .cat-box').forEach(box => box.classList.remove('clicked'));
             selectedCategoryValue = "";
-            document.getElementById('next-btn-2').disabled = true;
         }
 
         async function optimizeAndCompressFile(file, maxWidth = 1200, quality = 0.8) {
@@ -554,7 +607,7 @@
                     let finalServerUrl = (data.success && data.url) ? data.url : localPreviewUrl;
                     uploadedImageUrls.push(finalServerUrl);
 
-                    card.innerHTML = `<img src="${finalServerUrl}"><button type="button" class="remove-img-btn" style="position:absolute; top:2px; right:2px; background:rgba(0,0,0,0.8); color:#fff; border:none; border-radius:50%; width:20px; height:20px; cursor:pointer; font-size:10px; display:flex; align-items:center; justify-content:center;"><i class="fa-solid fa-xmark"></i></button>`;
+                    card.innerHTML = `<img src="${finalServerUrl}"><button type="button" class="remove-img-btn" style="position:absolute; top:4px; right:4px; background:rgba(0,0,0,0.8); color:#fff; border:none; border-radius:50%; width:24px; height:24px; cursor:pointer; font-size:11px; display:flex; align-items:center; justify-content:center;"><i class="fa-solid fa-xmark"></i></button>`;
                     card.querySelector('.remove-img-btn').onclick = () => {
                         card.remove();
                         uploadedImageUrls = uploadedImageUrls.filter(url => url !== finalServerUrl);
@@ -580,7 +633,7 @@
             let localVideoUrl = URL.createObjectURL(file);
             let card = document.createElement('div');
             card.className = 'preview-card';
-            card.style.width = "100px";
+            card.style.width = "140px";
             card.innerHTML = `<video src="${localVideoUrl}"></video><div style="position:absolute; inset:0; background:rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center; color:var(--gold-solid);"><i class="fa-solid fa-spinner fa-spin"></i></div>`;
             previewContainer.appendChild(card);
 
@@ -593,7 +646,7 @@
                 const data = await response.json();
                 uploadedVideoUrl = (data.success && data.url) ? data.url : localVideoUrl;
 
-                card.innerHTML = `<video src="${uploadedVideoUrl}" controls></video><button type="button" class="remove-vid-btn" style="position:absolute; top:2px; right:2px; background:rgba(0,0,0,0.8); color:#fff; border:none; border-radius:50%; width:20px; height:20px; cursor:pointer; font-size:10px; display:flex; align-items:center; justify-content:center;"><i class="fa-solid fa-xmark"></i></button>`;
+                card.innerHTML = `<video src="${uploadedVideoUrl}" controls></video><button type="button" class="remove-vid-btn" style="position:absolute; top:4px; right:4px; background:rgba(0,0,0,0.8); color:#fff; border:none; border-radius:50%; width:24px; height:24px; cursor:pointer; font-size:11px; display:flex; align-items:center; justify-content:center;"><i class="fa-solid fa-xmark"></i></button>`;
                 card.querySelector('.remove-vid-btn').onclick = () => {
                     card.remove();
                     uploadedVideoUrl = "";
@@ -603,7 +656,7 @@
                 card.innerHTML = `<video src="${localVideoUrl}" controls></video>`;
             }
             isUploadingMedia = false;
-            document.getElementById('next-btn-3').disabled = false;
+            if (uploadedImageUrls.length > 0) document.getElementById('next-btn-3').disabled = false;
         };
 
         window.submitMasterForm = async function(event) {
@@ -629,7 +682,7 @@
                 moq: parseInt(document.getElementById('moq_units')?.value) || 1,
                 image_url: uploadedImageUrls[0] || "",
                 images_json: JSON.stringify(uploadedImageUrls),
-                video_url: uploadedVideoUrl || "", // ব্যাকএন্ড ও D1 ডাটাবেজে সঠিক ভিডিও লিংক সেভ হওয়ার জন্য
+                video_url: uploadedVideoUrl || "",
                 youtube_video: document.getElementById('product_video').value.trim(),
                 youtube_live: document.getElementById('youtube_live').value.trim(),
                 facebook_live: document.getElementById('facebook_live').value.trim(),
