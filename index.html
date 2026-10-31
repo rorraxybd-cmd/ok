@@ -464,8 +464,9 @@
             loadLiveProducts();
         }
 
-        // ক্লাউডফ্লেয়ার ডাটাবেজ থেকে ডাইরেক্ট রিয়েল-টাইম প্রোডাক্ট লোড
+        // ক্লাউডফ্লেয়ার ওয়ার্কার এপিআই ও D1 ডাটাবেজ থেকে সরাসরি প্রোডাক্ট ফেচ করা
         async function loadLiveProducts() {
+            const currentMode = localStorage.getItem('rorraxy_mode') || 'retail';
             try {
                 const response = await fetch(`${API_BASE_URL}/api/get?table=products`);
                 const result = await response.json();
@@ -478,7 +479,15 @@
                 }
 
                 if (productsList.length > 0) {
-                    renderProductCards(productsList);
+                    // মোড অনুযায়ী ফিল্টার (যেমন retail, wholesale ইত্যাদি)
+                    const filteredProducts = productsList.filter(item => {
+                        const mode = (item.upload_mode || item.mode || 'retail').toLowerCase();
+                        return mode === currentMode.toLowerCase();
+                    });
+
+                    // যদি নির্দিষ্ট মোডের ডেটা না থাকে, তবে সমস্ত প্রোডাক্ট দেখাবে
+                    const finalProductsToRender = filteredProducts.length > 0 ? filteredProducts : productsList;
+                    renderProductCards(finalProductsToRender);
                 } else {
                     document.getElementById('productFeed').innerHTML = `
                         <div style="grid-column: 1 / -1; text-align: center; padding: 50px 0; color: var(--text-gray);">
@@ -498,7 +507,7 @@
             }
         }
 
-        // D1 ডাটাবেজের image_url এবং images_json থেকে আসল ছবি পার্স করার ইউনিভার্সাল লজিক
+        // D1 ডাটাবেজের image_url এবং images_json থেকে আসল ছবি নিখুঁতভাবে রেন্ডার করার ইউনিভার্সাল লজিক
         function renderProductCards(products) {
             const feedContainer = document.getElementById('productFeed');
             feedContainer.innerHTML = '';
