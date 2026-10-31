@@ -1,7 +1,7 @@
 /**
  * rorraxy - Ultimate Luxury Transparent PWA Installation Manager
- * Description: Smooth orbit rotation, progress bar timer, top minimal badge animation,
- * and direct native install handling.
+ * Description: Smooth orbit rotation, progress bar, top-right corner minimal badge,
+ * and Apple/Android/Desktop native support.
  */
 
 (function () {
@@ -59,7 +59,7 @@
             border: 1px solid rgba(212, 175, 55, 0.4);
         }
 
-        /* পারফেক্ট সার্কেল রোটেশন এনিমেশন */
+        /* সার্ভিস সার্কেল রোটেশন এনিমেশন */
         .rorraxy-orbit-ring {
             position: absolute; width: 150px; height: 150px;
             border: 1px dashed rgba(212, 175, 55, 0.5); border-radius: 50%;
@@ -89,7 +89,7 @@
         .rorraxy-btn-title { font-size: 11px; font-weight: 800; }
         .rorraxy-btn-devices { font-size: 7px; font-weight: 700; color: rgba(3, 3, 5, 0.8); }
 
-        /* ১৫ সেকেন্ড কাউন্টডাউন প্রোগ্রেস বার (দাঁড়ির মতো কমতে থাকবে) */
+        /* ১৫ সেকেন্ড কাউন্টডাউন প্রোগ্রেস বার */
         .rorraxy-progress-track {
             width: 100%; max-width: 200px; height: 3px; background: rgba(255, 255, 255, 0.1);
             margin: 0 auto; border-radius: 2px; overflow: hidden;
@@ -99,20 +99,20 @@
             animation: rorraxyShrinkBar 15s linear forwards;
         }
 
-        /* একদম উপরে ভাসমান ছোট মিনিমাল ব্যাজ এনিমেশন */
+        /* একদম ডান দিকের কোণায় ভাসমান ছোট মিনিমাল ব্যাজ */
         .rorraxy-minimal-widget {
-            position: fixed; top: 12px; left: 50%; transform: translateX(-50%) translateY(-50px);
-            background: rgba(3, 3, 5, 0.95); border: 1px solid rgba(212, 175, 55, 0.5);
-            padding: 6px 16px; border-radius: 20px; display: flex; align-items: center; gap: 8px;
-            z-index: 99998; cursor: pointer; box-shadow: 0 4px 20px rgba(0,0,0,0.8);
+            position: fixed; top: 12px; right: 15px; background: rgba(3, 3, 5, 0.95);
+            border: 1px solid rgba(212, 175, 55, 0.5); padding: 6px 14px; border-radius: 20px;
+            display: flex; align-items: center; gap: 6px; z-index: 99998; cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.8);
             animation: rorraxyBadgeSlideDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
         .rorraxy-minimal-text {
-            font-size: 10px; font-weight: 800; background: var(--gold-gradient);
+            font-size: 9px; font-weight: 800; background: var(--gold-gradient);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase;
         }
 
-        /* iOS গাইড নোটিফিকেশন */
+        /* Apple (iOS) গাইড নোটিফিকেশন */
         .rorraxy-ios-guide {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
             background: rgba(8, 8, 12, 0.95); border: 1px solid rgba(212, 175, 55, 0.6);
@@ -127,7 +127,7 @@
         @keyframes rorraxyPopScale { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
         @keyframes rorraxyOrbitSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         @keyframes rorraxyShrinkBar { from { width: 100%; } to { width: 0%; } }
-        @keyframes rorraxyBadgeSlideDown { from { transform: translateX(-50%) translateY(-50px); opacity: 0; } to { transform: translateX(-50%) translateY(0); opacity: 1; } }
+        @keyframes rorraxyBadgeSlideDown { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         @keyframes rorraxySlideUp { from { transform: translate(-50%, 50px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
     `;
     document.head.appendChild(style);
@@ -149,9 +149,9 @@
             iosGuide.id = 'rorraxyIosGuide';
             iosGuide.className = 'rorraxy-ios-guide';
             iosGuide.innerHTML = `
-                <div>📱 <b>iOS Installation Guide:</b></div>
+                <div>📱 <b>Apple (iOS) Installation Guide:</b></div>
                 <div style="margin-top: 4px; color: #a0a0ab; font-size: 10px;">
-                    Tap the <b>Share</b> button below in Safari, then select <b>'Add to Home Screen'</b>.
+                    Tap the <b>Share</b> button <i class="fa-solid fa-arrow-up-from-bracket"></i> below in Safari, then select <b>'Add to Home Screen'</b>.
                 </div>
             `;
             document.body.appendChild(iosGuide);
@@ -163,7 +163,6 @@
         }
 
         if (deferredPrompt) {
-            // অ্যান্ড্রয়েড ও ডেস্কটপের জন্য সরাসরি নেটিভ প্রম্পট ট্রিগার হবে
             deferredPrompt.prompt();
             const { outcome } = await deferredPrompt.userChoice;
             if (outcome === 'accepted') {
@@ -198,7 +197,7 @@
         return;
     }
 
-    // সাইটে প্রবেশের ঠিক ৩ সেকেন্ড পর পপআপ ভেসে উঠবে
+    // ৩ সেকেন্ড পর পপআপ ভেসে ওঠার লজিক
     setTimeout(() => {
         const overlay = document.createElement('div');
         overlay.className = 'rorraxy-pwa-overlay';
@@ -217,7 +216,7 @@
                 <div>
                     <button id="rorraxyPwaInstallBtn" class="rorraxy-pwa-btn">
                         <span class="rorraxy-btn-title">Install App</span>
-                        <span class="rorraxy-btn-devices">Android / iOS / Desktop</span>
+                        <span class="rorraxy-btn-devices">Android / Apple / Desktop</span>
                     </button>
                     <div class="rorraxy-progress-track">
                         <div class="rorraxy-progress-bar"></div>
@@ -233,7 +232,7 @@
             createMinimalWidget();
         };
 
-        // ঠিক ১৫ সেকেন্ড পর প্রোগ্রেস বার শেষ হয়ে পপআপ অটো রিমুভ হয়ে উপরে ছোট ব্যাজ চলে আসবে
+        // ১৫ সেকেন্ড পর অটো মিনিমাইজ হয়ে ডান কোণায় ব্যাজ চলে যাওয়ার টাইমার
         const autoHideTimer = setTimeout(() => {
             if (document.body.contains(overlay)) {
                 dismissPopup();
@@ -257,6 +256,5 @@
             clearTimeout(autoHideTimer);
             await triggerInstall();
         });
-    }, 3000); // ৩ সেকেন্ড ডিলে
+    }, 3000);
 })();
-        
