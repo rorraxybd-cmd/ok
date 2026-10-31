@@ -12,19 +12,21 @@ export async function onRequest(context) {
   }
 
   try {
-    // ১. GET রিকোয়েস্ট: সমস্ত প্রোডাক্ট বা নির্দিষ্ট কোডের প্রোডাক্ট দেখার জন্য (আউটপুট)
+    const url = new URL(request.url);
+    
+    // ১. GET রিকোয়েস্ট: সমস্ত প্রোডাক্ট, মোড (retail/wholesale/dropshipping) অথবা নির্দিষ্ট কোড অনুযায়ী দেখার জন্য
     if (request.method === "GET") {
-      const url = new URL(request.url);
-      const productCode = url.searchParams.get("code");
+      const productCode = url.searchParams.get("code") || url.searchParams.get("id");
       const sellerId = url.searchParams.get("seller_id");
+      const mode = url.searchParams.get("mode"); // retail, wholesale, dropshipping
 
       let query = "SELECT * FROM products";
       let params = [];
       let conditions = [];
 
       if (productCode) {
-        conditions.push("product_code = ?");
-        params.push(productCode);
+        conditions.push("(product_code = ? OR id = ?)");
+        params.push(productCode, productCode);
       }
       
       if (sellerId) {
@@ -32,9 +34,16 @@ export async function onRequest(context) {
         params.push(sellerId);
       }
 
+      if (mode) {
+        conditions.push("upload_mode = ?");
+        params.push(mode);
+      }
+
       if (conditions.length > 0) {
         query += " WHERE " + conditions.join(" AND ");
       }
+
+      query += " ORDER BY created_at DESC";
 
       const stmt = env.retail.prepare(query).bind(...params);
       const { results } = await stmt.all();
@@ -90,25 +99,25 @@ export async function onRequest(context) {
         seller_id || null,
         product_code || null,
         title || null,
-        upload_mode || null,
+        upload_mode || "retail",
         category || null,
-        price || null,
-        market_price || null,
-        dropship_base_price || null,
-        dropship_resell_price || null,
-        price_sample || null,
-        price_min_whole || null,
-        price_bulk || null,
-        stock || null,
-        moq || null,
+        price || 0,
+        market_price || 0,
+        dropship_base_price || 0,
+        dropship_resell_price || 0,
+        price_sample || 0,
+        price_min_whole || 0,
+        price_bulk || 0,
+        stock || 0,
+        moq || 1,
         image_url || null,
-        images_json ? JSON.stringify(images_json) : null,
+        images_json ? (typeof images_json === 'string' ? images_json : JSON.stringify(images_json)) : null,
         video_url || null,
         youtube_video || null,
         youtube_live || null,
         facebook_live || null,
-        target_country || null,
-        discount_rate || null,
+        target_country || "bd",
+        discount_rate || "0",
         allow_custom_note ? 1 : 0,
         chat_with_seller ? 1 : 0,
         description || null
@@ -134,10 +143,10 @@ export async function onRequest(context) {
       const updateQuery = `
         UPDATE products 
         SET like_count = COALESCE(like_count, 0) + 1 
-        WHERE product_code = ?
+        WHERE product_code = ? OR id = ?
       `;
 
-      await env.retail.prepare(updateQuery).bind(product_code).run();
+      await env.retail.prepare(updateQuery).bind(product_code, product_code).run();
 
       return new Response(JSON.stringify({ success: true, message: "Like count updated successfully!" }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" }
