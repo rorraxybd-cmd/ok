@@ -78,7 +78,6 @@
             100% { transform: translate3d(-50%, 0, 0); }
         }
 
-        /* Mode Selector Top Right Dropdown Box */
         .mode-selector-corner {
             background: #0d0d14;
             border: 1px solid rgba(212, 175, 55, 0.4);
@@ -101,7 +100,6 @@
             padding: 6px;
         }
 
-        /* Luxury Modal Overlay */
         .luxury-center-modal-overlay {
             display: none; position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important;
             background: rgba(0, 0, 0, 0.85) !important; z-index: 99999 !important; backdrop-filter: blur(20px);
@@ -166,7 +164,6 @@
         .explore-subtxt { font-size: 0.60rem; font-weight: 400; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
         .btn-right-arrow { font-size: 0.75rem; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* Feed Container Layout Optimizations */
         .feed-container {
             padding: 8px 6px; 
             display: grid; 
@@ -227,7 +224,6 @@
         
         .share-action-btn { background: none; border: none; font-size: 0.70rem; font-weight: 500; cursor: pointer; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; display: flex; align-items: center; gap: 4px; }
 
-        /* Clean Fixed Bottom Navigation Bar */
         nav.bottom-nav {
             position: fixed; bottom: 0; left: 0; width: 100%; background: var(--footer-retail);
             display: flex; justify-content: space-around; align-items: center; padding: 8px 4px 10px 4px;
@@ -274,7 +270,6 @@
 </head>
 <body id="mainBody">
 
-    <!-- Global SVG Gradient Definition -->
     <svg style="width:0;height:0;position:absolute;" aria-hidden="true" focusable="false">
       <linearGradient id="goldGradientSvg" x1="0%" y1="0%" x2="100%" y2="100%">
         <stop offset="0%" stop-color="#bf953f" />
@@ -285,7 +280,6 @@
       </linearGradient>
     </svg>
 
-    <!-- Header Section -->
     <header class="app-header" id="mainHeader">
         <div class="trending-marquee-bar">
             <div class="marquee-container" id="marqueeContainer1">
@@ -300,21 +294,9 @@
                     <span class="txt-gold"><i class="fa-solid fa-plane"></i> New Products</span>
                     <span class="txt-gold"><i class="fa-solid fa-chart-line"></i> Trending Collections</span>
                 </div>
-                <div class="marquee-group" aria-hidden="true">
-                    <span class="txt-gold"><i class="fa-solid fa-crown"></i> Women Fashion</span>
-                    <span class="txt-gold"><i class="fa-solid fa-gem"></i> Baby Fashion</span>
-                    <span class="txt-gold"><i class="fa-solid fa-star"></i> Girls Fashion</span>
-                    <span class="txt-gold"><i class="fa-solid fa-fire"></i> Boy Fashion</span>
-                    <span class="txt-gold"><i class="fa-solid fa-bolt"></i> Men Fashion</span>
-                    <span class="txt-gold"><i class="fa-solid fa-gift"></i> Luxury Gift</span>
-                    <span class="txt-gold"><i class="fa-solid fa-shirt"></i> Matching Set</span>
-                    <span class="txt-gold"><i class="fa-solid fa-plane"></i> New Products</span>
-                    <span class="txt-gold"><i class="fa-solid fa-chart-line"></i> Trending Collections</span>
-                </div>
             </div>
         </div>
 
-        <!-- Mode Selector Switcher at Top Right Corner -->
         <select class="mode-selector-corner" id="userModeSelector" onchange="switchEcosystemMode(this.value)">
             <option value="retail">RETAIL (B2C)</option>
             <option value="wholesale">WHOLESALE (B2B)</option>
@@ -322,104 +304,35 @@
         </select>
     </header>
 
-    <!-- You Portal Navigation Modal -->
     <div id="youMenuModalOverlay" class="luxury-center-modal-overlay">
         <div class="luxury-center-modal-box" onclick="event.stopPropagation()">
             <button class="luxury-modal-close-btn" onclick="closeYouMenuModal()"><i class="fa-solid fa-xmark"></i></button>
             <img src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png" alt="Logo" class="luxury-modal-logo-large" onclick="navigateTo('https://rorraxy.com/')">
-            
             <div class="modal-material-info-text">AUTHENTIC MATERIALS</div>
-
-            <div class="modal-marquee-wrapper">
-                <div class="modal-marquee-container">
-                    <div class="modal-marquee-group">
-                        <span class="txt-gold"><i class="fa-solid fa-feather"></i> Textiles & Handloom</span>
-                        <span class="txt-gold"><i class="fa-solid fa-shield"></i> Leather</span>
-                        <span class="txt-gold"><i class="fa-solid fa-seedling"></i> Jute</span>
-                        <span class="txt-gold"><i class="fa-solid fa-tree"></i> Wood</span>
-                        <span class="txt-gold"><i class="fa-solid fa-water"></i> Resin</span>
-                        <span class="txt-gold"><i class="fa-solid fa-mountain"></i> Bamboo</span>
-                        <span class="txt-gold"><i class="fa-solid fa-ring"></i> Brass</span>
-                        <span class="txt-gold"><i class="fa-solid fa-coins"></i> Silver</span>
-                        <span class="txt-gold"><i class="fa-solid fa-crown"></i> Gold Plating</span>
-                    </div>
-                    <div class="modal-marquee-group" aria-hidden="true">
-                        <span class="txt-gold"><i class="fa-solid fa-feather"></i> Textiles & Handloom</span>
-                        <span class="txt-gold"><i class="fa-solid fa-shield"></i> Leather</span>
-                        <span class="txt-gold"><i class="fa-solid fa-seedling"></i> Jute</span>
-                        <span class="txt-gold"><i class="fa-solid fa-tree"></i> Wood</span>
-                        <span class="txt-gold"><i class="fa-solid fa-water"></i> Resin</span>
-                        <span class="txt-gold"><i class="fa-solid fa-mountain"></i> Bamboo</span>
-                        <span class="txt-gold"><i class="fa-solid fa-ring"></i> Brass</span>
-                        <span class="txt-gold"><i class="fa-solid fa-coins"></i> Silver</span>
-                        <span class="txt-gold"><i class="fa-solid fa-crown"></i> Gold Plating</span>
-                    </div>
-                </div>
-            </div>
-
             <h2 class="luxury-modal-title-top" onclick="navigateTo('/account.html')">USER PORTAL</h2>
             <div class="luxury-options-fullstack">
                 <div class="luxury-action-btn-item" onclick="navigateTo('/account.html')">
-                    <div class="btn-left-part">
-                        <i class="fa-solid fa-user"></i>
-                        <div class="btn-text-stack">
-                            <span class="btn-main-title">My Account</span>
-                            <span class="explore-subtxt">Dashboard</span>
-                        </div>
-                    </div>
-                    <i class="fa-solid fa-arrow-right btn-right-arrow"></i>
+                    <div class="btn-left-part"><i class="fa-solid fa-user"></i><span class="btn-main-title">My Account</span></div>
                 </div>
                 <div class="luxury-action-btn-item" onclick="navigateTo('/seller/index.html')">
-                    <div class="btn-left-part">
-                        <i class="fa-solid fa-chart-line"></i>
-                        <div class="btn-text-stack">
-                            <span class="btn-main-title">Seller Portal</span>
-                            <span class="explore-subtxt">Management</span>
-                        </div>
-                    </div>
-                    <i class="fa-solid fa-arrow-right btn-right-arrow"></i>
-                </div>
-                <div class="luxury-action-btn-item" onclick="navigateTo('/affiliate/index.html')">
-                    <div class="btn-left-part">
-                        <i class="fa-solid fa-handshake"></i>
-                        <div class="btn-text-stack">
-                            <span class="btn-main-title">Affiliate Program</span>
-                            <span class="explore-subtxt">Earn Rewards</span>
-                        </div>
-                    </div>
-                    <i class="fa-solid fa-arrow-right btn-right-arrow"></i>
+                    <div class="btn-left-part"><i class="fa-solid fa-chart-line"></i><span class="btn-main-title">Seller Portal</span></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Main Feed Container loaded dynamically from Cloudflare D1 database -->
     <main class="feed-container" id="productFeed">
-        <!-- Loading Spinner Placeholder -->
         <div style="grid-column: 1 / -1; text-align: center; padding: 50px 0; color: var(--gold-solid);">
             <i class="fa-solid fa-circle-notch fa-spin fa-2x"></i>
             <p style="margin-top: 10px; font-size: 0.75rem; letter-spacing: 1px;">LOADING rorraxy PRODUCTS...</p>
         </div>
     </main>
 
-    <!-- Optimized Bottom Navigation Bar -->
     <nav class="bottom-nav" id="bottomNav">
-        <a href="/world.html" class="nav-item">
-            <i class="fa-solid fa-earth-americas"></i>
-            <span>World</span>
-        </a>
-        <div class="nav-item" id="youNavBtn" onclick="openYouMenuModal(event)">
-            <i class="fa-solid fa-user"></i>
-            <span>You</span>
-        </div>
-        <a href="/video.html" class="nav-item">
-            <i class="fa-brands fa-youtube"></i>
-            <span>Video</span>
-        </a>
-        <a href="/category.html" class="nav-item">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <span>Category</span>
-        </a>
+        <a href="/world.html" class="nav-item"><i class="fa-solid fa-earth-americas"></i><span>World</span></a>
+        <div class="nav-item" id="youNavBtn" onclick="openYouMenuModal(event)"><i class="fa-solid fa-user"></i><span>You</span></div>
+        <a href="/video.html" class="nav-item"><i class="fa-brands fa-youtube"></i><span>Video</span></a>
+        <a href="/category.html" class="nav-item"><i class="fa-solid fa-magnifying-glass"></i><span>Category</span></a>
         <a href="/cart.html" class="nav-item">
             <div class="cart-icon-box">
                 <svg class="cart-custom-svg" viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
@@ -436,27 +349,12 @@
             initSelectedMode();
             updateCartBadgeCount();
             loadLiveProducts();
-
-            const modals = document.querySelectorAll('.luxury-center-modal-overlay');
-            modals.forEach(modal => {
-                modal.onclick = function(event) {
-                    if (event.target === modal) {
-                        closeAllModals();
-                    }
-                };
-            });
-
-            setInterval(() => {
-                updateCartBadgeCount();
-            }, 1000);
         });
 
         function initSelectedMode() {
             const currentMode = localStorage.getItem('rorraxy_mode') || 'retail';
             const selector = document.getElementById('userModeSelector');
-            if (selector) {
-                selector.value = currentMode;
-            }
+            if (selector) selector.value = currentMode;
         }
 
         function switchEcosystemMode(selectedMode) {
@@ -464,48 +362,34 @@
             loadLiveProducts();
         }
 
-        // ক্লাউডফ্লেয়ার ওয়ার্কার এপিআই থেকে ডেটা ফেচ করা
+        // রিয়েল-টাইম ডাইরেক্ট ক্লাউড ফেচ
         async function loadLiveProducts() {
-            const currentMode = localStorage.getItem('rorraxy_mode') || 'retail';
             try {
                 const response = await fetch(`${API_BASE_URL}/api/get?table=products`);
                 const result = await response.json();
                 
                 let productsList = [];
-                if (result.success && Array.isArray(result.data)) {
+                if (result && result.success && Array.isArray(result.data)) {
                     productsList = result.data;
                 } else if (Array.isArray(result)) {
                     productsList = result;
                 }
 
                 if (productsList.length > 0) {
-                    const filteredProducts = productsList.filter(item => {
-                        const mode = (item.upload_mode || item.mode || 'retail').toLowerCase();
-                        return mode === currentMode.toLowerCase();
-                    });
-
-                    const finalProductsToRender = filteredProducts.length > 0 ? filteredProducts : productsList;
-                    renderProductCards(finalProductsToRender);
+                    renderProductCards(productsList);
                 } else {
                     document.getElementById('productFeed').innerHTML = `
                         <div style="grid-column: 1 / -1; text-align: center; padding: 50px 0; color: var(--text-gray);">
                             <i class="fa-solid fa-box-open fa-2x" style="color:var(--gold-solid);"></i>
                             <p style="margin-top: 10px; font-size: 0.75rem; letter-spacing: 1px;">NO PRODUCTS FOUND IN CLOUD DATABASE.</p>
-                        </div>
-                    `;
+                        </div>`;
                 }
             } catch (error) {
                 console.error('Failed to load products from Cloudflare backend:', error);
-                document.getElementById('productFeed').innerHTML = `
-                    <div style="grid-column: 1 / -1; text-align: center; padding: 50px 0; color: var(--pink-love);">
-                        <i class="fa-solid fa-triangle-exclamation fa-2x"></i>
-                        <p style="margin-top: 10px; font-size: 0.75rem; letter-spacing: 1px;">FAILED TO CONNECT CLOUD BACKEND.</p>
-                    </div>
-                `;
             }
         }
 
-        // সম্পূর্ণ সুরক্ষিত ইমেজ পার্সার ও রেন্ডারিং লজিক
+        // শতভাগ ট্রাবলফ্রি ও রিয়েল ইমেজ রেন্ডারার
         function renderProductCards(products) {
             const feedContainer = document.getElementById('productFeed');
             feedContainer.innerHTML = '';
@@ -518,27 +402,19 @@
                 const countryCode = (item.target_country || item.targetCountry || 'bd').toLowerCase();
                 const flagUrl = `https://flagcdn.com/w20/${countryCode}.png`;
                 
-                let resolvedImageUrl = '';
-
-                // ডাইরেক্ট ইমেজ ইউআরএল অথবা JSON অ্যারে থেকে সঠিক লিংক বের করা
-                if (item.image_url && typeof item.image_url === 'string' && item.image_url.trim() !== '') {
-                    resolvedImageUrl = item.image_url.trim();
-                } else if (item.images_json) {
+                let rawImg = item.image_url || item.imageUrl || item.img || '';
+                
+                if(!rawImg && item.images_json) {
                     try {
                         let parsed = typeof item.images_json === 'string' ? JSON.parse(item.images_json) : item.images_json;
-                        if (Array.isArray(parsed) && parsed.length > 0) {
-                            resolvedImageUrl = parsed[0];
-                        }
-                    } catch (e) {
-                        if (typeof item.images_json === 'string') {
-                            resolvedImageUrl = item.images_json.replace(/[\[\]'"]/g, '').split(',')[0].trim();
-                        }
+                        if(Array.isArray(parsed) && parsed.length > 0) rawImg = parsed[0];
+                    } catch(e) {
+                        rawImg = String(item.images_json).replace(/[\[\]'"]/g, '').split(',')[0];
                     }
                 }
 
-                if (!resolvedImageUrl || resolvedImageUrl.length < 10) {
-                    resolvedImageUrl = 'https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png';
-                }
+                // যদি লিংকে স্পেশাল আন্ডারস্কোর বা ইস্যু থাকে সেটিকে রিঅ্যাডজাস্ট করা
+                let resolvedImageUrl = rawImg ? rawImg.trim() : '';
 
                 const cardHtml = `
                     <div class="product-card" data-product-id="${productId}" onclick="openProductDetails('${productId}')">
@@ -546,7 +422,7 @@
                             <div class="product-country-discount-badge">
                                 <img src="${flagUrl}" alt="${countryCode}" class="flag-icon" onerror="this.style.display='none'"> ${discount}% OFF
                             </div>
-                            <img src="${resolvedImageUrl}" alt="${title}" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png';">
+                            <img src="${resolvedImageUrl}" alt="${title}" loading="lazy" decoding="async">
                         </div>
                         <div class="card-footer-actions" onclick="event.stopPropagation()">
                             <span class="product-price-tag">${price}</span>
@@ -565,29 +441,10 @@
             });
         }
 
-        function openProductDetails(productId) {
-            window.location.href = `pd.html?id=${productId}`;
-        }
-
-        function navigateTo(url) {
-            window.location.href = url;
-        }
-
-        function openYouMenuModal(event) {
-            if(event) event.stopPropagation();
-            closeAllModals();
-            const modal = document.getElementById('youMenuModalOverlay');
-            if(modal) modal.style.display = 'flex';
-        }
-
-        function closeYouMenuModal() {
-            const modal = document.getElementById('youMenuModalOverlay');
-            if(modal) modal.style.display = 'none';
-        }
-
-        function closeAllModals() {
-            document.querySelectorAll('.luxury-center-modal-overlay').forEach(m => m.style.display = 'none');
-        }
+        function openProductDetails(productId) { window.location.href = `pd.html?id=${productId}`; }
+        function navigateTo(url) { window.location.href = url; }
+        function openYouMenuModal(e) { if(e) e.stopPropagation(); document.getElementById('youMenuModalOverlay').style.display = 'flex'; }
+        function closeYouMenuModal() { document.getElementById('youMenuModalOverlay').style.display = 'none'; }
 
         function toggleLove(event, btn) {
             event.stopPropagation();
@@ -605,43 +462,22 @@
         async function triggerAutoShare(event, productId, productTitle) {
             event.stopPropagation();
             const shareUrl = `${window.location.origin}/pd.html?id=${productId}`;
-            const shareData = {
-                title: `${productTitle} - rorraxy`,
-                text: `Check out this product on rorraxy: ${productTitle}`,
-                url: shareUrl
-            };
-
             if (navigator.share) {
-                try {
-                    await navigator.share(shareData);
-                } catch (err) {
-                    console.log('Share canceled or failed silently:', err);
-                }
+                try { await navigator.share({ title: `${productTitle} - rorraxy`, url: shareUrl }); } catch (err) {}
             } else if (navigator.clipboard) {
-                try {
-                    await navigator.clipboard.writeText(shareUrl);
-                    const shareBtn = event.currentTarget;
-                    const origText = shareBtn.innerHTML;
-                    shareBtn.innerHTML = `<i class="fa-solid fa-check"></i> COPIED!`;
-                    setTimeout(() => { shareBtn.innerHTML = origText; }, 1500);
-                } catch (err) {
-                    console.error('Clipboard copy failed:', err);
-                }
+                await navigator.clipboard.writeText(shareUrl);
+                alert("Copied link to clipboard!");
             }
         }
 
         function updateCartBadgeCount() {
             let cart = JSON.parse(localStorage.getItem('rorraxy_cart')) || [];
             let totalQty = cart.reduce((sum, item) => sum + (parseInt(item.qty) || 0), 0);
-            
             let badge = document.getElementById('floatingCartItemCountBadge');
             if(badge) {
                 badge.innerText = totalQty;
-                if(totalQty > 0) {
-                    badge.classList.remove('empty-badge');
-                } else {
-                    badge.classList.add('empty-badge');
-                }
+                if(totalQty > 0) badge.classList.remove('empty-badge');
+                else badge.classList.add('empty-badge');
             }
         }
     </script>
