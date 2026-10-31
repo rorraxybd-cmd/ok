@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <title>Affiliate Profile & Info - rorraxy Ecosystem</title>
+    <title>Affiliate Settings - rorraxy</title>
     
-    <!-- সেন্ট্রাল ক্লাউডফ্লেয়ার ইকোসিস্টেম কোর স্ক্রিপ্ট -->
     <script src="/ecosystem-core.js"></script>
     
-    <!-- Google Fonts & FontAwesome -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -24,51 +22,64 @@
             --text-gray: #a0a0ab;
             --font-main: 'Poppins', sans-serif;
             --required-red: #ff4d4d;
+            --border-color: rgba(212, 175, 55, 0.15);
+            --accent-green: #22c55e;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         html, body { width: 100%; overflow-x: hidden; background: var(--bg-retail) !important; color: var(--text-white); font-family: var(--font-main); min-height: 100vh; font-size: 14px; }
         body { padding: 24px 16px 110px 16px; text-transform: uppercase; }
-        .main-container { width: 100%; max-width: 900px; margin: 0 auto; }
+        .main-container { width: 100%; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
 
-        .dashboard-header { text-align: center; margin-bottom: 25px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
-        .header-logo-img { width: 90px; height: 90px; object-fit: contain; filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.6)); }
-        .dashboard-header h1 { font-size: 1.5rem; font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .dashboard-header { text-align: center; margin-bottom: 6px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        .header-logo-img { width: 80px; height: 80px; object-fit: contain; filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.5)); }
+        .dashboard-header h1 { font-size: 1.35rem; font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 0.5px; }
 
-        .info-card, .profile-summary-card { background: var(--card-retail); border-radius: 18px; padding: 24px 20px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8); border: 1px solid rgba(212, 175, 55, 0.15); }
-        .profile-summary-card { display: none; }
-        .info-card.hidden { display: none; }
-
-        .section-title { font-size: 0.85rem; font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(212, 175, 55, 0.15); padding-bottom: 8px; }
+        /* সিম্পল ও সফট কার্ড লেআউট */
+        .sector-card { background: var(--card-retail); border-radius: 16px; padding: 20px 18px; border: 1px solid var(--border-color); }
+        .section-title { font-size: 0.80rem; font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 6px; letter-spacing: 0.5px; }
         
-        .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 20px; }
-        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 16px; }
+        .form-group { display: flex; flex-direction: column; gap: 5px; }
         .form-group.full-width { grid-column: span 2; }
-        .form-group label { font-size: 0.72rem; font-weight: 700; color: var(--text-gray); }
-        .req-star { color: var(--required-red); margin-left: 3px; }
+        .form-group label { font-size: 0.68rem; font-weight: 700; color: var(--text-gray); }
+        .req-star { color: var(--required-red); margin-left: 2px; }
 
-        .form-control, .form-select { width: 100%; background: #040407; border: none; border-radius: 12px; padding: 12px 16px; color: var(--text-white); font-size: 0.8rem; outline: none; font-family: var(--font-main); text-transform: none; box-shadow: inset 0 2px 6px rgba(0,0,0,0.8); }
+        .form-control, .form-select { width: 100%; background: #040407; border: 1px solid var(--border-color); border-radius: 10px; padding: 11px 14px; color: var(--text-white); font-size: 0.78rem; outline: none; font-family: var(--font-main); text-transform: none; }
         .form-select option { background: #08080c; color: #fff; }
 
-        .dynamic-payment-container { grid-column: span 2; display: flex; flex-direction: column; gap: 12px; background: #040407; padding: 16px; border-radius: 14px; border: 1px solid rgba(212, 175, 55, 0.2); }
-        .payment-field-group { display: none; flex-direction: column; gap: 12px; }
+        .dynamic-payment-container { grid-column: span 2; display: flex; flex-direction: column; gap: 10px; background: #040407; padding: 14px; border-radius: 12px; border: 1px solid var(--border-color); }
+        .payment-field-group { display: none; flex-direction: column; gap: 10px; }
         .payment-field-group.active { display: flex; }
 
-        .submit-btn, .edit-profile-btn { background: var(--gold-gradient); color: #000; border: none; width: 100%; padding: 14px; border-radius: 14px; font-weight: 800; font-size: 0.85rem; cursor: pointer; text-transform: uppercase; box-shadow: 0 4px 15px rgba(212,175,55,0.3); }
+        .action-btn { background: var(--gold-gradient); color: #000; border: none; width: 100%; padding: 12px 14px; border-radius: 10px; font-weight: 800; font-size: 0.78rem; cursor: pointer; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 6px; letter-spacing: 0.5px; }
+        
+        /* সামারি স্টাইল */
+        .summary-box { display: none; background: #040407; padding: 14px; border-radius: 12px; border: 1px solid var(--border-color); flex-direction: column; gap: 8px; text-transform: none; }
+        .summary-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.04); padding-bottom: 5px; }
+        .summary-row span:first-child { color: var(--text-gray); font-weight: 600; }
+        .summary-row span:last-child { color: var(--text-white); font-weight: 700; }
+        .edit-badge { color: var(--gold-solid); cursor: pointer; font-weight: 700; font-size: 0.70rem; display: inline-flex; align-items: center; gap: 4px; }
 
-        .summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 20px; text-transform: none; }
-        .summary-item { background: #040407; padding: 12px 14px; border-radius: 12px; display: flex; flex-direction: column; gap: 4px; }
-        .summary-item.full-width { grid-column: span 2; }
-        .summary-item label { font-size: 0.62rem; color: var(--gold-solid); font-weight: 700; }
-        .summary-item span { font-size: 0.78rem; color: var(--text-white); word-break: break-all; }
+        /* টু-স্টেপ বায়োমেট্রিক সিকিউরিটি সেকশন (একদম সিম্পল ও রিফাইন্ড) */
+        .security-box { display: flex; flex-direction: column; gap: 10px; text-align: center; }
+        .security-desc { font-size: 0.70rem; color: var(--text-gray); text-transform: none; margin-bottom: 4px; }
+        .status-alert { font-size: 0.72rem; padding: 8px 10px; border-radius: 8px; display: none; text-transform: none; }
+        .status-alert.error { background: rgba(255, 77, 77, 0.15); border: 1px solid #ff4d4d; color: #ff4d4d; }
+        .status-alert.success { background: rgba(34, 197, 94, 0.15); border: 1px solid #22c55e; color: #22c55e; }
 
-        .affiliate-bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(3, 3, 5, 0.95); backdrop-filter: blur(20px); border-top: 1px solid rgba(212, 175, 55, 0.15); display: flex; justify-content: space-around; align-items: center; padding: 12px 6px; z-index: 1000; }
+        /* বটম নেভিগেশন মেনু */
+        .affiliate-bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(3, 3, 5, 0.95); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; align-items: center; padding: 10px 6px; z-index: 1000; }
         .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; background: none; border: none; cursor: pointer; }
         .nav-item.active i, .nav-item.active span { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .nav-item i { font-size: 1.25rem; margin-bottom: 4px; color: var(--text-gray); }
-        .nav-item span { font-size: 0.62rem; font-weight: 700; color: var(--text-gray); }
+        .nav-item i { font-size: 1.15rem; margin-bottom: 3px; color: var(--text-gray); }
+        .nav-item span { font-size: 0.60rem; font-weight: 700; color: var(--text-gray); }
 
-        @media (max-width: 768px) { .form-grid, .summary-grid { grid-template-columns: 1fr; } .form-group.full-width, .summary-item.full-width, .dynamic-payment-container { grid-column: span 1; } }
+        @media (max-width: 600px) { 
+            body { padding: 16px 12px 90px 12px; }
+            .form-grid { grid-template-columns: 1fr; gap: 10px; } 
+            .form-group.full-width, .dynamic-payment-container { grid-column: span 1; } 
+        }
     </style>
 </head>
 <body>
@@ -76,24 +87,29 @@
     <div class="main-container">
         <header class="dashboard-header">
             <img src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png" alt="Logo" class="header-logo-img">
-            <h1>AFFILIATE PROFILE & INFO</h1>
+            <h1>AFFILIATE SETTINGS</h1>
         </header>
 
-        <!-- ফরম কার্ড -->
-        <div class="info-card" id="infoFormCard">
-            <div class="section-title"><i class="fa-solid fa-user-shield"></i> MANDATORY AFFILIATE INFORMATION</div>
+        <!-- সেক্টর ১ ও ২: ইনফরমেশন ও পেমেন্ট অপশন -->
+        <div class="sector-card">
+            <div class="section-title">
+                <i class="fa-solid fa-user-gear"></i> AFFILIATE & PAYMENT INFO
+                <span id="infoCheckMark" style="margin-left:auto; display:none; color:var(--accent-green); font-size:0.75rem;"><i class="fa-solid fa-circle-check"></i> SAVED</span>
+            </div>
+
+            <!-- ফরম ভিউ -->
             <form id="affiliateInfoForm" onsubmit="saveAffiliateInfo(event)">
                 <div class="form-grid">
-                    <div class="form-group"><label>FIRST NAME <span class="req-star">*</span></label><input type="text" id="firstName" class="form-control" placeholder="FIRST NAME" required></div>
-                    <div class="form-group"><label>LAST NAME <span class="req-star">*</span></label><input type="text" id="lastName" class="form-control" placeholder="LAST NAME" required></div>
-                    <div class="form-group"><label>EMAIL ADDRESS <span class="req-star">*</span></label><input type="email" id="email" class="form-control" placeholder="name@gmail.com" required style="text-transform:lowercase;"></div>
-                    <div class="form-group"><label>WHATSAPP / PHONE <span class="req-star">*</span></label><input type="tel" id="phone" class="form-control" placeholder="+8801700000000" required></div>
-                    <div class="form-group full-width"><label>PROMOTIONAL CHANNEL <span class="req-star">*</span></label><input type="text" id="promoChannel" class="form-control" placeholder="YOUTUBE, FACEBOOK OR WEBSITE URL" required></div>
+                    <div class="form-group"><label>FIRST NAME <span class="req-star">*</span></label><input type="text" id="firstName" class="form-control" placeholder="First Name" required></div>
+                    <div class="form-group"><label>LAST NAME <span class="req-star">*</span></label><input type="text" id="lastName" class="form-control" placeholder="Last Name" required></div>
+                    <div class="form-group"><label>EMAIL <span class="req-star">*</span></label><input type="email" id="email" class="form-control" placeholder="name@gmail.com" required style="text-transform:lowercase;"></div>
+                    <div class="form-group"><label>PHONE / WHATSAPP <span class="req-star">*</span></label><input type="tel" id="phone" class="form-control" placeholder="+8801700000000" required></div>
+                    <div class="form-group full-width"><label>PROMO CHANNEL <span class="req-star">*</span></label><input type="text" id="promoChannel" class="form-control" placeholder="YouTube, Facebook or Website URL" required></div>
                     
                     <div class="form-group full-width">
-                        <label>PREFERRED PAYMENT METHOD <span class="req-star">*</span></label>
+                        <label>PAYMENT METHOD <span class="req-star">*</span></label>
                         <select id="paymentMethod" class="form-select" onchange="handlePaymentMethodChange()" required>
-                            <option value="">SELECT METHOD</option>
+                            <option value="">Select Method</option>
                             <option value="bKash">bKash</option>
                             <option value="Nagad">Nagad</option>
                             <option value="Bank Transfer">Bank Transfer</option>
@@ -111,36 +127,51 @@
                         </div>
                     </div>
                 </div>
-                <button type="submit" class="submit-btn"><i class="fa-solid fa-floppy-disk"></i> SAVE & SYNC TO CLOUDFLARE D1</button>
+                <button type="submit" class="action-btn"><i class="fa-solid fa-floppy-disk"></i> SAVE INFO</button>
             </form>
+
+            <!-- সেভ সামারি -->
+            <div class="summary-box" id="infoSummaryBox">
+                <div class="summary-row"><span>FULL NAME:</span> <span id="sumName"></span></div>
+                <div class="summary-row"><span>EMAIL:</span> <span id="sumEmail"></span></div>
+                <div class="summary-row"><span>PHONE:</span> <span id="sumPhone"></span></div>
+                <div class="summary-row"><span>PAYMENT METHOD:</span> <span id="sumMethod"></span></div>
+                <div class="summary-row"><span>CHANNEL:</span> <span id="sumChannel"></span></div>
+                <div style="display: flex; justify-content: flex-end; margin-top: 4px;">
+                    <span class="edit-badge" onclick="editAffiliateInfo()"><i class="fa-solid fa-pen-to-square"></i> EDIT</span>
+                </div>
+            </div>
         </div>
 
-        <!-- সাবমিট হওয়ার পর গোছানো সামারি কার্ড -->
-        <div class="profile-summary-card" id="profileSummaryCard">
-            <div class="section-title">VERIFIED AFFILIATE PROFILE <span style="color:#4ade80; margin-left:auto; font-size:0.7rem;">SYNCED</span></div>
-            <div class="summary-grid">
-                <div class="summary-item"><label>FULL NAME</label><span id="sumName"></span></div>
-                <div class="summary-item"><label>EMAIL</label><span id="sumEmail"></span></div>
-                <div class="summary-item"><label>PHONE</label><span id="sumPhone"></span></div>
-                <div class="summary-item"><label>PAYOUT METHOD</label><span id="sumMethod"></span></div>
-                <div class="summary-item full-width"><label>PROMOTIONAL CHANNEL</label><span id="sumChannel"></span></div>
+        <!-- সেক্টর ৩: টু-স্টেপ বায়োমেট্রিক সিকিউরিটি (সিম্পল ও মিনিমাল) -->
+        <div class="sector-card">
+            <div class="section-title"><i class="fa-solid fa-shield-halved"></i> 2-STEP BIOMETRIC SECURITY</div>
+            <div class="security-box">
+                <p class="security-desc">Verify your hardware biometric passkey to access payout.</p>
+                
+                <div id="statusAlert" class="status-alert"></div>
+
+                <button type="button" class="action-btn" onclick="registerAffiliatePasskey()" style="background: rgba(212,175,55,0.06); border:1px solid var(--border-color); color:var(--gold-solid);">
+                    <i class="fa-solid fa-fingerprint"></i> <span>REGISTER PASSKEY</span>
+                </button>
+
+                <button type="button" class="action-btn" onclick="authenticateAffiliatePasskey()">
+                    <i class="fa-solid fa-lock-open"></i> <span>VERIFY & PAYOUT</span>
+                </button>
             </div>
-            <button type="button" class="edit-profile-btn" id="editProfileBtn"><i class="fa-solid fa-pen-to-square"></i> EDIT PROFILE INFO</button>
         </div>
     </div>
 
     <!-- বটম নেভিগেশন মেনু -->
-    <nav class="/affiliate/affiliate-bottom-nav">
-        <a href="/affiliate/dashboard.html" class="nav-item"><i class="fa-solid fa-chart-pie"></i><span>DASHBOARD</span></a>
-        <a href="/affiliate/payout.html" class="nav-item"><i class="fa-solid fa-hand-holding-dollar"></i><span>PAYOUT</span></a>
-        <a href="/affiliate/report.html" class="nav-item"><i class="fa-solid fa-chart-column"></i><span>REPORT</span></a>
-        <a href="/affiliate/link.html" class="nav-item"><i class="fa-solid fa-link"></i><span>LINK</span></a>
-        <a href="/affiliate/info.html" class="nav-item active"><i class="fa-solid fa-user"></i><span>INFO</span></a>
+    <nav class="affiliate-bottom-nav">
+        <a href="index.html" class="nav-item"><i class="fa-solid fa-chart-pie"></i><span>DASHBOARD</span></a>
+        <a href="payout.html" class="nav-item" onclick="checkPayoutAccess(event)"><i class="fa-solid fa-hand-holding-dollar"></i><span>PAYOUT</span></a>
+        <a href="report.html" class="nav-item"><i class="fa-solid fa-chart-column"></i><span>REPORT</span></a>
+        <a href="link.html" class="nav-item"><i class="fa-solid fa-link"></i><span>LINK</span></a>
+        <a href="info.html" class="nav-item active"><i class="fa-solid fa-user-gear"></i><span>SETTING</span></a>
     </nav>
 
     <script>
-        const WORKER_SAVE_API = "https://s.rorraxybd.workers.dev/api/save";
-
         function handlePaymentMethodChange() {
             const method = document.getElementById('paymentMethod').value;
             const container = document.getElementById('dynamicPaymentContainer');
@@ -163,75 +194,119 @@
                     document.getElementById('promoChannel').value = data.promoChannel || '';
                     document.getElementById('paymentMethod').value = data.paymentMethod || '';
                     handlePaymentMethodChange();
-                    renderSummaryCard(data);
+                    showSummary(data);
                 } catch(e) { console.error(e); }
             }
         });
 
-        function renderSummaryCard(data) {
+        function saveAffiliateInfo(e) {
+            e.preventDefault();
+            const data = {
+                firstName: document.getElementById('firstName').value.trim(),
+                lastName: document.getElementById('lastName').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                phone: document.getElementById('phone').value.trim(),
+                promoChannel: document.getElementById('promoChannel').value.trim(),
+                paymentMethod: document.getElementById('paymentMethod').value
+            };
+
+            localStorage.setItem('rorraxy_affiliate_info', JSON.stringify(data));
+            showSummary(data);
+            alert('AFFILIATE INFORMATION SAVED SUCCESSFULLY!');
+        }
+
+        function showSummary(data) {
             document.getElementById('sumName').innerText = `${data.firstName} ${data.lastName}`;
             document.getElementById('sumEmail').innerText = data.email;
             document.getElementById('sumPhone').innerText = data.phone;
             document.getElementById('sumMethod').innerText = data.paymentMethod;
             document.getElementById('sumChannel').innerText = data.promoChannel;
 
-            document.getElementById('infoFormCard').classList.add('hidden');
-            document.getElementById('profileSummaryCard').style.display = 'block';
+            document.getElementById('affiliateInfoForm').style.display = 'none';
+            document.getElementById('infoSummaryBox').style.display = 'flex';
+            document.getElementById('infoCheckMark').style.display = 'inline-flex';
         }
 
-        document.getElementById('editProfileBtn').addEventListener('click', () => {
-            document.getElementById('profileSummaryCard').style.display = 'none';
-            document.getElementById('infoFormCard').classList.remove('hidden');
-        });
+        function editAffiliateInfo() {
+            document.getElementById('affiliateInfoForm').style.display = 'block';
+            document.getElementById('infoSummaryBox').style.display = 'none';
+            document.getElementById('infoCheckMark').style.display = 'none';
+        }
 
-        async function saveAffiliateInfo(e) {
-            e.preventDefault();
-            const formData = {
-                first_name: document.getElementById('firstName').value.trim(),
-                last_name: document.getElementById('lastName').value.trim(),
-                email: document.getElementById('email').value.trim(),
-                phone: document.getElementById('phone').value.trim(),
-                promo_channel: document.getElementById('promoChannel').value.trim(),
-                payment_method: document.getElementById('paymentMethod').value
-            };
+        function showAlert(msg, isError = true) {
+            const box = document.getElementById('statusAlert');
+            box.style.display = 'block';
+            box.className = 'status-alert ' + (isError ? 'error' : 'success');
+            box.innerText = msg;
+        }
 
-            // Local storage backup
-            localStorage.setItem('rorraxy_affiliate_info', JSON.stringify({
-                firstName: formData.first_name,
-                lastName: formData.last_name,
-                email: formData.email,
-                phone: formData.phone,
-                promoChannel: formData.promo_channel,
-                paymentMethod: formData.payment_method
-            }));
-            localStorage.setItem('rorraxy_affiliate_info_completed', 'true');
-
-            // Cloudflare D1 Database Sync via worker.js (/api/save)
+        async function registerAffiliatePasskey() {
+            if (!window.PublicKeyCredential) {
+                showAlert("Passkey is not supported on this browser.");
+                return;
+            }
             try {
-                const response = await fetch(WORKER_SAVE_API, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        table: "affiliate_info",
-                        data: formData
-                    })
+                showAlert("Activating Device Biometrics...", false);
+                const challenge = new Uint8Array(32);
+                window.crypto.getRandomValues(challenge);
+                const userId = new Uint8Array(16);
+                window.crypto.getRandomValues(userId);
+
+                const credential = await navigator.credentials.create({
+                    publicKey: {
+                        challenge: challenge,
+                        rp: { name: "rorraxy Affiliate Portal", id: window.location.hostname },
+                        user: { id: userId, name: "affiliate_" + Date.now(), displayName: "Verified Affiliate" },
+                        pubKeyCredParams: [{ alg: -7, type: "public-key" }, { alg: -257, type: "public-key" }],
+                        timeout: 60000,
+                        authenticatorSelection: { authenticatorAttachment: "platform", userVerification: "required", residentKey: "required" }
+                    }
                 });
-                const result = await response.json();
-                if(!result.success) throw new Error(result.error);
-            } catch(err) {
-                console.warn("Cloudflare D1 sync warning, fallback active.");
+
+                if (credential) {
+                    localStorage.setItem('rorraxy_affiliate_passkey_enrolled', 'true');
+                    showAlert("Passkey Registered Successfully!", false);
+                }
+            } catch (error) {
+                showAlert("Registration failed: Biometric verification required.");
+            }
+        }
+
+        async function authenticateAffiliatePasskey() {
+            const isEnrolled = localStorage.getItem('rorraxy_affiliate_passkey_enrolled');
+            if (!isEnrolled) {
+                showAlert("Please click 'REGISTER PASSKEY' first.");
+                return;
             }
 
-            renderSummaryCard({
-                firstName: formData.first_name,
-                lastName: formData.last_name,
-                email: formData.email,
-                phone: formData.phone,
-                paymentMethod: formData.payment_method,
-                promoChannel: formData.promo_channel
-            });
+            try {
+                showAlert("Waiting for Biometric Signature...", false);
+                const challenge = new Uint8Array(32);
+                window.crypto.getRandomValues(challenge);
 
-            alert('AFFILIATE INFO SAVED & SYNCED TO CLOUDFLARE D1 SUCCESSFULLY!');
+                const assertion = await navigator.credentials.get({
+                    publicKey: { challenge: challenge, rpId: window.location.hostname, userVerification: "required" }
+                });
+
+                if (assertion) {
+                    localStorage.setItem('rorraxy_affiliate_auth_verified', 'true');
+                    showAlert("Verification Successful! Redirecting...", false);
+                    setTimeout(() => {
+                        window.location.replace('payout.html');
+                    }, 600);
+                }
+            } catch (error) {
+                showAlert("Verification failed or cancelled.");
+            }
+        }
+
+        function checkPayoutAccess(e) {
+            const isVerified = localStorage.getItem('rorraxy_affiliate_auth_verified');
+            if (isVerified !== 'true') {
+                e.preventDefault();
+                alert('MANDATORY: PLEASE COMPLETE THE 2-STEP BIOMETRIC VERIFICATION IN SETTINGS BEFORE ACCESSING PAYOUT!');
+                window.location.href = 'info.html';
+            }
         }
     </script>
 </body>
