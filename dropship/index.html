@@ -126,7 +126,7 @@
         .explore-subtxt { font-size: 0.60rem; font-weight: 400; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
         .btn-right-arrow { font-size: 0.75rem; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* Pinterest Style Grid Layout */
+        /* Grid Layout */
         .feed-container {
             padding: 8px 6px; display: grid; grid-template-columns: repeat(2, 1fr); 
             gap: 8px; width: 100%; max-width: 1400px; margin: 0 auto;
@@ -163,8 +163,6 @@
         .love-action { display: flex; align-items: center; gap: 4px; cursor: pointer; font-size: 0.70rem; font-weight: 500; color: var(--text-gray) !important; }
         .love-action i { color: var(--pink-love); }
         .love-action.gold-active { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 600; }
-        
-        .push-action-btn { background: none; border: none; font-size: 0.65rem; font-weight: 600; cursor: pointer; color: var(--gold-solid); text-transform: uppercase; display: flex; align-items: center; gap: 4px; }
 
         /* Bottom Navigation Bar */
         nav.bottom-nav {
@@ -378,13 +376,10 @@
                                 <span class="product-price-tag">Base: ${basePrice}</span>
                                 <span class="resell-tag">Resell: ${resellPrice}</span>
                             </div>
-                            <div class="card-sub-actions">
+                            <div class="card-sub-actions" style="justify-content: center;">
                                 <div class="love-action card-love-btn" onclick="toggleLove(event, this, '${productId}')">
                                     <i class="fa-solid fa-heart"></i> <span class="love-count">${item.like_count || 32}</span>
                                 </div>
-                                <button class="push-action-btn" onclick="triggerPushProduct(event, '${productId}')">
-                                    <i class="fa-solid fa-share-from-square"></i> Push
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -395,11 +390,6 @@
 
         function openProductDetails(productId) {
             window.location.href = `pd.html?id=${productId}`;
-        }
-
-        function triggerPushProduct(event, productId) {
-            event.stopPropagation();
-            window.location.href = `push.html?id=${productId}`;
         }
 
         function navigateTo(url) { window.location.href = url; }
