@@ -1,167 +1,662 @@
-export async function onRequest(context) {
-  const { request, env } = context;
-  
-  const corsHeaders = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "GET, POST, PUT, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
-  };
-
-  if (request.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
-  }
-
-  try {
-    const url = new URL(request.url);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <title>rorraxy - Multi-Mode E-Commerce Platform</title>
     
-    // ১. GET রিকোয়েস্ট: সমস্ত প্রোডাক্ট, মোড (retail/wholesale/dropshipping) অথবা নির্দিষ্ট কোড অনুযায়ী দেখার জন্য
-    if (request.method === "GET") {
-      const productCode = url.searchParams.get("code") || url.searchParams.get("id");
-      const sellerId = url.searchParams.get("seller_id");
-      const mode = url.searchParams.get("mode"); // retail, wholesale, dropshipping
+    <!-- Central Script Tag -->
+    <script src="/ecosystem-core.js"></script>
 
-      let query = "SELECT * FROM products";
-      let params = [];
-      let conditions = [];
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev">
 
-      if (productCode) {
-        conditions.push("(product_code = ? OR id = ?)");
-        params.push(productCode, productCode);
-      }
-      
-      if (sellerId) {
-        conditions.push("seller_id = ?");
-        params.push(sellerId);
-      }
+    <!-- Icons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png">
+    <link rel="apple-touch-icon" href="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png">
 
-      if (mode) {
-        conditions.push("upload_mode = ?");
-        params.push(mode);
-      }
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-      if (conditions.length > 0) {
-        query += " WHERE " + conditions.join(" AND ");
-      }
+    <style>
+        :root {
+            --bg-retail: #000000;
+            --card-retail: #0a0a0f;
+            --header-retail: rgba(0, 0, 0, 0.85);
+            --footer-retail: rgba(4, 4, 6, 0.95);
+            --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
+            --gold-solid: #d4af37;
+            --pink-love: #ff2a85;
+            --text-white: #ffffff;
+            --text-gray: #a0a0b5;
+            --font-main: 'Poppins', sans-serif;
+        }
 
-      query += " ORDER BY created_at DESC";
+        html, body { 
+            width: 100%; max-width: 100%; overflow-x: hidden; 
+            background: var(--bg-retail) !important; 
+            color: var(--text-white); font-family: var(--font-main); 
+            min-height: 100vh; font-size: 15px;
+            -webkit-font-smoothing: antialiased;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+        }
+        
+        body { padding-top: 38px; padding-bottom: 75px; text-transform: uppercase !important; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-      const stmt = env.retail.prepare(query).bind(...params);
-      const { results } = await stmt.all();
+        header.app-header {
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+            background: var(--header-retail); backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: flex; flex-direction: row; align-items: center; justify-content: space-between;
+            border: none !important; box-shadow: none !important;
+            transform: translateZ(0); padding-right: 8px;
+        }
 
-      return new Response(JSON.stringify({ success: true, data: results }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" }
-      });
-    }
+        .trending-marquee-bar {
+            overflow: hidden; white-space: nowrap; font-size: 0.70rem; font-weight: 500; text-transform: uppercase;
+            flex: 1; display: flex; align-items: center; height: 38px; position: relative; background: #040406;
+            border: none !important;
+            transform: translateZ(0);
+        }
+        
+        .marquee-container { 
+            display: flex; width: max-content; 
+            animation: smoothMarquee 35s linear infinite; 
+            will-change: transform; 
+            backface-visibility: hidden;
+        }
 
-    // ২. POST রিকোয়েস্ট: নতুন প্রোডাক্ট বা তথ্য ইনপুট দেওয়ার জন্য
-    if (request.method === "POST") {
-      const body = await request.json();
-      
-      const {
-        seller_id,
-        product_code,
-        title,
-        upload_mode,
-        category,
-        price,
-        market_price,
-        dropship_base_price,
-        dropship_resell_price,
-        price_sample,
-        price_min_whole,
-        price_bulk,
-        stock,
-        moq,
-        image_url,
-        images_json,
-        video_url,
-        youtube_video,
-        youtube_live,
-        facebook_live,
-        target_country,
-        discount_rate,
-        allow_custom_note,
-        chat_with_seller,
-        description
-      } = body;
+        .marquee-group { display: flex; align-items: center; gap: 35px; padding-right: 35px; flex-shrink: 0; }
+        .marquee-group span { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; color: var(--text-gray); }
+        .txt-gold { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-      const insertQuery = `
-        INSERT INTO products (
-          seller_id, product_code, title, upload_mode, category, price, market_price, 
-          dropship_base_price, dropship_resell_price, price_sample, price_min_whole, 
-          price_bulk, stock, moq, image_url, images_json, video_url, youtube_video, 
-          youtube_live, facebook_live, target_country, discount_rate, allow_custom_note, 
-          chat_with_seller, description, like_count, created_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, datetime('now'))
-      `;
+        @keyframes smoothMarquee {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-50%, 0, 0); }
+        }
 
-      await env.retail.prepare(insertQuery).bind(
-        seller_id || null,
-        product_code || null,
-        title || null,
-        upload_mode || "retail",
-        category || null,
-        price || 0,
-        market_price || 0,
-        dropship_base_price || 0,
-        dropship_resell_price || 0,
-        price_sample || 0,
-        price_min_whole || 0,
-        price_bulk || 0,
-        stock || 0,
-        moq || 1,
-        image_url || null,
-        images_json ? (typeof images_json === 'string' ? images_json : JSON.stringify(images_json)) : null,
-        video_url || null,
-        youtube_video || null,
-        youtube_live || null,
-        facebook_live || null,
-        target_country || "bd",
-        discount_rate || "0",
-        allow_custom_note ? 1 : 0,
-        chat_with_seller ? 1 : 0,
-        description || null
-      ).run();
+        /* Mode Selector Top Right Dropdown Box */
+        .mode-selector-corner {
+            background: #0d0d14;
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            color: #d4af37;
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 8px;
+            outline: none;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            height: 28px;
+            z-index: 1001;
+            box-shadow: 0 0 8px rgba(212, 175, 55, 0.2);
+        }
+        .mode-selector-corner option {
+            background: #0a0a0f;
+            color: #ffffff;
+            font-weight: 500;
+            padding: 6px;
+        }
 
-      return new Response(JSON.stringify({ success: true, message: "Product uploaded successfully!" }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" }
-      });
-    }
+        /* Luxury Modal Overlay */
+        .luxury-center-modal-overlay {
+            display: none; position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important;
+            background: rgba(0, 0, 0, 0.85) !important; z-index: 99999 !important; backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            align-items: center; justify-content: center; padding: 16px; box-sizing: border-box;
+        }
+        .luxury-center-modal-box {
+            background: #0d0d12; width: 100%; max-width: 450px; border-radius: 24px; 
+            padding: 28px 20px; display: flex; flex-direction: column; align-items: center; text-align: center; 
+            position: relative; border: 1px solid rgba(212,175,55,0.2); max-height: 90vh; overflow-y: auto;
+            scrollbar-width: thin; scrollbar-color: var(--gold-solid) transparent;
+            -webkit-overflow-scrolling: touch;
+        }
+        .luxury-modal-close-btn { 
+            position: absolute; top: 16px; right: 16px;
+            background: rgba(212,175,55,0.08); border: 1px solid rgba(212,175,55,0.2); color: var(--gold-solid); 
+            font-size: 1rem; width: 34px; height: 34px; border-radius: 50%; cursor: pointer; 
+            display: flex; align-items: center; justify-content: center; transition: 0.2s; z-index: 10;
+        }
+        .luxury-modal-close-btn:hover { background: rgba(212,175,55,0.2); }
 
-    // ৩. PUT রিকোয়েস্ট: হোমপেজে কেউ লাইক করলে like_count বাড়িয়ে নেওয়ার জন্য
-    if (request.method === "PUT") {
-      const body = await request.json();
-      const { product_code } = body;
+        .luxury-modal-logo-large { width: 75px; height: 75px; object-fit: contain; margin-bottom: 12px; cursor: pointer; }
+        
+        .modal-material-info-text {
+            font-size: 0.68rem; font-weight: 600; color: var(--text-gray) !important; text-align: center;
+            margin-bottom: 12px; line-height: 1.4; text-transform: uppercase; letter-spacing: 2px;
+            padding: 0 10px; display: block !important;
+        }
 
-      if (!product_code) {
-        return new Response(JSON.stringify({ success: false, error: "Product code is required" }), {
-          status: 400,
-          headers: { ...corsHeaders, "Content-Type": "application/json" }
+        .modal-marquee-wrapper {
+            width: 100%; overflow: hidden; white-space: nowrap; margin-bottom: 18px;
+            background: rgba(255, 255, 255, 0.03); padding: 8px 0; border-radius: 12px;
+            border: 1px solid rgba(212, 175, 55, 0.1); display: block !important;
+        }
+        .modal-marquee-container {
+            display: flex; width: max-content;
+            animation: smoothMarquee 30s linear infinite; 
+        }
+        .modal-marquee-group {
+            display: flex; align-items: center; gap: 20px; padding-right: 20px; font-size: 0.68rem; font-weight: 500; color: var(--text-gray);
+        }
+
+        .luxury-modal-title-top {
+            font-size: 1rem; font-weight: 600; background: var(--gold-gradient);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 2px;
+            margin-bottom: 16px; text-transform: uppercase; cursor: pointer;
+        }
+        .luxury-options-fullstack { display: flex; flex-direction: column; gap: 10px; width: 100%; align-items: center; }
+        .luxury-action-btn-item {
+            background: #121218; color: var(--text-white); padding: 14px 18px; border-radius: 14px; text-decoration: none; 
+            display: flex; align-items: center; justify-content: space-between;
+            border: 1px solid rgba(212,175,55,0.12); transition: background 0.2s; width: 100%; cursor: pointer;
+        }
+        .luxury-action-btn-item:hover {
+            border-color: rgba(212,175,55,0.4);
+            background: #181822;
+        }
+        .luxury-action-btn-item .btn-left-part { display: flex; align-items: center; gap: 12px; }
+        .luxury-action-btn-item i { font-size: 1.1rem; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; width: 22px; text-align: center; }
+        .btn-text-stack { display: flex; flex-direction: column; align-items: flex-start; text-align: left; }
+        .btn-main-title { font-size: 0.82rem; font-weight: 500; color: var(--text-white); text-transform: uppercase; line-height: 1.2; }
+        .explore-subtxt { font-size: 0.60rem; font-weight: 400; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
+        .btn-right-arrow { font-size: 0.75rem; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* Feed Container Layout Optimizations */
+        .feed-container {
+            padding: 8px 6px; 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 8px; 
+            width: 100%; 
+            max-width: 1400px; 
+            margin: 0 auto;
+            contain: layout style paint;
+        }
+        @media (min-width: 768px) { 
+            .feed-container { 
+                grid-template-columns: repeat(4, 1fr); 
+                gap: 12px; 
+                padding: 12px; 
+            } 
+        }
+
+        .product-card {
+            background: var(--card-retail); 
+            border-radius: 14px; overflow: hidden; 
+            display: flex; flex-direction: column; width: 100%; 
+            border: 1px solid rgba(212,175,55,0.12); position: relative;
+            transform: translateZ(0); cursor: pointer;
+            contain: content;
+        }
+        .product-card:hover { border-color: rgba(212,175,55,0.35); }
+
+        .product-media-box { position: relative; width: 100%; background: #050508; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .product-media-box img { width: 100%; height: auto; display: block; object-fit: contain; background: #050508; }
+        
+        .product-country-discount-badge {
+            position: absolute; top: 8px; left: 8px; z-index: 10;
+            background: rgba(255, 42, 133, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 3px 8px; border-radius: 8px; display: flex; align-items: center; gap: 5px;
+            font-size: 0.58rem; font-weight: 700; color: #ffffff !important;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .product-country-discount-badge img.flag-icon {
+            width: 13px; height: 9px; object-fit: cover; border-radius: 2px; display: inline-block;
+        }
+
+        .card-footer-actions { 
+            display: flex; justify-content: space-between; align-items: center; padding: 10px; 
+            background: #06060a !important; border-top: 1px solid rgba(255,255,255,0.05); gap: 4px; 
+            margin-top: auto;
+        }
+        .product-price-tag { font-size: 0.85rem; font-weight: 600; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .card-sub-actions { display: flex; align-items: center; gap: 12px; justify-content: center; }
+        
+        .love-action { display: flex; align-items: center; gap: 4px; cursor: pointer; font-size: 0.70rem; font-weight: 500; color: var(--text-gray) !important; transition: 0.15s; }
+        .love-action:hover { color: var(--text-white) !important; }
+        .love-action i { color: var(--pink-love); }
+        .love-action.gold-active { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 600; }
+        .love-action.gold-active i { background: var(--gold-gradient) !important; -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; }
+        
+        .share-action-btn { background: none; border: none; font-size: 0.70rem; font-weight: 500; cursor: pointer; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; display: flex; align-items: center; gap: 4px; }
+
+        /* Clean Fixed Bottom Navigation Bar */
+        nav.bottom-nav {
+            position: fixed; bottom: 0; left: 0; width: 100%; background: var(--footer-retail);
+            display: flex; justify-content: space-around; align-items: center; padding: 8px 4px 10px 4px;
+            z-index: 1000; backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: none !important; border-top: none !important; box-shadow: none !important;
+            transform: translateZ(0);
+        }
+        .nav-item {
+            display: flex; flex-direction: column; align-items: center; text-decoration: none;
+            font-size: 0.50rem; font-weight: 600; cursor: pointer; text-align: center; gap: 3px; flex: 1; position: relative;
+            text-transform: uppercase; background: none; border: none;
+        }
+        
+        .nav-item i { 
+            font-size: 1.25rem; 
+            background: var(--gold-gradient);
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            line-height: 1;
+        }
+        
+        .nav-item span {
+            color: #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
+            font-size: 0.50rem;
+            letter-spacing: 0.5px;
+            line-height: 1;
+            font-weight: 600;
+        }
+
+        .cart-icon-box { position: relative; display: inline-flex; align-items: center; justify-content: center; }
+        
+        .cart-badge-circle {
+            position: absolute; top: -5px; right: -8px; 
+            background: var(--pink-love); color: #ffffff !important;
+            font-size: 0.50rem; font-weight: 700; width: 15px; height: 15px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; 
+            z-index: 5;
+        }
+        .cart-badge-circle.empty-badge { display: none !important; }
+        .cart-custom-svg { width: 22px; height: 22px; fill: url(#goldGradientSvg); }
+    </style>
+</head>
+<body id="mainBody">
+
+    <!-- Global SVG Gradient Definition -->
+    <svg style="width:0;height:0;position:absolute;" aria-hidden="true" focusable="false">
+      <linearGradient id="goldGradientSvg" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#bf953f" />
+        <stop offset="25%" stop-color="#fcf6ba" />
+        <stop offset="50%" stop-color="#b38728" />
+        <stop offset="75%" stop-color="#fbf5b7" />
+        <stop offset="100%" stop-color="#aa771c" />
+      </linearGradient>
+    </svg>
+
+    <!-- Header Section -->
+    <header class="app-header" id="mainHeader">
+        <div class="trending-marquee-bar">
+            <div class="marquee-container" id="marqueeContainer1">
+                <div class="marquee-group">
+                    <span class="txt-gold"><i class="fa-solid fa-crown"></i> Women Fashion</span>
+                    <span class="txt-gold"><i class="fa-solid fa-gem"></i> Baby Fashion</span>
+                    <span class="txt-gold"><i class="fa-solid fa-star"></i> Girls Fashion</span>
+                    <span class="txt-gold"><i class="fa-solid fa-fire"></i> Boy Fashion</span>
+                    <span class="txt-gold"><i class="fa-solid fa-bolt"></i> Men Fashion</span>
+                    <span class="txt-gold"><i class="fa-solid fa-gift"></i> Luxury Gift</span>
+                    <span class="txt-gold"><i class="fa-solid fa-shirt"></i> Matching Set</span>
+                    <span class="txt-gold"><i class="fa-solid fa-plane"></i> New Products</span>
+                    <span class="txt-gold"><i class="fa-solid fa-chart-line"></i> Trending Collections</span>
+                </div>
+                <div class="marquee-group" aria-hidden="true">
+                    <span class="txt-gold"><i class="fa-solid fa-crown"></i> Women Fashion</span>
+                    <span class="txt-gold"><i class="fa-solid fa-gem"></i> Baby Fashion</span>
+                    <span class="txt-gold"><i class="fa-solid fa-star"></i> Girls Fashion</span>
+                    <span class="txt-gold"><i class="fa-solid fa-fire"></i> Boy Fashion</span>
+                    <span class="txt-gold"><i class="fa-solid fa-bolt"></i> Men Fashion</span>
+                    <span class="txt-gold"><i class="fa-solid fa-gift"></i> Luxury Gift</span>
+                    <span class="txt-gold"><i class="fa-solid fa-shirt"></i> Matching Set</span>
+                    <span class="txt-gold"><i class="fa-solid fa-plane"></i> New Products</span>
+                    <span class="txt-gold"><i class="fa-solid fa-chart-line"></i> Trending Collections</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mode Selector Switcher at Top Right Corner -->
+        <select class="mode-selector-corner" id="userModeSelector" onchange="switchEcosystemMode(this.value)">
+            <option value="retail">RETAIL (B2C)</option>
+            <option value="wholesale">WHOLESALE (B2B)</option>
+            <option value="dropshipping">DROPSHIPPING</option>
+        </select>
+    </header>
+
+    <!-- You Portal Navigation Modal -->
+    <div id="youMenuModalOverlay" class="luxury-center-modal-overlay">
+        <div class="luxury-center-modal-box" onclick="event.stopPropagation()">
+            <button class="luxury-modal-close-btn" onclick="closeYouMenuModal()"><i class="fa-solid fa-xmark"></i></button>
+            <img src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png" alt="Logo" class="luxury-modal-logo-large" onclick="navigateTo('https://rorraxy.com/')">
+            
+            <div class="modal-material-info-text">AUTHENTIC MATERIALS</div>
+
+            <div class="modal-marquee-wrapper">
+                <div class="modal-marquee-container">
+                    <div class="modal-marquee-group">
+                        <span class="txt-gold"><i class="fa-solid fa-feather"></i> Textiles & Handloom</span>
+                        <span class="txt-gold"><i class="fa-solid fa-shield"></i> Leather</span>
+                        <span class="txt-gold"><i class="fa-solid fa-seedling"></i> Jute</span>
+                        <span class="txt-gold"><i class="fa-solid fa-tree"></i> Wood</span>
+                        <span class="txt-gold"><i class="fa-solid fa-water"></i> Resin</span>
+                        <span class="txt-gold"><i class="fa-solid fa-mountain"></i> Bamboo</span>
+                        <span class="txt-gold"><i class="fa-solid fa-ring"></i> Brass</span>
+                        <span class="txt-gold"><i class="fa-solid fa-coins"></i> Silver</span>
+                        <span class="txt-gold"><i class="fa-solid fa-crown"></i> Gold Plating</span>
+                    </div>
+                    <div class="modal-marquee-group" aria-hidden="true">
+                        <span class="txt-gold"><i class="fa-solid fa-feather"></i> Textiles & Handloom</span>
+                        <span class="txt-gold"><i class="fa-solid fa-shield"></i> Leather</span>
+                        <span class="txt-gold"><i class="fa-solid fa-seedling"></i> Jute</span>
+                        <span class="txt-gold"><i class="fa-solid fa-tree"></i> Wood</span>
+                        <span class="txt-gold"><i class="fa-solid fa-water"></i> Resin</span>
+                        <span class="txt-gold"><i class="fa-solid fa-mountain"></i> Bamboo</span>
+                        <span class="txt-gold"><i class="fa-solid fa-ring"></i> Brass</span>
+                        <span class="txt-gold"><i class="fa-solid fa-coins"></i> Silver</span>
+                        <span class="txt-gold"><i class="fa-solid fa-crown"></i> Gold Plating</span>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="luxury-modal-title-top" onclick="navigateTo('/account.html')">USER PORTAL</h2>
+            <div class="luxury-options-fullstack">
+                <div class="luxury-action-btn-item" onclick="navigateTo('/account.html')">
+                    <div class="btn-left-part">
+                        <i class="fa-solid fa-user"></i>
+                        <div class="btn-text-stack">
+                            <span class="btn-main-title">My Account</span>
+                            <span class="explore-subtxt">Dashboard</span>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-arrow-right btn-right-arrow"></i>
+                </div>
+                <div class="luxury-action-btn-item" onclick="navigateTo('/seller/index.html')">
+                    <div class="btn-left-part">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <div class="btn-text-stack">
+                            <span class="btn-main-title">Seller Portal</span>
+                            <span class="explore-subtxt">Management</span>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-arrow-right btn-right-arrow"></i>
+                </div>
+                <div class="luxury-action-btn-item" onclick="navigateTo('/affiliate/index.html')">
+                    <div class="btn-left-part">
+                        <i class="fa-solid fa-handshake"></i>
+                        <div class="btn-text-stack">
+                            <span class="btn-main-title">Affiliate Program</span>
+                            <span class="explore-subtxt">Earn Rewards</span>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-arrow-right btn-right-arrow"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Feed Container loaded dynamically from Cloudflare D1 database -->
+    <main class="feed-container" id="productFeed">
+        <!-- Loading Spinner Placeholder -->
+        <div style="grid-column: 1 / -1; text-align: center; padding: 50px 0; color: var(--gold-solid);" id="loadingPlaceholder">
+            <i class="fa-solid fa-circle-notch fa-spin fa-2x"></i>
+            <p style="margin-top: 10px; font-size: 0.75rem; letter-spacing: 1px;">LOADING rorraxy PRODUCTS...</p>
+        </div>
+    </main>
+
+    <!-- Optimized Bottom Navigation Bar -->
+    <nav class="bottom-nav" id="bottomNav">
+        <a href="/world.html" class="nav-item">
+            <i class="fa-solid fa-earth-americas"></i>
+            <span>World</span>
+        </a>
+        <div class="nav-item" id="youNavBtn" onclick="openYouMenuModal(event)">
+            <i class="fa-solid fa-user"></i>
+            <span>You</span>
+        </div>
+        <a href="/video.html" class="nav-item">
+            <i class="fa-brands fa-youtube"></i>
+            <span>Video</span>
+        </a>
+        <a href="/category.html" class="nav-item">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <span>Category</span>
+        </a>
+        <a href="/cart.html" class="nav-item">
+            <div class="cart-icon-box">
+                <svg class="cart-custom-svg" viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                <span class="cart-badge-circle empty-badge" id="floatingCartItemCountBadge">0</span>
+            </div>
+            <span>Cart</span>
+        </a>
+    </nav>
+
+    <script>
+        const API_BASE_URL = 'https://rorraxy.com';
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initSelectedMode();
+            updateCartBadgeCount();
+            loadLiveProducts();
+
+            const modals = document.querySelectorAll('.luxury-center-modal-overlay');
+            modals.forEach(modal => {
+                modal.onclick = function(event) {
+                    if (event.target === modal) {
+                        closeAllModals();
+                    }
+                };
+            });
+
+            setInterval(() => {
+                updateCartBadgeCount();
+            }, 1000);
         });
-      }
 
-      const updateQuery = `
-        UPDATE products 
-        SET like_count = COALESCE(like_count, 0) + 1 
-        WHERE product_code = ? OR id = ?
-      `;
+        function initSelectedMode() {
+            const currentMode = localStorage.getItem('rorraxy_mode') || 'retail';
+            const selector = document.getElementById('userModeSelector');
+            if (selector) {
+                selector.value = currentMode;
+            }
+        }
 
-      await env.retail.prepare(updateQuery).bind(product_code, product_code).run();
+        function switchEcosystemMode(selectedMode) {
+            localStorage.setItem('rorraxy_mode', selectedMode);
+            loadLiveProducts();
+        }
 
-      return new Response(JSON.stringify({ success: true, message: "Like count updated successfully!" }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" }
-      });
-    }
+        async function loadLiveProducts() {
+            const currentMode = localStorage.getItem('rorraxy_mode') || 'retail';
+            const feedContainer = document.getElementById('productFeed');
+            
+            // Show loading state
+            feedContainer.innerHTML = `
+                <div style="grid-column: 1 / -1; text-align: center; padding: 50px 0; color: var(--gold-solid);">
+                    <i class="fa-solid fa-circle-notch fa-spin fa-2x"></i>
+                    <p style="margin-top: 10px; font-size: 0.75rem; letter-spacing: 1px;">LOADING rorraxy PRODUCTS...</p>
+                </div>
+            `;
 
-    return new Response(JSON.stringify({ success: false, error: "Method not allowed" }), {
-      status: 405,
-      headers: { ...corsHeaders, "Content-Type": "application/json" }
-    });
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/products?mode=${currentMode}`);
+                const result = await response.json();
+                if (result.success && Array.isArray(result.data) && result.data.length > 0) {
+                    renderProductCards(result.data);
+                } else {
+                    feedContainer.innerHTML = `
+                        <div style="grid-column: 1 / -1; text-align: center; padding: 50px 0; color: var(--text-gray);">
+                            <i class="fa-solid fa-box-open fa-2x" style="margin-bottom: 10px;"></i>
+                            <p style="font-size: 0.75rem; letter-spacing: 1px;">NO PRODUCTS FOUND IN THIS MODE.</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Failed to load products from Cloudflare backend:', error);
+                feedContainer.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 50px 0; color: var(--pink-love);">
+                        <i class="fa-solid fa-triangle-exclamation fa-2x" style="margin-bottom: 10px;"></i>
+                        <p style="font-size: 0.75rem; letter-spacing: 1px;">FAILED TO LOAD LIVE PRODUCTS.</p>
+                    </div>
+                `;
+            }
+        }
 
-  } catch (err) {
-    return new Response(JSON.stringify({ success: false, error: err.message }), {
-      status: 500,
-      headers: { ...corsHeaders, "Content-Type": "application/json" }
-    });
-  }
-}
+        function renderProductCards(products) {
+            const feedContainer = document.getElementById('productFeed');
+            feedContainer.innerHTML = '';
+
+            products.forEach(item => {
+                const productId = item.id || item.product_id || item.product_code || '101';
+                const title = item.title || 'rorraxy Luxury Item';
+                const price = item.price ? `$${parseFloat(item.price).toFixed(2)}` : '$0.00';
+                const discount = item.discount_rate || item.discountRate || '0';
+                const countryCode = (item.target_country || item.targetCountry || 'bd').toLowerCase();
+                const flagUrl = `https://flagcdn.com/w20/${countryCode}.png`;
+                
+                // সঠিক ইমেজ ইউআরএল বা পাথ হ্যান্ডেল করার লজিক
+                let resolvedImageUrl = 'https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png';
+                if (item.image_url) {
+                    resolvedImageUrl = item.image_url;
+                } else if (item.imageUrl) {
+                    resolvedImageUrl = item.imageUrl;
+                } else if (item.images_json) {
+                    try {
+                        const parsedImages = JSON.parse(item.images_json);
+                        if (Array.isArray(parsedImages) && parsedImages.length > 0) {
+                            resolvedImageUrl = parsedImages[0];
+                        }
+                    } catch (e) {
+                        if (typeof item.images_json === 'string' && item.images_json.trim() !== '') {
+                            resolvedImageUrl = item.images_json.split(',')[0].trim();
+                        }
+                    }
+                }
+
+                const discountBadgeHtml = parseInt(discount) > 0 ? `
+                    <div class="product-country-discount-badge">
+                        <img src="${flagUrl}" alt="${countryCode}" class="flag-icon" onerror="this.style.display='none'"> ${discount}% OFF
+                    </div>
+                ` : `
+                    <div class="product-country-discount-badge">
+                        <img src="${flagUrl}" alt="${countryCode}" class="flag-icon" onerror="this.style.display='none'"> ${countryCode.toUpperCase()}
+                    </div>
+                `;
+
+                const cardHtml = `
+                    <div class="product-card" data-product-id="${productId}" onclick="openProductDetails('${productId}')">
+                        <div class="product-media-box">
+                            ${discountBadgeHtml}
+                            <img src="${resolvedImageUrl}" alt="${title}" loading="lazy" onerror="this.src='https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png'">
+                        </div>
+                        <div class="card-footer-actions" onclick="event.stopPropagation()">
+                            <span class="product-price-tag">${price}</span>
+                            <div class="card-sub-actions">
+                                <div class="love-action card-love-btn" onclick="toggleLove(event, this)">
+                                    <i class="fa-solid fa-heart"></i> <span class="love-count">${item.like_count || 0}</span>
+                                </div>
+                                <button class="share-action-btn" onclick="triggerAutoShare(event, '${productId}', '${title.replace(/'/g, "\\'")}')">
+                                    <i class="fa-solid fa-share-nodes"></i> Share
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                feedContainer.insertAdjacentHTML('beforeend', cardHtml);
+            });
+        }
+
+        function openProductDetails(productId) {
+            window.location.href = `pd.html?id=${productId}`;
+        }
+
+        function navigateTo(url) {
+            window.location.href = url;
+        }
+
+        function openYouMenuModal(event) {
+            if(event) event.stopPropagation();
+            closeAllModals();
+            const modal = document.getElementById('youMenuModalOverlay');
+            if(modal) modal.style.display = 'flex';
+        }
+
+        function closeYouMenuModal() {
+            const modal = document.getElementById('youMenuModalOverlay');
+            if(modal) modal.style.display = 'none';
+        }
+
+        function closeAllModals() {
+            document.querySelectorAll('.luxury-center-modal-overlay').forEach(m => m.style.display = 'none');
+        }
+
+        async function toggleLove(event, btn) {
+            event.stopPropagation();
+            let card = btn.closest('.product-card');
+            let productId = card.getAttribute('data-product-id');
+            let countSpan = btn.querySelector('.love-count');
+            let currentLikes = parseInt(countSpan.innerText) || 0;
+
+            if(btn.classList.contains('gold-active')) {
+                btn.classList.remove('gold-active');
+                countSpan.innerText = Math.max(0, currentLikes - 1);
+            } else {
+                btn.classList.add('gold-active');
+                countSpan.innerText = currentLikes + 1;
+                
+                try {
+                    await fetch(`${API_BASE_URL}/api/products`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ product_code: productId })
+                    });
+                } catch (err) {
+                    console.error('Failed to update like count:', err);
+                }
+            }
+        }
+
+        async function triggerAutoShare(event, productId, productTitle) {
+            event.stopPropagation();
+            const shareUrl = `${window.location.origin}/pd.html?id=${productId}`;
+            const shareData = {
+                title: `${productTitle} - rorraxy`,
+                text: `Check out this product on rorraxy: ${productTitle}`,
+                url: shareUrl
+            };
+
+            if (navigator.share) {
+                try {
+                    await navigator.share(shareData);
+                } catch (err) {
+                    console.log('Share canceled or failed silently:', err);
+                }
+            } else if (navigator.clipboard) {
+                try {
+                    await navigator.clipboard.writeText(shareUrl);
+                    const shareBtn = event.currentTarget;
+                    const origText = shareBtn.innerHTML;
+                    shareBtn.innerHTML = `<i class="fa-solid fa-check"></i> COPIED!`;
+                    setTimeout(() => { shareBtn.innerHTML = origText; }, 1500);
+                } catch (err) {
+                    console.error('Clipboard copy failed:', err);
+                }
+            }
+        }
+
+        function updateCartBadgeCount() {
+            let cart = JSON.parse(localStorage.getItem('rorraxy_cart')) || [];
+            let totalQty = cart.reduce((sum, item) => sum + (parseInt(item.qty) || 0), 0);
+            
+            let badge = document.getElementById('floatingCartItemCountBadge');
+            if(badge) {
+                badge.innerText = totalQty;
+                if(totalQty > 0) {
+                    badge.classList.remove('empty-badge');
+                } else {
+                    badge.classList.add('empty-badge');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
