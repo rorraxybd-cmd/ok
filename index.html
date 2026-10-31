@@ -464,11 +464,11 @@
             loadLiveProducts();
         }
 
-        // Fetch products dynamically using Cloudflare Worker API & D1 Database (Pure Cloud Real-time)
+        // Cloudflare Worker API & D1 Database থেকে ডাইরেক্ট রিয়েল-টাইম প্রোডাক্ট লোড
         async function loadLiveProducts() {
             const currentMode = localStorage.getItem('rorraxy_mode') || 'retail';
             try {
-                const response = await fetch(`${API_BASE_URL}/api/get?table=products&mode=${currentMode}`);
+                const response = await fetch(`${API_BASE_URL}/api/get?table=products`);
                 const result = await response.json();
                 
                 let productsList = [];
@@ -499,38 +499,47 @@
             }
         }
 
-        // Render Dynamic Products with Universal Media Handler & Super Fast Lazy Loading (No Demos)
+        // ক্লাউডফ্লেয়ার ডাটাবেজ থেকে আসল ইমেজ ও ভিডিও ইউআরএল পার্স এবং সুপার-ফাস্ট রেন্ডারিং
         function renderProductCards(products) {
             const feedContainer = document.getElementById('productFeed');
             feedContainer.innerHTML = '';
 
             products.forEach(item => {
                 const productId = item.id || item.product_id || item.product_code || '101';
-                const title = item.title || 'rorraxy Luxury Item';
+                const title = item.title || item.name || 'rorraxy Luxury Item';
                 const price = item.price ? `$${parseFloat(item.price).toFixed(2)}` : '$0.00';
-                const discount = item.discount_rate || item.discountRate || '50';
+                const discount = item.discount_rate || item.discountRate || '5';
                 const countryCode = (item.target_country || item.targetCountry || 'bd').toLowerCase();
                 const flagUrl = `https://flagcdn.com/w20/${countryCode}.png`;
                 
-                // Universal Image URL / Array Resolver
-                let resolvedImageUrl = 'https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png';
-                if (item.image_url) {
-                    resolvedImageUrl = item.image_url;
-                } else if (item.imageUrl) {
-                    resolvedImageUrl = item.imageUrl;
-                } else if (item.img) {
-                    resolvedImageUrl = item.img;
-                } else if (item.images_json) {
-                    try {
-                        const parsedImages = JSON.parse(item.images_json);
-                        if (Array.isArray(parsedImages) && parsedImages.length > 0) {
-                            resolvedImageUrl = parsedImages[0];
+                // ১. ডাইনামিক ইমেজ ইউআরএল পার্সার (Cloudflare R2 / Cloudinary / D1 Any URL Column)
+                let rawImg = item.image_url || item.imageUrl || item.img || item.image || item.images_json || item.images;
+                let resolvedImageUrl = '';
+
+                if (rawImg) {
+                    if (typeof rawImg === 'string') {
+                        if (rawImg.startsWith('[') || rawImg.startsWith('{')) {
+                            try {
+                                let parsed = JSON.parse(rawImg);
+                                if (Array.isArray(parsed) && parsed.length > 0) {
+                                    resolvedImageUrl = parsed[0];
+                                } else if (typeof parsed === 'object') {
+                                    resolvedImageUrl = parsed.url || parsed.src || '';
+                                }
+                            } catch (e) {
+                                resolvedImageUrl = rawImg.split(',')[0].replace(/[\[\]'"]/g, '').trim();
+                            }
+                        } else {
+                            resolvedImageUrl = rawImg.split(',')[0].trim();
                         }
-                    } catch (e) {
-                        if (typeof item.images_json === 'string' && item.images_json.trim() !== '') {
-                            resolvedImageUrl = item.images_json.split(',')[0].trim();
-                        }
+                    } else if (Array.isArray(rawImg) && rawImg.length > 0) {
+                        resolvedImageUrl = rawImg[0];
                     }
+                }
+
+                // যদি কোনো ইমেজ ক্লাউডে না পাওয়া যায়
+                if (!resolvedImageUrl || resolvedImageUrl.length < 5) {
+                    resolvedImageUrl = 'https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png';
                 }
 
                 const cardHtml = `
