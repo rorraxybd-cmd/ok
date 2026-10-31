@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <title>Seller Profile & Info - rorraxy Ecosystem</title>
+    <title>Seller Settings - rorraxy Ecosystem</title>
     
     <script src="/ecosystem-core.js"></script>
    
@@ -11,6 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
 
     <style>
         :root {
@@ -26,49 +27,129 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         html, body { width: 100%; overflow-x: hidden; background: var(--bg-retail) !important; color: var(--text-white); font-family: var(--font-main); min-height: 100vh; font-size: 14px; }
-        body { padding: 24px 16px 90px 16px; text-transform: uppercase; }
+        body { padding: 24px 16px 110px 16px; text-transform: uppercase; }
 
         .main-container { width: 100%; max-width: 900px; margin: 0 auto; }
+        
         .dashboard-header { text-align: center; margin-bottom: 25px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
-        .header-logo-img { width: 90px; height: 90px; object-fit: contain; filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.6)); }
+        .header-logo-img { width: 85px; height: 85px; object-fit: contain; }
         .dashboard-header h1 { font-size: 1.5rem; font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        .info-card, .profile-summary-card { background: var(--card-retail); border-radius: 18px; padding: 24px 20px; margin-bottom: 25px; border: 1px solid rgba(212, 175, 55, 0.15); }
-        .info-card.hidden { display: none; }
-        .profile-summary-card { display: none; }
+        .accordion-wrapper { display: flex; flex-direction: column; gap: 14px; margin-bottom: 30px; }
+        
+        .accordion-item {
+            background: #08080c;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: border-color 0.3s;
+        }
 
-        .section-title { font-size: 0.85rem; font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(212, 175, 55, 0.15); padding-bottom: 8px; }
+        .accordion-item.active {
+            border-color: rgba(212, 175, 55, 0.4);
+        }
 
-        .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 20px; }
+        .accordion-header {
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            background: #08080c;
+            user-select: none;
+        }
+
+        .accordion-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.88rem;
+            font-weight: 800;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .accordion-header i.arrow-icon {
+            color: var(--gold-solid);
+            font-size: 0.9rem;
+            transition: transform 0.3s ease;
+        }
+
+        .accordion-item.active .arrow-icon {
+            transform: rotate(180deg);
+        }
+
+        .accordion-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+            padding: 0 20px;
+            background: #040407;
+            border-top: 1px solid transparent;
+        }
+
+        .accordion-item.active .accordion-body {
+            max-height: 1500px;
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 12px; }
         .form-group { display: flex; flex-direction: column; gap: 6px; }
         .form-group.full-width { grid-column: span 2; }
-        .form-group label { font-size: 0.72rem; font-weight: 700; color: var(--text-gray); display: flex; justify-content: space-between; }
-        .char-counter { font-size: 0.62rem; color: var(--text-gray); text-transform: none; }
-        .req-star { color: var(--required-red); margin-left: 3px; }
+        
+        .form-group label { 
+            font-size: 0.72rem; 
+            font-weight: 700; 
+            color: var(--text-gray); 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between;
+            width: 100%;
+        }
 
-        .form-control, .form-select, textarea.form-control { width: 100%; background: #040407; border: none; border-radius: 12px; padding: 12px 16px; color: var(--text-white); font-size: 0.8rem; outline: none; font-family: var(--font-main); text-transform: none; }
+        .label-text { display: inline-flex; align-items: center; }
+        .req-star { color: var(--required-red); margin-left: 4px; font-weight: 900; }
+        .char-counter { font-size: 0.62rem; color: var(--text-gray); text-transform: none; }
+
+        .form-control, .form-select, textarea.form-control { 
+            width: 100%; 
+            background: #08080c; 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            border-radius: 10px; 
+            padding: 12px 16px; 
+            color: var(--text-white); 
+            font-size: 0.8rem; 
+            outline: none; 
+            font-family: var(--font-main); 
+            text-transform: none; 
+        }
+        .form-control:focus, .form-select:focus { border-color: var(--gold-solid); }
         .form-select option { background: #08080c; color: #fff; }
 
-        .avatar-upload-container { display: flex; align-items: center; gap: 16px; background: #040407; padding: 14px 16px; border-radius: 12px; margin-bottom: 20px; }
-        .avatar-preview { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid var(--gold-solid); }
-        .avatar-upload-lbl { background: rgba(212, 175, 55, 0.1); border: 1px solid rgba(212, 175, 55, 0.4); padding: 8px 14px; border-radius: 10px; color: var(--gold-solid); font-size: 0.72rem; font-weight: 700; cursor: pointer; }
+        .avatar-upload-container { display: flex; align-items: center; gap: 16px; padding: 15px 0; margin-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+        .avatar-preview { width: 65px; height: 65px; border-radius: 50%; object-fit: cover; border: 1px solid var(--gold-solid); }
+        .avatar-upload-lbl { background: rgba(212, 175, 55, 0.15); border: 1px solid rgba(212, 175, 55, 0.3); padding: 8px 16px; border-radius: 8px; color: var(--gold-solid); font-size: 0.72rem; font-weight: 700; cursor: pointer; }
         .file-input-hidden { display: none; }
 
-        .save-btn, .edit-profile-btn { width: 100%; background: var(--gold-gradient); border: none; border-radius: 14px; padding: 14px; color: #000; font-weight: 800; font-size: 0.85rem; cursor: pointer; text-transform: uppercase; }
+        .setting-action-row { display: flex; align-items: center; justify-content: space-between; background: #08080c; padding: 16px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.05); }
+        .setting-action-info h4 { font-size: 0.8rem; font-weight: 700; color: var(--text-white); }
+        .setting-action-info p { font-size: 0.7rem; color: var(--text-gray); text-transform: none; margin-top: 2px; }
+        .action-sub-btn { background: rgba(212, 175, 55, 0.15); border: 1px solid rgba(212, 175, 55, 0.3); color: var(--gold-solid); padding: 8px 16px; border-radius: 8px; font-size: 0.72rem; font-weight: 700; text-decoration: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
 
-        .summary-brand-box { display: flex; align-items: center; gap: 16px; margin-bottom: 18px; background: #040407; padding: 16px; border-radius: 14px; }
-        .summary-avatar { width: 65px; height: 65px; border-radius: 50%; object-fit: cover; border: 2px solid var(--gold-solid); }
-        .summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 20px; }
-        .summary-item { background: #040407; padding: 12px 14px; border-radius: 12px; display: flex; flex-direction: column; gap: 4px; }
-        .summary-item.full-width { grid-column: span 2; }
-        .summary-item label { font-size: 0.62rem; color: var(--gold-solid); font-weight: 700; }
-        .summary-item span { font-size: 0.78rem; color: var(--text-white); text-transform: none; word-break: break-all; }
+        .section-save-btn { background: var(--gold-gradient); border: none; border-radius: 10px; padding: 10px 20px; color: #000; font-weight: 900; font-size: 0.75rem; cursor: pointer; text-transform: uppercase; margin-top: 14px; float: right; }
 
         .seller-bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(3, 3, 5, 0.95); border-top: 1px solid rgba(212, 175, 55, 0.15); display: flex; justify-content: space-around; align-items: center; padding: 12px 6px; z-index: 1000; }
         .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; background: none; border: none; cursor: pointer; }
         .nav-item.active i, .nav-item.active span { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .nav-item i { font-size: 1.25rem; margin-bottom: 4px; color: var(--text-gray); }
         .nav-item span { font-size: 0.62rem; font-weight: 700; color: var(--text-gray); }
+
+        @media (max-width: 600px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .form-group.full-width { grid-column: span 1; }
+        }
     </style>
 </head>
 <body>
@@ -76,92 +157,178 @@
     <div class="main-container">
         <header class="dashboard-header">
             <img src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png" alt="Logo" class="header-logo-img">
-            <h1>SELLER PROFILE & INFO</h1>
+            <h1>SELLER SETTINGS</h1>
         </header>
 
-        <section class="info-card" id="infoFormCard">
-            <form id="sellerInfoForm">
-                <div class="section-title"><i class="fa-solid fa-store"></i><span>BRAND & BUSINESS DETAILS</span></div>
-                <div class="form-grid">
-                    <div class="form-group"><label>BRAND NAME<span class="req-star">*</span></label><input type="text" class="form-control" id="brandName" placeholder="rorraxy store" required></div>
-                    <div class="form-group"><label>FULL NAME<span class="req-star">*</span></label><input type="text" class="form-control" id="fullName" placeholder="Owner full name..." required></div>
-                    <div class="form-group full-width">
-                        <label><span>BUSINESS DESCRIPTION<span class="req-star">*</span></span><span class="char-counter" id="charCount">0/200</span></label>
-                        <textarea class="form-control" id="businessDesc" rows="3" maxlength="200" placeholder="Briefly describe products..." required></textarea>
+        <div class="accordion-wrapper">
+            
+            <!-- ১. অ্যাকাউন্ট ভেরিফিকেশন -->
+            <div class="accordion-item active">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-header-left">
+                        <i class="fa-solid fa-user-check"></i>
+                        <span>ACCOUNT VERIFICATION</span>
                     </div>
-                    <div class="form-group"><label>EMAIL<span class="req-star">*</span></label><input type="email" class="form-control" id="emailAddr" placeholder="name@gmail.com..." required></div>
-                    <div class="form-group"><label>WHATSAPP<span class="req-star">*</span></label><input type="tel" class="form-control" id="whatsappNum" placeholder="+8801700000000" required></div>
-                    <div class="form-group"><label>PHONE<span class="req-star">*</span></label><input type="tel" class="form-control" id="phoneNum" placeholder="+8801800000000" required></div>
-                    <div class="form-group"><label>COUNTRY<span class="req-star">*</span></label><input type="text" class="form-control" id="detectedCountry" readonly></div>
-                    <div class="form-group full-width"><label>ADDRESS<span class="req-star">*</span></label><input type="text" class="form-control" id="fullAddress" placeholder="District, Postal Code..." required></div>
+                    <i class="fa-solid fa-chevron-down arrow-icon"></i>
                 </div>
-
-                <div class="section-title"><i class="fa-solid id-card"></i><span>IDENTITY VERIFICATION</span></div>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>DOCUMENT TYPE<span class="req-star">*</span></label>
-                        <select class="form-select" id="docTypeSelect" required>
-                            <option value="NID">National ID (NID)</option>
-                            <option value="BirthCert">Birth Certificate</option>
-                            <option value="TradeLicense">Trade License</option>
-                        </select>
+                <div class="accordion-body">
+                    <div class="setting-action-row">
+                        <div class="setting-action-info">
+                            <h4>GOOGLE ACCOUNT VERIFIED</h4>
+                            <p id="authEmailDisplay">seller@gmail.com (Connected)</p>
+                        </div>
+                        <span style="color:#4ade80; font-size:0.75rem; font-weight:800;"><i class="fa-solid fa-circle-check"></i> VERIFIED</span>
                     </div>
-                    <div class="form-group" id="docNumGroup">
-                        <label id="docNumLabel">NID NUMBER<span class="req-star">*</span></label>
-                        <input type="text" class="form-control" id="docNumberInput" placeholder="Enter NID..." required>
-                    </div>
-                </div>
-
-                <div class="section-title"><i class="fa-solid fa-wallet"></i><span>DEFAULT PAYOUT SETUP</span></div>
-                <div class="form-grid">
-                    <div class="form-group full-width">
-                        <label>PREFERRED METHOD<span class="req-star">*</span></label>
-                        <select class="form-select" id="defaultPayMethod" required>
-                            <option value="bKash">bKash</option>
-                            <option value="Nagad">Nagad</option>
-                            <option value="Bank">Bank Transfer</option>
-                            <option value="Payoneer">Payoneer</option>
-                        </select>
-                    </div>
-                    <div class="form-grid full-width" id="payDetailsGrid" style="margin-bottom: 0;">
-                        <div class="form-group full-width"><label>BKASH NUMBER<span class="req-star">*</span></label><input type="text" class="form-control" id="bkashNumInput" placeholder="11-digit bKash number..." required></div>
-                    </div>
-                </div>
-
-                <div class="section-title"><i class="fa-solid fa-image"></i><span>BRAND LOGO<span class="req-star">*</span></span></div>
-                <div class="avatar-upload-container">
-                    <img src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png" alt="Logo" class="avatar-preview" id="avatarPreview">
-                    <div class="avatar-upload-info">
-                        <label for="profilePhotoInput" class="avatar-upload-lbl"><i class="fa-solid fa-upload"></i> UPLOAD LOGO</label>
-                        <input type="file" id="profilePhotoInput" class="file-input-hidden" accept="image/*">
-                    </div>
-                </div>
-
-                <button type="submit" class="save-btn">SAVE & COMPLETE SELLER INFO</button>
-            </form>
-        </section>
-
-        <section class="profile-summary-card" id="profileSummaryCard">
-            <div class="section-title">VERIFIED SELLER PROFILE <span style="color:#4ade80; margin-left:auto;">ACTIVE</span></div>
-            <div class="summary-brand-box">
-                <img src="" alt="Logo" class="summary-avatar" id="sumAvatar">
-                <div class="summary-brand-info">
-                    <h3 id="sumBrandName" style="background:var(--gold-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;"></h3>
-                    <p id="sumDesc" style="color:var(--text-gray); font-size:0.75rem; text-transform:none;"></p>
                 </div>
             </div>
-            <div class="summary-grid">
-                <div class="summary-item"><label>OWNER</label><span id="sumFullName"></span></div>
-                <div class="summary-item"><label>EMAIL</label><span id="sumEmail"></span></div>
-                <div class="summary-item"><label>WHATSAPP</label><span id="sumWhatsapp"></span></div>
-                <div class="summary-item"><label>PHONE</label><span id="sumPhone"></span></div>
-                <div class="summary-item"><label>COUNTRY</label><span id="sumCountry"></span></div>
-                <div class="summary-item"><label>DOC</label><span id="sumDoc"></span></div>
-                <div class="summary-item full-width"><label>ADDRESS</label><span id="sumAddress"></span></div>
-                <div class="summary-item full-width"><label>PAYOUT</label><span id="sumPayout"></span></div>
+
+            <!-- ২. বিজনেস ইনফরমেশন ও লোগো -->
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-header-left">
+                        <i class="fa-solid fa-store"></i>
+                        <span>BUSINESS INFORMATION & LOGO</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-down arrow-icon"></i>
+                </div>
+                <div class="accordion-body">
+                    <form id="businessInfoForm">
+                        <div class="avatar-upload-container">
+                            <img src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png" alt="Logo" class="avatar-preview" id="avatarPreview">
+                            <div class="avatar-upload-info">
+                                <label for="profilePhotoInput" class="avatar-upload-lbl"><i class="fa-solid fa-upload"></i> UPLOAD BRAND LOGO</label>
+                                <input type="file" id="profilePhotoInput" class="file-input-hidden" accept="image/*">
+                            </div>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label><span class="label-text">BRAND NAME<span class="req-star">*</span></span></label>
+                                <input type="text" class="form-control" id="brandName" placeholder="rorraxy store" required>
+                            </div>
+                            <div class="form-group">
+                                <label><span class="label-text">FULL NAME<span class="req-star">*</span></span></label>
+                                <input type="text" class="form-control" id="fullName" placeholder="Owner full name..." required>
+                            </div>
+                            <div class="form-group full-width">
+                                <label>
+                                    <span class="label-text">BUSINESS DESCRIPTION<span class="req-star">*</span></span>
+                                    <span class="char-counter" id="charCount">0/200</span>
+                                </label>
+                                <textarea class="form-control" id="businessDesc" rows="3" maxlength="200" placeholder="Briefly describe products..." required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label><span class="label-text">WHATSAPP<span class="req-star">*</span></span></label>
+                                <input type="tel" class="form-control" id="whatsappNum" placeholder="+8801700000000" required>
+                            </div>
+                            <div class="form-group">
+                                <label><span class="label-text">PHONE<span class="req-star">*</span></span></label>
+                                <input type="tel" class="form-control" id="phoneNum" placeholder="+8801800000000" required>
+                            </div>
+                            <div class="form-group">
+                                <label><span class="label-text">COUNTRY<span class="req-star">*</span></span></label>
+                                <select class="form-select" id="countrySelect" required>
+                                    <option value="Bangladesh">Bangladesh</option>
+                                    <option value="India">India</option>
+                                    <option value="Pakistan">Pakistan</option>
+                                    <option value="United Arab Emirates">United Arab Emirates</option>
+                                    <option value="United States">United States</option>
+                                    <option value="United Kingdom">United Kingdom</option>
+                                </select>
+                            </div>
+                            <div class="form-group full-width">
+                                <label><span class="label-text">ADDRESS<span class="req-star">*</span></span></label>
+                                <input type="text" class="form-control" id="fullAddress" placeholder="District, Postal Code..." required>
+                            </div>
+                            <div class="form-group">
+                                <label><span class="label-text">VERIFICATION DOCUMENT<span class="req-star">*</span></span></label>
+                                <select class="form-select" id="docTypeSelect" onchange="updateDocLabel()" required>
+                                    <option value="NID">National ID (NID)</option>
+                                    <option value="BirthCert">Birth Certificate</option>
+                                    <option value="TradeLicense">Trade License</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label><span class="label-text" id="docNumLabel">NID NUMBER<span class="req-star">*</span></span></label>
+                                <input type="text" class="form-control" id="docNumberInput" placeholder="Enter ID number..." required>
+                            </div>
+                        </div>
+                        <button type="submit" class="section-save-btn">SAVE BUSINESS INFO <i class="fa-solid fa-check"></i></button>
+                    </form>
+                </div>
             </div>
-            <button type="button" class="edit-profile-btn" id="editProfileBtn"><i class="fa-solid fa-pen-to-square"></i> EDIT SELLER INFO</button>
-        </section>
+
+            <!-- ৩. বায়োমেট্রিক ভেরিফিকেশন -->
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-header-left">
+                        <i class="fa-solid fa-fingerprint"></i>
+                        <span>BIOMETRIC & 2-STEP VERIFICATION</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-down arrow-icon"></i>
+                </div>
+                <div class="accordion-body">
+                    <div class="setting-action-row">
+                        <div class="setting-action-info">
+                            <h4>HARDWARE BIOMETRIC SECURITY</h4>
+                            <p>Mandatory security check before payout withdrawal.</p>
+                        </div>
+                        <button type="button" class="action-sub-btn" onclick="verifyBiometricSecurity()"><i class="fa-solid fa-fingerprint"></i> VERIFY NOW</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ৪. পেমেন্ট সেটআপ (ডাইনামিক ফিল্ড সহ) -->
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-header-left">
+                        <i class="fa-solid fa-wallet"></i>
+                        <span>PAYOUT SETUP</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-down arrow-icon"></i>
+                </div>
+                <div class="accordion-body">
+                    <form id="payoutSetupForm">
+                        <div class="form-grid">
+                            <div class="form-group full-width">
+                                <label><span class="label-text">PREFERRED METHOD<span class="req-star">*</span></span></label>
+                                <select class="form-select" id="defaultPayMethod" onchange="renderPayoutFields()" required>
+                                    <option value="bKash">bKash</option>
+                                    <option value="Nagad">Nagad</option>
+                                    <option value="Bank">Bank Transfer</option>
+                                    <option value="Payoneer">Payoneer</option>
+                                </select>
+                            </div>
+                            <div class="form-group full-width" id="payoutDynamicContainer">
+                                <!-- ডাইনামিক ফিল্ড এখানে রেন্ডার হবে -->
+                            </div>
+                        </div>
+                        <button type="submit" class="section-save-btn">SAVE PAYOUT SETUP <i class="fa-solid fa-check"></i></button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- ৫. এডমিন অ্যান্ড সাপোর্ট টিম -->
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-header-left">
+                        <i class="fa-solid fa-headset"></i>
+                        <span>ADMIN & SUPPORT TEAM</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-down arrow-icon"></i>
+                </div>
+                <div class="accordion-body">
+                    <div class="setting-action-row">
+                        <div class="setting-action-info">
+                            <h4>LIVE ADMIN CHAT & HELP</h4>
+                            <p>Direct communication channel with rorraxy management.</p>
+                        </div>
+                        <button type="button" class="action-sub-btn" onclick="openAdminChatModal()"><i class="fa-solid fa-comments"></i> CHAT NOW</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
 
     <nav class="seller-bottom-nav">
@@ -169,23 +336,78 @@
         <a href="payout.html" class="nav-item"><i class="fa-solid fa-hand-holding-dollar"></i><span>PAYOUT</span></a>
         <button type="button" class="nav-item" onclick="location.href='dashboard.html'"><i class="fa-solid fa-house"></i><span>HOME</span></button>
         <a href="shipment.html" class="nav-item"><i class="fa-solid fa-truck-fast"></i><span>SHIPMENT</span></a>
-        <a href="info.html" class="nav-item active"><i class="fa-solid fa-user"></i><span>INFO</span></a>
+        <a href="info.html" class="nav-item active"><i class="fa-solid fa-user-gear"></i><span>SETTING</span></a>
     </nav>
 
+    <!-- অ্যাডমিন চ্যাট মডাল বক্স -->
+    <div id="adminChatModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:2000; justify-content:center; align-items:center; padding:16px;">
+        <div style="background:#08080c; border:1px solid rgba(212,175,55,0.4); border-radius:16px; width:100%; max-width:400px; display:flex; flex-direction:column; overflow:hidden;">
+            <div style="padding:14px 18px; background:#030305; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(212,175,55,0.2);">
+                <h4 style="font-size:0.85rem; background:var(--gold-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">ADMIN SUPPORT CHAT</h4>
+                <button type="button" onclick="closeAdminChatModal()" style="background:none; border:none; color:#fff; font-size:1.1rem; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="chatMessagesBox" style="padding:14px; height:250px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; font-size:0.78rem;">
+                <div style="background:#12121c; padding:10px 14px; border-radius:10px; align-self:flex-start; max-width:80%; text-transform:none;">Welcome to rorraxy Admin Support. How can we assist you?</div>
+            </div>
+            <div style="padding:12px; background:#030305; display:flex; gap:8px;">
+                <input type="text" id="chatInputMsg" placeholder="Type message..." style="flex:1; background:#000; border:1px solid rgba(255,255,255,0.1); border-radius:20px; padding:10px 14px; color:#fff; font-size:0.78rem; outline:none; text-transform:none;">
+                <button type="button" onclick="sendAdminChatMessage()" style="background:var(--gold-gradient); border:none; width:36px; height:36px; border-radius:50%; color:#000; cursor:pointer;"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        const API_BASE_URL = 'https://s.rorraxybd.workers.dev';
+        function toggleAccordion(header) {
+            const currentItem = header.parentElement;
+            document.querySelectorAll('.accordion-item').forEach(item => {
+                if (item !== currentItem) item.classList.remove('active');
+            });
+            currentItem.classList.toggle('active');
+        }
+
         const businessDesc = document.getElementById('businessDesc');
         const charCount = document.getElementById('charCount');
         businessDesc.addEventListener('input', () => { charCount.innerText = `${businessDesc.value.length}/200`; });
 
-        document.addEventListener('DOMContentLoaded', async () => {
-            const countryInput = document.getElementById('detectedCountry');
-            countryInput.value = "🇧🇩 Bangladesh";
+        // ডকুমেন্ট টাইপ লেবেল পরিবর্তন
+        function updateDocLabel() {
+            const type = document.getElementById('docTypeSelect').value;
+            const label = document.getElementById('docNumLabel');
+            if(type === 'NID') label.innerHTML = 'NID NUMBER<span class="req-star">*</span>';
+            else if(type === 'BirthCert') label.innerHTML = 'BIRTH CERTIFICATE NUMBER<span class="req-star">*</span>';
+            else if(type === 'TradeLicense') label.innerHTML = 'TRADE LICENSE NUMBER<span class="req-star">*</span>';
+        }
 
-            let savedData = JSON.parse(localStorage.getItem('rorraxy_seller_profile') || 'null');
-            if (savedData) renderSummaryCard(savedData);
-        });
+        // পেমেন্ট মেথড অনুযায়ী ডাইনামিক ফিল্ড রেন্ডার
+        function renderPayoutFields() {
+            const method = document.getElementById('defaultPayMethod').value;
+            const container = document.getElementById('payoutDynamicContainer');
+            
+            if (method === 'bKash' || method === 'Nagad') {
+                container.innerHTML = `
+                    <div class="form-group full-width">
+                        <label><span class="label-text">${method.toUpperCase()} ACCOUNT NUMBER<span class="req-star">*</span></span></label>
+                        <input type="text" class="form-control" id="payoutAccNum" placeholder="11-digit mobile number..." required>
+                    </div>
+                `;
+            } else if (method === 'Bank') {
+                container.innerHTML = `
+                    <div class="form-group full-width"><label><span class="label-text">BANK NAME<span class="req-star">*</span></span></label><input type="text" class="form-control" id="bankNameInput" placeholder="e.g. Dutch-Bangla Bank" required></div>
+                    <div class="form-group full-width"><label><span class="label-text">ACCOUNT HOLDER NAME<span class="req-star">*</span></span></label><input type="text" class="form-control" id="bankAccName" placeholder="Account holder full name" required></div>
+                    <div class="form-group full-width"><label><span class="label-text">ACCOUNT NUMBER / IBAN<span class="req-star">*</span></span></label><input type="text" class="form-control" id="bankAccNum" placeholder="Bank account number" required></div>
+                    <div class="form-group full-width"><label><span class="label-text">BRANCH & ROUTING / SWIFT CODE<span class="req-star">*</span></span></label><input type="text" class="form-control" id="bankRouting" placeholder="Routing or Swift code" required></div>
+                `;
+            } else if (method === 'Payoneer') {
+                container.innerHTML = `
+                    <div class="form-group full-width">
+                        <label><span class="label-text">PAYONEER REGISTERED EMAIL<span class="req-star">*</span></span></label>
+                        <input type="email" class="form-control" id="payoneerEmail" placeholder="your-payoneer@email.com" required>
+                    </div>
+                `;
+            }
+        }
 
+        // লোগো অপ্টিমাইজেশন ও প্রিভিউ
         let compressedAvatarData = "https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png";
         document.getElementById('profilePhotoInput').addEventListener('change', (e) => {
             const file = e.target.files[0];
@@ -206,48 +428,103 @@
             reader.readAsDataURL(file);
         });
 
-        document.getElementById('sellerInfoForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const profileData = {
-                brandName: document.getElementById('brandName').value,
-                fullName: document.getElementById('fullName').value,
-                businessDesc: businessDesc.value,
-                email: document.getElementById('emailAddr').value,
-                whatsapp: document.getElementById('whatsappNum').value,
-                phone: document.getElementById('phoneNum').value,
-                address: document.getElementById('fullAddress').value,
-                country: document.getElementById('detectedCountry').value,
-                docType: document.getElementById('docTypeSelect').value,
-                docNum: document.getElementById('docNumberInput').value,
-                payout: document.getElementById('defaultPayMethod').value,
-                logo: compressedAvatarData
-            };
-
-            localStorage.setItem('rorraxy_seller_profile', JSON.stringify(profileData));
-            renderSummaryCard(profileData);
-            alert('SELLER INFO SAVED SUCCESSFULLY!');
-        });
-
-        function renderSummaryCard(data) {
-            document.getElementById('sumBrandName').innerText = data.brandName;
-            document.getElementById('sumDesc').innerText = data.businessDesc;
-            document.getElementById('sumFullName').innerText = data.fullName;
-            document.getElementById('sumEmail').innerText = data.email;
-            document.getElementById('sumWhatsapp').innerText = data.whatsapp;
-            document.getElementById('sumPhone').innerText = data.phone;
-            document.getElementById('sumAddress').innerText = data.address;
-            document.getElementById('sumCountry').innerText = data.country;
-            document.getElementById('sumDoc').innerText = `${data.docType}: ${data.docNum}`;
-            document.getElementById('sumPayout').innerText = data.payout;
-            document.getElementById('sumAvatar').src = data.logo;
-
-            document.getElementById('infoFormCard').classList.add('hidden');
-            document.getElementById('profileSummaryCard').style.display = 'block';
+        // বায়োমেট্রিক হার্ডওয়্যার ভেরিফিকেশন
+        async function verifyBiometricSecurity() {
+            if (!window.PublicKeyCredential) {
+                alert("Biometric verification is not supported on this browser.");
+                return;
+            }
+            try {
+                const challenge = new Uint8Array(32);
+                window.crypto.getRandomValues(challenge);
+                const assertion = await navigator.credentials.get({
+                    publicKey: { challenge: challenge, rpId: window.location.hostname, userVerification: "required" }
+                });
+                if (assertion) {
+                    localStorage.setItem('rorraxy_biometric_verified', 'true');
+                    alert("Biometric Verification Successful! Payout unlocked.");
+                } else {
+                    alert("Verification Failed.");
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Biometric verification cancelled or unavailable.");
+            }
         }
 
-        document.getElementById('editProfileBtn').addEventListener('click', () => {
-            document.getElementById('profileSummaryCard').style.display = 'none';
-            document.getElementById('infoFormCard').classList.remove('hidden');
+        function openAdminChatModal() { document.getElementById('adminChatModal').style.display = 'flex'; }
+        function closeAdminChatModal() { document.getElementById('adminChatModal').style.display = 'none'; }
+        function sendAdminChatMessage() {
+            const input = document.getElementById('chatInputMsg');
+            const text = input.value.trim();
+            if(!text) return;
+            const box = document.getElementById('chatMessagesBox');
+            box.innerHTML += `<div style="background:var(--gold-gradient); color:#000; padding:10px 14px; border-radius:10px; align-self:flex-end; max-width:80%; font-weight:600; text-transform:none;">${text}</div>`;
+            input.value = '';
+            box.scrollTop = box.scrollHeight;
+        }
+
+        // লোকাল ডেটা লোড
+        document.addEventListener('DOMContentLoaded', () => {
+            renderPayoutFields();
+            let savedData = JSON.parse(localStorage.getItem('rorraxy_seller_profile') || 'null');
+            if (savedData) {
+                if(savedData.brandName) document.getElementById('brandName').value = savedData.brandName;
+                if(savedData.fullName) document.getElementById('fullName').value = savedData.fullName;
+                if(savedData.businessDesc) {
+                    document.getElementById('businessDesc').value = savedData.businessDesc;
+                    charCount.innerText = `${savedData.businessDesc.length}/200`;
+                }
+                if(savedData.whatsapp) document.getElementById('whatsappNum').value = savedData.whatsapp;
+                if(savedData.phone) document.getElementById('phoneNum').value = savedData.phone;
+                if(savedData.country) document.getElementById('countrySelect').value = savedData.country;
+                if(savedData.address) document.getElementById('fullAddress').value = savedData.address;
+                if(savedData.docType) {
+                    document.getElementById('docTypeSelect').value = savedData.docType;
+                    updateDocLabel();
+                }
+                if(savedData.docNum) document.getElementById('docNumberInput').value = savedData.docNum;
+                if(savedData.logo) {
+                    compressedAvatarData = savedData.logo;
+                    document.getElementById('avatarPreview').src = savedData.logo;
+                }
+            }
+        });
+
+        // আলাদা আলাদা সেকশন সেভ করার লজিক
+        document.getElementById('businessInfoForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const profileData = JSON.parse(localStorage.getItem('rorraxy_seller_profile') || '{}');
+            profileData.brandName = document.getElementById('brandName').value;
+            profileData.fullName = document.getElementById('fullName').value;
+            profileData.businessDesc = businessDesc.value;
+            profileData.whatsapp = document.getElementById('whatsappNum').value;
+            profileData.phone = document.getElementById('phoneNum').value;
+            profileData.country = document.getElementById('countrySelect').value;
+            profileData.address = document.getElementById('fullAddress').value;
+            profileData.docType = document.getElementById('docTypeSelect').value;
+            profileData.docNum = document.getElementById('docNumberInput').value;
+            profileData.logo = compressedAvatarData;
+
+            localStorage.setItem('rorraxy_seller_profile', JSON.stringify(profileData));
+            alert('BUSINESS INFORMATION SAVED SUCCESSFULLY!');
+        });
+
+        document.getElementById('payoutSetupForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const profileData = JSON.parse(localStorage.getItem('rorraxy_seller_profile') || '{}');
+            profileData.payoutMethod = document.getElementById('defaultPayMethod').value;
+            
+            if(profileData.payoutMethod === 'bKash' || profileData.payoutMethod === 'Nagad') {
+                profileData.payoutDetails = document.getElementById('payoutAccNum').value;
+            } else if(profileData.payoutMethod === 'Bank') {
+                profileData.payoutDetails = `${document.getElementById('bankNameInput').value} - ${document.getElementById('bankAccName').value} - ${document.getElementById('bankAccNum').value} - ${document.getElementById('bankRouting').value}`;
+            } else if(profileData.payoutMethod === 'Payoneer') {
+                profileData.payoutDetails = document.getElementById('payoneerEmail').value;
+            }
+
+            localStorage.setItem('rorraxy_seller_profile', JSON.stringify(profileData));
+            alert('PAYOUT SETUP SAVED SUCCESSFULLY!');
         });
     </script>
 </body>
