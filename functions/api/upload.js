@@ -4,7 +4,7 @@ export async function onRequest(context) {
   const corsHeaders = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Headers": "Content-Type, X-File-Name",
   };
 
   if (request.method === "OPTIONS") {
@@ -18,31 +18,44 @@ export async function onRequest(context) {
   }
 
   try {
-    const formData = await request.formData();
-    const file = formData.get("file"); // ফর্ম থেকে ফাইল ধরবে
-    const bucketType = formData.get("type") || "image"; // 'image' অথবা 'video'
+    const url = new URL(request.url);
+    const bucketType = url.searchParams.get("type") || "image"; // 'image' অথবা 'video'
+    
+    // R2 বাকেট বাইন্ডিং সিলেক্ট করা
+    const targetBucket = bucketType === "video" ? env.video : env.image;
 
-    if (!file) {
-      return new Response(JSON.stringify({ success: false, error: "No file uploaded" }), {
+    if (!targetBucket) {
+      return new Response(JSON.stringify({ success: false, error: `R2 Bucket for '${bucketType}' is not bound.` }), {
+        status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" }
+      });
+    }
+
+    const originalName = request.headers.get("X-File-Name") || `file_${Date.now()}`;
+    const fileName = `${Date.now()}_${originalName.replace(/[^a-zA-Z0-9_.-]/g, '_')}`;
+    
+    // রিকোয়েস্ট বডি থেকে সরাসরি বাইনারি ডেটা রিড করা (FormData-এর পরিবর্তে রেশনালাইজড স্ট্রিম)
+    const fileBuffer = await request.arrayBuffer();
+
+    if (!fileBuffer || fileBuffer.byteLength === 0) {
+      return new Response(JSON.stringify({ success: false, error: "No file uploaded or empty buffer" }), {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" }
       });
     }
 
-    // ফাইলের একটি ইউনিক নাম তৈরি করা
-    const fileName = `${Date.now()}-${file.name}`;
-    
-    // কোন R2 বাকেটে যাবে তা সিলেক্ট করা (image বা video)
-    const targetBucket = bucketType === "video" ? env.video : env.image;
-
-    // R2-এ ফাইল আপলোড করা
-    await targetBucket.put(fileName, file.stream(), {
+    // R2-এ ফাইল পুট করা
+    await targetBucket.put(fileName, fileBuffer, {
       httpMetadata: {
-        contentType: file.type,
+        contentType: request.headers.get("Content-Type") || (bucketType === "video" ? "video/mp4" : "image/webp"),
       },
     });
 
-    // ফাইলের অ্যাক্সেস করার ইউআরএল তৈরি (আপনার ডোমেন অনুযায়ী)
-    const fileUrl = `https://rorraxy.com/cdn/${fileName}`; // অথবা আপনার স্টোরেজ লিংক
+    // কাস্টম ডোমেইন অনুযায়ী সঠিক পাবলিক লিংক তৈরি
+    const domainMap = {
+      image: "https://img.rorraxy.com",
+      video: "https://vid.rorraxy.com"
+    };
+
+    const fileUrl = `${domainMap[bucketType] || "https://img.rorraxy.com"}/${fileName}`;
 
     return new Response(JSON.stringify({ 
       success: true, 
