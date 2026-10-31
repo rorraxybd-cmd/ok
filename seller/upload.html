@@ -7,7 +7,7 @@
     
     <script src="/ecosystem-core.js"></script>
 
-    <link rel="icon" type="image/png" href="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png">
+    <link rel="icon" type="image/png" href="https://img.rorraxy.com/rorraxyfree/mr%20masudar%20logo%20(3).png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -367,7 +367,7 @@
     </main>
 
     <script>
-        const WORKER_BASE_URL = 'https://s.rorraxybd.workers.dev';
+        // সরাসরি ক্লাউডফ্লেয়ার পেজেস ফাংশন পাথ ব্যবহার করা হলো (অপ্রয়োজনীয় এক্সটার্নাল ওয়ার্কার রিমুভড)
         let currentStep = 1;
         let selectedModeValue = "";
         let selectedCategoryValue = "";
@@ -541,7 +541,7 @@
         }
 
         // ============================================================================
-        // হাই-পারফরম্যান্স অপ্টিমাইজড ফাইল কম্প্রেশন (WebP / JPEG Support)[cite: 30]
+        // হাই-পারফরম্যান্স অপ্টিমাইজড ফাইল কম্প্রেশন (WebP / JPEG Support)
         // ============================================================================
         async function optimizeAndCompressFile(file, maxWidth = 1200, quality = 0.8) {
             return new Promise((resolve) => {
@@ -614,7 +614,7 @@
         }
 
         // ============================================================================
-        // ইনস্ট্যান্ট লোকাল প্রিভিউ এবং ব্যাকগ্রাউন্ড R2 আপলোড হ্যান্ডলার (ফাইল ভাঙার সমস্যা সমাধান)
+        // ইনস্ট্যান্ট লোকাল প্রিভিউ এবং ব্যাকগ্রাউন্ড R2 আপলোড হ্যান্ডলার (সরাসরি পেজেস ফাংশন কল)
         // ============================================================================
         window.handleImageSelection = async function(event) {
             const files = event.target.files;
@@ -624,7 +624,6 @@
             for (let i = 0; i < files.length; i++) {
                 let file = files[i];
 
-                // তাৎক্ষণিকভাবে ব্রাউজারে নিখুঁত রিয়েল প্রিভিউ দেখানোর জন্য অবজেক্ট ইউআরএল
                 const localPreviewUrl = URL.createObjectURL(file);
 
                 const card = document.createElement('div');
@@ -636,18 +635,16 @@
                 previewContainer.appendChild(card);
 
                 try {
-                    // ১. ফাইল সাইজ ছোট করার জন্য কম্প্রেশন
                     let optimizedFile = await optimizeAndCompressFile(file);
 
-                    // ২. ক্লাউডফ্লেয়ার R2 বাকেটে ব্যাকগ্রাউন্ড আপলোড
-                    const response = await fetch(`${WORKER_BASE_URL}/api/upload?type=image`, {
+                    // সরাসরি পেজেস ফাংশন `/api/upload?type=image` এ ফেচ রিকোয়েস্ট পাঠানো হচ্ছে
+                    const response = await fetch(`/api/upload?type=image`, {
                         method: "POST",
                         headers: { "X-File-Name": optimizedFile.name || `img_${Date.now()}.jpg` },
                         body: optimizedFile
                     });
                     const data = await response.json();
 
-                    // ৩. হোমপেজ এবং ক্যাটাগরি পেজে দেখানোর জন্য সঠিক ব্যাকএন্ড বা লোকাল ইউআরএল নিশ্চিত করা
                     const finalServerUrl = (data.success && data.url) ? data.url : localPreviewUrl;
                     uploadedImageUrls.push(finalServerUrl);
 
@@ -693,7 +690,8 @@
             previewContainer.appendChild(card);
 
             try {
-                const response = await fetch(`${WORKER_BASE_URL}/api/upload?type=video`, {
+                // সরাসরি পেজেস ফাংশন `/api/upload?type=video` এ ফেচ রিকোয়েস্ট পাঠানো হচ্ছে
+                const response = await fetch(`/api/upload?type=video`, {
                     method: "POST",
                     headers: { "X-File-Name": file.name || `vid_${Date.now()}.mp4` },
                     body: file
@@ -728,7 +726,7 @@
         };
 
         // ============================================================================
-        // ফর্ম সাবমিট এবং D1 ডাটাবেজ সিঙ্ক
+        // ফর্ম সাবমিট এবং D1 ডাটাবেজ সিঙ্ক (`/api/products`)
         // ============================================================================
         window.submitMasterForm = async function(event) {
             event.preventDefault();
@@ -771,13 +769,11 @@
             submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> PUBLISHING TO D1...';
 
             try {
-                await fetch(`${WORKER_BASE_URL}/api/save`, {
+                // সরাসরি পেজেস ফাংশন `/api/products` এ পোস্ট রিকোয়েস্ট পাঠানো হচ্ছে
+                await fetch(`/api/products`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        table: 'products',
-                        data: productPayload
-                    })
+                    body: JSON.stringify(productPayload)
                 });
 
                 let sellerProducts = JSON.parse(localStorage.getItem('rorraxy_seller_products')) || [];
