@@ -18,10 +18,10 @@
             --card-retail: #08080c;
             --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
             --gold-solid: #d4af37;
-            --pink-love: #ff2a85;
             --text-white: #ffffff;
             --text-gray: #a0a0ab;
             --font-main: 'Poppins', sans-serif;
+            --border-color: rgba(212, 175, 55, 0.15);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -30,33 +30,35 @@
         .main-container { width: 100%; max-width: 900px; margin: 0 auto; }
 
         .dashboard-header { text-align: center; margin-bottom: 25px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
-        .header-logo-img { width: 90px; height: 90px; object-fit: contain; filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.6)); }
+        .header-logo-img { width: 90px; height: 90px; object-fit: contain; filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.5)); }
         .dashboard-header h1 { font-size: 1.5rem; font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
-        .header-email-box { display: inline-flex; align-items: center; gap: 8px; background: var(--card-retail); padding: 6px 16px; border-radius: 25px; text-decoration: none; text-transform: lowercase; font-size: 0.78rem; color: var(--text-gray); }
-        .generator-card { background: var(--card-retail); border-radius: 18px; padding: 24px 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8); margin-bottom: 25px; border: 1px solid rgba(212, 175, 55, 0.15); }
+        .header-email-box { display: inline-flex; align-items: center; gap: 8px; background: var(--card-retail); padding: 6px 16px; border-radius: 25px; text-decoration: none; text-transform: lowercase; font-size: 0.78rem; color: var(--text-gray); border: 1px solid var(--border-color); }
+        
+        .generator-card { background: var(--card-retail); border-radius: 18px; padding: 24px 20px; margin-bottom: 25px; border: 1px solid var(--border-color); }
         .form-group { margin-bottom: 18px; }
         .form-group label { display: block; font-size: 0.72rem; font-weight: 700; color: var(--text-gray); margin-bottom: 8px; }
-        .form-control, .form-select { width: 100%; background: #040407; border: none; border-radius: 12px; padding: 12px 16px; color: var(--text-white); font-size: 0.8rem; outline: none; font-family: var(--font-main); text-transform: none; box-shadow: inset 0 2px 6px rgba(0,0,0,0.8); }
+        .form-control, .form-select { width: 100%; background: #040407; border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 16px; color: var(--text-white); font-size: 0.8rem; outline: none; font-family: var(--font-main); text-transform: none; }
         .form-select option { background: #08080c; color: var(--text-white); }
         
-        .generate-btn { width: 100%; background: var(--gold-gradient); border: none; border-radius: 14px; padding: 14px; color: #000; font-weight: 800; font-size: 0.85rem; cursor: pointer; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3); text-transform: uppercase; }
-        .result-box { margin-top: 20px; background: #040407; border-radius: 14px; padding: 18px; display: none; }
+        .generate-btn { width: 100%; background: var(--gold-gradient); border: none; border-radius: 14px; padding: 14px; color: #000; font-weight: 800; font-size: 0.85rem; cursor: pointer; text-transform: uppercase; }
+        .result-box { margin-top: 20px; background: #040407; border-radius: 14px; padding: 18px; border: 1px solid var(--border-color); display: none; }
         .result-box.active { display: block; }
         .result-label { font-size: 0.72rem; color: var(--gold-solid); font-weight: 700; margin-bottom: 8px; }
         .result-flex { display: flex; gap: 10px; margin-bottom: 15px; }
-        .result-input { flex: 1; background: #000; border: none; border-radius: 10px; padding: 10px 14px; color: var(--text-white); font-size: 0.78rem; outline: none; text-transform: none; }
+        .result-input { flex: 1; background: #000; border: 1px solid var(--border-color); border-radius: 10px; padding: 10px 14px; color: var(--text-white); font-size: 0.78rem; outline: none; text-transform: none; }
         .copy-btn { background: var(--gold-gradient); border: none; border-radius: 10px; padding: 0 16px; color: #000; font-weight: 800; font-size: 0.78rem; cursor: pointer; }
         
         .share-channels { display: flex; justify-content: space-between; gap: 8px; }
-        .share-ch-btn { flex: 1; background: #08080c; border-radius: 10px; padding: 10px 6px; color: var(--text-white); text-decoration: none; font-size: 0.62rem; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .share-ch-btn { flex: 1; background: #08080c; border: 1px solid var(--border-color); border-radius: 10px; padding: 10px 6px; color: var(--text-white); text-decoration: none; font-size: 0.62rem; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; }
         .share-ch-btn i { font-size: 1.1rem; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        .affiliate-bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(3, 3, 5, 0.95); backdrop-filter: blur(20px); border-top: 1px solid rgba(212, 175, 55, 0.15); display: flex; justify-content: space-around; align-items: center; padding: 12px 6px; z-index: 1000; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; background: none; border: none; cursor: pointer; }
+        /* বটম নেভিগেশন মেনু (ভেঙে যাওয়া লেখা ঠিক করা হয়েছে) */
+        .affiliate-bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(3, 3, 5, 0.95); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; align-items: center; padding: 12px 4px; z-index: 1000; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; background: none; border: none; cursor: pointer; white-space: nowrap; }
         .nav-item.active i, .nav-item.active span { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .nav-item i { font-size: 1.25rem; margin-bottom: 4px; color: var(--text-gray); }
-        .nav-item span { font-size: 0.62rem; font-weight: 700; color: var(--text-gray); }
+        .nav-item i { font-size: 1.15rem; margin-bottom: 3px; color: var(--text-gray); }
+        .nav-item span { font-size: 0.58rem; font-weight: 700; color: var(--text-gray); letter-spacing: 0.3px; }
     </style>
 </head>
 <body>
@@ -72,10 +74,9 @@
             <div class="form-group">
                 <label>SELECT PLATFORM / SERVICE</label>
                 <select class="form-select" id="platformSelect">
-                    <option value="https://r.rorraxy.com">RETAIL STORE (15% COMMISSION)</option>
-                    <option value="https://w.rorraxy.com">WHOLESALE STORE (7% COMMISSION)</option>
-                    <option value="https://rorraxy.com">ENTERPRISE SERVICES (5% COMMISSION)</option>
-                    <option value="https://a.rorraxy.com">RORRAXY SCI-TECH ACADEMY (5% COMMISSION)</option>
+                    <option value="https://r.rorraxy.com">RETAIL STORE (8% COMMISSION)</option>
+                    <option value="https://w.rorraxy.com">WHOLESALE STORE (2% COMMISSION)</option>
+                    <option value="https://rorraxy.com">ENTERPRISE SERVICES (10% COMMISSION)</option>
                 </select>
             </div>
 
@@ -103,21 +104,28 @@
         </section>
     </div>
 
+    <!-- বটম নেভিগেশন মেনু (৫টি মেনু - লেখা ঠিক করা হয়েছে) -->
     <nav class="affiliate-bottom-nav">
-        <a href="/affiliate/dashboard.html" class="nav-item"><i class="fa-solid fa-chart-pie"></i><span>DASHBOARD</span></a>
-        <a href="/affiliate/payout.html" class="nav-item"><i class="fa-solid fa-hand-holding-dollar"></i><span>PAYOUT</span></a>
-        <a href="/affiliate/report.html" class="nav-item"><i class="fa-solid fa-chart-column"></i><span>REPORT</span></a>
-        <a href="/affiliate/link.html" class="nav-item active"><i class="fa-solid fa-link"></i><span>LINK</span></a>
-        <a href="/affiliate/info.html" class="nav-item"><i class="fa-solid fa-user"></i><span>INFO</span></a>
+        <a href="index.html" class="nav-item"><i class="fa-solid fa-chart-pie"></i><span>DASHBOARD</span></a>
+        <a href="payout.html" class="nav-item"><i class="fa-solid fa-hand-holding-dollar"></i><span>PAYOUT</span></a>
+        <a href="report.html" class="nav-item"><i class="fa-solid fa-chart-column"></i><span>REPORT</span></a>
+        <a href="link.html" class="nav-item active"><i class="fa-solid fa-link"></i><span>LINK</span></a>
+        <a href="info.html" class="nav-item"><i class="fa-solid fa-user-gear"></i><span>SETTING</span></a>
     </nav>
 
     <script>
-        const WORKER_SAVE_API = "https://s.rorraxybd.workers.dev/api/save";
-
         document.getElementById('generateBtn').addEventListener('click', async () => {
             const baseUrl = document.getElementById('platformSelect').value;
             const customPath = document.getElementById('targetUrlInput').value.trim();
-            const affiliateId = "ref777"; 
+            
+            let affiliateId = "AFF-DIRECT";
+            const savedInfo = localStorage.getItem('rorraxy_affiliate_info');
+            if (savedInfo) {
+                try {
+                    const parsed = JSON.parse(savedInfo);
+                    if (parsed.email) affiliateId = parsed.email;
+                } catch(e) {}
+            }
 
             let trackingLink = `${baseUrl}?ref=${affiliateId}`;
             if (customPath !== "") {
@@ -133,14 +141,19 @@
             document.getElementById('shareTelegram').href = `https://t.me/share/url?url=${encodeURIComponent(trackingLink)}&text=${encodedText}`;
             document.getElementById('shareImo').href = `https://imo.im`;
 
-            // Cloudflare D1 ব্যাকএন্ডে লিংক জেনারেট রেকর্ড সেভ করা
+            // ক্লাউডফ্লেয়ার পেজেস ফাংশন এপিআই (/api/post) এর মাধ্যমে ডাটাবেজে লিংক জেনারেশন রেকর্ড সেভ করা
             try {
-                await fetch(WORKER_SAVE_API, {
+                await fetch(`/api/post`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ table: "affiliate_links", data: { affiliate_id: affiliateId, target_url: trackingLink, platform: baseUrl } })
+                    body: JSON.stringify({ 
+                        action: "affiliate_link", 
+                        affiliate_id: affiliateId, 
+                        target_url: trackingLink, 
+                        platform: baseUrl 
+                    })
                 });
-            } catch(e) { console.warn("Cloudflare D1 sync error."); }
+            } catch(e) { console.warn("Cloudflare D1 sync warning, fallback active."); }
         });
 
         document.getElementById('copyBtn').addEventListener('click', () => {
