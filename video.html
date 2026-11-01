@@ -5,19 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
     <title>rorraxy - Retail Reels & Video Feed</title>
     
+    <!-- Central Script Tag -->
+    <script src="/ecosystem-core.js"></script>
+
+    <!-- PWA Manifest Link -->
+    <link rel="manifest" href="/manifest.json">
+
+    <!-- Service Worker Registration Script -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then((reg) => console.log('Service Worker registered successfully:', reg.scope))
+            .catch((err) => console.log('Service Worker registration failed:', err));
+        });
+      }
+    </script>
+
+    <!-- Popup JS Link -->
+    <script src="/popup.js"></script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://img.rorraxy.com">
+    <link rel="preconnect" href="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev">
     <link rel="preconnect" href="https://vid.rorraxy.com">
 
-    <link rel="icon" type="image/png" sizes="32x32" href="https://img.rorraxy.com/rorraxyfree/mr%20masudar%20logo%20(3).png">
-    <link rel="apple-touch-icon" href="https://img.rorraxy.com/rorraxyfree/mr%20masudar%20logo%20(3).png">
+    <!-- Correct Cloudflare R2 Icons & Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png">
+    <link rel="apple-touch-icon" href="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png">
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- rorraxy Ecosystem - Master Core Loader -->
-    <script src="/ecosystem-core.js"></script>
 
     <script>
         let globalVideoList = [];
@@ -123,7 +141,7 @@
                             discount: (item.discount_rate || '30') + '% OFF',
                             category: item.category || 'video',
                             sellerName: item.brand_name || 'Rorraxy Retail Merchant',
-                            sellerAvatar: 'https://img.rorraxy.com/rorraxyfree/mr%20masudar%20logo%20(3).png',
+                            sellerAvatar: 'https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png',
                             sellerDesc: 'Verified retail merchant on Rorraxy ecosystem.'
                         };
                     });
@@ -139,7 +157,7 @@
 
         function renderFallbackVideos() {
             globalVideoList = [
-                { id: 'RRX-001', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', price: '$85.00', baseLikes: 5200, baseShares: 180, discount: '30% OFF', category: 'video', sellerName: 'Rorraxy Retail Hub', sellerAvatar: 'https://img.rorraxy.com/rorraxyfree/mr%20masudar%20logo%20(3).png', sellerDesc: 'Primary retail supplier across global digital ecosystem.' }
+                { id: 'RRX-001', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', price: '$85.00', baseLikes: 5200, baseShares: 180, discount: '30% OFF', category: 'video', sellerName: 'Rorraxy Retail Hub', sellerAvatar: 'https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png', sellerDesc: 'Primary retail supplier across global digital ecosystem.' }
             ];
             renderBatchVideos();
         }
@@ -249,7 +267,7 @@
         function updateBottomSellerProfile(product) {
             const avatarImg = document.getElementById('bottomSellerAvatar');
             if(avatarImg && product) {
-                avatarImg.src = product.sellerAvatar || 'https://img.rorraxy.com/rorraxyfree/mr%20masudar%20logo%20(3).png';
+                avatarImg.src = product.sellerAvatar || 'https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png';
             }
         }
 
@@ -259,7 +277,7 @@
             let currentProduct = activeList[currentIndex] || activeList[0];
 
             let sName = currentProduct.sellerName || 'Rorraxy Merchant';
-            let sAvatar = currentProduct.sellerAvatar || 'https://img.rorraxy.com/rorraxyfree/mr%20masudar%20logo%20(3).png';
+            let sAvatar = currentProduct.sellerAvatar || 'https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png';
             let sDesc = currentProduct.sellerDesc || 'Verified merchant on Rorraxy ecosystem.';
 
             let sellerVideos = globalVideoList.filter(p => (p.sellerName || 'Rorraxy Hub') === sName);
@@ -393,7 +411,7 @@
                             <div class="glass-opt-btn" onclick="shareToSocial(this, 'facebook')"><i class="fa-brands fa-facebook-f"></i><span>Facebook</span></div>
                         </div>
                         <div class="glass-copy-row">
-                            <input type="text" class="glass-copy-input lowercase-url" readonly value="retail/pd.html?id=${pId}">
+                            <input type="text" class="glass-copy-input lowercase-url" readonly value="pd.html?id=${pId}">
                             <button class="glass-copy-btn" onclick="copyLinkDirectSilent(this)">COPY</button>
                         </div>
                     </div>
@@ -429,7 +447,7 @@
         window.shareToSocial = function(btn, platform) {
             let card = btn.closest('.reel-card');
             let urlInput = card.querySelector('.glass-copy-input');
-            let shareUrl = urlInput ? `retail/pd.html?id=${encodeURIComponent(card.dataset.productId)}` : window.location.href;
+            let shareUrl = urlInput ? `pd.html?id=${encodeURIComponent(card.dataset.productId)}` : window.location.href;
             let text = "Check out this product on Rorraxy Retail:";
 
             let shareLink = "";
@@ -469,7 +487,7 @@
         }
 
         html, body { 
-            width: 100%; max-width: 100%; overflow: hidden; 
+            width: 100%; max-width: 100vw; overflow: hidden; 
             background: var(--bg-retail) !important; 
             color: var(--text-white); font-family: var(--font-main); 
             height: 100vh; height: 100dvh; font-size: 15px;
@@ -635,7 +653,7 @@
 
     <nav class="bottom-nav-bar">
         <div id="bottomSellerBtn" class="bottom-nav-item">
-            <img id="bottomSellerAvatar" src="https://img.rorraxy.com/rorraxyfree/mr%20masudar%20logo%20(3).png">
+            <img id="bottomSellerAvatar" src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png">
             <span>SELLER</span>
         </div>
         <div id="bottomHomeBtn" class="bottom-nav-item"><i class="fa-solid fa-house"></i><span>HOME</span></div>
