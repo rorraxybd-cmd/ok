@@ -34,7 +34,7 @@
         .rorraxy-pwa-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0, 0, 0, 0.4) !important; display: flex; align-items: center;
-            justify-content: center; z-index: 99999; padding: 20px; box-sizing: border-box;
+            justify-content: center; z-index: 2147483646 !important; padding: 20px; box-sizing: border-box;
             animation: rorraxyFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
@@ -106,16 +106,16 @@
             animation: rorraxyShrinkBar 15s linear forwards;
         }
 
-        /* ছোট উইজেটের z-index এবং ক্লিক প্রিভেনশন ফিক্সড */
+        /* ছোট উইজেটের পজিশন হেডার থেকে নামিয়ে নিরাপদ দূরত্বে এবং সর্বোচ্চ z-index দেওয়া হলো */
         .rorraxy-minimal-widget {
-            position: fixed; top: 8px; right: 15px; background: rgba(3, 3, 5, 0.98);
-            border: 1px solid rgba(212, 175, 55, 0.5); padding: 5px 12px; border-radius: 20px;
+            position: fixed; top: 55px; right: 15px; background: rgba(3, 3, 5, 0.98);
+            border: 1px solid rgba(212, 175, 55, 0.6); padding: 7px 14px; border-radius: 20px;
             display: flex; align-items: center; gap: 6px; z-index: 2147483647 !important; cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.8) !important; user-select: none;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.9) !important; user-select: none;
             animation: rorraxyBadgeSlideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
         .rorraxy-minimal-text {
-            font-size: 9px; font-weight: 800; background: var(--gold-gradient);
+            font-size: 10px; font-weight: 800; background: var(--gold-gradient);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase;
             pointer-events: none;
         }
@@ -183,52 +183,9 @@
             }
             deferredPrompt = null;
         } else {
-            const overlay = document.querySelector('.rorraxy-pwa-overlay');
-            if (overlay) overlay.remove();
-            createMinimalWidget();
+            // নেটিভ প্রম্পট প্রস্তুত না থাকলে বিকল্প গাইড বা মেনু দেখানোর জন্য অ্যালার্ট বা ছোট গাইড বক্স
+            alert("To install rorraxy, please use your browser menu (Chrome/Edge -> Click 'Install app' or 'Add to Home screen').");
         }
-    };
-
-    const makeDraggable = (elm) => {
-        let startX = 0, startY = 0, initialX = 0, initialY = 0;
-        let isDragging = false;
-
-        elm.addEventListener('pointerdown', dragStart, false);
-
-        function dragStart(e) {
-            isDragging = false;
-            startX = e.clientX;
-            startY = e.clientY;
-            initialX = elm.offsetLeft;
-            initialY = elm.offsetTop;
-
-            document.addEventListener('pointermove', dragMove, false);
-            document.addEventListener('pointerup', dragEnd, false);
-        }
-
-        function dragMove(e) {
-            let dx = Math.abs(e.clientX - startX);
-            let dy = Math.abs(e.clientY - startY);
-            if (dx > 4 || dy > 4) {
-                isDragging = true;
-            }
-
-            let currentX = initialX + (e.clientX - startX);
-            let currentY = initialY + (e.clientY - startY);
-
-            elm.style.left = currentX + "px";
-            elm.style.top = currentY + "px";
-            elm.style.right = "auto";
-            elm.style.bottom = "auto";
-        }
-
-        function dragEnd() {
-            document.removeEventListener('pointermove', dragMove, false);
-            document.removeEventListener('pointerup', dragEnd, false);
-            setTimeout(() => { isDragging = false; }, 50);
-        }
-
-        elm.dataset.checkDrag = () => isDragging;
     };
 
     const createMinimalWidget = () => {
@@ -238,14 +195,11 @@
         widget.className = 'rorraxy-minimal-widget';
         widget.innerHTML = `<span class="rorraxy-minimal-text"><i class="fa-solid fa-download"></i> INSTALL APP</span>`;
         
-        // টপ লেভেল ক্লিক ইভেন্ট এবং টাচ সাপোর্টের মাধ্যমে ফিক্স করা হয়েছে
         widget.addEventListener('click', async (e) => {
-            if (widget.dataset.checkDrag && widget.dataset.checkDrag()) return;
             await triggerInstall(e);
         }, true);
 
         document.body.appendChild(widget);
-        makeDraggable(widget);
     };
 
     if (isSessionDismissed === 'true') {
