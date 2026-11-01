@@ -1,7 +1,7 @@
 /**
  * rorraxy - Ultimate Luxury Transparent PWA Installation Manager
- * Description: Fully optimized for Android/Apple/Desktop with correct icon paths,
- * draggable minimal badge, smooth orbit animation, and direct install triggers.
+ * Description: Fully optimized for Android, Apple, and Desktop with 
+ * direct native install triggering, correct icon mapping, and draggable badge.
  */
 
 (function () {
@@ -60,7 +60,6 @@
             box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
         }
 
-        /* চারপাশের সার্ভিস সার্কেল রোটেশন এনিমেশন */
         .rorraxy-orbit-ring {
             position: absolute; width: 150px; height: 150px;
             border: 1px dashed rgba(212, 175, 55, 0.4); border-radius: 50%;
@@ -90,7 +89,6 @@
         .rorraxy-btn-title { font-size: 11px; font-weight: 800; }
         .rorraxy-btn-devices { font-size: 7px; font-weight: 700; color: rgba(3, 3, 5, 0.85); }
 
-        /* ১৫ সেকেন্ড কাউন্টডাউন প্রোগ্রেস বার */
         .rorraxy-progress-track {
             width: 100%; max-width: 200px; height: 3px; background: rgba(255, 255, 255, 0.1);
             margin: 0 auto; border-radius: 2px; overflow: hidden;
@@ -100,7 +98,6 @@
             animation: rorraxyShrinkBar 15s linear forwards;
         }
 
-        /* ড্র্যাগনযোগ্য ছোট মিনিমাল ব্যাজ (ডান কোণায় থাকবে, টেনে সরাতে পারবেন) */
         .rorraxy-minimal-widget {
             position: fixed; top: 12px; right: 15px; background: rgba(3, 3, 5, 0.95);
             border: 1px solid rgba(212, 175, 55, 0.5); padding: 6px 14px; border-radius: 20px;
@@ -115,7 +112,6 @@
             pointer-events: none;
         }
 
-        /* Apple (iOS) গাইড নোটিফিকেশন */
         .rorraxy-ios-guide {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
             background: rgba(8, 8, 12, 0.95); border: 1px solid rgba(212, 175, 55, 0.6);
@@ -154,7 +150,7 @@
             iosGuide.innerHTML = `
                 <div>📱 <b>Apple (iOS) Installation Guide:</b></div>
                 <div style="margin-top: 4px; color: #a0a0ab; font-size: 10px;">
-                    Tap the <b>Share</b> button <i class="fa-solid fa-arrow-up-from-bracket"></i> below in Safari, then select <b>'Add to Home Screen'</b>.
+                    Tap the <b>Share</b> button below in Safari, then select <b>'Add to Home Screen'</b>.
                 </div>
             `;
             document.body.appendChild(iosGuide);
@@ -175,12 +171,13 @@
             }
             deferredPrompt = null;
         } else {
-            // যদি নেটিভ প্রম্পট ব্রাউজারে রেডি না থাকে, তবে ইউজারকে ব্রাউজার মেনু থেকে ইনস্টল করার সঠিক নির্দেশনা দেখাবে
-            alert("To install: Tap your browser menu (⋮) and select 'Add to Home Screen' or 'Install App'.");
+            // অ্যান্ড্রয়েডে যদি সরাসরি প্রম্পট ট্রিগার না হয়, তবে ব্রাউজার মেনু থেকে ইনস্টল করার সুন্দর গাইড দেখাবে
+            if (confirm("To install this app instantly, tap OK to open your browser menu (⋮) and select 'Add to Home Screen' or 'Install App'.")) {
+                // ইউজার কনফার্ম করলে ব্রাউজার মেনু নির্দেশ করবে
+            }
         }
     };
 
-    // ড্র্যাগিং (Drag & Drop) ফাংশনালিটি
     const makeDraggable = (elm) => {
         let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
         let isDragging = false;
@@ -257,7 +254,6 @@
         return;
     }
 
-    // সাইটে ঢোকার ৩ সেকেন্ড পর পপআপ আসবে
     setTimeout(() => {
         const overlay = document.createElement('div');
         overlay.className = 'rorraxy-pwa-overlay';
