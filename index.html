@@ -27,11 +27,11 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://img.rorraxy.com">
+    <link rel="preconnect" href="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev">
 
-    <!-- Icons -->
-    <link rel="icon" type="image/png" sizes="32x32" href="https://img.rorraxy.com/rorraxyfree/mr%20masudar%20logo%20(3).png">
-    <link rel="apple-touch-icon" href="https://img.rorraxy.com/rorraxyfree/mr%20masudar%20logo%20(3).png">
+    <!-- Correct Cloudflare R2 Icons & Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png">
+    <link rel="apple-touch-icon" href="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png">
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -247,7 +247,7 @@
     <div id="youMenuModalOverlay" class="luxury-center-modal-overlay">
         <div class="luxury-center-modal-box" onclick="event.stopPropagation()">
             <button class="luxury-modal-close-btn" onclick="closeYouMenuModal()"><i class="fa-solid fa-xmark"></i></button>
-            <img src="https://img.rorraxy.com/rorraxyfree/mr%20masudar%20logo%20(3).png" alt="Logo" class="luxury-modal-logo-large" onclick="navigateTo('https://rorraxy.com/')">
+            <img src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png" alt="Logo" class="luxury-modal-logo-large" onclick="navigateTo('https://rorraxy.com/')">
             
             <div class="modal-material-info-text">AUTHENTIC MATERIALS</div>
 
@@ -381,7 +381,7 @@
                 const countryCode = (item.target_country || item.targetCountry || 'bd').toLowerCase();
                 const flagUrl = `https://flagcdn.com/w20/${countryCode}.png`;
                 
-                let resolvedImageUrl = 'https://img.rorraxy.com/rorraxyfree/mr%20masudar%20logo%20(3).png';
+                let resolvedImageUrl = 'https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png';
                 if (item.image_url) resolvedImageUrl = item.image_url;
                 else if (item.imageUrl) resolvedImageUrl = item.imageUrl;
 
@@ -391,7 +391,7 @@
                             <div class="product-country-discount-badge">
                                 <img src="${flagUrl}" alt="${countryCode}" class="flag-icon" onerror="this.style.display='none'"> ${discount}% OFF
                             </div>
-                            <img src="${resolvedImageUrl}" alt="${title}" loading="lazy" onerror="this.src='https://img.rorraxy.com/rorraxyfree/mr%20masudar%20logo%20(3).png'">
+                            <img src="${resolvedImageUrl}" alt="${title}" loading="lazy" onerror="this.src='https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png'">
                         </div>
                         <div class="card-footer-actions" onclick="event.stopPropagation()">
                             <span class="product-price-tag">${price}</span>
