@@ -349,7 +349,7 @@
             <span class="footer-menu-label" id="orderBtnLabel">ORDER NOW</span>
         </div>
 
-        <a href="/account.html" class="footer-menu-item">
+        <a href="/retail/account.html" class="footer-menu-item">
             <i class="fa-solid fa-user footer-menu-icon"></i>
             <span class="footer-menu-label">YOU</span>
         </a>
@@ -383,7 +383,8 @@
     </div>
 
     <script>
-        const API_BASE_URL = 'https://s.rorraxybd.workers.dev';
+        // ডাইরেক্ট ক্লাউডফ্লেয়ার পেজ ফাংশন কানেকশন
+        const API_BASE_URL = '';
         let currentActiveProduct = null;
         let currentItemQuantity = 1;
         let savedCustomNote = "";
@@ -427,7 +428,6 @@
             }
         }
 
-        // ক্লাউডফ্লেয়ার এজ ওয়ার্কার ও D1 ডাটাবেজ থেকে ডেটা ফেচ করা
         async function fetchProductDetailsFromCloudflareD1(productId) {
             try {
                 const response = await fetch(`${API_BASE_URL}/api/products?mode=retail`);
@@ -533,7 +533,6 @@
             strip.innerHTML = thumbHtml;
         }
 
-        // নিচে রিলেটেড প্রোডাক্টগুলো পিন্টারেস্ট স্টাইলে রেন্ডার করার ফাংশন
         function renderRelatedProducts(allProducts, currentProd) {
             const container = document.getElementById('relatedProductsFeedContainer');
             if (!allProducts || allProducts.length <= 1) {
@@ -541,10 +540,9 @@
                 return;
             }
 
-            // কারেন্ট প্রোডাক্ট বাদে বাকিগুলো থেকে রিলেটেড প্রোডাক্ট ফিল্টার করা
             let relatedList = allProducts.filter(p => String(p.id || p.product_id || p.product_code) !== String(currentProd.id || currentProd.product_id || currentProd.product_code));
             
-            if (relatedList.length === 0) relatedList = allProducts; // ফলব্যাক
+            if (relatedList.length === 0) relatedList = allProducts;
 
             container.innerHTML = relatedList.slice(0, 8).map(item => {
                 const prodId = item.id || item.product_id || item.product_code || '101';
