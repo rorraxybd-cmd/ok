@@ -10,10 +10,10 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://img.rorraxy.com">
+    <link rel="preconnect" href="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev">
 
     <!-- Icons -->
-    <link rel="icon" type="image/png" href="https://img.rorraxy.com/rorraxyfree/mr%20masudar%20logo%20(3).png">
+    <link rel="icon" type="image/png" href="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -186,11 +186,16 @@
         .dropship-pricing-row { display: flex; justify-content: space-between; align-items: center; width: 100%; }
         .product-price-tag { font-size: 0.82rem; font-weight: 700; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .resell-tag { font-size: 0.65rem; color: var(--text-gray); font-weight: 600; }
-        .card-sub-actions { display: flex; align-items: center; justify-content: space-between; width: 100%; border-top: 1px solid rgba(255,255,255,0.04); padding-top: 6px; }
-        .love-action { display: flex; align-items: center; gap: 4px; cursor: pointer; font-size: 0.70rem; font-weight: 500; color: var(--text-gray) !important; }
+        
+        /* এক লাইনে সুন্দরভাবে সাজানোর জন্য ফ্লেক্সবক্স লেআউট */
+        .card-single-line-row { 
+            display: flex; align-items: center; justify-content: space-between; width: 100%; 
+            border-top: 1px solid rgba(255,255,255,0.04); padding-top: 6px; gap: 4px;
+        }
+        .love-action { display: flex; align-items: center; gap: 3px; cursor: pointer; font-size: 0.68rem; font-weight: 500; color: var(--text-gray) !important; white-space: nowrap; }
         .love-action i { color: var(--pink-love); }
         .love-action.gold-active { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 600; }
-        .push-action-btn { background: none; border: none; font-size: 0.65rem; font-weight: 600; cursor: pointer; color: var(--gold-solid); text-transform: uppercase; display: flex; align-items: center; gap: 4px; }
+        .push-action-btn { background: none; border: none; font-size: 0.65rem; font-weight: 600; cursor: pointer; color: var(--gold-solid); text-transform: uppercase; display: flex; align-items: center; gap: 3px; white-space: nowrap; }
 
         /* ফুটার বার */
         .fixed-bottom-checkout-bar {
@@ -407,7 +412,7 @@
                 dropship_resell_price: 45.00,
                 stock: 500,
                 description: "High-grade trending dropshipping item ready for instant storefront integration and automated global fulfillment.",
-                image_url: "https://img.rorraxy.com/rorraxyfree/mr%20masudar%20logo%20(3).png"
+                image_url: "https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png"
             };
             renderProductDetails(sampleProduct);
             renderRelatedDropshipProducts([sampleProduct], sampleProduct);
@@ -455,7 +460,7 @@
             if (videoFileUrl) mediaList.push({ type: 'video', url: videoFileUrl });
 
             if(mediaList.length === 0) {
-                mediaList.push({ type: 'image', url: "https://img.rorraxy.com/rorraxyfree/mr%20masudar%20logo%20(3).png" });
+                mediaList.push({ type: 'image', url: "https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png" });
             }
 
             updateMainViewport(mediaList[0]);
@@ -466,7 +471,7 @@
                 if(m.type === 'video') {
                     thumbHtml += `<div class="thumb-item ${activeCls}" onclick='switchMediaView(${JSON.stringify(m)}, this)'><video src="${m.url}" muted></video></div>`;
                 } else {
-                    thumbHtml += `<div class="thumb-item ${activeCls}" onclick='switchMediaView(${JSON.stringify(m)}, this)'><img src="${m.url}" alt="Thumb" onerror="this.src='https://img.rorraxy.com/rorraxyfree/mr%20masudar%20logo%20(3).png'"></div>`;
+                    thumbHtml += `<div class="thumb-item ${activeCls}" onclick='switchMediaView(${JSON.stringify(m)}, this)'><img src="${m.url}" alt="Thumb" onerror="this.src='https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png'"></div>`;
                 }
             });
             strip.innerHTML = thumbHtml;
@@ -487,7 +492,7 @@
                 const title = item.title || 'rorraxy Dropship Item';
                 const basePrice = item.dropship_base_price ? `$${parseFloat(item.dropship_base_price).toFixed(2)}` : (item.price ? `$${parseFloat(item.price).toFixed(2)}` : '$20.00');
                 const resellPrice = item.dropship_resell_price ? `$${parseFloat(item.dropship_resell_price).toFixed(2)}` : 'Suggested';
-                const imageUrl = item.image_url || item.imageUrl || 'https://img.rorraxy.com/rorraxyfree/mr%20masudar%20logo%20(3).png';
+                const imageUrl = item.image_url || item.imageUrl || 'https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png';
 
                 return `
                     <div class="product-card" onclick="window.location.href='pd.html?id=${prodId}'">
@@ -495,14 +500,14 @@
                             <div class="dropship-card-badge">
                                 <i class="fa-solid fa-bolt"></i> DROPSHIP
                             </div>
-                            <img src="${imageUrl}" alt="${title}" loading="lazy" onerror="this.src='https://img.rorraxy.com/rorraxyfree/mr%20masudar%20logo%20(3).png'">
+                            <img src="${imageUrl}" alt="${title}" loading="lazy" onerror="this.src='https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png'">
                         </div>
                         <div class="card-footer-actions" onclick="event.stopPropagation()">
                             <div class="dropship-pricing-row">
                                 <span class="product-price-tag">Base: ${basePrice}</span>
                                 <span class="resell-tag">Resell: ${resellPrice}</span>
                             </div>
-                            <div class="card-sub-actions">
+                            <div class="card-single-line-row">
                                 <div class="love-action" onclick="toggleLove(event, this)">
                                     <i class="fa-solid fa-heart"></i> <span class="love-count">${item.like_count || 32}</span>
                                 </div>
@@ -522,7 +527,7 @@
             if(mediaObj.type === 'video') {
                 viewport.innerHTML = `<video src="${mediaObj.url}" class="main-media-element" controls autoplay muted loop playsinline></video>`;
             } else {
-                viewport.innerHTML = `<img src="${mediaObj.url}" class="main-media-element" alt="Product View" onerror="this.src='https://img.rorraxy.com/rorraxyfree/mr%20masudar%20logo%20(3).png'">`;
+                viewport.innerHTML = `<img src="${mediaObj.url}" class="main-media-element" alt="Product View" onerror="this.src='https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png'">`;
             }
         }
 
