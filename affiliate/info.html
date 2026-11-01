@@ -35,7 +35,6 @@
         .header-logo-img { width: 80px; height: 80px; object-fit: contain; filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.5)); }
         .dashboard-header h1 { font-size: 1.35rem; font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 0.5px; }
 
-        /* সিম্পল ও সফট কার্ড লেআউট */
         .sector-card { background: var(--card-retail); border-radius: 16px; padding: 20px 18px; border: 1px solid var(--border-color); }
         .section-title { font-size: 0.80rem; font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 6px; letter-spacing: 0.5px; }
         
@@ -54,21 +53,18 @@
 
         .action-btn { background: var(--gold-gradient); color: #000; border: none; width: 100%; padding: 12px 14px; border-radius: 10px; font-weight: 800; font-size: 0.78rem; cursor: pointer; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 6px; letter-spacing: 0.5px; }
         
-        /* সামারি স্টাইল */
         .summary-box { display: none; background: #040407; padding: 14px; border-radius: 12px; border: 1px solid var(--border-color); flex-direction: column; gap: 8px; text-transform: none; }
         .summary-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.04); padding-bottom: 5px; }
         .summary-row span:first-child { color: var(--text-gray); font-weight: 600; }
         .summary-row span:last-child { color: var(--text-white); font-weight: 700; }
         .edit-badge { color: var(--gold-solid); cursor: pointer; font-weight: 700; font-size: 0.70rem; display: inline-flex; align-items: center; gap: 4px; }
 
-        /* টু-স্টেপ বায়োমেট্রিক সিকিউরিটি সেকশন (একদম সিম্পল ও রিফাইন্ড) */
         .security-box { display: flex; flex-direction: column; gap: 10px; text-align: center; }
         .security-desc { font-size: 0.70rem; color: var(--text-gray); text-transform: none; margin-bottom: 4px; }
         .status-alert { font-size: 0.72rem; padding: 8px 10px; border-radius: 8px; display: none; text-transform: none; }
         .status-alert.error { background: rgba(255, 77, 77, 0.15); border: 1px solid #ff4d4d; color: #ff4d4d; }
         .status-alert.success { background: rgba(34, 197, 94, 0.15); border: 1px solid #22c55e; color: #22c55e; }
 
-        /* বটম নেভিগেশন মেনু */
         .affiliate-bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(3, 3, 5, 0.95); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; align-items: center; padding: 10px 6px; z-index: 1000; }
         .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; background: none; border: none; cursor: pointer; }
         .nav-item.active i, .nav-item.active span { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
@@ -84,20 +80,24 @@
 </head>
 <body>
 
+    <script>
+        if (localStorage.getItem('rorraxy_affiliate_verified') !== 'true') {
+            window.location.href = 'index.html';
+        }
+    </script>
+
     <div class="main-container">
         <header class="dashboard-header">
             <img src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png" alt="Logo" class="header-logo-img">
             <h1>AFFILIATE SETTINGS</h1>
         </header>
 
-        <!-- সেক্টর ১ ও ২: ইনফরমেশন ও পেমেন্ট অপশন -->
         <div class="sector-card">
             <div class="section-title">
                 <i class="fa-solid fa-user-gear"></i> AFFILIATE & PAYMENT INFO
                 <span id="infoCheckMark" style="margin-left:auto; display:none; color:var(--accent-green); font-size:0.75rem;"><i class="fa-solid fa-circle-check"></i> SAVED</span>
             </div>
 
-            <!-- ফরম ভিউ -->
             <form id="affiliateInfoForm" onsubmit="saveAffiliateInfo(event)">
                 <div class="form-grid">
                     <div class="form-group"><label>FIRST NAME <span class="req-star">*</span></label><input type="text" id="firstName" class="form-control" placeholder="First Name" required></div>
@@ -130,7 +130,6 @@
                 <button type="submit" class="action-btn"><i class="fa-solid fa-floppy-disk"></i> SAVE INFO</button>
             </form>
 
-            <!-- সেভ সামারি -->
             <div class="summary-box" id="infoSummaryBox">
                 <div class="summary-row"><span>FULL NAME:</span> <span id="sumName"></span></div>
                 <div class="summary-row"><span>EMAIL:</span> <span id="sumEmail"></span></div>
@@ -143,18 +142,14 @@
             </div>
         </div>
 
-        <!-- সেক্টর ৩: টু-স্টেপ বায়োমেট্রিক সিকিউরিটি (সিম্পল ও মিনিমাল) -->
         <div class="sector-card">
             <div class="section-title"><i class="fa-solid fa-shield-halved"></i> 2-STEP BIOMETRIC SECURITY</div>
             <div class="security-box">
                 <p class="security-desc">Verify your hardware biometric passkey to access payout.</p>
-                
                 <div id="statusAlert" class="status-alert"></div>
-
                 <button type="button" class="action-btn" onclick="registerAffiliatePasskey()" style="background: rgba(212,175,55,0.06); border:1px solid var(--border-color); color:var(--gold-solid);">
                     <i class="fa-solid fa-fingerprint"></i> <span>REGISTER PASSKEY</span>
                 </button>
-
                 <button type="button" class="action-btn" onclick="authenticateAffiliatePasskey()">
                     <i class="fa-solid fa-lock-open"></i> <span>VERIFY & PAYOUT</span>
                 </button>
@@ -162,7 +157,6 @@
         </div>
     </div>
 
-    <!-- বটম নেভিগেশন মেনু -->
     <nav class="affiliate-bottom-nav">
         <a href="index.html" class="nav-item"><i class="fa-solid fa-chart-pie"></i><span>DASHBOARD</span></a>
         <a href="payout.html" class="nav-item" onclick="checkPayoutAccess(event)"><i class="fa-solid fa-hand-holding-dollar"></i><span>PAYOUT</span></a>
@@ -209,7 +203,6 @@
                 promoChannel: document.getElementById('promoChannel').value.trim(),
                 paymentMethod: document.getElementById('paymentMethod').value
             };
-
             localStorage.setItem('rorraxy_affiliate_info', JSON.stringify(data));
             showSummary(data);
             alert('AFFILIATE INFORMATION SAVED SUCCESSFULLY!');
@@ -278,7 +271,6 @@
                 showAlert("Please click 'REGISTER PASSKEY' first.");
                 return;
             }
-
             try {
                 showAlert("Waiting for Biometric Signature...", false);
                 const challenge = new Uint8Array(32);
@@ -291,9 +283,7 @@
                 if (assertion) {
                     localStorage.setItem('rorraxy_affiliate_auth_verified', 'true');
                     showAlert("Verification Successful! Redirecting...", false);
-                    setTimeout(() => {
-                        window.location.replace('payout.html');
-                    }, 600);
+                    setTimeout(() => { window.location.replace('payout.html'); }, 600);
                 }
             } catch (error) {
                 showAlert("Verification failed or cancelled.");
