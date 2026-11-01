@@ -1,7 +1,7 @@
 /**
  * rorraxy - Ultimate Luxury Transparent PWA Installation Manager
- * Description: Smooth orbit rotation, progress bar, top-right corner minimal badge,
- * and Apple/Android/Desktop native support.
+ * Description: Draggable minimal badge, smooth orbit rotation, progress timer,
+ * and direct native install handling for Android/Apple/Desktop.
  */
 
 (function () {
@@ -59,15 +59,15 @@
             border: 1px solid rgba(212, 175, 55, 0.4);
         }
 
-        /* সার্ভিস সার্কেল রোটেশন এনিমেশন */
+        /* সার্কেল রোটেশন এনিমেশন (বর্ডার রিমুভড ক্লিন লুক) */
         .rorraxy-orbit-ring {
             position: absolute; width: 150px; height: 150px;
-            border: 1px dashed rgba(212, 175, 55, 0.5); border-radius: 50%;
+            border: 1px dashed rgba(212, 175, 55, 0.4); border-radius: 50%;
             animation: rorraxyOrbitSpin 10s linear infinite; pointer-events: none; z-index: 2;
         }
 
         .rorraxy-orbit-item {
-            position: absolute; background: #030305; border: 1px solid rgba(212, 175, 55, 0.7);
+            position: absolute; background: #030305; border: 1px solid rgba(212, 175, 55, 0.6);
             color: var(--gold-solid); font-size: 7px; font-weight: 700; padding: 2px 6px;
             border-radius: 8px; text-transform: uppercase; white-space: nowrap;
         }
@@ -99,17 +99,19 @@
             animation: rorraxyShrinkBar 15s linear forwards;
         }
 
-        /* একদম ডান দিকের কোণায় ভাসমান ছোট মিনিমাল ব্যাজ */
+        /* ড্র্যাগনযোগ্য ছোট মিনিমাল ব্যাজ (ডান কোণায় ফিক্সড, টেনে সরাতে পারবেন) */
         .rorraxy-minimal-widget {
             position: fixed; top: 12px; right: 15px; background: rgba(3, 3, 5, 0.95);
             border: 1px solid rgba(212, 175, 55, 0.5); padding: 6px 14px; border-radius: 20px;
-            display: flex; align-items: center; gap: 6px; z-index: 99998; cursor: pointer;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.8);
+            display: flex; align-items: center; gap: 6px; z-index: 99998; cursor: grab;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.8); user-select: none;
             animation: rorraxyBadgeSlideDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
+        .rorraxy-minimal-widget:active { cursor: grabbing; }
         .rorraxy-minimal-text {
             font-size: 9px; font-weight: 800; background: var(--gold-gradient);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase;
+            pointer-events: none;
         }
 
         /* Apple (iOS) গাইড নোটিফিকেশন */
@@ -172,10 +174,65 @@
             }
             deferredPrompt = null;
         } else {
-            const overlay = document.querySelector('.rorraxy-pwa-overlay');
-            if (overlay) overlay.remove();
-            createMinimalWidget();
+            // অ্যান্ড্রয়েডে যদি সরাসরি ইভেন্ট ফায়ার না করে, তবে ব্রাউজার মেনু থেকে ইনস্টল করার গাইড বা শর্টকাট প্রম্পট দেখাবে
+            alert("To install: Tap your browser menu (⋮) and select 'Add to Home Screen' or 'Install App'.");
         }
+    };
+
+    // ড্র্যাগিং (Drag & Drop) ফাংশনালিটি যাতে ছোট ব্যাজটি যেকোনো জায়গায় সরিয়ে রাখা যায়
+    const makeDraggable = (elm) => {
+        let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+        let isDragging = false;
+
+        elm.onmousedown = dragMouseDown;
+        elm.ontouchstart = dragMouseDown;
+
+        function dragMouseDown(e) {
+            isDragging = false;
+            if (e.type === 'touchstart') {
+                pos3 = e.touches[0].clientX;
+                pos4 = e.touches[0].clientY;
+            } else {
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+            }
+            document.onmouseup = closeDragElement;
+            document.ontouchend = closeDragElement;
+            document.onmousemove = elementDrag;
+            document.ontouchmove = elementDrag;
+        }
+
+        function elementDrag(e) {
+            isDragging = true;
+            e = e || window.event;
+            let clientX, clientY;
+            if (e.type === 'touchmove') {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+            pos1 = pos3 - clientX;
+            pos2 = pos4 - clientY;
+            pos3 = clientX;
+            pos4 = clientY;
+
+            elm.style.top = (elm.offsetTop - pos2) + "px";
+            elm.style.left = (elm.offsetLeft - pos1) + "px";
+            elm.style.right = "auto";
+            elm.style.bottom = "auto";
+        }
+
+        function closeDragElement() {
+            document.onmouseup = null;
+            document.ontouchend = null;
+            document.onmousemove = null;
+            document.ontouchmove = null;
+            setTimeout(() => { isDragging = false; }, 50);
+        }
+
+        elm.dataset.checkDrag = () => isDragging;
     };
 
     const createMinimalWidget = () => {
@@ -186,10 +243,12 @@
         widget.innerHTML = `<span class="rorraxy-minimal-text"><i class="fa-solid fa-download"></i> INSTALL APP</span>`;
         
         widget.addEventListener('click', async () => {
+            if (widget.dataset.checkDrag && widget.dataset.checkDrag()) return;
             await triggerInstall();
         });
 
         document.body.appendChild(widget);
+        makeDraggable(widget);
     };
 
     if (isSessionDismissed === 'true') {
@@ -232,7 +291,6 @@
             createMinimalWidget();
         };
 
-        // ১৫ সেকেন্ড পর অটো মিনিমাইজ হয়ে ডান কোণায় ব্যাজ চলে যাওয়ার টাইমার
         const autoHideTimer = setTimeout(() => {
             if (document.body.contains(overlay)) {
                 dismissPopup();
