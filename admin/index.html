@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Admin Portal - rorraxy</title>
+   
+    <!-- Ecosystem Core Script -->
+    <script src="/ecosystem-core.js"></script>
+
+    <!-- Google Fonts & FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-retail: #000000;
+            --card-retail: #0a0a0f;
+            --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);  
+            --gold-solid: #d4af37;
+            --text-white: #ffffff;
+            --text-gray: #8e8e99;
+            --font-main: 'Poppins', sans-serif;
+            --required-red: #ff4d4d;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        html, body { width: 100%; overflow-x: hidden; background: var(--bg-retail) !important; color: var(--text-white); font-family: var(--font-main); min-height: 100vh; font-size: 15px; -webkit-font-smoothing: antialiased; }
+        body { display: flex; align-items: center; justify-content: center; padding: 20px; text-transform: uppercase; }
+
+        .auth-wrapper {
+            width: 100%;
+            max-width: 420px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .auth-card {
+            background: rgba(10, 10, 15, 0.95);
+            border: none !important;
+            border-radius: 28px;
+            width: 100%;
+            padding: 44px 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+        }
+
+        .auth-logo {
+            width: 150px;
+            height: auto;
+            max-height: 150px;
+            object-fit: contain;
+            margin: 0 auto;
+            background: transparent !important;
+            filter: drop-shadow(0 6px 20px rgba(212, 175, 55, 0.2)) !important;
+        }
+
+        .auth-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1.5px;
+            margin-top: -6px;
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            text-align: left;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--text-gray);
+            letter-spacing: 0.8px;
+        }
+
+        .form-control {
+            width: 100%;
+            background: #030305;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 15px 18px;
+            color: var(--text-white);
+            font-size: 0.88rem;
+            outline: none;
+            font-family: var(--font-main);
+            text-transform: none;
+            transition: all 0.25s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--gold-solid);
+            background: #000000;
+            box-shadow: 0 0 12px rgba(212, 175, 55, 0.15);
+        }
+
+        .email-hint {
+            font-size: 0.65rem;
+            color: var(--text-gray);
+            text-transform: none;
+            letter-spacing: 0.3px;
+            margin-top: 2px;
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .otp-input {
+            letter-spacing: 14px;
+            font-size: 1.3rem;
+            text-align: center;
+            font-weight: 800;
+            color: var(--gold-solid);
+        }
+
+        .auth-btn {
+            width: 100%;
+            background: var(--gold-gradient);
+            border: none;
+            border-radius: 16px;
+            padding: 16px;
+            color: #030305;
+            font-weight: 800;
+            font-size: 0.88rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: transform 0.15s ease, filter 0.2s ease;
+            margin-top: 6px;
+        }
+
+        .auth-btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
+        .auth-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        .status-msg {
+            font-size: 0.72rem;
+            text-transform: none;
+            margin-top: -6px;
+            display: none;
+        }
+        .status-msg.error { color: #ff4d4d; }
+        .status-msg.success { color: #2ecc71; }
+
+        .resend-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.68rem;
+            color: var(--text-gray);
+            text-transform: none;
+        }
+
+        .resend-btn {
+            color: var(--gold-solid);
+            background: none;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        .resend-btn:disabled { color: var(--text-gray); cursor: not-allowed; }
+
+        @media (max-width: 480px) {
+            .auth-card { padding: 34px 20px; gap: 18px; }
+            .auth-title { font-size: 1.05rem; }
+            .auth-logo { width: 130px; }
+        }
+    </style>
+</head>
+<body>
+
+    <script>
+        if (localStorage.getItem('rorraxy_admin_verified') === 'true') {
+            window.location.href = 'dashboard.html';
+        }
+    </script>
+
+    <div class="auth-wrapper">
+        <div class="auth-card">
+            <img src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png" alt="rorraxy logo" class="auth-logo">
+            
+            <h2 class="auth-title">ADMIN VERIFICATION</h2>
+
+            <!-- Step 1: Email Form -->
+            <form id="emailStepForm" class="auth-form">
+                <div class="form-group">
+                    <label>ADMIN EMAIL ADDRESS <span style="color:var(--required-red)">*</span></label>
+                    <input type="email" class="form-control" id="adminEmail" placeholder="Enter admin email..." required style="text-transform: none;" autocomplete="email">
+                    <span class="email-hint"><i class="fa-regular fa-circle-check"></i> Authorized ecosystem accounts only</span>
+                </div>
+                <div id="emailStatus" class="status-msg"></div>
+                <button type="submit" class="auth-btn" id="sendOtpBtn">GET CODE</button>
+            </form>
+
+            <!-- Step 2: 6-Digit OTP Form -->
+            <form id="otpStepForm" class="auth-form" style="display: none;">
+                <div class="form-group">
+                    <label>ENTER 6-DIGIT CODE <span style="color:var(--required-red)">*</span></label>
+                    <input type="text" class="form-control otp-input" id="otpCode" maxlength="6" pattern="\d{6}" placeholder="------" required autocomplete="one-time-code">
+                </div>
+                <div class="resend-row">
+                    <span id="timerText">Expires in: <b id="countdown" style="color:var(--gold-solid)">03:00</b></span>
+                    <button type="button" class="resend-btn" id="resendOtpBtn" disabled>RESEND CODE</button>
+                </div>
+                <div id="otpStatus" class="status-msg"></div>
+                <button type="submit" class="auth-btn" id="verifyOtpBtn" style="display:none;">VERIFY</button>
+            </form>
+
+        </div>
+    </div>
+
+    <script>
+        const WORKER_URL = "https://email.rorraxybd.workers.dev";
+
+        const emailStepForm = document.getElementById('emailStepForm');
+        const otpStepForm = document.getElementById('otpStepForm');
+        const adminEmailInput = document.getElementById('adminEmail');
+        const otpCodeInput = document.getElementById('otpCode');
+        const sendOtpBtn = document.getElementById('sendOtpBtn');
+        const resendOtpBtn = document.getElementById('resendOtpBtn');
+        const emailStatus = document.getElementById('emailStatus');
+        const otpStatus = document.getElementById('otpStatus');
+        const countdownEl = document.getElementById('countdown');
+
+        let activeEmail = '';
+        let timerInterval = null;
+
+        function showStatus(element, message, isError = false) {
+            element.innerText = message;
+            element.className = 'status-msg ' + (isError ? 'error' : 'success');
+            element.style.display = 'block';
+        }
+
+        function startTimer(durationSeconds) {
+            clearInterval(timerInterval);
+            let timer = durationSeconds;
+            resendOtpBtn.disabled = true;
+
+            timerInterval = setInterval(() => {
+                const minutes = Math.floor(timer / 60);
+                const seconds = timer % 60;
+                countdownEl.innerText = `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+                if (--timer < 0) {
+                    clearInterval(timerInterval);
+                    countdownEl.innerText = "EXPIRED";
+                    resendOtpBtn.disabled = false;
+                }
+            }, 1000);
+        }
+
+        emailStepForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            activeEmail = adminEmailInput.value.trim().toLowerCase();
+
+            if (!activeEmail) return;
+
+            sendOtpBtn.disabled = true;
+            sendOtpBtn.innerText = "SENDING...";
+            emailStatus.style.display = 'none';
+
+            try {
+                const response = await fetch(`${WORKER_URL}/send-otp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: activeEmail })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    emailStepForm.style.display = 'none';
+                    otpStepForm.style.display = 'flex';
+                    showStatus(otpStatus, 'Verification code sent to admin email!', false);
+                    startTimer(180);
+                    otpCodeInput.focus();
+                } else {
+                    showStatus(emailStatus, data.error || 'Failed to send OTP. Try again.', true);
+                }
+            } catch (err) {
+                showStatus(emailStatus, 'Network error! Please check connection.', true);
+            } finally {
+                sendOtpBtn.disabled = false;
+                sendOtpBtn.innerText = "GET CODE";
+            }
+        });
+
+        // অটো-ভেরিফাই (৬ ডিজিট পূর্ণ হওয়ার সাথে সাথে)
+        otpCodeInput.addEventListener('input', async (e) => {
+            const otpCode = e.target.value.trim();
+            
+            if (otpCode.length === 6) {
+                otpCodeInput.disabled = true;
+                otpStatus.style.display = 'none';
+
+                try {
+                    const response = await fetch(`${WORKER_URL}/verify-otp`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email: activeEmail, otp: otpCode })
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok && data.verified) {
+                        localStorage.setItem('rorraxy_admin_verified', 'true');
+                        localStorage.setItem('rorraxy_admin_email', activeEmail);
+                        
+                        showStatus(otpStatus, 'Admin Verification Successful! Redirecting...', false);
+                        setTimeout(() => {
+                            window.location.href = 'dashboard.html';
+                        }, 800);
+                    } else {
+                        showStatus(otpStatus, data.message || 'Invalid or expired code!', true);
+                        otpCodeInput.disabled = false;
+                        otpCodeInput.value = '';
+                        otpCodeInput.focus();
+                    }
+                } catch (err) {
+                    showStatus(otpStatus, 'Verification error! Try again.', true);
+                    otpCodeInput.disabled = false;
+                    otpCodeInput.focus();
+                }
+            }
+        });
+
+        resendOtpBtn.addEventListener('click', async () => {
+            resendOtpBtn.disabled = true;
+            showStatus(otpStatus, 'Resending code...', false);
+
+            try {
+                const response = await fetch(`${WORKER_URL}/send-otp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: activeEmail })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    showStatus(otpStatus, 'A new code has been sent!', false);
+                    otpCodeInput.value = '';
+                    startTimer(180);
+                } else {
+                    showStatus(otpStatus, data.error || 'Failed to resend code.', true);
+                    resendOtpBtn.disabled = false;
+                }
+            } catch (err) {
+                showStatus(otpStatus, 'Network error!', true);
+                resendOtpBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
