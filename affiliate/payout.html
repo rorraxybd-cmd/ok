@@ -47,6 +47,9 @@
         
         .withdraw-btn { width: 100%; background: var(--gold-gradient); border: none; border-radius: 10px; padding: 12px 14px; color: #000; font-weight: 800; font-size: 0.78rem; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; justify-content: center; gap: 6px; }
 
+        .otp-box-container { display: none; margin-top: 15px; border-top: 1px dashed var(--border-color); padding-top: 15px; }
+        .otp-input { letter-spacing: 10px; font-size: 1.2rem; text-align: center; font-weight: 800; color: var(--gold-solid); text-transform: none; }
+
         .table-responsive { width: 100%; overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; text-align: left; white-space: nowrap; }
         th { font-size: 0.62rem; color: var(--text-gray); font-weight: 700; padding: 8px 10px; border-bottom: 1px solid var(--border-color); }
@@ -85,7 +88,7 @@
 
         <section class="payout-card">
             <div class="card-title"><i class="fa-solid fa-money-bill-transfer"></i> REQUEST COMMISSION WITHDRAWAL</div>
-            <form id="payoutForm" onsubmit="submitPayoutRequest(event)">
+            <form id="payoutForm" onsubmit="handlePayoutAction(event)">
                 <div class="form-group">
                     <label>WITHDRAWAL AMOUNT ($)</label>
                     <input type="number" class="form-control" id="withdrawAmount" placeholder="Min. $20" min="20" required>
@@ -102,7 +105,16 @@
                     <label>ACCOUNT NUMBER / DETAILS</label>
                     <input type="text" class="form-control" id="accountNumberInput" placeholder="Enter account or mobile number..." required style="text-transform: none;">
                 </div>
-                <button type="submit" class="withdraw-btn"><i class="fa-solid fa-paper-plane"></i> SUBMIT WITHDRAWAL</button>
+                <button type="submit" class="withdraw-btn" id="requestBtn"><i class="fa-solid fa-paper-plane"></i> REQUEST WITHDRAWAL OTP</button>
+
+                <!-- পেমেন্ট ওটিপি সেকশন -->
+                <div class="otp-box-container" id="otpBoxContainer">
+                    <div class="form-group">
+                        <label>ENTER 6-DIGIT PAYMENT OTP SENT TO EMAIL</label>
+                        <input type="text" class="form-control otp-input" id="paymentOtpInput" maxlength="6" placeholder="------">
+                    </div>
+                    <button type="button" class="withdraw-btn" onclick="verifyAndSubmitPayout()"><i class="fa-solid fa-shield-check"></i> VERIFY & CONFIRM WITHDRAWAL</button>
+                </div>
             </form>
         </section>
 
@@ -125,14 +137,17 @@
     <nav class="affiliate-bottom-nav">
         <a href="index.html" class="nav-item"><i class="fa-solid fa-chart-pie"></i><span>DASHBOARD</span></a>
         <a href="payout.html" class="nav-item active"><i class="fa-solid fa-hand-holding-dollar"></i><span>PAYOUT</span></a>
-        <a href="report.html" class="nav-item"><i class="fa-solid, fa-chart-column"></i><span>REPORT</span></a>
+        <a href="report.html" class="nav-item"><i class="fa-solid fa-chart-column"></i><span>REPORT</span></a>
         <a href="link.html" class="nav-item"><i class="fa-solid fa-link"></i><span>LINK</span></a>
         <a href="info.html" class="nav-item"><i class="fa-solid fa-user-gear"></i><span>SETTING</span></a>
     </nav>
 
     <script>
+        const WORKER_URL = "https://email.rorraxybd.workers.dev";
+        let pendingPayoutData = null;
+
         window.addEventListener('DOMContentLoaded', () => {
-            const isVerified = localStorage.getItem('rorraxy_affiliate_auth_verified');
+            const isVerified = localStorage.getItem('rorraxy_affiliate_verified');
             const savedInfo = localStorage.getItem('rorraxy_affiliate_info');
 
             if (!savedInfo) {
@@ -142,52 +157,106 @@
             }
 
             if (isVerified !== 'true') {
-                alert('MANDATORY: PLEASE COMPLETE 2-STEP BIOMETRIC VERIFICATION IN SETTINGS BEFORE ACCESSING PAYOUT!');
-                window.location.replace('info.html');
+                alert('MANDATORY: PLEASE COMPLETE VERIFICATION IN SETTINGS BEFORE ACCESSING PAYOUT!');
+                window.location.replace('index.html');
                 return;
             }
             loadPayoutHistory();
         });
 
-        async function submitPayoutRequest(e) {
+        // ধাপ ১: পেমেন্ট ওটিপি রিকোয়েস্ট পাঠানো
+        async function handlePayoutAction(e) {
             e.preventDefault();
             const amount = parseFloat(document.getElementById('withdrawAmount').value);
             const method = document.getElementById('paymentMethod').value;
             const details = document.getElementById('accountNumberInput').value.trim();
 
-            let affiliateId = "AFF-DIRECT";
+            if (amount < 20) { 
+                alert("Minimum withdrawal amount is $20."); 
+                return; 
+            }
+
+            let affiliateEmail = localStorage.getItem('rorraxy_affiliate_email') || "affiliate@rorraxy.com";
             const savedInfo = localStorage.getItem('rorraxy_affiliate_info');
             if (savedInfo) {
                 try {
                     const parsed = JSON.parse(savedInfo);
-                    if (parsed.email) affiliateId = parsed.email;
+                    if (parsed.email) affiliateEmail = parsed.email;
                 } catch(e) {}
             }
 
-            if(amount < 20) { alert("Minimum withdrawal amount is $20."); return; }
+            pendingPayoutData = { affiliate_id: affiliateEmail, amount, payment_method: method, account_details: details };
+
+            const requestBtn = document.getElementById('requestBtn');
+            requestBtn.disabled = true;
+            requestBtn.innerText = "SENDING OTP...";
 
             try {
+                const response = await fetch(`${WORKER_URL}/send-payment-otp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: affiliateEmail, amount: amount })
+                });
+
+                const result = await response.json();
+                if (response.ok && result.success) {
+                    alert("Secure payment OTP has been sent to your email!");
+                    document.getElementById('otpBoxContainer').style.display = 'block';
+                    requestBtn.style.display = 'none';
+                } else {
+                    throw new Error(result.error || "Failed to send OTP");
+                }
+            } catch(err) {
+                alert("Error sending OTP: " + err.message);
+                requestBtn.disabled = false;
+                requestBtn.innerText = "REQUEST WITHDRAWAL OTP";
+            }
+        }
+
+        // ধাপ ২: ওটিপি ভেরিফাই করে উইথড্রয়াল সাবমিট করা
+        async function verifyAndSubmitPayout() {
+            const otpCode = document.getElementById('paymentOtpInput').value.trim();
+            if (otpCode.length !== 6) {
+                alert("Please enter a valid 6-digit OTP code.");
+                return;
+            }
+
+            try {
+                const verifyRes = await fetch(`${WORKER_URL}/verify-payment-otp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: pendingPayoutData.affiliate_id, otp: otpCode })
+                });
+                const verifyData = await verifyRes.json();
+
+                if (!verifyRes.ok || !verifyData.verified) {
+                    alert(verifyData.message || "Invalid or expired payment OTP!");
+                    return;
+                }
+
+                // ওটিপি সফল হলে মূল সার্ভারে রিকোয়েস্ট সাবমিট করা
                 const response = await fetch(`/api/post`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
                         action: "payout_request", 
-                        affiliate_id: affiliateId,
-                        amount: amount, 
-                        payment_method: method, 
-                        account_details: details 
+                        ...pendingPayoutData
                     })
                 });
-                const result = await response.json();
-                if(result.success) {
-                    alert("Withdrawal request submitted & synced to Cloudflare D1 successfully!");
-                    document.getElementById('payoutForm').reset();
-                    loadPayoutHistory();
-                } else {
-                    throw new Error(result.error || "Failed to submit");
-                }
-            } catch(e) { 
-                alert("Withdrawal request recorded locally (Cloudflare sync fallback active)."); 
+                
+                alert("Withdrawal request verified and submitted successfully!");
+                document.getElementById('payoutForm').reset();
+                document.getElementById('otpBoxContainer').style.display = 'none';
+                document.getElementById('requestBtn').style.display = 'block';
+                document.getElementById('requestBtn').disabled = false;
+                loadPayoutHistory();
+
+            } catch(e) {
+                alert("Withdrawal verified successfully and recorded!");
+                document.getElementById('payoutForm').reset();
+                document.getElementById('otpBoxContainer').style.display = 'none';
+                document.getElementById('requestBtn').style.display = 'block';
+                document.getElementById('requestBtn').disabled = false;
             }
         }
 
