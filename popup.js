@@ -1,7 +1,7 @@
 /**
  * rorraxy - Ultimate Luxury Transparent PWA Installation Manager
- * Description: Zero shadow/effects, super smooth animations, direct install triggers,
- * and click-outside-to-dismiss functionality.
+ * Description: Zero shadow/effects, smooth animations, black aesthetic integration,
+ * and direct native install handling.
  */
 
 (function () {
@@ -24,9 +24,16 @@
             --font-main: 'Poppins', sans-serif;
         }
 
+        /* ডানে-বামে অতিরিক্ত স্ক্রল এবং হোয়াইট স্পেস রোধ করার জন্য গ্লোবাল রুলস */
+        html, body {
+            max-width: 100vw !important;
+            overflow-x: hidden !important;
+            background-color: #0b0b0b !important;
+        }
+
         .rorraxy-pwa-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: transparent !important; display: flex; align-items: center;
+            background: rgba(0, 0, 0, 0.4) !important; display: flex; align-items: center;
             justify-content: center; z-index: 99999; padding: 20px; box-sizing: border-box;
             animation: rorraxyFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
@@ -57,10 +64,9 @@
             width: 95px; height: 95px; object-fit: contain; border-radius: 14px;
             position: relative; z-index: 3; background: #000000;
             border: 1px solid rgba(212, 175, 55, 0.4);
-            box-shadow: none !important; /* শ্যাডো ও অতিরিক্ত ইফেক্ট সম্পূর্ণ জিরো করা হয়েছে */
+            box-shadow: none !important;
         }
 
-        /* স্মুথ এবং স্বাভাবিক সার্কেল রোটেশন অ্যানিমেশন */
         .rorraxy-orbit-ring {
             position: absolute; width: 150px; height: 150px;
             border: 1px dashed rgba(212, 175, 55, 0.3); border-radius: 50%;
@@ -100,7 +106,6 @@
             animation: rorraxyShrinkBar 15s linear forwards;
         }
 
-        /* ড্র্যাগ করার উপযোগী ছোট মিনিমাল ব্যাজ */
         .rorraxy-minimal-widget {
             position: fixed; top: 12px; right: 15px; background: rgba(3, 3, 5, 0.95);
             border: 1px solid rgba(212, 175, 55, 0.4); padding: 6px 14px; border-radius: 20px;
@@ -174,7 +179,6 @@
             }
             deferredPrompt = null;
         } else {
-            // অ্যান্ড্রয়েডে বা কম্পিউটারে নেটিভ প্রম্পট ব্রাউজার থেকে সরাসরি ট্রিগার না হলে, কোনো বিরক্তিকর অ্যালার্ট না দেখিয়ে উইজেটটি সাইডে রাখাবে
             const overlay = document.querySelector('.rorraxy-pwa-overlay');
             if (overlay) overlay.remove();
             createMinimalWidget();
@@ -257,7 +261,6 @@
         return;
     }
 
-    // ৩ সেকেন্ড পর পপআপ ভেসে ওঠার লজিক
     setTimeout(() => {
         const overlay = document.createElement('div');
         overlay.className = 'rorraxy-pwa-overlay';
@@ -292,7 +295,6 @@
             createMinimalWidget();
         };
 
-        // সাইটের যেকোনো ফাঁকা জায়গায় ক্লিক করলেই পপআপ সাথে সাথে বন্ধ হয়ে যাবে
         overlay.addEventListener('click', (e) => {
             if (e.target === overlay) {
                 clearTimeout(autoHideTimer);
@@ -300,7 +302,6 @@
             }
         });
 
-        // ১৫ সেকেন্ডের টাইমার
         const autoHideTimer = setTimeout(() => {
             if (document.body.contains(overlay)) {
                 dismissPopup();
