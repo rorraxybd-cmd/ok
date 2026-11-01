@@ -1,7 +1,7 @@
 /**
  * rorraxy - Ultimate Luxury Transparent PWA Installation Manager
- * Description: Fully optimized for Android, Apple, and Desktop with 
- * direct native install triggering, correct icon mapping, and draggable badge.
+ * Description: Zero shadow/effects, super smooth animations, direct install triggers,
+ * and click-outside-to-dismiss functionality.
  */
 
 (function () {
@@ -28,20 +28,20 @@
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: transparent !important; display: flex; align-items: center;
             justify-content: center; z-index: 99999; padding: 20px; box-sizing: border-box;
-            animation: rorraxyFadeIn 0.3s ease forwards; pointer-events: none;
+            animation: rorraxyFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         .rorraxy-pwa-card {
             width: 100%; max-width: 280px; background: transparent !important;
             border: none !important; box-shadow: none !important; text-align: center;
             position: relative; font-family: var(--font-main); color: var(--text-white);
-            padding: 10px; pointer-events: auto;
-            animation: rorraxyPopScale 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            padding: 10px;
+            animation: rorraxyPopScale 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         .rorraxy-pwa-close {
             position: absolute; top: -5px; right: 5px; background: rgba(3, 3, 5, 0.9);
-            border: 1px solid rgba(212, 175, 55, 0.6); color: var(--gold-solid);
+            border: 1px solid rgba(212, 175, 55, 0.4); color: var(--gold-solid);
             width: 28px; height: 28px; border-radius: 50%; display: flex;
             align-items: center; justify-content: center; font-size: 14px; font-weight: 700;
             cursor: pointer; z-index: 10; transition: transform 0.2s ease;
@@ -56,20 +56,22 @@
         .rorraxy-pwa-logo {
             width: 95px; height: 95px; object-fit: contain; border-radius: 14px;
             position: relative; z-index: 3; background: #000000;
-            border: 1.5px solid rgba(212, 175, 55, 0.6);
-            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            box-shadow: none !important; /* শ্যাডো ও অতিরিক্ত ইফেক্ট সম্পূর্ণ জিরো করা হয়েছে */
         }
 
+        /* স্মুথ এবং স্বাভাবিক সার্কেল রোটেশন অ্যানিমেশন */
         .rorraxy-orbit-ring {
             position: absolute; width: 150px; height: 150px;
-            border: 1px dashed rgba(212, 175, 55, 0.4); border-radius: 50%;
-            animation: rorraxyOrbitSpin 10s linear infinite; pointer-events: none; z-index: 2;
+            border: 1px dashed rgba(212, 175, 55, 0.3); border-radius: 50%;
+            animation: rorraxyOrbitSpin 14s linear infinite; pointer-events: none; z-index: 2;
         }
 
         .rorraxy-orbit-item {
-            position: absolute; background: #030305; border: 1px solid rgba(212, 175, 55, 0.7);
+            position: absolute; background: #030305; border: 1px solid rgba(212, 175, 55, 0.5);
             color: var(--gold-solid); font-size: 7px; font-weight: 700; padding: 2px 6px;
             border-radius: 8px; text-transform: uppercase; white-space: nowrap;
+            box-shadow: none !important;
         }
 
         .item-1 { top: -5px; left: 50%; transform: translateX(-50%); }
@@ -82,15 +84,15 @@
             padding: 10px 16px; font-size: 10px; font-weight: 800; border-radius: 14px;
             cursor: pointer; width: 100%; max-width: 200px; text-transform: uppercase;
             letter-spacing: 0.8px; margin: 0 auto 8px auto; display: flex; flex-direction: column;
-            align-items: center; gap: 2px; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25);
-            transition: transform 0.15s ease;
+            align-items: center; gap: 2px; box-shadow: none !important;
+            transition: transform 0.2s ease, filter 0.2s ease;
         }
-        .rorraxy-pwa-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        .rorraxy-pwa-btn:hover { transform: translateY(-1px); filter: brightness(1.05); }
         .rorraxy-btn-title { font-size: 11px; font-weight: 800; }
         .rorraxy-btn-devices { font-size: 7px; font-weight: 700; color: rgba(3, 3, 5, 0.85); }
 
         .rorraxy-progress-track {
-            width: 100%; max-width: 200px; height: 3px; background: rgba(255, 255, 255, 0.1);
+            width: 100%; max-width: 200px; height: 2px; background: rgba(255, 255, 255, 0.08);
             margin: 0 auto; border-radius: 2px; overflow: hidden;
         }
         .rorraxy-progress-bar {
@@ -98,12 +100,13 @@
             animation: rorraxyShrinkBar 15s linear forwards;
         }
 
+        /* ড্র্যাগ করার উপযোগী ছোট মিনিমাল ব্যাজ */
         .rorraxy-minimal-widget {
             position: fixed; top: 12px; right: 15px; background: rgba(3, 3, 5, 0.95);
-            border: 1px solid rgba(212, 175, 55, 0.5); padding: 6px 14px; border-radius: 20px;
+            border: 1px solid rgba(212, 175, 55, 0.4); padding: 6px 14px; border-radius: 20px;
             display: flex; align-items: center; gap: 6px; z-index: 99998; cursor: grab;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.8); user-select: none;
-            animation: rorraxyBadgeSlideDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            box-shadow: none !important; user-select: none;
+            animation: rorraxyBadgeSlideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
         .rorraxy-minimal-widget:active { cursor: grabbing; }
         .rorraxy-minimal-text {
@@ -114,20 +117,20 @@
 
         .rorraxy-ios-guide {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            background: rgba(8, 8, 12, 0.95); border: 1px solid rgba(212, 175, 55, 0.6);
+            background: rgba(8, 8, 12, 0.95); border: 1px solid rgba(212, 175, 55, 0.5);
             padding: 12px 18px; border-radius: 16px; color: #fff; font-family: var(--font-main);
-            font-size: 11px; z-index: 100000; box-shadow: 0 10px 30px rgba(0,0,0,0.9);
+            font-size: 11px; z-index: 100000; box-shadow: none !important;
             text-align: center; width: 90%; max-width: 320px;
-            animation: rorraxySlideUp 0.3s ease forwards;
+            animation: rorraxySlideUp 0.35s ease forwards;
         }
         .rorraxy-ios-guide b { color: #d4af37; }
 
         @keyframes rorraxyFadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes rorraxyPopScale { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
+        @keyframes rorraxyPopScale { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
         @keyframes rorraxyOrbitSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         @keyframes rorraxyShrinkBar { from { width: 100%; } to { width: 0%; } }
-        @keyframes rorraxyBadgeSlideDown { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        @keyframes rorraxySlideUp { from { transform: translate(-50%, 50px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
+        @keyframes rorraxyBadgeSlideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes rorraxySlideUp { from { transform: translate(-50%, 30px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
     `;
     document.head.appendChild(style);
 
@@ -171,10 +174,10 @@
             }
             deferredPrompt = null;
         } else {
-            // অ্যান্ড্রয়েডে যদি সরাসরি প্রম্পট ট্রিগার না হয়, তবে ব্রাউজার মেনু থেকে ইনস্টল করার সুন্দর গাইড দেখাবে
-            if (confirm("To install this app instantly, tap OK to open your browser menu (⋮) and select 'Add to Home Screen' or 'Install App'.")) {
-                // ইউজার কনফার্ম করলে ব্রাউজার মেনু নির্দেশ করবে
-            }
+            // অ্যান্ড্রয়েডে বা কম্পিউটারে নেটিভ প্রম্পট ব্রাউজার থেকে সরাসরি ট্রিগার না হলে, কোনো বিরক্তিকর অ্যালার্ট না দেখিয়ে উইজেটটি সাইডে রাখাবে
+            const overlay = document.querySelector('.rorraxy-pwa-overlay');
+            if (overlay) overlay.remove();
+            createMinimalWidget();
         }
     };
 
@@ -254,6 +257,7 @@
         return;
     }
 
+    // ৩ সেকেন্ড পর পপআপ ভেসে ওঠার লজিক
     setTimeout(() => {
         const overlay = document.createElement('div');
         overlay.className = 'rorraxy-pwa-overlay';
@@ -288,6 +292,15 @@
             createMinimalWidget();
         };
 
+        // সাইটের যেকোনো ফাঁকা জায়গায় ক্লিক করলেই পপআপ সাথে সাথে বন্ধ হয়ে যাবে
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) {
+                clearTimeout(autoHideTimer);
+                dismissPopup();
+            }
+        });
+
+        // ১৫ সেকেন্ডের টাইমার
         const autoHideTimer = setTimeout(() => {
             if (document.body.contains(overlay)) {
                 dismissPopup();
