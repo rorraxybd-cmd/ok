@@ -187,7 +187,6 @@
         .product-price-tag { font-size: 0.82rem; font-weight: 700; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .resell-tag { font-size: 0.65rem; color: var(--text-gray); font-weight: 600; }
         
-        /* এক লাইনে সুন্দরভাবে সাজানোর জন্য ফ্লেক্সবক্স লেআউট */
         .card-single-line-row { 
             display: flex; align-items: center; justify-content: space-between; width: 100%; 
             border-top: 1px solid rgba(255,255,255,0.04); padding-top: 6px; gap: 4px;
@@ -360,7 +359,8 @@
     </div>
 
     <script>
-        const API_BASE_URL = 'https://s.rorraxybd.workers.dev';
+        // ডাইরেক্ট ক্লাউডফ্লেয়ার পেজ ফাংশন কানেকশন
+        const API_BASE_URL = '';
         let currentActiveProduct = null;
         let currentItemQuantity = 1;
         let savedCustomNote = "";
