@@ -1,7 +1,7 @@
 /**
  * rorraxy - Ultimate Luxury Transparent PWA Installation Manager
- * Description: Draggable minimal badge, smooth orbit rotation, progress timer,
- * and direct native install handling for Android/Apple/Desktop.
+ * Description: Fully optimized for Android/Apple/Desktop with correct icon paths,
+ * draggable minimal badge, smooth orbit animation, and direct install triggers.
  */
 
 (function () {
@@ -40,13 +40,13 @@
         }
 
         .rorraxy-pwa-close {
-            position: absolute; top: -5px; right: 5px; background: rgba(3, 3, 5, 0.85);
-            border: 1px solid rgba(212, 175, 55, 0.5); color: var(--gold-solid);
-            width: 26px; height: 26px; border-radius: 50%; display: flex;
+            position: absolute; top: -5px; right: 5px; background: rgba(3, 3, 5, 0.9);
+            border: 1px solid rgba(212, 175, 55, 0.6); color: var(--gold-solid);
+            width: 28px; height: 28px; border-radius: 50%; display: flex;
             align-items: center; justify-content: center; font-size: 14px; font-weight: 700;
             cursor: pointer; z-index: 10; transition: transform 0.2s ease;
         }
-        .rorraxy-pwa-close:hover { transform: scale(1.1); }
+        .rorraxy-pwa-close:hover { transform: scale(1.1); background: var(--gold-gradient); color: #000; }
 
         .rorraxy-pwa-logo-container {
             position: relative; width: 150px; height: 150px; margin: 0 auto 15px auto;
@@ -54,12 +54,13 @@
         }
 
         .rorraxy-pwa-logo {
-            width: 95px; height: 95px; object-fit: contain; border-radius: 12px;
+            width: 95px; height: 95px; object-fit: contain; border-radius: 14px;
             position: relative; z-index: 3; background: #000000;
-            border: 1px solid rgba(212, 175, 55, 0.4);
+            border: 1.5px solid rgba(212, 175, 55, 0.6);
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
         }
 
-        /* সার্কেল রোটেশন এনিমেশন (বর্ডার রিমুভড ক্লিন লুক) */
+        /* চারপাশের সার্ভিস সার্কেল রোটেশন এনিমেশন */
         .rorraxy-orbit-ring {
             position: absolute; width: 150px; height: 150px;
             border: 1px dashed rgba(212, 175, 55, 0.4); border-radius: 50%;
@@ -67,7 +68,7 @@
         }
 
         .rorraxy-orbit-item {
-            position: absolute; background: #030305; border: 1px solid rgba(212, 175, 55, 0.6);
+            position: absolute; background: #030305; border: 1px solid rgba(212, 175, 55, 0.7);
             color: var(--gold-solid); font-size: 7px; font-weight: 700; padding: 2px 6px;
             border-radius: 8px; text-transform: uppercase; white-space: nowrap;
         }
@@ -85,9 +86,9 @@
             align-items: center; gap: 2px; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25);
             transition: transform 0.15s ease;
         }
-        .rorraxy-pwa-btn:hover { transform: translateY(-2px); }
+        .rorraxy-pwa-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
         .rorraxy-btn-title { font-size: 11px; font-weight: 800; }
-        .rorraxy-btn-devices { font-size: 7px; font-weight: 700; color: rgba(3, 3, 5, 0.8); }
+        .rorraxy-btn-devices { font-size: 7px; font-weight: 700; color: rgba(3, 3, 5, 0.85); }
 
         /* ১৫ সেকেন্ড কাউন্টডাউন প্রোগ্রেস বার */
         .rorraxy-progress-track {
@@ -99,7 +100,7 @@
             animation: rorraxyShrinkBar 15s linear forwards;
         }
 
-        /* ড্র্যাগনযোগ্য ছোট মিনিমাল ব্যাজ (ডান কোণায় ফিক্সড, টেনে সরাতে পারবেন) */
+        /* ড্র্যাগনযোগ্য ছোট মিনিমাল ব্যাজ (ডান কোণায় থাকবে, টেনে সরাতে পারবেন) */
         .rorraxy-minimal-widget {
             position: fixed; top: 12px; right: 15px; background: rgba(3, 3, 5, 0.95);
             border: 1px solid rgba(212, 175, 55, 0.5); padding: 6px 14px; border-radius: 20px;
@@ -174,12 +175,12 @@
             }
             deferredPrompt = null;
         } else {
-            // অ্যান্ড্রয়েডে যদি সরাসরি ইভেন্ট ফায়ার না করে, তবে ব্রাউজার মেনু থেকে ইনস্টল করার গাইড বা শর্টকাট প্রম্পট দেখাবে
+            // যদি নেটিভ প্রম্পট ব্রাউজারে রেডি না থাকে, তবে ইউজারকে ব্রাউজার মেনু থেকে ইনস্টল করার সঠিক নির্দেশনা দেখাবে
             alert("To install: Tap your browser menu (⋮) and select 'Add to Home Screen' or 'Install App'.");
         }
     };
 
-    // ড্র্যাগিং (Drag & Drop) ফাংশনালিটি যাতে ছোট ব্যাজটি যেকোনো জায়গায় সরিয়ে রাখা যায়
+    // ড্র্যাগিং (Drag & Drop) ফাংশনালিটি
     const makeDraggable = (elm) => {
         let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
         let isDragging = false;
@@ -256,7 +257,7 @@
         return;
     }
 
-    // ৩ সেকেন্ড পর পপআপ ভেসে ওঠার লজিক
+    // সাইটে ঢোকার ৩ সেকেন্ড পর পপআপ আসবে
     setTimeout(() => {
         const overlay = document.createElement('div');
         overlay.className = 'rorraxy-pwa-overlay';
@@ -270,7 +271,7 @@
                         <span class="rorraxy-orbit-item item-3">Solutions</span>
                         <span class="rorraxy-orbit-item item-4">Academy</span>
                     </div>
-                    <img src="/512svg.svg" alt="rorraxy" class="rorraxy-pwa-logo">
+                    <img src="/icon-512.png" alt="rorraxy" class="rorraxy-pwa-logo">
                 </div>
                 <div>
                     <button id="rorraxyPwaInstallBtn" class="rorraxy-pwa-btn">
