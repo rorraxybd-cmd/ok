@@ -516,7 +516,7 @@
                 <button onclick="closeChatModal()" style="background:none; border:none; color:#fff; font-size:1.1rem; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="chat-body" id="chatMsgContainer">
-                <div class="chat-msg seller">Hello! Welcome to Rorraxy Dropship Support. How can I assist you with your fulfillment order?</div>
+                <div class="chat-msg seller">Hello! Welcome to rorraxy Dropship Support. How can I assist you with your fulfillment order?</div>
             </div>
             <div class="chat-footer">
                 <input type="text" id="chatInputText" class="chat-input" placeholder="Type your message here...">
@@ -581,7 +581,8 @@
     </div>
 
     <script>
-        const API_BASE_URL = 'https://s.rorraxybd.workers.dev';
+        // ডাইরেক্ট ক্লাউডফ্লেয়ার পেজ ফাংশন কানেকশন
+        const API_BASE_URL = '';
         let currentOrderData = null;
 
         window.onload = function() {
@@ -703,7 +704,7 @@
             items.forEach((item, index) => {
                 const itemOrderId = item.orderId || `${mainOrderId}-${index + 1}`;
                 const itemTrackingId = item.trackingId || `TRK-${Math.floor(10000000 + Math.random() * 90000000)}`;
-                const sellerName = item.sellerName || item.sellerId || 'Rorraxy Dropship Vendor';
+                const sellerName = item.sellerName || item.sellerId || 'rorraxy Dropship Vendor';
                 const title = item.title || item.product_title || 'Dropship Item';
                 const price = item.price ? (typeof item.price === 'number' ? `$${item.price.toFixed(2)}` : item.price) : '$0.00';
                 const qty = item.qty || 1;
