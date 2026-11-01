@@ -106,11 +106,12 @@
             animation: rorraxyShrinkBar 15s linear forwards;
         }
 
+        /* ছোট উইজেটের z-index এবং ক্লিক প্রিভেনশন ফিক্সড */
         .rorraxy-minimal-widget {
-            position: fixed; top: 12px; right: 15px; background: rgba(3, 3, 5, 0.95);
-            border: 1px solid rgba(212, 175, 55, 0.4); padding: 6px 14px; border-radius: 20px;
-            display: flex; align-items: center; gap: 6px; z-index: 99998; cursor: pointer;
-            box-shadow: none !important; user-select: none; touch-action: none;
+            position: fixed; top: 8px; right: 15px; background: rgba(3, 3, 5, 0.98);
+            border: 1px solid rgba(212, 175, 55, 0.5); padding: 5px 12px; border-radius: 20px;
+            display: flex; align-items: center; gap: 6px; z-index: 2147483647 !important; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.8) !important; user-select: none;
             animation: rorraxyBadgeSlideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
         .rorraxy-minimal-text {
@@ -123,7 +124,7 @@
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
             background: rgba(8, 8, 12, 0.95); border: 1px solid rgba(212, 175, 55, 0.5);
             padding: 12px 18px; border-radius: 16px; color: #fff; font-family: var(--font-main);
-            font-size: 11px; z-index: 100000; box-shadow: none !important;
+            font-size: 11px; z-index: 2147483647 !important; box-shadow: none !important;
             text-align: center; width: 90%; max-width: 320px;
             animation: rorraxySlideUp 0.35s ease forwards;
         }
@@ -144,7 +145,11 @@
         deferredPrompt = e;
     });
 
-    const triggerInstall = async () => {
+    const triggerInstall = async (e) => {
+        if(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
         if (isIOS) {
@@ -233,12 +238,11 @@
         widget.className = 'rorraxy-minimal-widget';
         widget.innerHTML = `<span class="rorraxy-minimal-text"><i class="fa-solid fa-download"></i> INSTALL APP</span>`;
         
-        // ফিক্সড ক্লিক হ্যান্ডলার যাতে কম্পিউটারে এবং মোবাইলে নির্ভুলভাবে কাজ করে
+        // টপ লেভেল ক্লিক ইভেন্ট এবং টাচ সাপোর্টের মাধ্যমে ফিক্স করা হয়েছে
         widget.addEventListener('click', async (e) => {
             if (widget.dataset.checkDrag && widget.dataset.checkDrag()) return;
-            e.stopPropagation();
-            await triggerInstall();
-        });
+            await triggerInstall(e);
+        }, true);
 
         document.body.appendChild(widget);
         makeDraggable(widget);
@@ -305,13 +309,13 @@
         document.getElementById('rorraxyLogoClick').addEventListener('click', async (e) => {
             e.stopPropagation();
             clearTimeout(autoHideTimer);
-            await triggerInstall();
+            await triggerInstall(e);
         });
 
         document.getElementById('rorraxyPwaInstallBtn').addEventListener('click', async (e) => {
             e.stopPropagation();
             clearTimeout(autoHideTimer);
-            await triggerInstall();
+            await triggerInstall(e);
         });
     }, 3000);
 })();
