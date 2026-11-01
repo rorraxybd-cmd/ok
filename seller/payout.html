@@ -70,6 +70,13 @@
 </head>
 <body>
 
+    <!-- সিকিউরিটি গেন্টিং চেক -->
+    <script>
+        if (localStorage.getItem('rorraxy_seller_verified') !== 'true') {
+            window.location.href = 'index.html';
+        }
+    </script>
+
     <div class="main-container">
         <header class="dashboard-header">
             <img src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png" alt="Logo" class="header-logo-img">
@@ -123,6 +130,20 @@
         </section>
     </div>
 
+    <!-- পেমেন্ট 2FA ওটিপি ভেরিফিকেশন মোডাল -->
+    <div id="payoutOtpModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.88); backdrop-filter:blur(8px); z-index:9999; justify-content:center; align-items:center; padding:16px;">
+        <div style="background:#08080c; border:1px solid rgba(212,175,55,0.35); border-radius:24px; padding:35px 25px; width:100%; max-width:400px; text-align:center; box-shadow:0 20px 50px rgba(0,0,0,0.9);">
+            <h3 style="font-size:1.1rem; font-weight:800; background:var(--gold-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:10px;">AUTHORIZE PAYOUT</h3>
+            <p style="font-size:0.75rem; color:var(--text-gray); margin-bottom:20px; text-transform:none;">Enter the 6-digit security code sent to your registered email.</p>
+            
+            <input type="text" id="payoutOtpCode" maxlength="6" placeholder="------" style="width:100%; background:#030305; border:1px solid rgba(255,255,255,0.1); border-radius:14px; padding:14px; color:var(--gold-solid); font-size:1.4rem; text-align:center; font-weight:800; letter-spacing:12px; outline:none; margin-bottom:15px;" autocomplete="one-time-code">
+            
+            <div id="payoutOtpStatus" style="font-size:0.75rem; margin-bottom:15px; display:none; text-transform:none;"></div>
+            
+            <button type="button" onclick="closePayoutModal()" style="background:none; border:none; color:var(--text-gray); font-size:0.75rem; cursor:pointer;">CANCEL</button>
+        </div>
+    </div>
+
     <nav class="seller-bottom-nav">
         <a href="list.html" class="nav-item"><i class="fa-solid fa-list-check"></i><span>LIST</span></a>
         <a href="payout.html" class="nav-item active"><i class="fa-solid fa-hand-holding-dollar"></i><span>PAYOUT</span></a>
@@ -132,6 +153,9 @@
     </nav>
 
     <script>
+        const WORKER_URL = "https://email.rorraxybd.workers.dev";
+        let pendingPayoutData = null;
+
         window.addEventListener('DOMContentLoaded', () => {
             loadPayoutRealtimeData();
         });
@@ -139,7 +163,6 @@
         async function loadPayoutRealtimeData() {
             let payoutRequests = [];
             try {
-                // সরাসরি ক্লাউডফ্লেয়ার পেজেস ফাংশন এপিআই রুট ব্যবহার করা হয়েছে
                 const response = await fetch(`/api/get?table=payouts`);
                 const result = await response.json();
                 if (result.success && Array.isArray(result.data)) {
@@ -223,21 +246,13 @@
             }
         });
 
+        // পে-আউট ফর্ম সাবমিট (মাস্ট বি ইনফো পূরণ থাকতে হবে, তারপর ইমেল OTP পাঠাবে)
         document.getElementById('payoutForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            // সেটিং প্রোফাইল ও বায়োমেট্রিক ভেরিফিকেশন চেক
             const savedProfile = JSON.parse(localStorage.getItem('rorraxy_seller_profile') || 'null');
-            const isBiometricVerified = localStorage.getItem('rorraxy_biometric_verified');
-
-            if (!savedProfile || !savedProfile.brandName) {
-                alert('PLEASE COMPLETE YOUR BUSINESS INFORMATION IN SETTINGS FIRST!');
-                window.location.href = 'info.html';
-                return;
-            }
-
-            if (isBiometricVerified !== 'true') {
-                alert('MANDATORY: PLEASE COMPLETE BIOMETRIC & 2-STEP VERIFICATION IN SETTINGS BEFORE WITHDRAWING!');
+            if (!savedProfile || !savedProfile.brandName || !savedProfile.businessEmail) {
+                alert('PLEASE COMPLETE YOUR BUSINESS INFORMATION & EMAIL IN SETTINGS FIRST!');
                 window.location.href = 'info.html';
                 return;
             }
@@ -260,27 +275,85 @@
             if (amount > currentAvail) { alert('INSUFFICIENT BALANCE!'); return; }
 
             const today = new Date().toLocaleDateString();
-            let newRequest = { date: today, method: method, details: detailText, amount: amount, status: 'PENDING' };
-            
+            pendingPayoutData = { date: today, method: method, details: detailText, amount: amount, status: 'PENDING', email: savedProfile.businessEmail };
+
+            // ওয়ার্কারে পেমেন্ট ওটিপি রিকোয়েস্ট পাঠানো
             try {
-                // সরাসরি ফাংশন এপিআই রাউটে পোস্ট রিকোয়েস্ট পাঠানো
-                await fetch(`/api/post`, {
+                const res = await fetch(`${WORKER_URL}/send-payment-otp`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'payouts', ...newRequest })
+                    body: JSON.stringify({ email: savedProfile.businessEmail, amount: amount })
                 });
+                const data = await res.json();
+                if (res.ok && data.success) {
+                    document.getElementById('payoutOtpModal').style.display = 'flex';
+                    document.getElementById('payoutOtpCode').focus();
+                } else {
+                    alert(data.error || 'FAILED TO SEND SECURITY CODE.');
+                }
             } catch (err) {
-                console.warn("API sync error:", err);
+                alert('NETWORK ERROR! PLEASE TRY AGAIN.');
             }
-
-            let payoutRequests = JSON.parse(localStorage.getItem('rorraxy_seller_payouts') || '[]');
-            payoutRequests.unshift(newRequest);
-            localStorage.setItem('rorraxy_seller_payouts', JSON.stringify(payoutRequests));
-
-            loadPayoutRealtimeData();
-            alert('PAYOUT REQUEST SUBMITTED SUCCESSFULLY!');
-            e.target.reset();
         });
+
+        // ৬ ডিজিট কোড টাইপ শেষ হওয়া মাত্র অটো-ভেরিফাই ও সাবমিশন
+        document.getElementById('payoutOtpCode').addEventListener('input', async (e) => {
+            const otpCode = e.target.value.trim();
+            const statusEl = id => document.getElementById(id);
+
+            if (otpCode.length === 6 && pendingPayoutData) {
+                try {
+                    const res = await fetch(`${WORKER_URL}/verify-payment-otp`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email: pendingPayoutData.email, otp: otpCode })
+                    });
+                    const data = await res.json();
+
+                    if (res.ok && data.verified) {
+                        statusEl('payoutOtpStatus').style.color = '#4ade80';
+                        statusEl('payoutOtpStatus').innerText = 'PAYOUT AUTHORIZED SUCCESSFULLY!';
+                        statusEl('payoutOtpStatus').style.display = 'block';
+
+                        // লোকাল এবং এপিআই-তে সেভ করা
+                        let payoutRequests = JSON.parse(localStorage.getItem('rorraxy_seller_payouts') || '[]');
+                        payoutRequests.unshift(pendingPayoutData);
+                        localStorage.setItem('rorraxy_seller_payouts', JSON.stringify(payoutRequests));
+
+                        try {
+                            await fetch(`/api/post`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ action: 'payouts', ...pendingPayoutData })
+                            });
+                        } catch (err) { console.warn("API sync error:", err); }
+
+                        setTimeout(() => {
+                            closePayoutModal();
+                            loadPayoutRealtimeData();
+                            document.getElementById('payoutForm').reset();
+                            alert('PAYOUT REQUEST SUBMITTED SUCCESSFULLY!');
+                        }, 800);
+                    } else {
+                        statusEl('payoutOtpStatus').style.color = '#ff4d4d';
+                        statusEl('payoutOtpStatus').innerText = data.message || 'INVALID OR EXPIRED CODE!';
+                        statusEl('payoutOtpStatus').style.display = 'block';
+                        e.target.value = '';
+                    }
+                } catch (err) {
+                    statusEl('payoutOtpStatus').style.color = '#ff4d4d';
+                    statusEl('payoutOtpStatus').innerText = 'VERIFICATION ERROR!';
+                    statusEl('payoutOtpStatus').style.display = 'block';
+                }
+            }
+        });
+
+        function closePayoutModal() {
+            document.getElementById('payoutOtpModal').style.display = 'none';
+            document.getElementById('payoutOtpCode').value = '';
+            document.getElementById('payoutOtpStatus').style.display = 'none';
+            pendingPayoutData = null;
+        }
     </script>
 </body>
 </html>
