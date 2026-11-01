@@ -2,10 +2,10 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <title>Affiliate Dashboard - rorraxy Ecosystem</title>
-    
-    <!-- সেন্ট্রাল ক্লাউডফ্লেয়ার ইকোসিস্টেম কোর স্ক্রিপ্ট -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <title>Affiliate Portal - rorraxy</title>
+   
+    <!-- সেন্ট্রাল স্ক্রিপ্ট ট্যাগ -->
     <script src="/ecosystem-core.js"></script>
 
     <!-- Google Fonts & FontAwesome -->
@@ -13,9 +13,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
         :root {
@@ -26,257 +23,213 @@
             --text-white: #ffffff;
             --text-gray: #a0a0ab;
             --font-main: 'Poppins', sans-serif;
-            --border-color: rgba(212, 175, 55, 0.15);
+            --border-color: rgba(212, 175, 55, 0.22);
             --required-red: #ff4d4d;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        html, body { width: 100%; overflow-x: hidden; background: var(--bg-retail) !important; color: var(--text-white); font-family: var(--font-main); min-height: 100vh; font-size: 14px; }
-        body { padding: 24px 16px 110px 16px; text-transform: uppercase; }
-        
-        .main-container { 
-            width: 100%; 
-            max-width: 1200px; 
-            margin: 0 auto; 
-            filter: blur(8px);
-            pointer-events: none;
-            transition: filter 0.4s ease;
-        }
-        .main-container.unlocked {
-            filter: blur(0);
-            pointer-events: auto;
-        }
+        html, body { width: 100%; overflow-x: hidden; background: var(--bg-retail) !important; color: var(--text-white); font-family: var(--font-main); min-height: 100vh; font-size: 15px; -webkit-font-smoothing: antialiased; }
+        body { display: flex; align-items: center; justify-content: center; padding: 20px; text-transform: uppercase; }
 
-        .dashboard-header { text-align: center; margin-bottom: 30px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
-        .header-logo-img { width: 95px; height: 95px; object-fit: contain; filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.5)); }
-        .dashboard-header h1 { font-size: 1.65rem; font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 0.8px; }
-
-        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 30px; }
-        .stat-card { background: var(--card-retail); border-radius: 16px; padding: 20px 14px 14px 14px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 8px; border: 1px solid var(--border-color); }
-        .stat-card h3 { font-size: 0.72rem; color: var(--text-gray); font-weight: 600; }
-        .stat-card .value { font-size: 1.35rem; font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .graph-container { width: 100%; height: 60px; margin-top: 6px; position: relative; }
-
-        /* Bottom Fixed Navigation (5 Sub-items) */
-        .affiliate-bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(3, 3, 5, 0.95); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; align-items: center; padding: 12px 6px; z-index: 1000; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; background: none; border: none; cursor: pointer; }
-        .nav-item.active i, .nav-item.active span { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .nav-item i { font-size: 1.25rem; margin-bottom: 4px; color: var(--text-gray); }
-        .nav-item span { font-size: 0.62rem; font-weight: 700; color: var(--text-gray); }
-
-        /* Authentication Modal Overlay */
-        .auth-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.92);
-            backdrop-filter: blur(10px);
+        .auth-wrapper {
+            width: 100%;
+            max-width: 440px;
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 9999;
-            padding: 16px;
         }
         .auth-card {
             background: var(--card-retail);
             border: 1px solid var(--border-color);
-            border-radius: 20px;
+            border-radius: 24px;
             width: 100%;
-            max-width: 420px;
-            padding: 32px 24px;
+            padding: 38px 28px;
             display: flex;
             flex-direction: column;
-            gap: 18px;
+            gap: 22px;
             text-align: center;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.9);
         }
+        /* লোগো একদম স্পষ্ট এবং শ্যাডো/ইফেক্ট জিরো */
         .auth-logo {
-            width: 95px;
-            height: 95px;
+            width: 90px;
+            height: 90px;
             object-fit: contain;
             margin: 0 auto;
-            filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.6));
+            background: transparent !important;
+            filter: none !important;
+            box-shadow: none !important;
         }
         .auth-title {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 800;
             background: var(--gold-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            letter-spacing: 0.5px;
-        }
-        .auth-subtitle {
-            font-size: 0.65rem;
-            color: var(--text-gray);
-            font-weight: 600;
-            margin-top: -8px;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
         }
         .auth-form {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 16px;
             text-align: left;
         }
         .form-group {
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 6px;
         }
         .form-group label {
-            font-size: 0.68rem;
+            font-size: 0.7rem;
             font-weight: 700;
             color: var(--text-gray);
+            letter-spacing: 0.5px;
         }
         .form-control {
             width: 100%;
-            background: #040407;
+            background: #030305;
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 11px 14px;
+            border-radius: 14px;
+            padding: 14px 16px;
             color: var(--text-white);
-            font-size: 0.78rem;
+            font-size: 0.85rem;
             outline: none;
             font-family: var(--font-main);
             text-transform: none;
+            transition: border-color 0.2s ease;
         }
+        .form-control:focus {
+            border-color: var(--gold-solid);
+        }
+        .forgot-row {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: -4px;
+        }
+        .forgot-link {
+            color: var(--gold-solid);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.7rem;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+        }
+        .forgot-link:hover { text-decoration: underline; }
+
         .auth-btn {
             width: 100%;
             background: var(--gold-gradient);
             border: none;
-            border-radius: 12px;
-            padding: 13px;
-            color: #000;
+            border-radius: 14px;
+            padding: 15px;
+            color: #030305;
             font-weight: 800;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             cursor: pointer;
             text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: none !important;
+            transition: filter 0.2s ease, transform 0.1s ease;
             margin-top: 4px;
         }
+        .auth-btn:hover { filter: brightness(1.05); transform: translateY(-1px); }
+
         .auth-switch {
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             color: var(--text-gray);
-            margin-top: 2px;
             text-transform: none;
+            letter-spacing: 0.3px;
+            margin-top: 4px;
         }
-        .auth-switch a, .forgot-link {
+        .auth-switch a {
             color: var(--gold-solid);
             text-decoration: none;
             font-weight: 700;
             cursor: pointer;
+            margin-left: 4px;
         }
-        .auth-switch a:hover, .forgot-link:hover { text-decoration: underline; }
+        .auth-switch a:hover { text-decoration: underline; }
 
-        @media (max-width: 768px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 480px) {
+            .auth-card { padding: 28px 18px; gap: 18px; }
+            .auth-title { font-size: 1.15rem; }
+        }
     </style>
 </head>
 <body>
 
-    <!-- Authentication / Verification Modal Overlay -->
-    <div class="auth-overlay" id="authOverlay">
+    <div class="auth-wrapper">
         <div class="auth-card">
             <img src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png" alt="Logo" class="auth-logo">
-            <div>
-                <h2 class="auth-title" id="authTitle">AFFILIATE SIGN IN</h2>
-                <p class="auth-subtitle" id="authSubtitle">VERIFY YOUR EMAIL TO ACCESS PORTAL</p>
-            </div>
+            <h2 class="auth-title" id="formHeading">AFFILIATE PORTAL</h2>
 
+            <!-- Sign In / Sign Up Form -->
             <form id="authForm" class="auth-form">
                 <div class="form-group">
                     <label>EMAIL ADDRESS <span style="color:var(--required-red)">*</span></label>
-                    <input type="email" class="form-control" id="authEmail" placeholder="Enter your email (Gmail, Outlook, Yahoo)..." required style="text-transform: none;">
+                    <input type="email" class="form-control" id="authEmail" placeholder="Enter your email address..." required style="text-transform: none;">
                 </div>
-                <div class="form-group" id="passwordGroup">
+                <div class="form-group">
                     <label>PASSWORD <span style="color:var(--required-red)">*</span></label>
-                    <input type="password" class="form-control" id="authPassword" placeholder="Enter your secure password..." required style="text-transform: none;">
+                    <input type="password" class="form-control" id="authPassword" placeholder="Enter secure password..." required style="text-transform: none;">
                 </div>
-                <div style="display: flex; justify-content: flex-end;" id="forgotContainer">
-                    <a class="forgot-link" id="forgotPasswordBtn" style="font-size: 0.65rem;">FORGOT PASSWORD?</a>
+                <div class="forgot-row" id="forgotContainer">
+                    <a class="forgot-link" id="forgotPasswordBtn">FORGOT PASSWORD?</a>
                 </div>
-                <button type="submit" class="auth-btn" id="authSubmitBtn">SIGN IN TO DASHBOARD</button>
+                <button type="submit" class="auth-btn" id="authSubmitBtn">SIGN IN</button>
             </form>
 
             <div class="auth-switch" id="authSwitchText">
-                DON'T HAVE AN ACCOUNT? <a id="switchModeBtn">SIGN UP</a>
+                DON'T HAVE AN ACCOUNT? <a href="#" id="switchModeBtn">SIGN UP</a>
             </div>
         </div>
     </div>
 
-    <div class="main-container" id="mainContainer">
-        <header class="dashboard-header">
-            <img src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png" alt="Logo" class="header-logo-img">
-            <h1>AFFILIATE DASHBOARD</h1>
-            <p style="font-size: 0.72rem; color: var(--gold-solid);">Cloudflare D1 Database Connected</p>
-        </header>
-
-        <section class="stats-grid">
-            <div class="stat-card"><h3>TOTAL CLICKS</h3><div class="value" id="statClicksVal">1,420</div><div class="graph-container"><canvas id="chartClicks"></canvas></div></div>
-            <div class="stat-card"><h3>CONVERSIONS</h3><div class="value" id="statConversionsVal">85</div><div class="graph-container"><canvas id="chartConversions"></canvas></div></div>
-            <div class="stat-card"><h3>TOTAL REVENUE</h3><div class="value" id="statRevenueVal">$1,245.50</div><div class="graph-container"><canvas id="chartRevenue"></canvas></div></div>
-            <div class="stat-card"><h3>AVAILABLE BALANCE</h3><div class="value" id="statBalanceVal">$450.00</div><div class="graph-container"><canvas id="chartBalance"></canvas></div></div>
-        </section>
-    </div>
-
-    <!-- বটম নেভিগেশন মেনু -->
-    <nav class="affiliate-bottom-nav">
-        <a href="index.html" class="nav-item active"><i class="fa-solid fa-chart-pie"></i><span>DASHBOARD</span></a>
-        <a href="payout.html" class="nav-item"><i class="fa-solid fa-hand-holding-dollar"></i><span>PAYOUT</span></a>
-        <a href="report.html" class="nav-item"><i class="fa-solid fa-chart-column"></i><span>REPORT</span></a>
-        <a href="link.html" class="nav-item"><i class="fa-solid fa-link"></i><span>LINK</span></a>
-        <a href="info.html" class="nav-item"><i class="fa-solid fa-user-gear"></i><span>SETTING</span></a>
-    </nav>
-
-    <!-- Firebase Authentication & Cloudflare Pages API Integration -->
+    <!-- Firebase Authentication & Session Script -->
     <script type="module">
-        import { auth, db } from './firebase.js';
+        import { auth } from './firebase.js';
         import { 
             signInWithEmailAndPassword, 
             createUserWithEmailAndPassword, 
-            sendPasswordResetEmail, 
-            onAuthStateChanged 
+            sendPasswordResetEmail,
+            onAuthStateChanged
         } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         let isSignUpMode = false;
-        const authOverlay = document.getElementById('authOverlay');
-        const mainContainer = document.getElementById('mainContainer');
         const authForm = document.getElementById('authForm');
-        const authTitle = document.getElementById('authTitle');
-        const authSubtitle = document.getElementById('authSubtitle');
+        const formHeading = document.getElementById('formHeading');
         const authSubmitBtn = document.getElementById('authSubmitBtn');
         const switchModeBtn = document.getElementById('switchModeBtn');
         const authSwitchText = document.getElementById('authSwitchText');
+        const forgotContainer = document.getElementById('forgotContainer');
         const forgotPasswordBtn = document.getElementById('forgotPasswordBtn');
 
-        // ফায়ারবেস অথ স্টেট চেকার
+        // ক্যাশ চেক: ইউজার অলরেডি ভেরিফাই বা লগইন করা থাকলে সরাসরি ড্যাশবোর্ডে চলে যাবে
         onAuthStateChanged(auth, (user) => {
-            if (user) {
-                authOverlay.style.display = 'none';
-                mainContainer.classList.add('unlocked');
-                fetchCloudflareStats(user.email);
-            } else {
-                authOverlay.style.display = 'flex';
-                mainContainer.classList.remove('unlocked');
+            if (user || localStorage.getItem('rorraxy_affiliate_verified') === 'true') {
+                window.location.href = 'dashboard.html';
             }
         });
 
-        // মোড পরিবর্তন (Sign In <-> Sign Up)
-        switchModeBtn.addEventListener('click', () => {
+        // সাইন ইন এবং সাইন আপ মোড টগল করার ফাংশন
+        switchModeBtn.addEventListener('click', (e) => {
+            e.preventDefault();
             isSignUpMode = !isSignUpMode;
             if (isSignUpMode) {
-                authTitle.innerText = "AFFILIATE SIGN UP";
-                authSubtitle.innerText = "CREATE YOUR AFFILIATE ACCOUNT";
-                authSubmitBtn.innerText = "REGISTER & VERIFY";
-                authSwitchText.innerHTML = `ALREADY HAVE AN ACCOUNT? <a id="switchModeBtn">SIGN IN</a>`;
-                forgotPasswordBtn.style.display = 'none';
+                formHeading.innerText = "AFFILIATE SIGN UP";
+                authSubmitBtn.innerText = "CREATE ACCOUNT";
+                authSwitchText.innerHTML = `ALREADY HAVE AN ACCOUNT? <a href="#" id="switchModeBtn">SIGN IN</a>`;
+                forgotContainer.style.display = 'none';
             } else {
-                authTitle.innerText = "AFFILIATE SIGN IN";
-                authSubtitle.innerText = "VERIFY YOUR EMAIL TO ACCESS PORTAL";
-                authSubmitBtn.innerText = "SIGN IN TO DASHBOARD";
-                authSwitchText.innerHTML = `DON'T HAVE AN ACCOUNT? <a id="switchModeBtn">SIGN UP</a>`;
-                forgotPasswordBtn.style.display = 'block';
+                formHeading.innerText = "AFFILIATE PORTAL";
+                authSubmitBtn.innerText = "SIGN IN";
+                authSwitchText.innerHTML = `DON'T HAVE AN ACCOUNT? <a href="#" id="switchModeBtn">SIGN UP</a>`;
+                forgotContainer.style.display = 'flex';
             }
-            document.getElementById('switchModeBtn').addEventListener('click', () => switchModeBtn.click());
+            document.getElementById('switchModeBtn').addEventListener('click', arguments.callee);
         });
 
-        // ফর্ম সাবমিট (লগইন বা সাইন আপ)
+        // ফর্ম সাবমিট হ্যান্ডলার
         authForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('authEmail').value.trim();
@@ -285,18 +238,21 @@
             try {
                 if (isSignUpMode) {
                     await createUserWithEmailAndPassword(auth, email, password);
-                    alert('AFFILIATE ACCOUNT CREATED & VERIFIED SUCCESSFULLY!');
+                    alert('AFFILIATE ACCOUNT CREATED SUCCESSFULLY!');
                 } else {
                     await signInWithEmailAndPassword(auth, email, password);
                     alert('SIGN IN SUCCESSFUL!');
                 }
+                localStorage.setItem('rorraxy_affiliate_verified', 'true');
+                window.location.href = 'dashboard.html';
             } catch (error) {
                 alert('AUTHENTICATION ERROR: ' + error.message);
             }
         });
 
-        // পাসওয়ার্ড রিকভারি (Forgot Password)
-        forgotPasswordBtn.addEventListener('click', async () => {
+        // পাসওয়ার্ড রিকভারি মেকানিজম
+        forgotPasswordBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
             const email = document.getElementById('authEmail').value.trim();
             if (!email) {
                 alert('PLEASE ENTER YOUR EMAIL ADDRESS FIRST TO RECOVER PASSWORD!');
@@ -308,39 +264,6 @@
             } catch (error) {
                 alert('ERROR: ' + error.message);
             }
-        });
-
-        // ক্লাউডফ্লেয়ার পেজেস ফাংশন এপিআই থেকে রিয়েল-টাইম স্ট্যাটস ফেচ করা
-        async function fetchCloudflareStats(affiliateEmail = '') {
-            try {
-                const response = await fetch(`/api/get?action=stats&affiliate_id=${affiliateEmail}`);
-                const result = await response.json();
-                if (result.success && result.data && result.data.length > 0) {
-                    const latestStats = result.data[0];
-                    document.getElementById('statClicksVal').innerText = latestStats.clicks || '1,420';
-                    document.getElementById('statConversionsVal').innerText = latestStats.conversions || '85';
-                    document.getElementById('statRevenueVal').innerText = `$${(latestStats.revenue || 1245.50).toFixed(2)}`;
-                    document.getElementById('statBalanceVal').innerText = `$${(latestStats.balance || 450.00).toFixed(2)}`;
-                }
-            } catch(e) {
-                console.log("Using cached/local stats fallback.");
-            }
-        }
-
-        function createSparkline(canvasId, dataPoints, isBar = false) {
-            const ctx = document.getElementById(canvasId).getContext('2d');
-            return new Chart(ctx, {
-                type: isBar ? 'bar' : 'line',
-                data: { labels: dataPoints.map((_, i) => i), datasets: [{ data: dataPoints, borderColor: '#fcf6ba', borderWidth: 2, fill: true, backgroundColor: 'rgba(212,175,55,0.15)', tension: 0.4, pointRadius: 0 }] },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } } }
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            createSparkline('chartClicks', [15, 45, 30, 75, 55, 110, 90, 160]);
-            createSparkline('chartConversions', [3, 8, 5, 14, 9, 22, 17, 30], true);
-            createSparkline('chartRevenue', [8, 14, 25, 38, 52, 78, 110, 155]);
-            createSparkline('chartBalance', [20, 35, 32, 50, 68, 62, 85, 120]);
         });
     </script>
 </body>
