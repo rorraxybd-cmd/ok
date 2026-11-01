@@ -600,7 +600,7 @@
 
         async function triggerAutoShare(event, productId, productTitle) {
             event.stopPropagation();
-            const shareUrl = `${window.location.origin}/pd.html?id=${productId}`;
+            const shareUrl = `${window.location.origin}/wholesale/pd.html?id=${productId}`;
             if (navigator.share) {
                 try { await navigator.share({ title: productTitle, url: shareUrl }); } catch (err) {}
             } else if (navigator.clipboard) {
