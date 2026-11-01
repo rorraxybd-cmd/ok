@@ -40,7 +40,7 @@
         :root {
             --bg-retail: #0b0b0b;
             --card-retail: #0a0a0f;
-            --header-retail: rgba(11, 11, 11, 0.9);
+            --header-retail: rgba(11, 11, 11, 0.95);
             --footer-retail: rgba(6, 6, 8, 0.95);
             --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
             --gold-solid: #d4af37;
@@ -68,9 +68,10 @@
             background: var(--header-retail); backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             display: flex; flex-direction: row; align-items: center; justify-content: space-between;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.15); padding: 0 10px; height: 42px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.15); padding: 0 0 0 8px; height: 42px;
         }
 
+        /* অবিরাম এবং স্মুথ মারকুই বার */
         .trending-marquee-bar {
             overflow: hidden; white-space: nowrap; font-size: 0.72rem; font-weight: 600; text-transform: uppercase;
             flex: 1; display: flex; align-items: center; height: 42px; position: relative; background: transparent;
@@ -92,16 +93,31 @@
             100% { transform: translate3d(-50%, 0, 0); }
         }
 
+        /* একদম ডান কোণায় ফিট হওয়া লাক্সারি ড্রপডাউন মোড সিলেক্টর */
+        .mode-selector-wrapper {
+            position: relative; display: flex; align-items: center; height: 42px;
+            background: #050508; padding: 0 10px 0 6px; border-left: 1px solid rgba(212, 175, 55, 0.15);
+            flex-shrink: 0;
+        }
+
         .mode-selector-corner {
-            background: #050508; border: none; outline: none;
+            background: transparent; border: none; outline: none;
             background-image: var(--gold-gradient);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            font-size: 0.7rem; font-weight: 700; padding: 4px 6px;
+            font-size: 0.72rem; font-weight: 800; padding-right: 14px;
             cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px;
-            height: 30px; z-index: 1001;
+            height: 100%; z-index: 1001; appearance: none; -webkit-appearance: none; -moz-appearance: none;
+            font-family: var(--font-main);
         }
+
+        .mode-selector-wrapper::after {
+            content: "\f0d7"; font-family: "Font Awesome 6 Free"; font-weight: 900;
+            position: absolute; right: 8px; pointer-events: none;
+            font-size: 0.65rem; color: var(--gold-solid);
+        }
+
         .mode-selector-corner option {
-            background: #0a0a0f; color: #ffffff; -webkit-text-fill-color: #ffffff; font-weight: 500; padding: 8px;
+            background: #0a0a0f; color: #ffffff; -webkit-text-fill-color: #ffffff; font-weight: 600; padding: 10px;
         }
 
         .luxury-center-modal-overlay {
@@ -237,11 +253,13 @@
             </div>
         </div>
 
-        <select class="mode-selector-corner" id="userModeSelector" onchange="switchEcosystemMode(this.value)">
-            <option value="retail" selected>RETAIL</option>
-            <option value="wholesale">WHOLESALE</option>
-            <option value="dropshipping">DROPSHIPPING</option>
-        </select>
+        <div class="mode-selector-wrapper">
+            <select class="mode-selector-corner" id="userModeSelector" onchange="switchEcosystemMode(this.value)">
+                <option value="retail" selected>RETAIL</option>
+                <option value="wholesale">WHOLESALE</option>
+                <option value="dropshipping">DROPSHIPPING</option>
+            </select>
+        </div>
     </header>
 
     <div id="youMenuModalOverlay" class="luxury-center-modal-overlay">
