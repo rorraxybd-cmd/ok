@@ -66,6 +66,12 @@
 </head>
 <body>
 
+    <script>
+        if (localStorage.getItem('rorraxy_affiliate_verified') !== 'true') {
+            window.location.href = 'index.html';
+        }
+    </script>
+
     <div class="main-container">
         <header class="dashboard-header">
             <img src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png" alt="Logo" class="header-logo-img">
@@ -116,7 +122,6 @@
         </section>
     </div>
 
-    <!-- বটম নেভিগেশন মেনু (৫টি মেনু) -->
     <nav class="affiliate-bottom-nav">
         <a href="index.html" class="nav-item"><i class="fa-solid fa-chart-pie"></i><span>DASHBOARD</span></a>
         <a href="payout.html" class="nav-item active"><i class="fa-solid fa-hand-holding-dollar"></i><span>PAYOUT</span></a>
@@ -126,17 +131,24 @@
     </nav>
 
     <script>
-        // পে-আউটে প্রবেশের পূর্বে বায়োমেট্রিক সিকিউরিটি চেক
         window.addEventListener('DOMContentLoaded', () => {
             const isVerified = localStorage.getItem('rorraxy_affiliate_auth_verified');
+            const savedInfo = localStorage.getItem('rorraxy_affiliate_info');
+
+            if (!savedInfo) {
+                alert('MANDATORY: PLEASE COMPLETE YOUR AFFILIATE INFORMATION IN SETTINGS FIRST!');
+                window.location.replace('info.html');
+                return;
+            }
+
             if (isVerified !== 'true') {
                 alert('MANDATORY: PLEASE COMPLETE 2-STEP BIOMETRIC VERIFICATION IN SETTINGS BEFORE ACCESSING PAYOUT!');
                 window.location.replace('info.html');
+                return;
             }
             loadPayoutHistory();
         });
 
-        // ক্লাউডফ্লেয়ার পেজেস ফাংশন এপিআই (/api/post) এর মাধ্যমে পে-আউট রিকোয়েস্ট সাবমিট
         async function submitPayoutRequest(e) {
             e.preventDefault();
             const amount = parseFloat(document.getElementById('withdrawAmount').value);
@@ -179,7 +191,6 @@
             }
         }
 
-        // ক্লাউডফ্লেয়ার থেকে পে-আউট হিস্ট্রি ফেচ করা
         async function loadPayoutHistory() {
             let affiliateId = "AFF-DIRECT";
             const savedInfo = localStorage.getItem('rorraxy_affiliate_info');
