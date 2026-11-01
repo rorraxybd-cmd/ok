@@ -27,7 +27,6 @@
             --text-gray: #a0a0ab;
             --font-main: 'Poppins', sans-serif;
             --border-color: rgba(212, 175, 55, 0.15);
-            --required-red: #ff4d4d;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -41,13 +40,6 @@
             display: flex; 
             flex-direction: column; 
             align-items: center; 
-            filter: blur(8px);
-            pointer-events: none;
-            transition: filter 0.4s ease;
-        }
-        .main-container.unlocked {
-            filter: blur(0);
-            pointer-events: auto;
         }
 
         /* Header Section */
@@ -94,107 +86,6 @@
         .nav-item i { font-size: 1.25rem; margin-bottom: 4px; color: var(--text-gray); }
         .nav-item span { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.5px; color: var(--text-gray); }
 
-        /* Authentication Modal Overlay (বড় লোগো ও মিনিমাল পরিচ্ছন্ন ডিজাইন) */
-        .auth-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.92);
-            backdrop-filter: blur(10px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            padding: 16px;
-        }
-        .auth-card {
-            background: var(--card-retail);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            width: 100%;
-            max-width: 420px;
-            padding: 32px 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-            text-align: center;
-        }
-        .auth-logo {
-            width: 95px;
-            height: 95px;
-            object-fit: contain;
-            margin: 0 auto;
-            filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.6));
-        }
-        .auth-title {
-            font-size: 1.2rem;
-            font-weight: 800;
-            background: var(--gold-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: 0.5px;
-        }
-        .auth-subtitle {
-            font-size: 0.65rem;
-            color: var(--text-gray);
-            font-weight: 600;
-            margin-top: -8px;
-            letter-spacing: 0.5px;
-        }
-        .auth-form {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            text-align: left;
-        }
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-        .form-group label {
-            font-size: 0.68rem;
-            font-weight: 700;
-            color: var(--text-gray);
-        }
-        .form-control {
-            width: 100%;
-            background: #040407;
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 11px 14px;
-            color: var(--text-white);
-            font-size: 0.78rem;
-            outline: none;
-            font-family: var(--font-main);
-            text-transform: none;
-        }
-        .auth-btn {
-            width: 100%;
-            background: var(--gold-gradient);
-            border: none;
-            border-radius: 12px;
-            padding: 13px;
-            color: #000;
-            font-weight: 800;
-            font-size: 0.8rem;
-            cursor: pointer;
-            text-transform: uppercase;
-            margin-top: 4px;
-        }
-        .auth-switch {
-            font-size: 0.7rem;
-            color: var(--text-gray);
-            margin-top: 2px;
-            text-transform: none;
-        }
-        .auth-switch a, .forgot-link {
-            color: var(--gold-solid);
-            text-decoration: none;
-            font-weight: 700;
-            cursor: pointer;
-        }
-        .auth-switch a:hover, .forgot-link:hover { text-decoration: underline; }
-
         @media (max-width: 1024px) {
             .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
         }
@@ -206,37 +97,6 @@
     </style>
 </head>
 <body>
-
-    <!-- Authentication / Verification Modal Overlay -->
-    <div class="auth-overlay" id="authOverlay">
-        <div class="auth-card">
-            <img src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png" alt="Logo" class="auth-logo">
-            <div>
-                <h2 class="auth-title" id="authTitle">SELLER SIGN IN</h2>
-                <p class="auth-subtitle" id="authSubtitle">VERIFY YOUR EMAIL TO ACCESS PORTAL</p>
-            </div>
-
-            <!-- Sign In / Sign Up Form -->
-            <form id="authForm" class="auth-form">
-                <div class="form-group">
-                    <label>EMAIL ADDRESS <span style="color:var(--required-red)">*</span></label>
-                    <input type="email" class="form-control" id="authEmail" placeholder="Enter your email (Gmail, Outlook, Yahoo)..." required style="text-transform: none;">
-                </div>
-                <div class="form-group" id="passwordGroup">
-                    <label>PASSWORD <span style="color:var(--required-red)">*</span></label>
-                    <input type="password" class="form-control" id="authPassword" placeholder="Enter your secure password..." required style="text-transform: none;">
-                </div>
-                <div style="display: flex; justify-content: flex-end;" id="forgotContainer">
-                    <a class="forgot-link" id="forgotPasswordBtn" style="font-size: 0.65rem;">FORGOT PASSWORD?</a>
-                </div>
-                <button type="submit" class="auth-btn" id="authSubmitBtn">SIGN IN TO DASHBOARD</button>
-            </form>
-
-            <div class="auth-switch" id="authSwitchText">
-                DON'T HAVE AN ACCOUNT? <a id="switchModeBtn">SIGN UP</a>
-            </div>
-        </div>
-    </div>
 
     <div class="main-container" id="mainContainer">
         <!-- Header -->
@@ -298,91 +158,20 @@
         </a>
     </nav>
 
-    <!-- Firebase Authentication & Cloudflare Integration Script -->
+    <!-- Firebase Auth & Dashboard Stats Script -->
     <script type="module">
-        import { auth, db } from './firebase.js';
-        import { 
-            signInWithEmailAndPassword, 
-            createUserWithEmailAndPassword, 
-            sendPasswordResetEmail, 
-            onAuthStateChanged 
-        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { auth } from './firebase.js';
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-        let isSignUpMode = false;
-        const authOverlay = document.getElementById('authOverlay');
-        const mainContainer = document.getElementById('mainContainer');
-        const authForm = document.getElementById('authForm');
-        const authTitle = document.getElementById('authTitle');
-        const authSubtitle = document.getElementById('authSubtitle');
-        const authSubmitBtn = document.getElementById('authSubmitBtn');
-        const switchModeBtn = document.getElementById('switchModeBtn');
-        const authSwitchText = document.getElementById('authSwitchText');
-        const forgotPasswordBtn = document.getElementById('forgotPasswordBtn');
         const headerUserEmail = document.getElementById('headerUserEmail');
 
-        // ফায়ারবেস অথ স্টেট চেকার
+        // ফায়ারবেস অথ স্টেট চেকার - লগইন না থাকলে ভেরিফিকেশন পেজে পাঠিয়ে দিবে
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                authOverlay.style.display = 'none';
-                mainContainer.classList.add('unlocked');
                 headerUserEmail.innerText = user.email;
                 loadPureCloudDashboardStats();
             } else {
-                authOverlay.style.display = 'flex';
-                mainContainer.classList.remove('unlocked');
-            }
-        });
-
-        // মোড পরিবর্তন (Sign In <-> Sign Up)
-        switchModeBtn.addEventListener('click', () => {
-            isSignUpMode = !isSignUpMode;
-            if (isSignUpMode) {
-                authTitle.innerText = "SELLER SIGN UP";
-                authSubtitle.innerText = "CREATE YOUR VENDOR ACCOUNT";
-                authSubmitBtn.innerText = "REGISTER & VERIFY";
-                authSwitchText.innerHTML = `ALREADY HAVE AN ACCOUNT? <a id="switchModeBtn">SIGN IN</a>`;
-                forgotPasswordBtn.style.display = 'none';
-            } else {
-                authTitle.innerText = "SELLER SIGN IN";
-                authSubtitle.innerText = "VERIFY YOUR EMAIL TO ACCESS PORTAL";
-                authSubmitBtn.innerText = "SIGN IN TO DASHBOARD";
-                authSwitchText.innerHTML = `DON'T HAVE AN ACCOUNT? <a id="switchModeBtn">SIGN UP</a>`;
-                forgotPasswordBtn.style.display = 'block';
-            }
-            document.getElementById('switchModeBtn').addEventListener('click', () => switchModeBtn.click());
-        });
-
-        // ফর্ম সাবমিট (লগইন বা সাইন আপ)
-        authForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('authEmail').value.trim();
-            const password = document.getElementById('authPassword').value;
-
-            try {
-                if (isSignUpMode) {
-                    await createUserWithEmailAndPassword(auth, email, password);
-                    alert('ACCOUNT CREATED & VERIFIED SUCCESSFULLY!');
-                } else {
-                    await signInWithEmailAndPassword(auth, email, password);
-                    alert('SIGN IN SUCCESSFUL!');
-                }
-            } catch (error) {
-                alert('AUTHENTICATION ERROR: ' + error.message);
-            }
-        });
-
-        // পাসওয়ার্ড রিকভারি (Forgot Password)
-        forgotPasswordBtn.addEventListener('click', async () => {
-            const email = document.getElementById('authEmail').value.trim();
-            if (!email) {
-                alert('PLEASE ENTER YOUR EMAIL ADDRESS FIRST TO RECOVER PASSWORD!');
-                return;
-            }
-            try {
-                await sendPasswordResetEmail(auth, email);
-                alert('PASSWORD RESET LINK SENT TO YOUR EMAIL. PLEASE CHECK YOUR INBOX.');
-            } catch (error) {
-                alert('ERROR: ' + error.message);
+                window.location.href = 'verify.html';
             }
         });
 
