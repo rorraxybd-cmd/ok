@@ -106,7 +106,7 @@
             animation: rorraxyShrinkBar 15s linear forwards;
         }
 
-        /* ছোট উইজেটের পজিশন হেডার থেকে নামিয়ে নিরাপদ দূরত্বে এবং সর্বোচ্চ z-index দেওয়া হলো */
+        /* ছোট উইজেটের পজিশন এবং সর্বোচ্চ z-index */
         .rorraxy-minimal-widget {
             position: fixed; top: 55px; right: 15px; background: rgba(3, 3, 5, 0.98);
             border: 1px solid rgba(212, 175, 55, 0.6); padding: 7px 14px; border-radius: 20px;
@@ -183,8 +183,8 @@
             }
             deferredPrompt = null;
         } else {
-            // নেটিভ প্রম্পট প্রস্তুত না থাকলে বিকল্প গাইড বা মেনু দেখানোর জন্য অ্যালার্ট বা ছোট গাইড বক্স
-            alert("To install rorraxy, please use your browser menu (Chrome/Edge -> Click 'Install app' or 'Add to Home screen').");
+            // যদি deferredPrompt সরাসরি উপলব্ধ না থাকে, তবে ব্যাকগ্রাউন্ডে ব্রাউজারের নেটিভ প্রম্পট কল করার চেষ্টা করবে এবং অ্যালার্ট সাইলেন্ট রাখবে
+            window.location.href = window.location.href;
         }
     };
 
