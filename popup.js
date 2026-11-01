@@ -109,11 +109,10 @@
         .rorraxy-minimal-widget {
             position: fixed; top: 12px; right: 15px; background: rgba(3, 3, 5, 0.95);
             border: 1px solid rgba(212, 175, 55, 0.4); padding: 6px 14px; border-radius: 20px;
-            display: flex; align-items: center; gap: 6px; z-index: 99998; cursor: grab;
-            box-shadow: none !important; user-select: none;
+            display: flex; align-items: center; gap: 6px; z-index: 99998; cursor: pointer;
+            box-shadow: none !important; user-select: none; touch-action: none;
             animation: rorraxyBadgeSlideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
-        .rorraxy-minimal-widget:active { cursor: grabbing; }
         .rorraxy-minimal-text {
             font-size: 9px; font-weight: 800; background: var(--gold-gradient);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase;
@@ -186,54 +185,41 @@
     };
 
     const makeDraggable = (elm) => {
-        let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+        let startX = 0, startY = 0, initialX = 0, initialY = 0;
         let isDragging = false;
 
-        elm.onmousedown = dragMouseDown;
-        elm.ontouchstart = dragMouseDown;
+        elm.addEventListener('pointerdown', dragStart, false);
 
-        function dragMouseDown(e) {
+        function dragStart(e) {
             isDragging = false;
-            if (e.type === 'touchstart') {
-                pos3 = e.touches[0].clientX;
-                pos4 = e.touches[0].clientY;
-            } else {
-                pos3 = e.clientX;
-                pos4 = e.clientY;
-            }
-            document.onmouseup = closeDragElement;
-            document.ontouchend = closeDragElement;
-            document.onmousemove = elementDrag;
-            document.ontouchmove = elementDrag;
+            startX = e.clientX;
+            startY = e.clientY;
+            initialX = elm.offsetLeft;
+            initialY = elm.offsetTop;
+
+            document.addEventListener('pointermove', dragMove, false);
+            document.addEventListener('pointerup', dragEnd, false);
         }
 
-        function elementDrag(e) {
-            isDragging = true;
-            e = e || window.event;
-            let clientX, clientY;
-            if (e.type === 'touchmove') {
-                clientX = e.touches[0].clientX;
-                clientY = e.touches[0].clientY;
-            } else {
-                clientX = e.clientX;
-                clientY = e.clientY;
+        function dragMove(e) {
+            let dx = Math.abs(e.clientX - startX);
+            let dy = Math.abs(e.clientY - startY);
+            if (dx > 5 || dy > 5) {
+                isDragging = true;
             }
-            pos1 = pos3 - clientX;
-            pos2 = pos4 - clientY;
-            pos3 = clientX;
-            pos4 = clientY;
 
-            elm.style.top = (elm.offsetTop - pos2) + "px";
-            elm.style.left = (elm.offsetLeft - pos1) + "px";
+            let currentX = initialX + (e.clientX - startX);
+            let currentY = initialY + (e.clientY - startY);
+
+            elm.style.left = currentX + "px";
+            elm.style.top = currentY + "px";
             elm.style.right = "auto";
             elm.style.bottom = "auto";
         }
 
-        function closeDragElement() {
-            document.onmouseup = null;
-            document.ontouchend = null;
-            document.onmousemove = null;
-            document.ontouchmove = null;
+        function dragEnd() {
+            document.removeEventListener('pointermove', dragMove, false);
+            document.removeEventListener('pointerup', dragEnd, false);
             setTimeout(() => { isDragging = false; }, 50);
         }
 
@@ -247,8 +233,9 @@
         widget.className = 'rorraxy-minimal-widget';
         widget.innerHTML = `<span class="rorraxy-minimal-text"><i class="fa-solid fa-download"></i> INSTALL APP</span>`;
         
-        widget.addEventListener('click', async () => {
+        widget.addEventListener('click', async (e) => {
             if (widget.dataset.checkDrag && widget.dataset.checkDrag()) return;
+            e.stopPropagation();
             await triggerInstall();
         });
 
@@ -274,7 +261,7 @@
                         <span class="rorraxy-orbit-item item-3">Solutions</span>
                         <span class="rorraxy-orbit-item item-4">Academy</span>
                     </div>
-                    <img src="/icon-512.png" alt="rorraxy" class="rorraxy-pwa-logo">
+                    <img src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png" alt="rorraxy" class="rorraxy-pwa-logo">
                 </div>
                 <div>
                     <button id="rorraxyPwaInstallBtn" class="rorraxy-pwa-btn">
