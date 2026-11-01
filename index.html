@@ -7,7 +7,24 @@
     
     <!-- Central Script Tag -->
     <script src="/ecosystem-core.js"></script>
+    
+    <!-- PWA Manifest Link -->
+    <link rel="manifest" href="/manifest.json">
+
+    <!-- Service Worker Registration Script -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then((reg) => console.log('Service Worker registered successfully:', reg.scope))
+            .catch((err) => console.log('Service Worker registration failed:', err));
+        });
+      }
+    </script>
+
+    <!-- Popup JS Link -->
     <script src="/popup.js"></script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://img.rorraxy.com">
@@ -21,10 +38,10 @@
 
     <style>
         :root {
-            --bg-retail: #000000;
+            --bg-retail: #0b0b0b;
             --card-retail: #0a0a0f;
-            --header-retail: rgba(0, 0, 0, 0.9);
-            --footer-retail: rgba(4, 4, 6, 0.95);
+            --header-retail: rgba(11, 11, 11, 0.9);
+            --footer-retail: rgba(6, 6, 8, 0.95);
             --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
             --gold-solid: #d4af37;
             --pink-love: #ff2a85;
@@ -34,7 +51,7 @@
         }
 
         html, body { 
-            width: 100%; max-width: 100%; overflow-x: hidden; 
+            width: 100%; max-width: 100vw; overflow-x: hidden; 
             background: var(--bg-retail) !important; 
             color: var(--text-white); font-family: var(--font-main); 
             min-height: 100vh; font-size: 15px;
@@ -54,7 +71,6 @@
             border-bottom: 1px solid rgba(212, 175, 55, 0.15); padding: 0 10px; height: 42px;
         }
 
-        /* স্মুথ এবং অবিরাম স্ক্রলিং মারকুই */
         .trending-marquee-bar {
             overflow: hidden; white-space: nowrap; font-size: 0.72rem; font-weight: 600; text-transform: uppercase;
             flex: 1; display: flex; align-items: center; height: 42px; position: relative; background: transparent;
@@ -76,7 +92,6 @@
             100% { transform: translate3d(-50%, 0, 0); }
         }
 
-        /* বর্ডারহীন লাক্সারি মোড সিলেক্টর বাটন */
         .mode-selector-corner {
             background: #050508; border: none; outline: none;
             background-image: var(--gold-gradient);
@@ -89,7 +104,6 @@
             background: #0a0a0f; color: #ffffff; -webkit-text-fill-color: #ffffff; font-weight: 500; padding: 8px;
         }
 
-        /* সেন্ট্রাল ইউজার মডাল */
         .luxury-center-modal-overlay {
             display: none; position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important;
             background: rgba(0, 0, 0, 0.85) !important; z-index: 99999 !important; backdrop-filter: blur(20px);
@@ -131,7 +145,6 @@
         .explore-subtxt { font-size: 0.60rem; font-weight: 400; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
         .btn-right-arrow { font-size: 0.75rem; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* Pinterest Style Grid Layout */
         .feed-container {
             padding: 8px 6px; display: grid; grid-template-columns: repeat(2, 1fr); 
             gap: 8px; width: 100%; max-width: 1400px; margin: 0 auto;
@@ -170,7 +183,6 @@
         
         .share-action-btn { background: none; border: none; font-size: 0.70rem; font-weight: 500; cursor: pointer; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; }
 
-        /* Bottom Navigation Bar */
         nav.bottom-nav {
             position: fixed; bottom: 0; left: 0; width: 100%; background: var(--footer-retail);
             display: flex; justify-content: space-around; align-items: center; padding: 8px 4px 10px 4px;
@@ -205,7 +217,6 @@
       </linearGradient>
     </svg>
 
-    <!-- হেডার এবং দ্রুত গতিসম্পন্ন মারকুই বার -->
     <header class="app-header" id="mainHeader">
         <div class="trending-marquee-bar">
             <div class="marquee-container" id="marqueeContainer1">
@@ -226,7 +237,6 @@
             </div>
         </div>
 
-        <!-- বর্ডারহীন ড্রপডাউন মোড সিলেক্টর -->
         <select class="mode-selector-corner" id="userModeSelector" onchange="switchEcosystemMode(this.value)">
             <option value="retail" selected>RETAIL</option>
             <option value="wholesale">WHOLESALE</option>
@@ -234,7 +244,6 @@
         </select>
     </header>
 
-    <!-- ইউজার মডাল -->
     <div id="youMenuModalOverlay" class="luxury-center-modal-overlay">
         <div class="luxury-center-modal-box" onclick="event.stopPropagation()">
             <button class="luxury-modal-close-btn" onclick="closeYouMenuModal()"><i class="fa-solid fa-xmark"></i></button>
@@ -278,7 +287,6 @@
         </div>
     </div>
 
-    <!-- প্রোডাক্ট ফিড কন্টেইনার -->
     <main class="feed-container" id="productFeed">
         <div style="grid-column: 1 / -1; text-align: center; padding: 50px 0; color: var(--gold-solid);">
             <i class="fa-solid fa-circle-notch fa-spin fa-2x"></i>
@@ -286,7 +294,6 @@
         </div>
     </main>
 
-    <!-- বটম ন্যাভবার -->
     <nav class="bottom-nav" id="bottomNav">
         <a href="/world.html" class="nav-item">
             <i class="fa-solid fa-earth-americas"></i>
@@ -336,7 +343,6 @@
             }
         }
 
-        // ক্লাউডফ্লেয়ার ব্যাকএন্ড থেকে রিটেইল প্রোডাক্ট ফেচ করার ফাংশন
         async function loadLiveProducts() {
             try {
                 const response = await fetch(`/api/products?mode=retail`);
@@ -363,13 +369,12 @@
             }
         }
 
-        // পিন্টারেস্ট স্টাইলে প্রোডাক্ট কার্ড রেন্ডার করা
         function renderProductCards(products) {
             const feedContainer = document.getElementById('productFeed');
             feedContainer.innerHTML = '';
 
             products.forEach(item => {
-                const productId = item.id || item.product_id || item.product_code || '101';
+                const productId = item.id || item.product_id || item.product_code || item.code || '101';
                 const title = item.title || 'rorraxy Luxury Item';
                 const price = item.price ? `$${parseFloat(item.price).toFixed(2)}` : '$0.00';
                 const discount = item.discount_rate || item.discountRate || '50';
