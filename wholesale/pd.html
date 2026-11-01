@@ -74,6 +74,7 @@
             background: #08080c; border: 1px solid rgba(212, 175, 55, 0.2); transition: all 0.25s ease; 
         }
         .thumb-item img, .thumb-item video { width: 100%; height: 100%; object-fit: cover; }
+        .thumb-item:hover { border-color: rgba(212, 175, 55, 0.5); }
         .thumb-item.active { border-color: var(--gold-solid); transform: scale(1.05); }
 
         .product-right-col { display: flex; flex-direction: column; gap: 16px; width: 100%; min-width: 0; }
@@ -334,12 +335,12 @@
             <span class="footer-menu-label" id="orderBtnLabel">ADD TO WHOLESALE</span>
         </div>
 
-        <a href="/account.html" class="footer-menu-item">
+        <a href="/wholesale/account.html" class="footer-menu-item">
             <i class="fa-solid fa-user footer-menu-icon"></i>
             <span class="footer-menu-label">YOU</span>
         </a>
 
-        <a href="/cart.html" class="footer-menu-item" id="footerCartMenuBtn">
+        <a href="/wholesale/cart.html" class="footer-menu-item" id="footerCartMenuBtn">
             <div class="footer-cart-icon-wrapper">
                 <i class="fa-solid fa-cart-shopping footer-menu-icon"></i>
                 <span class="footer-cart-badge" id="footerCartItemCountBadge">0</span>
@@ -368,7 +369,8 @@
     </div>
 
     <script>
-        const API_BASE_URL = 'https://s.rorraxybd.workers.dev';
+        // ডাইরেক্ট ক্লাউডফ্লেয়ার পেজ ফাংশন কানেকশন
+        const API_BASE_URL = '';
         let currentActiveProduct = null;
         let currentItemQuantity = 10;
         let savedCustomNote = "";
