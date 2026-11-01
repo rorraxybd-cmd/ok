@@ -204,7 +204,7 @@
         function dragMove(e) {
             let dx = Math.abs(e.clientX - startX);
             let dy = Math.abs(e.clientY - startY);
-            if (dx > 5 || dy > 5) {
+            if (dx > 4 || dy > 4) {
                 isDragging = true;
             }
 
@@ -233,6 +233,7 @@
         widget.className = 'rorraxy-minimal-widget';
         widget.innerHTML = `<span class="rorraxy-minimal-text"><i class="fa-solid fa-download"></i> INSTALL APP</span>`;
         
+        // ফিক্সড ক্লিক হ্যান্ডলার যাতে কম্পিউটারে এবং মোবাইলে নির্ভুলভাবে কাজ করে
         widget.addEventListener('click', async (e) => {
             if (widget.dataset.checkDrag && widget.dataset.checkDrag()) return;
             e.stopPropagation();
