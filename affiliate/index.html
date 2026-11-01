@@ -228,6 +228,7 @@
     </div>
 
     <script>
+        // ক্লাউডফ্লেয়ার ওয়ার্কারের সঠিক এন্ডপয়েন্ট লিংক
         const WORKER_URL = "https://email.rorraxybd.workers.dev";
 
         const emailStepForm = document.getElementById('emailStepForm');
@@ -342,7 +343,6 @@
             }
         });
 
-        resendOtpBtn.appendEventListener('click', async () => {}); // placeholder check
         resendOtpBtn.addEventListener('click', async () => {
             resendOtpBtn.disabled = true;
             showStatus(otpStatus, 'Resending code...', false);
