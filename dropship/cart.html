@@ -393,7 +393,8 @@
     </div>
 
     <script>
-        const API_BASE_URL = 'https://s.rorraxybd.workers.dev';
+        // ডাইরেক্ট ক্লাউডফ্লেয়ার পেজ ফাংশন কানেকশন
+        const API_BASE_URL = '';
         let iti;
         let currentStep = 1;
         let matchedSavedAddresses = [];
@@ -759,7 +760,6 @@
                 return sum + (pNum * item.qty);
             }, 0);
 
-            // Cloudflare D1-এর dropship_orders টেবিলের কলাম কাঠামোর সাথে মিল রেখে পেলোড তৈরি করা হলো
             let cloudflareDbPayload = {
                 master_order_id: 'RRX-DROP-' + Math.floor(100000 + Math.random() * 900000),
                 customer_name: orderPayload.customer.fullName,
