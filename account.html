@@ -44,8 +44,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
-            padding: 16px 12px 90px 12px;
+            justify-content: space-between;
+            padding: 20px 12px 20px 12px;
             text-transform: uppercase !important;
             -webkit-font-smoothing: antialiased;
         }
@@ -58,58 +58,20 @@
             z-index: 99999;
         }
 
-        /* রিলস স্টাইল লম্বালম্বি কন্টেইনার (Vertical Feed Layout) */
         .account-container {
             width: 100%;
-            max-width: 440px;
+            max-width: 420px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 16px;
+            gap: 14px;
             animation: luxurySlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            margin-top: 10px;
+            margin: auto 0;
         }
 
         @keyframes luxurySlideUp {
             from { opacity: 0; transform: scale(0.96); }
             to { opacity: 1; transform: scale(1); }
-        }
-
-        /* Clean Soft Search Bar */
-        .search-tracking-box {
-            width: 100%;
-            background: var(--card-bg);
-            border: 1px solid rgba(212, 175, 55, 0.15);
-            border-radius: 12px;
-            padding: 6px 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .search-input-field {
-            flex: 1;
-            background: #030305;
-            border: 1px solid rgba(212, 175, 55, 0.08);
-            border-radius: 8px;
-            padding: 8px 12px;
-            color: #fff;
-            font-size: 0.72rem;
-            outline: none;
-            font-family: var(--font-family);
-        }
-        .search-input-field:focus { border-color: var(--gold-color); }
-
-        .search-submit-btn {
-            background: var(--gold-gradient);
-            border: none;
-            color: #000;
-            font-weight: 900;
-            font-size: 0.7rem;
-            padding: 8px 14px;
-            border-radius: 8px;
-            cursor: pointer;
-            white-space: nowrap;
         }
 
         .empty-orders-screen {
@@ -119,36 +81,16 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 50px 20px;
+            padding: 30px 20px;
             gap: 20px;
-        }
-
-        .top-brand-logo {
-            width: 100px;
-            height: auto;
-            object-fit: contain;
-        }
-
-        .mode-status-badge {
-            background: rgba(212, 175, 55, 0.08);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            border-radius: 20px;
-            padding: 5px 14px;
-            font-size: 0.65rem;
-            font-weight: 800;
-            color: var(--gold-color);
-            letter-spacing: 0.8px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
         }
 
         .shop-now-btn {
             background: var(--gold-gradient);
             color: #000;
             font-weight: 900;
-            font-size: 0.8rem;
-            padding: 10px 30px;
+            font-size: 0.85rem;
+            padding: 12px 35px;
             border-radius: 25px;
             text-decoration: none;
             display: inline-flex;
@@ -156,27 +98,27 @@
             gap: 8px;
             border: none;
             cursor: pointer;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
         }
 
-        /* MEMO & PREVIEW CARD (Vertical Reels Format) */
+        /* MEMO & PREVIEW CARD */
         .memo-preview-card {
             background: var(--card-bg);
-            border: 1px solid rgba(212, 175, 55, 0.25);
-            border-radius: 18px;
-            padding: 20px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 16px;
+            padding: 18px;
             width: 100%;
             display: flex;
             flex-direction: column;
-            gap: 14px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            gap: 12px;
         }
 
         .memo-top-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding-bottom: 10px;
         }
 
         .download-pdf-btn {
@@ -193,41 +135,38 @@
             justify-content: center;
             gap: 8px;
             width: 100%;
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
-            transition: transform 0.1s;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25);
         }
         .download-pdf-btn:active { transform: scale(0.96); }
 
         .memo-details-grid {
             background: #030305;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            padding: 12px;
-            font-size: 0.7rem;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 0.68rem;
             color: var(--text-muted);
-            line-height: 1.6;
+            line-height: 1.5;
         }
         .memo-details-grid span { color: #fff; font-weight: 700; }
 
-        /* VERTICAL ITEMS TABLE */
         .memo-items-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             margin-top: 2px;
         }
         .memo-items-table th, .memo-items-table td {
-            padding: 10px 8px;
+            padding: 8px 6px;
             text-align: left;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
-        /* গোল্ডেন গ্রেডিয়েন্ট হেডার টেক্সট */
         .memo-items-table th {
             background: var(--gold-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: 900;
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             letter-spacing: 0.5px;
         }
 
@@ -235,16 +174,16 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 900;
             color: var(--gold-color);
-            border-top: 1px solid rgba(212, 175, 55, 0.2);
-            padding-top: 10px;
+            border-top: 1px solid rgba(212, 175, 55, 0.12);
+            padding-top: 8px;
             margin-top: 2px;
         }
 
         .section-title {
-            font-size: 0.74rem;
+            font-size: 0.72rem;
             font-weight: 800;
             background: var(--gold-gradient);
             -webkit-background-clip: text;
@@ -254,29 +193,91 @@
             align-items: center;
             gap: 6px;
         }
+
+        /* BOTTOM SEARCH & HOME BAR */
+        .bottom-nav-bar {
+            width: 100%;
+            max-width: 420px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .search-tracking-box {
+            flex: 1;
+            background: var(--card-bg);
+            border: 1px solid rgba(212, 175, 55, 0.12);
+            border-radius: 12px;
+            padding: 6px 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-input-field {
+            flex: 1;
+            background: #030305;
+            border: 1px solid rgba(212, 175, 55, 0.06);
+            border-radius: 8px;
+            padding: 8px 12px;
+            color: #fff;
+            font-size: 0.7rem;
+            outline: none;
+            font-family: var(--font-family);
+        }
+        .search-input-field:focus { border-color: var(--gold-color); }
+
+        .search-submit-btn {
+            background: var(--gold-gradient);
+            border: none;
+            color: #000;
+            font-weight: 900;
+            font-size: 0.7rem;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .home-icon-btn {
+            background: var(--card-bg);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            color: var(--gold-color);
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            flex-shrink: 0;
+        }
     </style>
 </head>
 <body>
 
     <canvas id="confetti-canvas"></canvas>
 
-    <div class="account-container">
-        
-        <!-- Clean Soft Search Tracking Bar -->
+    <div class="account-container" id="accountDynamicContent">
+        <!-- Dynamic Content Loaded Here -->
+    </div>
+
+    <!-- BOTTOM SEARCH & HOME BAR -->
+    <div class="bottom-nav-bar">
+        <a href="/index.html" class="home-icon-btn" title="Home">
+            <i class="fa-solid fa-house"></i>
+        </a>
         <div class="search-tracking-box">
-            <input type="text" id="orderSearchInput" class="search-input-field" placeholder="ENTER MASTER ID OR PHONE">
+            <input type="text" id="orderSearchInput" class="search-input-field" placeholder="ENTER ORDER ID">
             <button onclick="executeOrderSearch()" class="search-submit-btn"><i class="fa-solid fa-magnifying-glass"></i> TRACK</button>
         </div>
-
-        <div id="accountDynamicContent" style="width: 100%; display: flex; flex-direction: column; gap: 14px;">
-            <!-- Dynamic Content Loaded Here -->
-        </div>
-
     </div>
 
     <script>
         const API_BASE_URL = ''; 
-        const BRAND_LOGO_URL = 'https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png';
         let currentOrderData = null;
 
         window.onload = function() {
@@ -289,7 +290,7 @@
                 confetti({
                     particleCount: 75,
                     spread: 70,
-                    origin: { y: 0.6 },
+                    origin: { y: 0.5 },
                     colors: ['#d4af37', '#fcf6ba', '#b38728', '#ffffff']
                 });
             } catch(e) {}
@@ -354,11 +355,6 @@
             const container = document.getElementById('accountDynamicContent');
             container.innerHTML = `
                 <div class="empty-orders-screen">
-                    <img src="${BRAND_LOGO_URL}" class="top-brand-logo" alt="rorraxy Logo">
-                    <div class="mode-status-badge">
-                        <i class="fa-solid fa-circle-check"></i> ACTIVE CHANNEL: RETAIL ACCOUNT
-                    </div>
-                    <p style="font-size:0.7rem; color:var(--text-muted);">NO ACTIVE ORDERS FOUND</p>
                     <button onclick="window.location.href='/index.html'" class="shop-now-btn">
                         <i class="fa-solid fa-bag-shopping"></i> START SHOPPING
                     </button>
@@ -386,7 +382,7 @@
 
                 itemsTableHtml += `
                     <tr>
-                        <td style="font-size:0.72rem; font-weight:700; color:#fff;">${title}</td>
+                        <td style="font-size:0.7rem; font-weight:700; color:#fff;">${title}</td>
                         <td style="text-align:center; font-weight:700;">${item.qty || 1}</td>
                         <td style="text-align:right; color:var(--gold-color); font-weight:900;">$${itemTotal.toFixed(2)}</td>
                     </tr>
@@ -397,21 +393,18 @@
 
             container.innerHTML = `
                 <div class="section-title">
-                    <i class="fa-solid fa-file-invoice"></i> ORDER PREVIEW & VOUCHER MEMO
+                    <i class="fa-solid fa-file-invoice"></i> ORDER MEMO
                 </div>
 
                 <div class="memo-preview-card" id="printableMemoArea">
                     <div class="memo-top-row">
-                        <div style="display:flex; align-items:center; gap:8px;">
-                            <img src="${BRAND_LOGO_URL}" crossorigin="anonymous" style="width:36px; height:auto;" alt="Logo">
-                            <div>
-                                <h2 style="font-size:0.82rem; font-weight:900; background:var(--gold-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">RORRAXY RETAIL</h2>
-                                <p style="font-size:0.5rem; color:var(--text-muted);">DIGITAL MEMO</p>
-                            </div>
+                        <div>
+                            <h2 style="font-size:0.85rem; font-weight:900; background:var(--gold-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">RORRAXY RETAIL</h2>
+                            <p style="font-size:0.48rem; color:var(--text-muted);">DIGITAL MEMO</p>
                         </div>
                         <div style="text-align:right;">
-                            <p style="font-size:0.7rem; font-weight:900; color:#fff;">#${mainOrderId}</p>
-                            <p style="font-size:0.5rem; color:var(--text-muted);">${orderDate}</p>
+                            <p style="font-size:0.68rem; font-weight:900; color:#fff;">#${mainOrderId}</p>
+                            <p style="font-size:0.48rem; color:var(--text-muted);">${orderDate}</p>
                         </div>
                     </div>
 
@@ -459,7 +452,11 @@
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
-            html2pdf().from(element).set(options).save();
+            html2pdf().from(element).set(options).save().then(() => {
+                setTimeout(() => {
+                    window.location.href = '/index.html';
+                }, 1000);
+            });
         }
     </script>
 </body>
