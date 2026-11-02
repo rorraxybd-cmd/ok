@@ -56,30 +56,30 @@ export async function onRequest(context) {
           default_payout_details, logo_url
         } = body;
 
+        // ডেটাবেসের কলামগুলোর সাথে সুনির্দিষ্টভাবে বাইন্ড করা হয়েছে
         const query = `
           INSERT OR REPLACE INTO seller_profiles (
             seller_id, brand_name, full_name, business_desc, email, whatsapp, 
             emergency_phone, country, full_address, doc_type, doc_number, 
-            default_payout_method, default_payout_details, logo_url, status, created_at, updated_at
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'ACTIVE', COALESCE((SELECT created_at FROM seller_profiles WHERE seller_id = ?), datetime('now')), datetime('now'))
+            default_payout_method, default_payout_details, logo_url, status
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'ACTIVE')
         `;
 
         await env.retail.prepare(query).bind(
           seller_id || 1, 
-          brand_name || null, 
-          full_name || null, 
+          brand_name || "", 
+          full_name || "", 
           business_desc || "", 
-          email || null, 
-          whatsapp || null, 
-          emergency_phone || null, 
+          email || "", 
+          whatsapp || "", 
+          emergency_phone || "", 
           country || "Bangladesh", 
-          full_address || null, 
+          full_address || "", 
           doc_type || "NID", 
-          doc_number || null, 
+          doc_number || "", 
           default_payout_method || "bKash", 
           default_payout_details || "N/A", 
-          logo_url || "",
-          seller_id || 1
+          logo_url || ""
         ).run();
 
         return new Response(JSON.stringify({ success: true, message: "Seller profile saved successfully!" }), {
@@ -93,7 +93,7 @@ export async function onRequest(context) {
           INSERT INTO seller_support_chats (seller_id, sender_type, message, is_read, created_at)
           VALUES (?, ?, ?, 0, datetime('now'))
         `;
-        await env.retail.prepare(query).bind(seller_id || 1, sender_type, message).run();
+        await env.retail.prepare(query).bind(seller_id || 1, sender_type || "seller", message || "").run();
 
         return new Response(JSON.stringify({ success: true, message: "Message sent successfully!" }), {
           headers: { ...corsHeaders, "Content-Type": "application/json" }
