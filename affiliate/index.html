@@ -7,7 +7,7 @@
    
     <!-- Ecosystem Core Script -->
     <script src="/ecosystem-core.js"></script>
-const WORKER_URL = "https://email.rorraxybd.workers.dev"; // আপনার সঠিক ওয়ার্কার লিংক এখানে দেবেন
+
     <!-- Google Fonts & FontAwesome -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -195,7 +195,7 @@ const WORKER_URL = "https://email.rorraxybd.workers.dev"; // আপনার স
                 
                 <div id="formStatus" class="status-msg"></div>
                 
-                <!-- জেনারেট হওয়া ম্যাজিক লিংক প্রদর্শনের বক্স (টেস্টিং বা সরাসরি ক্লিকের জন্য) -->
+                <!-- জেনারেট হওয়া ম্যাজিক লিংক প্রদর্শনের বক্স -->
                 <div id="magicLinkBox" class="magic-link-box"></div>
 
                 <button type="submit" class="auth-btn" id="sendLinkBtn">SEND MAGIC LINK</button>
@@ -242,7 +242,6 @@ const WORKER_URL = "https://email.rorraxybd.workers.dev"; // আপনার স
                 if (response.ok && data.success) {
                     showStatus(formStatus, 'Magic link generated successfully! Click below to verify:', false);
                     
-                    // ব্যাকএন্ড থেকে আসা ম্যাজিক লিংকটি স্ক্রিনে দেখিয়ে দেওয়া হচ্ছে (যাতে সরাসরি ক্লিক করে টেস্ট করা যায়)
                     if (data.magicLink) {
                         magicLinkBox.innerHTML = `Secure Link: <a href="${data.magicLink}" style="color: var(--text-white); text-decoration: underline;" target="_blank">${data.magicLink}</a>`;
                         magicLinkBox.style.display = 'block';
