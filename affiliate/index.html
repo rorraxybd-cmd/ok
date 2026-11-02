@@ -40,7 +40,7 @@
         
         .auth-card {
             background: rgba(10, 10, 15, 0.95);
-            border: none !important;
+            border: 1px solid rgba(212, 175, 55, 0.15);
             border-radius: 28px;
             width: 100%;
             padding: 44px 32px;
@@ -53,9 +53,9 @@
         }
 
         .auth-logo {
-            width: 150px;
+            width: 140px;
             height: auto;
-            max-height: 150px;
+            max-height: 140px;
             object-fit: contain;
             margin: 0 auto;
             background: transparent !important;
@@ -137,37 +137,62 @@
             letter-spacing: 1px;
             transition: transform 0.15s ease, filter 0.2s ease;
             margin-top: 6px;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
         }
 
         .auth-btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
         .auth-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
         .status-msg {
-            font-size: 0.72rem;
+            font-size: 0.75rem;
             text-transform: none;
-            margin-top: -6px;
+            margin-top: -4px;
             display: none;
+            text-align: center;
         }
         .status-msg.error { color: var(--required-red); }
         .status-msg.success { color: #2ecc71; }
 
-        .magic-link-box {
-            background: #030305;
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            border-radius: 16px;
-            padding: 15px;
-            word-break: break-all;
-            font-size: 0.75rem;
-            color: var(--gold-solid);
-            text-transform: none;
+        /* লাক্সারি গোল্ডেন গ্র্যাডিয়েন্ট ভেরিফিকেশন বাটন বক্স */
+        .action-link-box {
             display: none;
             margin-top: 10px;
+            text-align: center;
+        }
+
+        .verify-action-btn {
+            width: 100%;
+            background: var(--gold-gradient);
+            border: none;
+            border-radius: 16px;
+            padding: 16px;
+            color: #030305;
+            font-weight: 800;
+            font-size: 0.85rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+            transition: all 0.25s ease;
+        }
+
+        .verify-action-btn:hover {
+            filter: brightness(1.15);
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.5);
         }
 
         @media (max-width: 480px) {
             .auth-card { padding: 34px 20px; gap: 18px; }
             .auth-title { font-size: 1.05rem; }
-            .auth-logo { width: 130px; }
+            .auth-logo { width: 120px; }
         }
     </style>
 </head>
@@ -185,33 +210,37 @@
             
             <h2 class="auth-title">AFFILIATE VERIFICATION</h2>
 
-            <!-- Magic Link Request Form -->
+            <!-- Authentication Form -->
             <form id="magicLinkForm" class="auth-form">
                 <div class="form-group">
                     <label>EMAIL ADDRESS <span style="color:var(--required-red)">*</span></label>
                     <input type="email" class="form-control" id="affiliateEmail" placeholder="Enter your email address..." required style="text-transform: none;" autocomplete="email">
-                    <span class="email-hint"><i class="fa-regular fa-circle-check"></i> Secure Magic Link verification</span>
+                    <span class="email-hint"><i class="fa-regular fa-shield-halved" style="color: var(--gold-solid);"></i> Secure Instant Verification</span>
                 </div>
                 
                 <div id="formStatus" class="status-msg"></div>
                 
-                <!-- জেনারেট হওয়া ম্যাজিক লিংক প্রদর্শনের বক্স -->
-                <div id="magicLinkBox" class="magic-link-box"></div>
+                <!-- গোল্ডেন গ্র্যাডিয়েন্ট ভেরিফিকেশন বাটন (URL হাইড করা থাকবে) -->
+                <div id="actionLinkBox" class="action-link-box">
+                    <a id="verifyDirectBtn" href="#" target="_blank" class="verify-action-btn">
+                        <i class="fa-solid fa-lock"></i> VERIFY & ENTER DASHBOARD
+                    </a>
+                </div>
 
-                <button type="submit" class="auth-btn" id="sendLinkBtn">SEND MAGIC LINK</button>
+                <button type="submit" class="auth-btn" id="sendLinkBtn">GENERATE SECURE ENTRY</button>
             </form>
         </div>
     </div>
 
     <script>
-        // ক্লাউডফ্লেয়ার ওয়ার্কারের সঠিক এন্ডপয়েন্ট লিংক
         const WORKER_URL = "https://email.rorraxybd.workers.dev";
 
         const magicLinkForm = document.getElementById('magicLinkForm');
         const affiliateEmailInput = document.getElementById('affiliateEmail');
         const sendLinkBtn = document.getElementById('sendLinkBtn');
         const formStatus = document.getElementById('formStatus');
-        const magicLinkBox = document.getElementById('magicLinkBox');
+        const actionLinkBox = document.getElementById('actionLinkBox');
+        const verifyDirectBtn = document.getElementById('verifyDirectBtn');
 
         function showStatus(element, message, isError = false) {
             element.innerText = message;
@@ -226,9 +255,9 @@
             if (!email) return;
 
             sendLinkBtn.disabled = true;
-            sendLinkBtn.innerText = "GENERATING LINK...";
+            sendLinkBtn.innerText = "PROCESSING SECURE TOKEN...";
             formStatus.style.display = 'none';
-            magicLinkBox.style.display = 'none';
+            actionLinkBox.style.display = 'none';
 
             try {
                 const response = await fetch(`${WORKER_URL}/api/send-magic-link`, {
@@ -240,23 +269,23 @@
                 const data = await response.json();
 
                 if (response.ok && data.success) {
-                    showStatus(formStatus, 'Magic link generated successfully! Click below to verify:', false);
+                    showStatus(formStatus, 'Identity token created! Click button below to complete entry:', false);
                     
                     if (data.magicLink) {
-                        magicLinkBox.innerHTML = `Secure Link: <a href="${data.magicLink}" style="color: var(--text-white); text-decoration: underline;" target="_blank">${data.magicLink}</a>`;
-                        magicLinkBox.style.display = 'block';
+                        verifyDirectBtn.href = data.magicLink;
+                        actionLinkBox.style.display = 'block';
                     }
                     
-                    sendLinkBtn.innerText = "LINK SENT";
+                    sendLinkBtn.style.display = 'none'; // প্রাইমারি বাটন হাইড হয়ে যাবে
                 } else {
-                    showStatus(formStatus, data.error || 'Failed to generate link. Try again.', true);
+                    showStatus(formStatus, data.error || 'Verification failed. Try again.', true);
                     sendLinkBtn.disabled = false;
-                    sendLinkBtn.innerText = "SEND MAGIC LINK";
+                    sendLinkBtn.innerText = "GENERATE SECURE ENTRY";
                 }
             } catch (err) {
                 showStatus(formStatus, 'Network error! Please check connection.', true);
                 sendLinkBtn.disabled = false;
-                sendLinkBtn.innerText = "SEND MAGIC LINK";
+                sendLinkBtn.innerText = "GENERATE SECURE ENTRY";
             }
         });
     </script>
