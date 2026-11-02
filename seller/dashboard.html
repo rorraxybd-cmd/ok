@@ -111,7 +111,7 @@
     <!-- সিকিউরিটি গার্ড চেক -->
     <script>
         if (localStorage.getItem('rorraxy_seller_verified') !== 'true') {
-            window.location.replace('index.html');
+            window.location.replace('/seller/index.html');
         }
     </script>
 
@@ -170,23 +170,23 @@
 
     <!-- Seller Bottom Navigation Menu -->
     <nav class="seller-bottom-nav">
-        <a href="list.html" class="nav-item">
+        <a href="/seller/list.html" class="nav-item">
             <i class="fa-solid fa-list-check"></i>
             <span>LIST</span>
         </a>
-        <a href="payout.html" class="nav-item" onclick="checkPayoutAccess(event)">
+        <a href="/seller/payout.html" class="nav-item" onclick="checkPayoutAccess(event)">
             <i class="fa-solid fa-hand-holding-dollar"></i>
             <span>PAYOUT</span>
         </a>
-        <a href="upload.html" class="nav-item">
+        <a href="/seller/upload.html" class="nav-item">
             <i class="fa-solid fa-plus"></i>
             <span>UPLOAD</span>
         </a>
-        <a href="shipment.html" class="nav-item">
+        <a href="/seller/shipment.html" class="nav-item">
             <i class="fa-solid fa-truck-fast"></i>
             <span>SHIPMENT</span>
         </a>
-        <a href="info.html" class="nav-item">
+        <a href="/seller/info.html" class="nav-item">
             <i class="fa-solid fa-user-gear"></i>
             <span>INFO</span>
         </a>
@@ -203,7 +203,7 @@
             if (!savedProfile || !savedProfile.brandName || !savedProfile.businessEmail) {
                 e.preventDefault();
                 alert('MANDATORY: PLEASE COMPLETE YOUR BUSINESS INFO & EMAIL IN SETTINGS FIRST!');
-                window.location.href = 'info.html';
+                window.location.href = '/seller/info.html';
             }
         }
 
