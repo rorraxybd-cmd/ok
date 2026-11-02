@@ -137,7 +137,12 @@
     </style>
 </head>
 <body>
-
+<!-- সিকিউরিটি গার্ড চেক -->
+    <script>
+        if (localStorage.getItem('rorraxy_seller_verified') !== 'true') {
+            window.location.replace('index.html');
+        }
+    </script>
     <div id="success-overlay">
         <div class="success-card">
             <div style="font-size: 3rem; color: var(--gold-solid); margin-bottom: 10px;"><i class="fa-solid fa-circle-check"></i></div>
