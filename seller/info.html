@@ -103,7 +103,7 @@
         .req-star { color: var(--required-red); margin-left: 4px; font-weight: 900; }
         .char-counter { font-size: 0.62rem; color: var(--text-gray); text-transform: none; }
 
-        /* ঘরগুলো স্পষ্ট ও সুন্দর করার জন্য ব্যাকগ্রাউন্ড এবং বর্ডার দেওয়া হয়েছে */
+        /* ঘরগুলো স্পষ্টভাবে ফুটিয়ে তোলার জন্য চমৎকার ব্যাকগ্রাউন্ড ও বর্ডার */
         .form-control, .form-select, textarea.form-control { 
             width: 100%; background: #0c0c12; border: 1px solid rgba(212, 175, 55, 0.25); 
             border-radius: 12px; padding: 12px 16px; color: var(--text-white); font-size: 0.82rem; 
@@ -341,7 +341,8 @@
             box.scrollTop = box.scrollHeight;
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
+            // লোকাল স্টোরেজ থেকে ডাটা লোড
             let savedData = JSON.parse(localStorage.getItem('rorraxy_seller_profile') || 'null');
             if (savedData) {
                 if(savedData.brandName) document.getElementById('brandName').value = savedData.brandName;
@@ -365,26 +366,93 @@
                     document.getElementById('avatarPreview').src = savedData.logo;
                 }
             }
+
+            // ক্লাউডফায়ার D1 ডেটাবেস থেকে রিয়েল-টাইম সিঙ্ক করার জন্য ফেচ রিকোয়েস্ট
+            try {
+                const response = await fetch('/api/seller?action=profile&seller_id=1');
+                const result = await response.json();
+                if (result.success && result.data && result.data.length > 0) {
+                    const dbProfile = result.data[0];
+                    if(dbProfile.brand_name) document.getElementById('brandName').value = dbProfile.brand_name;
+                    if(dbProfile.email) document.getElementById('businessEmail').value = dbProfile.email;
+                    if(dbProfile.full_name) document.getElementById('fullName').value = dbProfile.full_name;
+                    if(dbProfile.business_desc) {
+                        document.getElementById('businessDesc').value = dbProfile.business_desc;
+                        charCount.innerText = `${dbProfile.business_desc.length}/200`;
+                    }
+                    if(dbProfile.whatsapp) document.getElementById('whatsappNum').value = dbProfile.whatsapp;
+                    if(dbProfile.emergency_phone) document.getElementById('phoneNum').value = dbProfile.emergency_phone;
+                    if(dbProfile.country) document.getElementById('countrySelect').value = dbProfile.country;
+                    if(dbProfile.full_address) document.getElementById('fullAddress').value = dbProfile.full_address;
+                    if(dbProfile.doc_type) {
+                        document.getElementById('docTypeSelect').value = dbProfile.doc_type;
+                        updateDocLabel();
+                    }
+                    if(dbProfile.doc_number) document.getElementById('docNumberInput').value = dbProfile.doc_number;
+                    if(dbProfile.logo_url) {
+                        compressedAvatarData = dbProfile.logo_url;
+                        document.getElementById('avatarPreview').src = dbProfile.logo_url;
+                    }
+                }
+            } catch (err) {
+                console.log("Cloudflare sync notice:", err);
+            }
         });
 
-        document.getElementById('businessInfoForm').addEventListener('submit', (e) => {
+        // ফর্ম সাবমিট এবং ক্লাউডফায়ার ডেটাবেসে সেভ করার লজিক
+        document.getElementById('businessInfoForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const profileData = JSON.parse(localStorage.getItem('rorraxy_seller_profile') || '{}');
-            profileData.brandName = document.getElementById('brandName').value;
-            profileData.businessEmail = document.getElementById('businessEmail').value.trim().toLowerCase();
-            profileData.fullName = document.getElementById('fullName').value;
-            profileData.businessDesc = businessDesc.value;
-            profileData.whatsapp = document.getElementById('whatsappNum').value;
-            profileData.phone = document.getElementById('phoneNum').value;
-            profileData.country = document.getElementById('countrySelect').value;
-            profileData.address = document.getElementById('fullAddress').value;
-            profileData.docType = document.getElementById('docTypeSelect').value;
-            profileData.docNum = document.getElementById('docNumberInput').value;
-            profileData.logo = compressedAvatarData;
+            
+            const profileData = {
+                seller_id: 1,
+                brand_name: document.getElementById('brandName').value,
+                email: document.getElementById('businessEmail').value.trim().toLowerCase(),
+                full_name: document.getElementById('fullName').value,
+                business_desc: businessDesc.value,
+                whatsapp: document.getElementById('whatsappNum').value,
+                emergency_phone: document.getElementById('phoneNum').value,
+                country: document.getElementById('countrySelect').value,
+                full_address: document.getElementById('fullAddress').value,
+                doc_type: document.getElementById('docTypeSelect').value,
+                doc_number: document.getElementById('docNumberInput').value,
+                logo_url: compressedAvatarData
+            };
 
-            localStorage.setItem('rorraxy_seller_profile', JSON.stringify(profileData));
-            alert('VERIFICATION & BUSINESS INFORMATION SAVED SUCCESSFULLY!');
-            window.location.href = 'dashboard.html';
+            // লোকাল স্টোরেজে ব্যাকআপ সেভ
+            localStorage.setItem('rorraxy_seller_profile', JSON.stringify({
+                brandName: profileData.brand_name,
+                businessEmail: profileData.email,
+                fullName: profileData.full_name,
+                businessDesc: profileData.business_desc,
+                whatsapp: profileData.whatsapp,
+                phone: profileData.emergency_phone,
+                country: profileData.country,
+                address: profileData.full_address,
+                docType: profileData.doc_type,
+                docNum: profileData.doc_number,
+                logo: profileData.logo_url
+            }));
+
+            // ক্লাউডফায়ারে পাঠানোর চেষ্টা
+            try {
+                const response = await fetch('/api/seller?action=profile', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(profileData)
+                });
+                const result = await response.json();
+                if (result.success) {
+                    alert('VERIFICATION & BUSINESS INFORMATION SAVED SUCCESSFULLY TO CLOUDFLARE!');
+                    window.location.href = 'dashboard.html';
+                } else {
+                    alert('Saved locally, but Cloudflare sync note: ' + (result.error || 'Unknown error'));
+                    window.location.href = 'dashboard.html';
+                }
+            } catch (err) {
+                console.error(err);
+                alert('VERIFICATION & BUSINESS INFORMATION SAVED SUCCESSFULLY!');
+                window.location.href = 'dashboard.html';
+            }
         });
     </script>
 </body>
