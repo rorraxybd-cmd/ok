@@ -58,7 +58,7 @@
     </style>
 </head>
 <body>
- <!-- সিকিউরিটি গার্ড চেক -->
+    <!-- সিকিউরিটি গার্ড চেক -->
     <script>
         if (localStorage.getItem('rorraxy_affiliate_verified') !== 'true') {
             window.location.replace('index.html');
@@ -71,9 +71,9 @@
         </header>
 
         <section class="report-summary-grid">
-            <div class="summary-card"><h3>PENDING COMMISSIONS</h3><div class="val" id="pendingCommVal">$12.50</div></div>
-            <div class="summary-card"><h3>CONFIRMED COMMISSIONS</h3><div class="val" id="confirmedCommVal">$53.00</div></div>
-            <div class="summary-card"><h3>TOTAL CLICKS RECORDED</h3><div class="val" id="totalClicksVal">1,420</div></div>
+            <div class="summary-card"><h3>PENDING COMMISSIONS</h3><div class="val" id="pendingCommVal">$0.00</div></div>
+            <div class="summary-card"><h3>CONFIRMED COMMISSIONS</h3><div class="val" id="confirmedCommVal">$0.00</div></div>
+            <div class="summary-card"><h3>TOTAL CLICKS RECORDED</h3><div class="val" id="totalClicksVal">0</div></div>
         </section>
 
         <section class="report-card">
@@ -84,21 +84,20 @@
                         <tr><th>DATE</th><th>ORDER ID</th><th>PLATFORM</th><th>COMMISSION</th><th>STATUS</th></tr>
                     </thead>
                     <tbody id="reportTableBody">
-                        <tr><td>2026-10-10 14:30</td><td>#RRX-98214</td><td>Retail Store</td><td>$12.50</td><td><span class="badge pending">PENDING</span></td></tr>
-                        <tr><td>2026-10-09 11:15</td><td>#RRX-98102</td><td>Wholesale Store</td><td>$45.00</td><td><span class="badge confirmed">CONFIRMED</span></td></tr>
+                        <tr><td colspan="5" style="text-align:center; color:var(--text-gray);">No conversion logs found.</td></tr>
                     </tbody>
                 </table>
             </div>
         </section>
     </div>
 
-    <!-- বটম নেভিগেশন মেনু (৫টি মেনু) -->
+    <!-- Affiliate Bottom Navigation Menu -->
     <nav class="affiliate-bottom-nav">
-        <a href="index.html" class="nav-item"><i class="fa-solid fa-chart-pie"></i><span>DASHBOARD</span></a>
+        <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-chart-pie"></i><span>DASHBOARD</span></a>
         <a href="payout.html" class="nav-item"><i class="fa-solid fa-hand-holding-dollar"></i><span>PAYOUT</span></a>
-        <a href="report.html" class="nav-item active"><i class="fa-solid fa-chart-column"></i><span>REPORT</span></a>
-        <a href="link.html" class="nav-item"><i class="fa-solid fa-link"></i><span>LINK</span></a>
-        <a href="info.html" class="nav-item"><i class="fa-solid fa-user-gear"></i><span>SETTING</span></a>
+        <a href="reports.html" class="nav-item active"><i class="fa-solid fa-chart-column"></i><span>REPORTS</span></a>
+        <a href="links.html" class="nav-item"><i class="fa-solid fa-link"></i><span>LINKS</span></a>
+        <a href="info.html" class="nav-item"><i class="fa-solid fa-user-gear"></i><span>SETTINGS</span></a>
     </nav>
 
     <script>
@@ -106,20 +105,14 @@
             fetchReportData();
         });
 
-        // ক্লাউডফ্লেয়ার পেজেস ফাংশন এপিআই (/api/get) এর মাধ্যমে রিয়েল-টাইম রিপোর্ট ও কনভার্শন ডেটা ফেচ করা
+        // ক্লাউডফায়ার ফাংশন এপিআই (/api/affiliate?action=conversion) এর মাধ্যমে রিয়েল-টাইম রিপোর্ট ডেটা ফেচ করা
         async function fetchReportData() {
-            let affiliateId = "AFF-DIRECT";
-            const savedInfo = localStorage.getItem('rorraxy_affiliate_info');
-            if (savedInfo) {
-                try {
-                    const parsed = JSON.parse(savedInfo);
-                    if (parsed.email) affiliateId = parsed.email;
-                } catch(e) {}
-            }
+            let affiliateId = localStorage.getItem('rorraxy_affiliate_email') || "AFF-DIRECT";
 
             try {
-                const response = await fetch(`/api/get?action=conversion&affiliate_id=${affiliateId}`);
+                const response = await fetch(`/api/affiliate?action=conversion&affiliate_id=${encodeURIComponent(affiliateId)}`);
                 const result = await response.json();
+                
                 if(result.success && Array.isArray(result.data) && result.data.length > 0) {
                     const tbody = document.getElementById('reportTableBody');
                     tbody.innerHTML = '';
@@ -147,9 +140,10 @@
 
                     document.getElementById('pendingCommVal').innerText = `$${pendingTotal.toFixed(2)}`;
                     document.getElementById('confirmedCommVal').innerText = `$${confirmedTotal.toFixed(2)}`;
+                    document.getElementById('totalClicksVal').innerText = result.data.length;
                 }
             } catch(e) { 
-                console.log("Using default fallback report data."); 
+                console.warn("Report API fetch notice:", e); 
             }
         }
     </script>
