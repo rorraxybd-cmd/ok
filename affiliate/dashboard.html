@@ -17,9 +17,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Chart.js & QRCode.js CDN -->
+    <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     <style>
         :root {
@@ -32,20 +31,14 @@
             --text-gray: #8e8e99;
             --font-main: 'Poppins', sans-serif;
             --border-color: rgba(212, 175, 55, 0.2);
+            --accent-green: #22c55e;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         html, body { width: 100%; overflow-x: hidden; background: var(--bg-retail) !important; color: var(--text-white); font-family: var(--font-main); min-height: 100vh; font-size: 14px; -webkit-font-smoothing: antialiased; }
         body { padding: 24px 16px 110px 16px; text-transform: uppercase; }
         
-        .main-container { 
-            width: 100%; 
-            max-width: 1200px; 
-            margin: 0 auto; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-        }
+        .main-container { width: 100%; max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
 
         /* Header Section */
         .dashboard-header { text-align: center; margin-bottom: 25px; display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%; }
@@ -57,49 +50,35 @@
         .header-email-box i { color: #ff2a85; }
         .header-email-box span { color: var(--text-white); font-weight: 600; }
 
-        /* SYNC DEVICE বাটন পিংক কালার */
         .sync-device-btn { background: var(--pink-solid); border: none; padding: 9px 18px; border-radius: 25px; color: #fff; font-weight: 700; font-size: 0.75rem; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 0 15px rgba(255,42,133,0.35); transition: all 0.25s ease; text-transform: uppercase; }
-        .sync-device-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
 
-        /* Stats Grid Section */
-        .stats-grid { 
-            display: grid; 
-            grid-template-columns: repeat(4, 1fr); 
-            gap: 16px; 
-            margin-bottom: 30px; 
-            width: 100%; 
+        /* dynamic view sections (on/off System) */
+        .tab-section { display: none; width: 100%; animation: fadeIn 0.3s ease-in-out; }
+        .tab-section.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .stat-card { 
-            background: var(--card-retail); 
-            border-radius: 18px; 
-            padding: 20px 14px 14px 14px; 
-            text-align: center; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: space-between; 
-            gap: 8px; 
-            border: 1px solid var(--border-color); 
-            width: 100%;
-            min-width: 0;
-        }
-
-        .stat-card h3 { font-size: 0.72rem; color: var(--text-gray); font-weight: 600; letter-spacing: 0.5px; white-space: nowrap; }
+        /* Stats Grid (OVERVIEW) */
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; width: 100%; }
+        .stat-card { background: var(--card-retail); border-radius: 18px; padding: 20px 14px 14px 14px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 8px; border: 1px solid var(--border-color); width: 100%; }
+        .stat-card h3 { font-size: 0.72rem; color: var(--text-gray); font-weight: 600; white-space: nowrap; }
         .stat-card .value { font-size: 1.35rem; font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 4px; }
-        
-        .graph-container { 
-            width: 100%; 
-            height: 75px; 
-            position: relative; 
-            display: block; 
-        }
-        .graph-container canvas { 
-            width: 100% !important; 
-            height: 100% !important; 
-        }
+        .graph-container { width: 100%; height: 75px; position: relative; }
+        .graph-container canvas { width: 100% !important; height: 100% !important; }
 
-        /* Bottom Fixed Navigation Menu - ফিক্সড ও পাশাপাশি বিন্যাস নিশ্চিত করা হলো */
+        /* Custom Cards Style for Sub-sections */
+        .content-card { background: var(--card-retail); border-radius: 18px; padding: 22px 18px; border: 1px solid var(--border-color); width: 100%; }
+        .card-title { font-size: 0.85rem; font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 8px; }
+
+        .form-group { margin-bottom: 14px; display: flex; flex-direction: column; gap: 6px; }
+        .form-group label { font-size: 0.70rem; font-weight: 700; color: var(--text-gray); }
+        .form-control, .form-select { width: 100%; background: #000; border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 14px; color: #fff; font-size: 0.78rem; outline: none; text-transform: none; }
+        .btn-gold { width: 100%; background: var(--gold-gradient); border: none; border-radius: 12px; padding: 12px; color: #000; font-weight: 800; font-size: 0.82rem; cursor: pointer; text-transform: uppercase; }
+
+        /* Bottom Fixed Navigation Menu */
         .seller-bottom-nav { 
             position: fixed !important; 
             bottom: 0 !important; 
@@ -118,7 +97,6 @@
             display: flex !important; 
             flex-direction: column !important; 
             align-items: center !important; 
-            text-decoration: none !important; 
             flex: 1 !important; 
             background: none !important; 
             border: none !important; 
@@ -127,206 +105,213 @@
         }
         .nav-item.active i, .nav-item.active span { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .nav-item i { font-size: 1.15rem; margin-bottom: 3px; color: var(--text-gray); }
-        .nav-item span { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.3px; color: var(--text-gray); }
+        .nav-item span { font-size: 0.58rem; font-weight: 700; color: var(--text-gray); }
 
-        @media (max-width: 1024px) {
-            .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
-        }
-
-        @media (max-width: 600px) {
-            body { padding: 16px 12px 100px 12px; }
-            .stats-grid { grid-template-columns: 1fr; gap: 12px; }
-        }
+        @media (max-width: 1024px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 600px) { body { padding: 16px 12px 100px 12px; } .stats-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
-    <!-- সিকিউরিটি গার্ড চেক -->
     <script>
         if (localStorage.getItem('rorraxy_affiliate_verified') !== 'true') {
             window.location.replace('/affiliate/index.html');
         }
     </script>
 
-    <div class="main-container" id="mainContainer">
+    <div class="main-container">
         <!-- Header -->
         <header class="dashboard-header">
             <img src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png" alt="rorraxy Logo" class="header-logo-img">
             <h1>AFFILIATE DASHBOARD</h1>
             
             <div class="header-actions">
-                <a href="mailto:affiliate@rorraxy.com?subject=Affiliate%20Support%20Query" class="header-email-box">
+                <a href="mailto:affiliate@rorraxy.com" class="header-email-box">
                     <i class="fa-solid fa-envelope"></i>
                     <span id="headerUserEmail">affiliate@rorraxy.com</span>
                 </a>
-                <!-- মাল্টি-ডিভাইস সিঙ্ক বাটন (পিংক কালার) -->
-                <button type="button" class="sync-device-btn" onclick="openMultiDeviceSyncModal()">
-                    <i class="fa-solid fa-qrcode"></i> SYNC DEVICE
-                </button>
             </div>
         </header>
 
-        <!-- Stats Overview with Animated Golden Graphs -->
-        <section class="stats-grid">
-            <div class="stat-card">
-                <h3>TOTAL EARNINGS</h3>
-                <div class="value" id="statEarningsVal">$0.00</div>
-                <div class="graph-container"><canvas id="chartEarnings"></canvas></div>
+        <!-- ১. OVERVIEW TAB -->
+        <section id="tab-overview" class="tab-section active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>TOTAL EARNINGS</h3>
+                    <div class="value" id="statEarningsVal">$0.00</div>
+                    <div class="graph-container"><canvas id="chartEarnings"></canvas></div>
+                </div>
+                <div class="stat-card">
+                    <h3>AVAILABLE BALANCE</h3>
+                    <div class="value" id="statBalanceVal">$0.00</div>
+                    <div class="graph-container"><canvas id="chartBalance"></canvas></div>
+                </div>
+                <div class="stat-card">
+                    <h3>TOTAL CLICKS</h3>
+                    <div class="value" id="statClicksVal">0</div>
+                    <div class="graph-container"><canvas id="chartClicks"></canvas></div>
+                </div>
+                <div class="stat-card">
+                    <h3>TOTAL REFERRALS</h3>
+                    <div class="value" id="statReferralsVal">0</div>
+                    <div class="graph-container"><canvas id="chartReferrals"></canvas></div>
+                </div>
             </div>
-            <div class="stat-card">
-                <h3>AVAILABLE BALANCE</h3>
-                <div class="value" id="statBalanceVal">$0.00</div>
-                <div class="graph-container"><canvas id="chartBalance"></canvas></div>
+        </section>
+
+        <!-- ২. LINKS TAB -->
+        <section id="tab-links" class="tab-section">
+            <div class="content-card">
+                <div class="card-title"><i class="fa-solid fa-link"></i> AFFILIATE LINK GENERATOR</div>
+                <div class="form-group">
+                    <label>SELECT PLATFORM</label>
+                    <select class="form-select" id="platformSelect">
+                        <option value="https://r.rorraxy.com">RETAIL STORE (8% COMMISSION)</option>
+                        <option value="https://w.rorraxy.com">WHOLESALE STORE (2% COMMISSION)</option>
+                        <option value="https://rorraxy.com">ENTERPRISE SERVICES (10% COMMISSION)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>TARGET PRODUCT URL (OPTIONAL)</label>
+                    <input type="text" class="form-control" id="targetUrlInput" placeholder="Paste product URL...">
+                </div>
+                <button type="button" class="btn-gold" id="generateBtn">GENERATE LINK</button>
+                <div id="resultBox" style="display:none; margin-top:16px;">
+                    <input type="text" class="form-control" id="generatedLinkOutput" readonly style="margin-bottom:10px;">
+                    <button type="button" class="btn-gold" id="universalShareBtn"><i class="fa-solid fa-share-nodes"></i> SHARE LINK</button>
+                </div>
             </div>
-            <div class="stat-card">
-                <h3>TOTAL CLICKS</h3>
-                <div class="value" id="statClicksVal">0</div>
-                <div class="graph-container"><canvas id="chartClicks"></canvas></div>
+        </section>
+
+        <!-- ৩. PAYOUT TAB -->
+        <section id="tab-payout" class="tab-section">
+            <div class="content-card">
+                <div class="card-title"><i class="fa-solid fa-wallet"></i> WITHDRAWAL REQUEST</div>
+                <form id="payoutForm" onsubmit="handlePayoutSubmit(event)">
+                    <div class="form-group">
+                        <label>AMOUNT ($)</label>
+                        <input type="number" class="form-control" id="withdrawAmount" placeholder="Min $20" min="20" required>
+                    </div>
+                    <div class="form-group">
+                        <label>PAYMENT METHOD</label>
+                        <select class="form-select" id="payoutMethod" required>
+                            <option value="bKash">bKash</option>
+                            <option value="Nagad">Nagad</option>
+                            <option value="Bank">Bank Transfer</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>ACCOUNT NUMBER</label>
+                        <input type="text" class="form-control" id="payoutAccount" required placeholder="Enter number...">
+                    </div>
+                    <button type="submit" class="btn-gold">REQUEST WITHDRAWAL</button>
+                </form>
             </div>
-            <div class="stat-card">
-                <h3>TOTAL REFERRALS</h3>
-                <div class="value" id="statReferralsVal">0</div>
-                <div class="graph-container"><canvas id="chartReferrals"></canvas></div>
+        </section>
+
+        <!-- ৪. REPORTS TAB -->
+        <section id="tab-reports" class="tab-section">
+            <div class="content-card">
+                <div class="card-title"><i class="fa-solid fa-file-invoice-dollar"></i> CONVERSION LOGS</div>
+                <div style="overflow-x:auto;">
+                    <table style="width:100%; border-collapse:collapse; text-align:left;">
+                        <thead>
+                            <tr style="color:var(--text-gray); border-bottom:1px solid var(--border-color); font-size:0.65rem;">
+                                <th style="padding:8px;">DATE</th>
+                                <th style="padding:8px;">ORDER ID</th>
+                                <th style="padding:8px;">COMMISSION</th>
+                                <th style="padding:8px;">STATUS</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reportTableBody" style="font-size:0.75rem;">
+                            <tr><td colspan="4" style="padding:12px; text-align:center; color:var(--text-gray);">No logs found.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ৫. SETTINGS TAB -->
+        <section id="tab-settings" class="tab-section">
+            <div class="content-card">
+                <div class="card-title"><i class="fa-solid fa-user-gear"></i> AFFILIATE PROFILE SETTINGS</div>
+                <form id="settingsForm" onsubmit="handleSaveSettings(event)">
+                    <div class="form-group"><label>FIRST NAME</label><input type="text" id="setFirstName" class="form-control" required></div>
+                    <div class="form-group"><label>LAST NAME</label><input type="text" id="setLastName" class="form-control" required></div>
+                    <div class="form-group"><label>PHONE / WHATSAPP</label><input type="tel" id="setPhone" class="form-control" required></div>
+                    <div class="form-group"><label>PROMO CHANNEL</label><input type="text" id="setChannel" class="form-control" required placeholder="YouTube / Facebook link"></div>
+                    <button type="submit" class="btn-gold">SAVE SETTINGS</button>
+                </form>
             </div>
         </section>
     </div>
 
-    <!-- মাল্টি-ডিভাইস কিউআর সিঙ্ক মোডাল -->
-    <div id="deviceSyncModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.9); backdrop-filter:blur(10px); z-index:9999; justify-content:center; align-items:center; padding:16px;">
-        <div style="background:#050508; border:1px solid rgba(255, 42, 133, 0.35); border-radius:24px; padding:35px 25px; width:100%; max-width:420px; text-align:center; box-shadow:0 25px 60px rgba(0,0,0,0.9);">
-            <h3 style="font-size:1.15rem; font-weight:800; background:var(--gold-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:8px;">MULTI-DEVICE SYNC</h3>
-            <p style="font-size:0.75rem; color:var(--text-gray); margin-bottom:22px; text-transform:none;">Scan this secure QR code with your mobile or target device camera to instantly sync affiliate session & data.</p>
-            
-            <div id="qrcodeContainer" style="background:#ffffff; padding:16px; border-radius:16px; display:inline-block; margin-bottom:20px; box-shadow:0 0 25px rgba(255,42,133,0.2);"></div>
-            
-            <div id="syncStatusText" style="font-size:0.75rem; color:#4ade80; margin-bottom:18px; text-transform:none; font-weight:600;">Secure session handshake ready...</div>
-            
-            <button type="button" onclick="closeMultiDeviceSyncModal()" style="width:100%; background:var(--pink-solid); border:none; border-radius:12px; padding:12px; color:#fff; font-weight:800; font-size:0.8rem; cursor:pointer; text-transform:uppercase; box-shadow:0 0 20px rgba(255,42,133,0.4);">CLOSE & RETURN</button>
-        </div>
-    </div>
-
-    <!-- Affiliate Bottom Navigation Menu -->
+    <!-- Affiliate Bottom Fixed Navigation Menu (On/Off Toggle Buttons) -->
     <nav class="seller-bottom-nav">
-        <a href="/affiliate/dashboard.html" class="nav-item active">
+        <button type="button" class="nav-item active" onclick="toggleTab('overview', this)">
             <i class="fa-solid fa-chart-line"></i>
             <span>OVERVIEW</span>
-        </a>
-        <a href="/affiliate/links.html" class="nav-item">
+        </button>
+        <button type="button" class="nav-item" onclick="toggleTab('links', this)">
             <i class="fa-solid fa-link"></i>
             <span>LINKS</span>
-        </a>
-        <a href="/affiliate/payout.html" class="nav-item">
+        </button>
+        <button type="button" class="nav-item" onclick="toggleTab('payout', this)">
             <i class="fa-solid fa-wallet"></i>
             <span>PAYOUT</span>
-        </a>
-        <a href="/affiliate/reports.html" class="nav-item">
+        </button>
+        <button type="button" class="nav-item" onclick="toggleTab('reports', this)">
             <i class="fa-solid fa-file-invoice-dollar"></i>
             <span>REPORTS</span>
-        </a>
-        <a href="/affiliate/info.html" class="nav-item">
+        </button>
+        <button type="button" class="nav-item" onclick="toggleTab('settings', this)">
             <i class="fa-solid fa-user-gear"></i>
             <span>SETTINGS</span>
-        </a>
+        </button>
     </nav>
 
     <script>
-        window.addEventListener('DOMContentLoaded', () => {
-            const savedEmail = localStorage.getItem('rorraxy_affiliate_email');
-            if (savedEmail) {
-                document.getElementById('headerUserEmail').innerText = savedEmail;
+        // ইনস্ট্যান্ট অন/অফ ও সেকশন টগল সিস্টেম
+        function toggleTab(tabName, btnEl) {
+            const targetTab = document.getElementById(`tab-${tabName}`);
+            const isAlreadyActive = targetTab.classList.contains('active');
+
+            // সব সেকশন ও বাটন রিসেট
+            document.querySelectorAll('.tab-section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+
+            // যদি বর্তমান ট্যাব অন থাকে এবং ক্লিক করা হয়, তবে ওভারভিউ ট্যাবে ব্যাক করবে
+            if (isAlreadyActive && tabName !== 'overview') {
+                document.getElementById('tab-overview').classList.add('active');
+                document.querySelector('.nav-item').classList.add('active');
+            } else {
+                targetTab.classList.add('active');
+                btnEl.classList.add('active');
             }
-            loadAffiliateStatsFromCloudflare();
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedEmail = localStorage.getItem('rorraxy_affiliate_email') || 'affiliate@rorraxy.com';
+            document.getElementById('headerUserEmail').innerText = savedEmail;
+            loadAffiliateStats();
         });
 
-        window.openMultiDeviceSyncModal = function() {
-            document.getElementById('deviceSyncModal').style.display = 'flex';
-            const qrcodeDiv = document.getElementById('qrcodeContainer');
-            qrcodeDiv.innerHTML = ''; 
-            
-            const syncToken = "rorraxy_aff_sync_" + Math.random().toString(36).substring(2) + Date.now().toString(36);
-            localStorage.setItem('rorraxy_active_aff_sync_token', syncToken);
-
-            new QRCode(qrcodeDiv, {
-                text: window.location.origin + "/affiliate/dashboard.html?sync_token=" + syncToken,
-                width: 180,
-                height: 180,
-                colorDark: "#000000",
-                colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.H
-            });
-        }
-
-        window.closeMultiDeviceSyncModal = function() {
-            document.getElementById('deviceSyncModal').style.display = 'none';
-        }
-
-        async function loadAffiliateStatsFromCloudflare() {
-            try {
-                const response = await fetch('/api/affiliate?action=stats');
-                const result = await response.json();
-                
-                if (result.success && result.data && result.data.length > 0) {
-                    const stats = result.data[0];
-                    document.getElementById('statEarningsVal').innerText = `$${parseFloat(stats.total_earnings || 0).toFixed(2)}`;
-                    document.getElementById('statBalanceVal').innerText = `$${parseFloat(stats.available_balance || 0).toFixed(2)}`;
-                    document.getElementById('statClicksVal').innerText = stats.total_clicks || "0";
-                    document.getElementById('statReferralsVal').innerText = stats.total_referrals || "0";
-                } else {
-                    document.getElementById('statEarningsVal').innerText = "$0.00";
-                    document.getElementById('statBalanceVal').innerText = "$0.00";
-                    document.getElementById('statClicksVal').innerText = "0";
-                    document.getElementById('statReferralsVal').innerText = "0";
-                }
-            } catch (e) {
-                console.warn("Affiliate API Sync Notice:", e);
-                document.getElementById('statEarningsVal').innerText = "$0.00";
-                document.getElementById('statBalanceVal').innerText = "$0.00";
-                document.getElementById('statClicksVal').innerText = "0";
-                document.getElementById('statReferralsVal').innerText = "0";
-            }
-        }
-
+        // ডাইনামিক চার্ট ফাংশন
         function createDynamicSparkline(canvasId, dataPoints, isBar = false) {
             const canvas = document.getElementById(canvasId);
             if (!canvas) return;
-            
             const ctx = canvas.getContext('2d');
             const gradient = ctx.createLinearGradient(0, 0, 0, 75);
             gradient.addColorStop(0, 'rgba(212, 175, 55, 0.45)');
-            gradient.addColorStop(0.7, 'rgba(212, 175, 55, 0.1)');
             gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
 
             return new Chart(ctx, {
                 type: isBar ? 'bar' : 'line',
                 data: {
-                    labels: dataPoints.map((_, i) => `Point ${i + 1}`),
-                    datasets: [{
-                        data: dataPoints,
-                        borderColor: '#d4af37',
-                        borderWidth: 2.2,
-                        fill: true,
-                        backgroundColor: gradient,
-                        tension: 0.4,
-                        pointRadius: 0,
-                        borderRadius: isBar ? 4 : 0
-                    }]
+                    labels: dataPoints.map((_, i) => `P${i + 1}`),
+                    datasets: [{ data: dataPoints, borderColor: '#d4af37', borderWidth: 2, fill: true, backgroundColor: gradient, tension: 0.4, pointRadius: 0 }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    animation: { 
-                        duration: 1500, 
-                        easing: 'easeInOutQuart' 
-                    },
-                    plugins: { 
-                        legend: { display: false }, 
-                        tooltip: { enabled: false } 
-                    },
-                    scales: { 
-                        x: { display: false }, 
-                        y: { display: false, min: 0 } 
-                    }
-                }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } } }
             });
         }
 
@@ -337,6 +322,41 @@
                 createDynamicSparkline('chartClicks', [20, 45, 35, 60, 50, 80, 65], true);
                 createDynamicSparkline('chartReferrals', [2, 6, 4, 10, 8, 15, 12]);
             }, 100);
+        });
+
+        async function loadAffiliateStats() {
+            try {
+                const res = await fetch('/api/affiliate?action=stats');
+                const data = await res.json();
+                if (data.success && data.data && data.data[0]) {
+                    document.getElementById('statEarningsVal').innerText = `$${parseFloat(data.data[0].total_earnings || 0).toFixed(2)}`;
+                    document.getElementById('statBalanceVal').innerText = `$${parseFloat(data.data[0].available_balance || 0).toFixed(2)}`;
+                    document.getElementById('statClicksVal').innerText = data.data[0].total_clicks || "0";
+                    document.getElementById('statReferralsVal').innerText = data.data[0].total_referrals || "0";
+                }
+            } catch(e) {}
+        }
+
+        // লিংক জেনারেশন
+        document.getElementById('generateBtn').addEventListener('click', () => {
+            const base = document.getElementById('platformSelect').value;
+            const target = document.getElementById('targetUrlInput').value.trim();
+            const email = localStorage.getItem('rorraxy_affiliate_email') || "AFF-DIRECT";
+            let link = `${base}?ref=${encodeURIComponent(email)}`;
+            if(target) link = `${base}/item?url=${encodeURIComponent(target)}&ref=${encodeURIComponent(email)}`;
+            
+            document.getElementById('generatedLinkOutput').value = link;
+            document.getElementById('resultBox').style.display = 'block';
+        });
+
+        document.getElementById('universalShareBtn').addEventListener('click', () => {
+            const val = document.getElementById('generatedLinkOutput').value;
+            if(navigator.share) {
+                navigator.share({ title: 'rorraxy Affiliate', url: val });
+            } else {
+                navigator.clipboard.writeText(val);
+                alert('LINK COPIED TO CLIPBOARD!');
+            }
         });
     </script>
 </body>
