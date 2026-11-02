@@ -42,7 +42,6 @@
         .form-control, .form-select { width: 100%; background: #040407; border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 16px; color: var(--text-white); font-size: 0.8rem; outline: none; font-family: var(--font-main); text-transform: none; }
         .form-select option { background: #08080c; color: var(--text-white); }
         
-        /* জেনারেট লিংক বাটন ছোট ও আকর্ষণীয় গোল্ডেন গ্রেডিয়েন্ট */
         .generate-btn { width: 100%; background: var(--gold-gradient); border: none; border-radius: 12px; padding: 12px; color: #000; font-weight: 800; font-size: 0.82rem; cursor: pointer; text-transform: uppercase; box-shadow: 0 4px 15px rgba(212,175,55,0.2); transition: transform 0.2s; }
         .generate-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
         
@@ -53,16 +52,38 @@
         .result-input { flex: 1; background: #000; border: 1px solid var(--border-color); border-radius: 10px; padding: 10px 14px; color: var(--text-white); font-size: 0.78rem; outline: none; text-transform: none; }
         .copy-btn { background: var(--gold-gradient); border: none; border-radius: 10px; padding: 0 16px; color: #000; font-weight: 800; font-size: 0.78rem; cursor: pointer; }
         
-        /* লম্বালম্বি ও সুন্দর শেয়ার বাটন (গোল্ডেন গ্রেডিয়েন্ট থিমযুক্ত) */
         .universal-share-btn { width: 100%; background: var(--gold-gradient); border: none; border-radius: 12px; padding: 12px; color: #000; font-weight: 800; font-size: 0.8rem; cursor: pointer; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 0 20px rgba(212,175,55,0.25); transition: all 0.25s ease; }
         .universal-share-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
 
-        /* বটম নেভিগেশন মেনু */
-        .affiliate-bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(3, 3, 5, 0.95); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; align-items: center; padding: 10px 6px; z-index: 1000; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; background: none; border: none; cursor: pointer; white-space: nowrap; }
+        /* বটম নেভিগেশন মেনু (সঠিক ফিক্সড ও পাশাপাশি বিন্যাস) */
+        .affiliate-bottom-nav { 
+            position: fixed !important; 
+            bottom: 0 !important; 
+            left: 0 !important; 
+            width: 100% !important; 
+            background: rgba(3, 3, 5, 0.98) !important; 
+            border-top: 1px solid var(--border-color) !important; 
+            display: flex !important; 
+            flex-direction: row !important; 
+            justify-content: space-around !important; 
+            align-items: center !important; 
+            padding: 10px 4px !important; 
+            z-index: 1000 !important; 
+        }
+        .nav-item { 
+            display: flex !important; 
+            flex-direction: column !important; 
+            align-items: center !important; 
+            text-decoration: none !important; 
+            flex: 1 !important; 
+            background: none !important; 
+            border: none !important; 
+            cursor: pointer !important; 
+            white-space: nowrap !important;
+        }
         .nav-item.active i, .nav-item.active span { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .nav-item i { font-size: 1.15rem; margin-bottom: 3px; color: var(--text-gray); }
-        .nav-item span { font-size: 0.60rem; font-weight: 700; color: var(--text-gray); }
+        .nav-item span { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.3px; color: var(--text-gray); }
     </style>
 </head>
 <body>
@@ -111,12 +132,12 @@
         </section>
     </div>
 
-    <!-- Affiliate Bottom Navigation Menu -->
+    <!-- Affiliate Bottom Navigation Menu (সঠিক রুট পাথসহ) -->
     <nav class="affiliate-bottom-nav">
         <a href="/affiliate/dashboard.html" class="nav-item"><i class="fa-solid fa-chart-pie"></i><span>DASHBOARD</span></a>
         <a href="/affiliate/payout.html" class="nav-item"><i class="fa-solid fa-hand-holding-dollar"></i><span>PAYOUT</span></a>
         <a href="/affiliate/reports.html" class="nav-item"><i class="fa-solid fa-chart-column"></i><span>REPORTS</span></a>
-        <a href="/affiliate/links.html" class="nav-item active"><i class="fa-solid fa-link"></i><span>LINKS</span></a>
+        <a href="/affiliate/links.html" class="nav-item active"><i class="fa-solid fa-link"></i><span>LINK</span></a>
         <a href="/affiliate/info.html" class="nav-item"><i class="fa-solid fa-user-gear"></i><span>SETTINGS</span></a>
     </nav>
 
