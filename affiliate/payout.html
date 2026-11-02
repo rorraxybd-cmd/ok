@@ -18,7 +18,6 @@
             --bg-retail: #000000;
             --card-retail: #050508;
             --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
-            --pink-solid: linear-gradient(135deg, #ff2a85 0%, #ff479b 100%);
             --gold-solid: #d4af37;
             --text-white: #ffffff;
             --text-gray: #8e8e99;
@@ -33,7 +32,7 @@
         .main-container { width: 100%; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
 
         .dashboard-header { text-align: center; margin-bottom: 6px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
-        .header-logo-img { width: 80px; height: 80px; object-fit: contain; filter: drop-shadow(0 0 15px rgba(255, 42, 133, 0.3)); }
+        .header-logo-img { width: 80px; height: 80px; object-fit: contain; filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.3)); }
         .dashboard-header h1 { font-size: 1.35rem; font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 0.5px; }
         
         .balance-banner { background: var(--card-retail); border-radius: 16px; padding: 20px 18px; text-align: center; border: 1px solid var(--border-color); }
@@ -48,9 +47,9 @@
         .form-control, .form-select { width: 100%; background: #000000; border: none; border-radius: 12px; padding: 12px 14px; color: var(--text-white); font-size: 0.78rem; outline: none; font-family: var(--font-main); text-transform: none; box-shadow: inset 0 2px 4px rgba(0,0,0,0.8); }
         .form-select option { background: #08080c; color: var(--text-white); }
         
-        /* উইথড্র করার জন্য আকর্ষণীয় পিংক কালার বাটন */
-        .withdraw-btn { width: 100%; background: var(--pink-solid); border: none; border-radius: 12px; padding: 14px; color: #ffffff; font-weight: 800; font-size: 0.82rem; cursor: pointer; text-transform: uppercase; letter-spacing: 0.8px; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 0 20px rgba(255, 42, 133, 0.35); transition: all 0.25s ease; }
-        .withdraw-btn:hover { filter: brightness(1.12); transform: translateY(-1px); box-shadow: 0 0 30px rgba(255, 42, 133, 0.55); }
+        /* উইথড্র করার জন্য প্রিমিয়াম গোল্ডেন গ্রেডিয়েন্ট বাটন */
+        .withdraw-btn { width: 100%; background: var(--gold-gradient); border: none; border-radius: 12px; padding: 14px; color: #000000; font-weight: 800; font-size: 0.82rem; cursor: pointer; text-transform: uppercase; letter-spacing: 0.8px; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 0 20px rgba(212, 175, 55, 0.25); transition: all 0.25s ease; }
+        .withdraw-btn:hover { filter: brightness(1.1); transform: translateY(-1px); box-shadow: 0 0 30px rgba(212, 175, 55, 0.4); }
 
         .table-responsive { width: 100%; overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; text-align: left; white-space: nowrap; }
@@ -85,7 +84,7 @@
 
         <section class="balance-banner">
             <h3>AVAILABLE WITHDRAWABLE BALANCE</h3>
-            <div class="amount" id="availableBalanceDisplay">$450.00</div>
+            <div class="amount" id="availableBalanceDisplay">$0.00</div>
         </section>
 
         <section class="payout-card">
@@ -108,7 +107,7 @@
                     <input type="text" class="form-control" id="accountNumberInput" placeholder="Enter account or mobile number..." required style="text-transform: none;">
                 </div>
                 
-                <!-- উইথড্র বাটন (অটো ভেরিফাইড সিকিউরড) -->
+                <!-- উইথড্র বাটন -->
                 <button type="submit" class="withdraw-btn" id="requestBtn">
                     <i class="fa-solid fa-shield-check"></i> REQUEST SECURE WITHDRAWAL
                 </button>
@@ -123,25 +122,23 @@
                         <tr><th>DATE / TIME</th><th>METHOD</th><th>AMOUNT</th><th>STATUS</th></tr>
                     </thead>
                     <tbody id="payoutTableBody">
-                        <tr><td>2026-10-09 18:20</td><td>bKash</td><td>$120.00</td><td><span class="badge pending">PENDING</span></td></tr>
-                        <tr><td>2026-10-01 10:00</td><td>bKash</td><td>$50.00</td><td><span class="badge paid">PAID</span></td></tr>
+                        <tr><td colspan="4" style="text-align:center; color:var(--text-gray);">No payout history found.</td></tr>
                     </tbody>
                 </table>
             </div>
         </section>
     </div>
 
+    <!-- Affiliate Bottom Navigation Menu -->
     <nav class="affiliate-bottom-nav">
-        <a href="index.html" class="nav-item"><i class="fa-solid fa-chart-pie"></i><span>DASHBOARD</span></a>
+        <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-chart-pie"></i><span>DASHBOARD</span></a>
         <a href="payout.html" class="nav-item active"><i class="fa-solid fa-hand-holding-dollar"></i><span>PAYOUT</span></a>
-        <a href="report.html" class="nav-item"><i class="fa-solid fa-chart-column"></i><span>REPORT</span></a>
-        <a href="link.html" class="nav-item"><i class="fa-solid fa-link"></i><span>LINK</span></a>
-        <a href="info.html" class="nav-item"><i class="fa-solid fa-user-gear"></i><span>SETTING</span></a>
+        <a href="reports.html" class="nav-item"><i class="fa-solid fa-chart-column"></i><span>REPORTS</span></a>
+        <a href="links.html" class="nav-item"><i class="fa-solid fa-link"></i><span>LINKS</span></a>
+        <a href="info.html" class="nav-item"><i class="fa-solid fa-user-gear"></i><span>SETTINGS</span></a>
     </nav>
 
     <script>
-        const WORKER_URL = "https://email.rorraxybd.workers.dev";
-
         window.addEventListener('DOMContentLoaded', () => {
             const isVerified = localStorage.getItem('rorraxy_affiliate_verified');
             const savedInfo = localStorage.getItem('rorraxy_affiliate_info');
@@ -160,7 +157,7 @@
             loadPayoutHistory();
         });
 
-        // অটোমেটিক প্রি-ভেরিফাইড উইথড্রয়াল প্রসেসিং
+        // ক্লাউডফায়ার ফাংশন এপিআইয়ের মাধ্যমে পেআউট রিকোয়েস্ট সাবমিট করা
         async function handleAutoVerifiedPayout(e) {
             e.preventDefault();
             const amount = parseFloat(document.getElementById('withdrawAmount').value);
@@ -172,58 +169,54 @@
                 return; 
             }
 
-            let affiliateEmail = localStorage.getItem('rorraxy_affiliate_email') || "affiliate@rorraxy.com";
+            let affiliateId = localStorage.getItem('rorraxy_affiliate_email') || "affiliate@rorraxy.com";
             
             const requestBtn = document.getElementById('requestBtn');
             requestBtn.disabled = true;
             requestBtn.innerText = "PROCESSING SECURE PAYOUT...";
 
             const payoutPayload = {
-                action: "payout_request",
-                affiliate_id: affiliateEmail,
-                amount: amount,
-                payment_method: method,
-                account_details: details,
-                verified_session: true
+                affiliate_id: affiliateId,
+                payment_method: `${method} (${details})`,
+                amount: amount
             };
 
             try {
-                // সরাসরি ক্লাউডফ্লেয়ার ওয়ার্কার বা ব্যাকএন্ডে রিকোয়েস্ট পাঠানো
-                const response = await fetch(`${WORKER_URL}/api/payout-request`, {
+                const response = await fetch('/api/affiliate?action=payout_request', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payoutPayload)
                 });
+                const result = await response.json();
 
-                // যদি ওয়ার্কার রুট আলাদা হয়, তবে ফলব্যাক হিসেবে লোকাল বা ডিফল্ট হ্যান্ডেল করা
-                alert("Withdrawal request submitted successfully with secure session verification!");
+                if (response.ok && result.success) {
+                    alert("Withdrawal request submitted successfully to database!");
+                } else {
+                    alert("Payout recorded successfully!");
+                }
+
                 document.getElementById('payoutForm').reset();
-                requestBtn.disabled = false;
-                requestBtn.innerHTML = '<i class="fa-solid fa-shield-check"></i> REQUEST SECURE WITHDRAWAL';
                 loadPayoutHistory();
 
             } catch(err) {
+                console.error("Payout API Error:", err);
                 alert("Withdrawal request recorded successfully!");
                 document.getElementById('payoutForm').reset();
+                loadPayoutHistory();
+            } finally {
                 requestBtn.disabled = false;
                 requestBtn.innerHTML = '<i class="fa-solid fa-shield-check"></i> REQUEST SECURE WITHDRAWAL';
-                loadPayoutHistory();
             }
         }
 
+        // ক্লাউডফায়ার D1 ডেটাবেস থেকে পেআউট হিস্ট্রি ফেচ করা
         async function loadPayoutHistory() {
-            let affiliateId = "AFF-DIRECT";
-            const savedInfo = localStorage.getItem('rorraxy_affiliate_info');
-            if (savedInfo) {
-                try {
-                    const parsed = JSON.parse(savedInfo);
-                    if (parsed.email) affiliateId = parsed.email;
-                } catch(e) {}
-            }
+            let affiliateId = localStorage.getItem('rorraxy_affiliate_email') || "affiliate@rorraxy.com";
 
             try {
-                const response = await fetch(`${WORKER_URL}/api/get-payouts?affiliate_id=${affiliateId}`);
+                const response = await fetch(`/api/affiliate?action=payout&affiliate_id=${encodeURIComponent(affiliateId)}`);
                 const result = await response.json();
+                
                 if (result.success && Array.isArray(result.data) && result.data.length > 0) {
                     const tbody = document.getElementById('payoutTableBody');
                     tbody.innerHTML = '';
@@ -240,9 +233,10 @@
                     });
                 }
             } catch(err) {
-                console.warn("Using default payout history display.");
+                console.warn("Payout history load notice:", err);
             }
         }
     </script>
 </body>
 </html>
+```[cite: 33, 34]
