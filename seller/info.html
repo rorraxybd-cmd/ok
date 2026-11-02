@@ -89,7 +89,6 @@
         .section-save-btn, .edit-profile-btn { background: var(--gold-gradient); border: none; border-radius: 10px; padding: 12px 24px; color: #000; font-weight: 800; font-size: 0.82rem; cursor: pointer; text-transform: uppercase; margin-top: 18px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2); }
         .section-save-btn:hover, .edit-profile-btn:hover { filter: brightness(1.1); }
 
-        /* প্রফেশনাল সিভি স্টাইল প্রিভিউ ডিজাইন */
         .cv-preview-box { display: flex; flex-direction: column; gap: 20px; }
         .cv-header-section { display: flex; align-items: center; gap: 20px; border-bottom: 1px solid rgba(212, 175, 55, 0.15); padding-bottom: 20px; }
         .cv-logo-img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid var(--gold-solid); }
@@ -129,7 +128,6 @@
             <h1>SELLER INFO</h1>
         </header>
 
-        <!-- ইনফো কার্ড (প্রিভিউ এবং ফর্ম মোড) -->
         <div class="info-card">
             <div class="info-card-title">
                 <i class="fa-solid fa-id-card"></i>
@@ -318,59 +316,66 @@
         }
 
         function renderPreview(data) {
-            document.getElementById('prevLogo').src = data.logo_url || compressedAvatarData;
-            document.getElementById('prevBrandName').innerText = data.brand_name || "---";
-            document.getElementById('prevBusinessDesc').innerText = data.business_desc || "---";
-            document.getElementById('prevEmail').innerText = data.email || "---";
-            document.getElementById('prevFullName').innerText = data.full_name || "---";
+            document.getElementById('prevLogo').src = data.logo_url || data.logo || compressedAvatarData;
+            document.getElementById('prevBrandName').innerText = data.brand_name || data.brandName || "---";
+            document.getElementById('prevBusinessDesc').innerText = data.business_desc || data.businessDesc || "---";
+            document.getElementById('prevEmail').innerText = data.email || data.businessEmail || "---";
+            document.getElementById('prevFullName').innerText = data.full_name || data.fullName || "---";
             document.getElementById('prevWhatsapp').innerText = data.whatsapp || "---";
-            document.getElementById('prevPhone').innerText = data.emergency_phone || "---";
+            document.getElementById('prevPhone').innerText = data.emergency_phone || data.phone || "---";
             document.getElementById('prevCountry').innerText = data.country || "---";
-            document.getElementById('prevAddress').innerText = data.full_address || "---";
+            document.getElementById('prevAddress').innerText = data.full_address || data.address || "---";
             
-            const docLabel = data.doc_type === 'BirthCert' ? 'BIRTH CERTIFICATE NUMBER' : 'NID NUMBER';
+            const docType = data.doc_type || data.docType;
+            const docLabel = docType === 'BirthCert' ? 'BIRTH CERTIFICATE NUMBER' : 'NID NUMBER';
             document.getElementById('prevDocTypeLbl').innerText = docLabel;
-            document.getElementById('prevDocNum').innerText = data.doc_number || "---";
-            document.getElementById('prevTradeLicense').innerText = data.default_payout_details || "---";
+            document.getElementById('prevDocNum').innerText = data.doc_number || data.docNum || "---";
+            document.getElementById('prevTradeLicense').innerText = data.default_payout_details || data.tradeLicense || "---";
 
             document.getElementById('profilePreviewSection').style.display = 'block';
             document.getElementById('businessInfoForm').style.display = 'none';
             document.getElementById('cardTitleText').innerText = "SELLER PROFILE PREVIEW";
         }
 
-        document.addEventListener('DOMContentLoaded', async () => {
-            const savedProfile = JSON.parse(localStorage.getItem('rorraxy_seller_profile') || 'null');
-            if (savedProfile && savedProfile.businessEmail) {
-                document.getElementById('businessEmail').value = savedProfile.businessEmail;
-            } else {
-                document.getElementById('businessEmail').value = "seller@rorraxy.com";
+        window.addEventListener('DOMContentLoaded', async () => {
+            // ইউজারের নিজস্ব ভেরিফাইড ইমেইল বা আইডি বের করা
+            const userEmail = localStorage.getItem('rorraxy_seller_email') || localStorage.getItem('rorraxy_seller_verified_email') || 'seller@rorraxy.com';
+            document.getElementById('businessEmail').value = userEmail;
+
+            // ইউনিক ইমেল বাইন্ডিং கீ (Key) দিয়ে লোকাল স্টোরেজ চেক করা
+            const storageKey = `rorraxy_seller_profile_${userEmail}`;
+            const savedProfile = JSON.parse(localStorage.getItem(storageKey) || 'null');
+
+            if (savedProfile && savedProfile.brandName) {
+                fillFormValues(savedProfile);
+                renderPreview(savedProfile);
+                return;
             }
 
+            // ক্লাউডফায়ার ডেটাবেস থেকে ইউজারের নিজস্ব ইমেইল দিয়ে ফেচ করা
             try {
-                const response = await fetch('/api/seller?action=profile&seller_id=1');
+                const response = await fetch(`/api/seller?action=profile&email=${encodeURIComponent(userEmail)}`);
                 const result = await response.json();
                 if (result.success && result.data && result.data.length > 0) {
                     const dbProfile = result.data[0];
                     if(dbProfile.brand_name) {
-                        // ডেটা থাকলে ফর্ম ফিলআপ করে প্রিভিউ মোড দেখাবে
-                        document.getElementById('brandName').value = dbProfile.brand_name;
-                        document.getElementById('businessEmail').value = dbProfile.email || "seller@rorraxy.com";
-                        document.getElementById('fullName').value = dbProfile.full_name || '';
-                        document.getElementById('businessDesc').value = dbProfile.business_desc || '';
-                        charCount.innerText = `${(dbProfile.business_desc || '').length}/200`;
-                        document.getElementById('whatsappNum').value = dbProfile.whatsapp || '';
-                        document.getElementById('phoneNum').value = dbProfile.emergency_phone || '';
-                        document.getElementById('countrySelect').value = dbProfile.country || 'Bangladesh';
-                        document.getElementById('fullAddress').value = dbProfile.full_address || '';
-                        document.getElementById('docTypeSelect').value = dbProfile.doc_type || 'NID';
-                        updateDocLabel();
-                        document.getElementById('docNumberInput').value = dbProfile.doc_number || '';
-                        document.getElementById('tradeLicenseInput').value = dbProfile.default_payout_details || '';
-                        if(dbProfile.logo_url) {
-                            compressedAvatarData = dbProfile.logo_url;
-                            document.getElementById('avatarPreview').src = dbProfile.logo_url;
-                        }
-                        renderPreview(dbProfile);
+                        const formattedData = {
+                            brandName: dbProfile.brand_name,
+                            businessEmail: dbProfile.email || userEmail,
+                            fullName: dbProfile.full_name || '',
+                            businessDesc: dbProfile.business_desc || '',
+                            whatsapp: dbProfile.whatsapp || '',
+                            phone: dbProfile.emergency_phone || '',
+                            country: dbProfile.country || 'Bangladesh',
+                            address: dbProfile.full_address || '',
+                            docType: dbProfile.doc_type || 'NID',
+                            docNum: dbProfile.doc_number || '',
+                            tradeLicense: dbProfile.default_payout_details || '',
+                            logo: dbProfile.logo_url || compressedAvatarData
+                        };
+                        localStorage.setItem(storageKey, JSON.stringify(formattedData));
+                        fillFormValues(formattedData);
+                        renderPreview(formattedData);
                         return;
                     }
                 }
@@ -378,31 +383,52 @@
                 console.log("Cloudflare load notice:", err);
             }
 
-            // যদি ডেটা না থাকে তবে সরাসরি ফরম দেখাবে
+            // ডেটা না থাকলে সরাসরি ফাঁকা ফরম দেখাবে
             document.getElementById('businessInfoForm').style.display = 'block';
             document.getElementById('profilePreviewSection').style.display = 'none';
         });
 
+        function fillFormValues(data) {
+            document.getElementById('brandName').value = data.brandName || '';
+            document.getElementById('businessEmail').value = data.businessEmail || document.getElementById('businessEmail').value;
+            document.getElementById('fullName').value = data.fullName || '';
+            document.getElementById('businessDesc').value = data.businessDesc || '';
+            charCount.innerText = `${(data.businessDesc || '').length}/200`;
+            document.getElementById('whatsappNum').value = data.whatsapp || '';
+            document.getElementById('phoneNum').value = data.phone || '';
+            document.getElementById('countrySelect').value = data.country || 'Bangladesh';
+            document.getElementById('fullAddress').value = data.address || '';
+            document.getElementById('docTypeSelect').value = data.docType || 'NID';
+            updateDocLabel();
+            document.getElementById('docNumberInput').value = data.docNum || '';
+            document.getElementById('tradeLicenseInput').value = data.tradeLicense || '';
+            if(data.logo) {
+                compressedAvatarData = data.logo;
+                document.getElementById('avatarPreview').src = data.logo;
+            }
+        }
+
         document.getElementById('businessInfoForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
+            const userEmail = document.getElementById('businessEmail').value.trim().toLowerCase();
             const profileData = {
-                seller_id: 1,
-                brand_name: document.getElementById('brandName').value,
-                email: document.getElementById('businessEmail').value.trim().toLowerCase(),
-                full_name: document.getElementById('fullName').value,
-                business_desc: businessDesc.value,
-                whatsapp: document.getElementById('whatsappNum').value,
-                emergency_phone: document.getElementById('phoneNum').value,
+                seller_id: userEmail, // ইউনিক ইমেইল আইডি হিসেবে পাস করা হলো
+                brand_name: document.getElementById('brandName').value.trim(),
+                email: userEmail,
+                full_name: document.getElementById('fullName').value.trim(),
+                business_desc: businessDesc.value.trim(),
+                whatsapp: document.getElementById('whatsappNum').value.trim(),
+                emergency_phone: document.getElementById('phoneNum').value.trim(),
                 country: document.getElementById('countrySelect').value,
-                full_address: document.getElementById('fullAddress').value,
+                full_address: document.getElementById('fullAddress').value.trim(),
                 doc_type: document.getElementById('docTypeSelect').value,
-                doc_number: document.getElementById('docNumberInput').value,
-                default_payout_details: document.getElementById('tradeLicenseInput').value || "N/A",
+                doc_number: document.getElementById('docNumberInput').value.trim(),
+                default_payout_details: document.getElementById('tradeLicenseInput').value.trim() || "N/A",
                 logo_url: compressedAvatarData
             };
 
-            localStorage.setItem('rorraxy_seller_profile', JSON.stringify({
+            const cleanData = {
                 brandName: profileData.brand_name,
                 businessEmail: profileData.email,
                 fullName: profileData.full_name,
@@ -413,8 +439,12 @@
                 address: profileData.full_address,
                 docType: profileData.doc_type,
                 docNum: profileData.doc_number,
+                tradeLicense: profileData.default_payout_details,
                 logo: profileData.logo_url
-            }));
+            };
+
+            // প্রতিটা ইউজারের নিজস্ব জিমেইল অনুযায়ী আলাদা লোকাল স্টোরেজে সংরক্ষণ
+            localStorage.setItem(`rorraxy_seller_profile_${userEmail}`, JSON.stringify(cleanData));
 
             try {
                 const response = await fetch('/api/seller?action=profile', {
@@ -423,17 +453,14 @@
                     body: JSON.stringify(profileData)
                 });
                 const result = await response.json();
-                if (result.success) {
-                    alert('INFO SAVED SUCCESSFULLY!');
-                    renderPreview(profileData);
+                if (response.ok && result.success) {
+                    renderPreview(cleanData);
                 } else {
-                    alert('Cloudflare Sync Warning: ' + (result.error || 'Unknown error'));
-                    renderPreview(profileData);
+                    renderPreview(cleanData);
                 }
             } catch (err) {
                 console.error(err);
-                alert('INFO SAVED LOCALLY SUCCESSFULLY!');
-                renderPreview(profileData);
+                renderPreview(cleanData);
             }
         });
     </script>
