@@ -209,7 +209,7 @@
     <!-- সেলার ইতিমধ্যে ভেরিফাই করা থাকলে সরাসরি সেলার ড্যাশবোর্ডে যাবে -->
     <script>
         if (localStorage.getItem('rorraxy_seller_verified') === 'true') {
-            window.location.replace('dashboard.html');
+            window.location.replace('/seller/dashboard.html');
         }
     </script>
 
@@ -231,7 +231,7 @@
                 
                 <!-- সফলভাবে ভেরিফাই হওয়ার পর দৃশ্যমান পিংক বাটন -->
                 <div id="actionLinkBox" class="action-link-box">
-                    <a id="verifyDirectBtn" href="dashboard.html" class="verify-action-btn">
+                    <a id="verifyDirectBtn" href="/seller/dashboard.html" class="verify-action-btn">
                         <i class="fa-solid fa-arrow-right-to-bracket"></i> ENTER DASHBOARD
                     </a>
                 </div>
@@ -310,7 +310,7 @@
                     if (data && data.magicLink) {
                         verifyDirectBtn.href = data.magicLink;
                     } else {
-                        verifyDirectBtn.href = 'dashboard.html';
+                        verifyDirectBtn.href = '/seller/dashboard.html';
                     }
 
                     actionLinkBox.style.display = 'block';
@@ -329,7 +329,7 @@
                 localStorage.setItem('rorraxy_seller_profile', JSON.stringify(profile));
 
                 showStatus(formStatus, 'Verified successfully! Click below:', false);
-                verifyDirectBtn.href = 'dashboard.html';
+                verifyDirectBtn.href = '/seller/dashboard.html';
                 actionLinkBox.style.display = 'block';
                 sendLinkBtn.style.display = 'none';
             }
