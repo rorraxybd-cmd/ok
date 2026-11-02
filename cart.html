@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <title>rorraxy - Retail Checkout</title>
+    <title>rorraxy - Global Retail Checkout</title>
     
     <!-- সেন্ট্রাল স্ক্রিপ্ট ট্যাগ -->
     <script src="/ecosystem-core.js"></script>
@@ -20,7 +20,7 @@
 
     <style>
         :root {
-            --bg-retail: #000000;
+            --bg-retail: #030305;
             --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
             --green-gradient: linear-gradient(135deg, #00b09b, #96c93d);
             --gold-solid: #d4af37;
@@ -28,7 +28,7 @@
             --text-white: #ffffff;
             --text-gray: #a0a0b8;
             --font-main: 'Poppins', 'Plus Jakarta Sans', sans-serif;
-            --card-bg: #09090d;
+            --card-bg: #0a0a0f;
             --input-bg: #12121a;
             --border-color: rgba(212, 175, 55, 0.15);
         }
@@ -42,46 +42,46 @@
         }
 
         .checkout-container {
-            max-width: 800px; width: 100%; margin: 0 auto; padding: 20px 12px 100px 12px; display: flex; flex-direction: column; gap: 18px;
+            max-width: 800px; width: 100%; margin: 0 auto; padding: 24px 14px 120px 14px; display: flex; flex-direction: column; gap: 20px;
         }
 
         .cart-brand-logo {
             width: 110px; height: auto; object-fit: contain; margin: 0 auto; display: block;
-            filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.35));
+            filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.25));
         }
 
         .cart-items-box {
-            background: var(--card-bg); border-radius: 14px; padding: 12px; width: 100%;
-            display: flex; flex-direction: column; gap: 8px; max-height: 380px; overflow-y: auto;
+            background: var(--card-bg); border-radius: 16px; padding: 14px; width: 100%;
+            display: flex; flex-direction: column; gap: 10px; max-height: 380px; overflow-y: auto;
             border: 1px solid rgba(212,175,55,0.12);
         }
         .cart-row-item { 
-            display: flex; align-items: center; justify-content: space-between; background: #0f0f17; padding: 8px 10px; border-radius: 10px; gap: 8px;
-            border: 1px solid rgba(255,255,255,0.03); flex-wrap: nowrap;
+            display: flex; align-items: center; justify-content: space-between; background: #0f0f17; padding: 10px 12px; border-radius: 12px; gap: 10px;
+            border: 1px solid rgba(255,255,255,0.04); flex-wrap: nowrap;
         }
-        .cart-img { width: 42px; height: 42px; object-fit: cover; border-radius: 6px; background: #000; flex-shrink: 0; }
+        .cart-img { width: 46px; height: 46px; object-fit: cover; border-radius: 8px; background: #000; flex-shrink: 0; }
 
         .summary-card-box {
-            width: 100%; background: var(--card-bg); padding: 14px; border-radius: 12px;
-            display: flex; flex-direction: column; gap: 8px; border: 1px solid rgba(212,175,55,0.12);
+            width: 100%; background: var(--card-bg); padding: 16px; border-radius: 14px;
+            display: flex; flex-direction: column; gap: 10px; border: 1px solid rgba(212,175,55,0.12);
         }
-        .summary-row { display: flex; justify-content: space-between; align-items: center; width: 100%; font-size: 0.72rem; }
+        .summary-row { display: flex; justify-content: space-between; align-items: center; width: 100%; font-size: 0.74rem; }
 
         .address-form-section {
-            display: flex; background: var(--card-bg); border-radius: 16px; padding: 16px 14px; flex-direction: column; gap: 12px; 
+            display: flex; background: var(--card-bg); border-radius: 18px; padding: 18px 16px; flex-direction: column; gap: 14px; 
             border: 1px solid rgba(212,175,55,0.15);
         }
-        .section-center-header { text-align: center; border-bottom: 1px solid rgba(212,175,55,0.1); padding-bottom: 8px; }
-        .section-center-header h2 { font-size: 0.85rem; font-weight: 800; letter-spacing: 1px; display: inline-flex; align-items: center; gap: 6px; }
+        .section-center-header { text-align: center; border-bottom: 1px solid rgba(212,175,55,0.1); padding-bottom: 10px; }
+        .section-center-header h2 { font-size: 0.88rem; font-weight: 800; letter-spacing: 1.2px; display: inline-flex; align-items: center; gap: 8px; }
 
         .luxury-form-label { font-size: 0.65rem; color: #ffffff !important; font-weight: 700; letter-spacing: 0.5px; display: block; margin-bottom: 4px; }
         .luxury-form-input {
             background: var(--input-bg) !important; border: 1px solid rgba(212, 175, 55, 0.15) !important; 
-            padding: 11px 12px !important; border-radius: 10px !important; color: #ffffff !important; 
+            padding: 12px 14px !important; border-radius: 10px !important; color: #ffffff !important; 
             font-size: 0.82rem !important; font-family: var(--font-main) !important; width: 100% !important; outline: none !important;
-            transition: border-color 0.2s ease;
+            transition: border-color 0.25 ease;
         }
-        .luxury-form-input:focus { border-color: var(--gold-solid) !important; box-shadow: 0 0 10px rgba(212,175,55,0.1); }
+        .luxury-form-input:focus { border-color: var(--gold-solid) !important; }
         .luxury-form-input.input-error { border: 1.5px solid var(--danger-red) !important; }
 
         .phone-check-container { display: flex; flex-direction: column; gap: 6px; width: 100%; }
@@ -89,9 +89,9 @@
         .phone-field-wrapper { flex: 1; position: relative; width: 100%; min-width: 0; }
 
         .btn-saved-address {
-            background: var(--gold-gradient); color: #000000; border: none; padding: 0 12px; height: 42px;
+            background: var(--gold-gradient); color: #000000; border: none; padding: 0 14px; height: 44px;
             border-radius: 10px; font-weight: 800; cursor: pointer; display: flex; align-items: center;
-            justify-content: center; gap: 5px; font-size: 0.60rem; flex-shrink: 0;
+            justify-content: center; gap: 6px; font-size: 0.62rem; flex-shrink: 0;
             white-space: nowrap; font-family: var(--font-main); letter-spacing: 0.3px; transition: all 0.3s ease;
         }
         .btn-saved-address.active-found {
@@ -131,52 +131,51 @@
         .or-divider span { padding: 0 10px; color: var(--gold-solid); }
 
         #step2PaymentSection {
-            display: none; flex-direction: column; gap: 14px; animation: fadeIn 0.4s ease-in-out;
+            display: none; flex-direction: column; gap: 16px; animation: fadeIn 0.4s ease-in-out;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(12px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .payment-accordion-group { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+        .payment-accordion-group { display: flex; flex-direction: column; gap: 12px; width: 100%; }
 
         .payment-method-item {
-            background: rgba(18, 18, 26, 0.6); border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 12px; overflow: hidden; transition: all 0.25s ease; cursor: pointer; width: 100%;
+            background: rgba(18, 18, 26, 0.6); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px; overflow: hidden; transition: all 0.25s ease; cursor: pointer; width: 100%;
         }
         .payment-method-item.active {
-            border-color: var(--gold-solid); background: rgba(24, 24, 36, 0.85);
+            border-color: var(--gold-solid); background: rgba(24, 24, 36, 0.95);
         }
-        .payment-method-header { padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-        .payment-method-title { display: flex; align-items: center; gap: 12px; font-size: 0.78rem; font-weight: 700; color: #fff; }
+        .payment-method-header { padding: 16px 18px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        .payment-method-title { display: flex; align-items: center; gap: 12px; font-size: 0.80rem; font-weight: 800; color: #fff; letter-spacing: 0.5px; }
 
-        .brand-badge-bkash { background: #e2136e; color: #ffffff; font-size: 0.65rem; font-weight: 900; padding: 4px 10px; border-radius: 6px; }
-        .brand-badge-nagad { background: linear-gradient(135deg, #f7931e, #ff5000); color: #ffffff; font-size: 0.65rem; font-weight: 900; padding: 4px 10px; border-radius: 6px; }
         .brand-badge-payoneer { background: linear-gradient(135deg, #ff4800, #ff0055); color: #ffffff; font-size: 0.65rem; font-weight: 900; padding: 4px 10px; border-radius: 6px; }
+        .brand-badge-ssl { background: linear-gradient(135deg, #0052d4, #4364f7); color: #ffffff; font-size: 0.65rem; font-weight: 900; padding: 4px 10px; border-radius: 6px; }
+        .brand-badge-bkash { background: #e2136e; color: #ffffff; font-size: 0.65rem; font-weight: 900; padding: 4px 10px; border-radius: 6px; }
 
-        .payment-dropdown-content { display: none; padding: 16px; border-top: 1px solid rgba(255,255,255,0.06); background: rgba(6, 6, 10, 0.7); width: 100%; }
-        .payment-method-item.active .payment-dropdown-content { display: block; }
-
-        .card-dual-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
+        .payment-sub-text { font-size: 0.64rem; color: var(--text-gray); text-transform: none !important; margin-top: 4px; line-height: 1.4; }
+        .global-card-icons { display: flex; gap: 8px; align-items: center; margin-top: 8px; flex-wrap: wrap; }
+        .global-card-icons i { font-size: 1.25rem; color: #d1d1e0; }
 
         .single-fixed-checkout-wrapper {
             position: fixed; bottom: 0; left: 0; right: 0; z-index: 99999;
-            background: rgba(0, 0, 0, 0.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            padding: 10px 12px; display: flex; justify-content: center; align-items: center; gap: 10px;
-            border-top: 1px solid rgba(212, 175, 55, 0.15);
+            background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            padding: 12px 14px; display: flex; justify-content: center; align-items: center; gap: 10px;
+            border-top: 1px solid rgba(212, 175, 55, 0.18);
         }
         .btn-action-main {
-            background: var(--gold-gradient); color: #000000; font-weight: 800; font-size: 0.85rem;
-            padding: 12px 16px; border-radius: 25px; border: none; display: flex; align-items: center;
-            justify-content: center; gap: 8px; cursor: pointer; letter-spacing: 0.8px; width: 100%; max-width: 420px;
+            background: var(--gold-gradient); color: #000000; font-weight: 800; font-size: 0.88rem;
+            padding: 13px 18px; border-radius: 25px; border: none; display: flex; align-items: center;
+            justify-content: center; gap: 10px; cursor: pointer; letter-spacing: 0.8px; width: 100%; max-width: 420px;
             transition: transform 0.15s ease-in-out; font-family: var(--font-main);
         }
         .btn-action-main:active { transform: scale(0.97); }
 
         .btn-back-step {
             background: rgba(255, 255, 255, 0.08); color: #ffffff; font-weight: 700; font-size: 0.75rem;
-            padding: 12px 16px; border-radius: 25px; border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 13px 18px; border-radius: 25px; border: 1px solid rgba(255, 255, 255, 0.15);
             display: none; align-items: center; justify-content: center; gap: 6px; cursor: pointer; flex-shrink: 0;
             font-family: var(--font-main); transition: all 0.2s ease;
         }
@@ -185,7 +184,7 @@
         .gold-gradient-price { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; }
 
         #toastBox {
-            position: fixed; bottom: 75px; left: 50%; transform: translateX(-50%); background: #14141c; color: #ffffff; padding: 10px 16px;
+            position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: #14141c; color: #ffffff; padding: 10px 16px;
             border-radius: 8px; border: 1px solid rgba(212, 175, 55, 0.3); z-index: 9999999; display: none; font-size: 0.72rem; font-weight: 600; text-transform: none !important; width: 90%; max-width: 340px; text-align: center;
         }
     </style>
@@ -202,7 +201,7 @@
         </div>
 
         <!-- STEP 1: CART & SHIPPING ADDRESS -->
-        <div id="step1CartSection" style="display:flex; flex-direction:column; gap:14px;">
+        <div id="step1CartSection" style="display:flex; flex-direction:column; gap:16px;">
             
             <div style="text-align: center;">
                 <h2 class="gold-gradient-text" style="font-size: 0.85rem; letter-spacing: 1px;"><i class="fa-solid fa-cart-shopping"></i> RETAIL CART & CHECKOUT</h2>
@@ -232,7 +231,7 @@
                     </h2>
                 </div>
                 
-                <form id="shippingCheckoutForm" onsubmit="event.preventDefault();" style="display:flex; flex-direction:column; gap:10px;">
+                <form id="shippingCheckoutForm" onsubmit="event.preventDefault();" style="display:flex; flex-direction:column; gap:12px;">
                     
                     <div class="phone-check-container">
                         <label class="luxury-form-label">WHATSAPP / MOBILE NUMBER <span style="color:var(--danger-red);">*</span></label>
@@ -274,100 +273,73 @@
             <div class="address-form-section">
                 <div class="section-center-header">
                     <h2 class="gold-gradient-text">
-                        <i class="fa-solid fa-credit-card" style="color: var(--gold-solid);"></i> SELECT PAYMENT METHOD
+                        <i class="fa-solid fa-shield-halved" style="color: var(--gold-solid);"></i> SELECT PAYMENT METHOD
                     </h2>
                 </div>
 
                 <div class="payment-accordion-group">
 
-                    <!-- PAYONEER CHECKOUT (GLOBAL) -->
+                    <!-- PAYONEER CHECKOUT (GLOBAL / INTERNATIONAL) -->
                     <div class="payment-method-item active" id="method-payoneer" onclick="selectPaymentMethod('Payoneer Checkout', 'method-payoneer')">
                         <div class="payment-method-header">
-                            <div class="payment-method-title">
-                                <i class="fa-solid fa-globe" style="color:var(--gold-solid);"></i>
-                                <span>PAYONEER CHECKOUT</span>
+                            <div style="display:flex; flex-direction:column; gap:2px;">
+                                <div class="payment-method-title">
+                                    <i class="fa-solid fa-globe" style="color:var(--gold-solid);"></i>
+                                    <span>PAYONEER CHECKOUT</span>
+                                </div>
+                                <div class="payment-sub-text">Pay securely using international Credit/Debit cards globally.</div>
+                                <div class="global-card-icons">
+                                    <i class="fa-brands fa-cc-visa" style="color:#fff;"></i>
+                                    <i class="fa-brands fa-cc-mastercard" style="color:#ff5f00;"></i>
+                                    <i class="fa-brands fa-cc-amex" style="color:#006fcf;"></i>
+                                    <i class="fa-brands fa-cc-discover" style="color:#f9a01b;"></i>
+                                    <i class="fa-brands fa-google-pay" style="color:#ea4335;"></i>
+                                    <i class="fa-brands fa-apple-pay" style="color:#fff;"></i>
+                                </div>
                             </div>
-                            <div class="brand-badge-payoneer">PAYONEER</div>
+                            <div class="brand-badge-payoneer">GLOBAL</div>
                         </div>
                     </div>
                     
-                    <!-- CREDIT / DEBIT CARD (SSLCOMMERZ / GLOBAL CARD) -->
-                    <div class="payment-method-item" id="method-card" onclick="selectPaymentMethod('Credit / Debit Card', 'method-card')">
+                    <!-- SSLCOMMERZ (ALL BANGLADESHI CARDS & WALLETS) -->
+                    <div class="payment-method-item" id="method-ssl" onclick="selectPaymentMethod('SSLCommerz Gateway', 'method-ssl')">
                         <div class="payment-method-header">
-                            <div class="payment-method-title">
-                                <i class="fa-solid fa-credit-card" style="color:var(--gold-solid);"></i>
-                                <span>CREDIT / DEBIT CARD</span>
-                            </div>
-                            <div style="display:flex; gap:6px; align-items:center;">
-                                <i class="fa-brands fa-cc-visa" style="color:#ffffff; font-size:1.2rem;"></i>
-                                <i class="fa-brands fa-cc-mastercard" style="color:#ff5f00; font-size:1.2rem;"></i>
-                            </div>
-                        </div>
-                        <div class="payment-dropdown-content">
-                            <div style="display:flex; flex-direction:column; gap:6px; margin-bottom:10px;">
-                                <label class="luxury-form-label">CARD NUMBER</label>
-                                <input type="text" class="luxury-form-input" placeholder="4111 2222 3333 4444" maxlength="19">
-                            </div>
-                            <div class="card-dual-grid">
-                                <div style="display:flex; flex-direction:column; gap:6px;">
-                                    <label class="luxury-form-label">EXPIRY (MM/YY)</label>
-                                    <input type="text" class="luxury-form-input" placeholder="MM/YY" maxlength="5">
+                            <div style="display:flex; flex-direction:column; gap:2px;">
+                                <div class="payment-method-title">
+                                    <i class="fa-solid fa-credit-card" style="color:#4364f7;"></i>
+                                    <span>SSLCOMMERZ (LOCAL CARDS & WALLETS)</span>
                                 </div>
-                                <div style="display:flex; flex-direction:column; gap:6px;">
-                                    <label class="luxury-form-label">CVV</label>
-                                    <input type="password" class="luxury-form-input" placeholder="123" maxlength="4">
-                                </div>
+                                <div class="payment-sub-text">Pay via Visa, Mastercard, bKash, Nagad, Rocket or Net Banking.</div>
                             </div>
+                            <div class="brand-badge-ssl">SSLCOMMERZ</div>
                         </div>
                     </div>
 
-                    <!-- BKASH MOBILE BANKING -->
-                    <div class="payment-method-item" id="method-bkash" onclick="selectPaymentMethod('bKash Mobile Banking', 'method-bkash')">
+                    <!-- BKASH DIRECT MOBILE BANKING -->
+                    <div class="payment-method-item" id="method-bkash" onclick="selectPaymentMethod('bKash Direct PGW', 'method-bkash')">
                         <div class="payment-method-header">
-                            <div class="payment-method-title">
-                                <i class="fa-solid fa-mobile-screen-button" style="color:#e2136e;"></i>
-                                <span>BKASH</span>
+                            <div style="display:flex; flex-direction:column; gap:2px;">
+                                <div class="payment-method-title">
+                                    <i class="fa-solid fa-mobile-screen-button" style="color:#e2136e;"></i>
+                                    <span>BKASH DIRECT CHECKOUT</span>
+                                </div>
+                                <div class="payment-sub-text">Instant 1-Tap payment using bKash Mobile Wallet.</div>
                             </div>
                             <div class="brand-badge-bkash">bKash</div>
-                        </div>
-                        <div class="payment-dropdown-content">
-                            <div style="display:flex; flex-direction:column; gap:6px;">
-                                <label class="luxury-form-label">BKASH NUMBER</label>
-                                <input type="text" class="luxury-form-input" placeholder="01XXXXXXXXX" maxlength="11">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- NAGAD MOBILE BANKING -->
-                    <div class="payment-method-item" id="method-nagad" onclick="selectPaymentMethod('Nagad Mobile Banking', 'method-nagad')">
-                        <div class="payment-method-header">
-                            <div class="payment-method-title">
-                                <i class="fa-solid fa-wallet" style="color:#f7931e;"></i>
-                                <span>NAGAD</span>
-                            </div>
-                            <div class="brand-badge-nagad">NAGAD</div>
-                        </div>
-                        <div class="payment-dropdown-content">
-                            <div style="display:flex; flex-direction:column; gap:6px;">
-                                <label class="luxury-form-label">NAGAD NUMBER</label>
-                                <input type="text" class="luxury-form-input" placeholder="01XXXXXXXXX" maxlength="11">
-                            </div>
                         </div>
                     </div>
 
                     <!-- CASH ON DELIVERY -->
                     <div class="payment-method-item" id="method-cod" onclick="selectPaymentMethod('Cash on Delivery', 'method-cod')">
                         <div class="payment-method-header">
-                            <div class="payment-method-title">
-                                <i class="fa-solid fa-hand-holding-dollar" style="color:#00e676;"></i>
-                                <span>CASH ON DELIVERY</span>
+                            <div style="display:flex; flex-direction:column; gap:2px;">
+                                <div class="payment-method-title">
+                                    <i class="fa-solid fa-hand-holding-dollar" style="color:#00e676;"></i>
+                                    <span>CASH ON DELIVERY</span>
+                                </div>
+                                <div class="payment-sub-text">Pay in cash after receiving product delivery at doorstep.</div>
                             </div>
-                            <span style="font-size:0.62rem; font-weight:800; color:#000; background:#00e676; padding:3px 10px; border-radius:6px;">COD</span>
-                        </div>
-                        <div class="payment-dropdown-content">
-                            <div style="font-size:0.7rem; color:var(--text-gray); text-transform:none !important; line-height:1.5;">
-                                Pay in cash upon product delivery.
-                            </div>
+                            <span style="font-size:0.62rem; font-weight:800; color:#000; background:#00e676; padding:4px 10px; border-radius:6px;">COD</span>
                         </div>
                     </div>
 
@@ -383,8 +355,8 @@
                     <span id="summarySubtotal" style="font-weight:800; color:#fff;">$0.00 USD</span>
                 </div>
                 <div class="summary-row">
-                    <span style="color:var(--text-gray); font-weight:700;">SHIPPING:</span>
-                    <span style="color:#00e676; font-weight:800;">FREE</span>
+                    <span style="color:var(--text-gray); font-weight:700;">SHIPPING FEE:</span>
+                    <span style="color:#00e676; font-weight:800;">FREE SHIPPING</span>
                 </div>
                 <div style="border-top: 1px dashed rgba(255,255,255,0.12); margin: 4px 0;"></div>
                 <div class="summary-row" style="align-items: flex-start;">
@@ -535,12 +507,12 @@
                         <div style="font-size:0.58rem; color:var(--gold-solid); font-weight:600; margin-top:1px;">SIZE: ${item.size || 'STANDARD'}</div>
                     </div>
                     <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
-                        <button class="btn-qty-minus" data-index="${index}" style="background:var(--gold-gradient); border:none; color:#000; font-weight:800; width:20px; height:20px; border-radius:50%; cursor:pointer;">-</button>
-                        <span style="font-size:0.72rem; font-weight:700; color:#ffffff;">${item.qty}</span>
-                        <button class="btn-qty-plus" data-index="${index}" style="background:var(--gold-gradient); border:none; color:#000; font-weight:800; width:20px; height:20px; border-radius:50%; cursor:pointer;">+</button>
+                        <button class="btn-qty-minus" data-index="${index}" style="background:var(--gold-gradient); border:none; color:#000; font-weight:800; width:22px; height:22px; border-radius:50%; cursor:pointer;">-</button>
+                        <span style="font-size:0.74rem; font-weight:700; color:#ffffff;">${item.qty}</span>
+                        <button class="btn-qty-plus" data-index="${index}" style="background:var(--gold-gradient); border:none; color:#000; font-weight:800; width:22px; height:22px; border-radius:50%; cursor:pointer;">+</button>
                     </div>
                     <div class="gold-gradient-price" style="font-size:0.80rem; flex-shrink:0;">$${itemTotal.toFixed(2)}</div>
-                    <button class="btn-qty-remove" data-index="${index}" style="background:none; border:none; color:#ff3b30; cursor:pointer; font-size:0.82rem; padding:3px; flex-shrink:0;"><i class="fa-solid fa-trash-can"></i></button>
+                    <button class="btn-qty-remove" data-index="${index}" style="background:none; border:none; color:#ff3b30; cursor:pointer; font-size:0.85rem; padding:3px; flex-shrink:0;"><i class="fa-solid fa-trash-can"></i></button>
                 </div>`;
 
                 return item;
@@ -795,12 +767,10 @@
                 items: orderPayload.items
             };
 
-            let targetTable = 'retail_orders';
-
             showToast("Submitting order to Cloudflare D1...");
 
             try {
-                let response = await fetch(`${API_BASE_URL}/api/orders?table=${targetTable}`, {
+                let response = await fetch(`${API_BASE_URL}/api/orders`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(cloudflareDbPayload)
