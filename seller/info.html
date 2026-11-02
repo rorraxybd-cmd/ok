@@ -25,7 +25,7 @@
             --text-gray: #9e9eab;
             --font-main: 'Poppins', sans-serif;
             --required-red: #ff4d4d;
-            --border-gold: rgba(212, 175, 55, 0.25);
+            --border-gold: rgba(212, 175, 55, 0.2);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -35,7 +35,7 @@
         .main-container { width: 100%; max-width: 900px; margin: 0 auto; }
         
         .dashboard-header { text-align: center; margin-bottom: 25px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
-        .header-logo-img { width: 85px; height: 85px; object-fit: contain; filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.3)); }
+        .header-logo-img { width: 85px; height: 85px; object-fit: contain; filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.2)); }
         .dashboard-header h1 { font-size: 1.5rem; font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
         .info-card {
@@ -56,7 +56,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
             padding-bottom: 12px;
         }
 
@@ -75,40 +75,32 @@
 
         .form-control, .form-select, textarea.form-control { 
             width: 100%; background: #0a0a0f; border: 1px solid var(--border-gold); 
-            border-radius: 12px; padding: 12px 16px; color: var(--text-white); font-size: 0.82rem; 
+            border-radius: 10px; padding: 12px 16px; color: var(--text-white); font-size: 0.82rem; 
             outline: none; font-family: var(--font-main); text-transform: none; 
         }
         .form-control:focus, .form-select:focus { border-color: var(--gold-solid); background: #0f0f17; }
         .form-select option { background: #0f0f17; color: #fff; }
 
-        .avatar-upload-container { display: flex; align-items: center; gap: 16px; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid rgba(212, 175, 55, 0.15); }
+        .avatar-upload-container { display: flex; align-items: center; gap: 16px; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid rgba(212, 175, 55, 0.1); }
         .avatar-preview { width: 65px; height: 65px; border-radius: 50%; object-fit: cover; border: 2px solid var(--gold-solid); }
-        .avatar-upload-lbl { background: rgba(212, 175, 55, 0.1); border: 1px solid var(--gold-solid); padding: 9px 18px; border-radius: 10px; color: var(--gold-solid); font-size: 0.72rem; font-weight: 700; cursor: pointer; }
+        .avatar-upload-lbl { background: rgba(212, 175, 55, 0.08); border: 1px solid var(--gold-solid); padding: 9px 18px; border-radius: 8px; color: var(--gold-solid); font-size: 0.72rem; font-weight: 700; cursor: pointer; }
         .file-input-hidden { display: none; }
 
-        .section-save-btn { background: var(--gold-gradient); border: none; border-radius: 12px; padding: 14px 26px; color: #000; font-weight: 800; font-size: 0.82rem; cursor: pointer; text-transform: uppercase; margin-top: 18px; float: right; box-shadow: 0 0 15px rgba(212, 175, 55, 0.25); display: inline-flex; align-items: center; gap: 8px; }
-        .section-save-btn:hover { filter: brightness(1.1); }
+        .section-save-btn, .edit-profile-btn { background: var(--gold-gradient); border: none; border-radius: 10px; padding: 12px 24px; color: #000; font-weight: 800; font-size: 0.82rem; cursor: pointer; text-transform: uppercase; margin-top: 18px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2); }
+        .section-save-btn:hover, .edit-profile-btn:hover { filter: brightness(1.1); }
 
-        /* ভাসমান অ্যাডমিন চ্যাট লোগো বাটন */
-        .floating-chat-btn {
-            position: fixed;
-            bottom: 90px;
-            right: 20px;
-            width: 55px;
-            height: 55px;
-            background: #050508;
-            border: 2px solid var(--gold-solid);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.4);
-            z-index: 999;
-            transition: transform 0.2s;
-        }
-        .floating-chat-btn:hover { transform: scale(1.08); }
-        .floating-chat-btn img { width: 35px; height: 35px; object-fit: contain; }
+        /* প্রফেশনাল সিভি স্টাইল প্রিভিউ ডিজাইন */
+        .cv-preview-box { display: flex; flex-direction: column; gap: 20px; }
+        .cv-header-section { display: flex; align-items: center; gap: 20px; border-bottom: 1px solid rgba(212, 175, 55, 0.15); padding-bottom: 20px; }
+        .cv-logo-img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid var(--gold-solid); }
+        .cv-title-area h2 { font-size: 1.25rem; font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .cv-title-area p { font-size: 0.78rem; color: var(--text-gray); text-transform: none; margin-top: 4px; }
+
+        .cv-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .cv-item { background: #0a0a0f; border: 1px solid var(--border-gold); padding: 12px 16px; border-radius: 10px; }
+        .cv-item span.lbl { display: block; font-size: 0.68rem; color: var(--text-gray); margin-bottom: 4px; }
+        .cv-item span.val { font-size: 0.85rem; font-weight: 600; color: var(--text-white); text-transform: none; }
+        .cv-item.full { grid-column: span 2; }
 
         .seller-bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(3, 3, 5, 0.98); border-top: 1px solid var(--border-gold); display: flex; justify-content: space-around; align-items: center; padding: 12px 6px; z-index: 1000; }
         .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; background: none; border: none; cursor: pointer; }
@@ -117,8 +109,8 @@
         .nav-item span { font-size: 0.62rem; font-weight: 700; color: var(--text-gray); }
 
         @media (max-width: 600px) {
-            .form-grid { grid-template-columns: 1fr; }
-            .form-group.full-width { grid-column: span 1; }
+            .form-grid, .cv-grid { grid-template-columns: 1fr; }
+            .form-group.full-width, .cv-item.full { grid-column: span 1; }
         }
     </style>
 </head>
@@ -137,14 +129,67 @@
             <h1>SELLER INFO</h1>
         </header>
 
-        <!-- ইনফো ফর্ম কার্ড -->
+        <!-- ইনফো কার্ড (প্রিভিউ এবং ফর্ম মোড) -->
         <div class="info-card">
             <div class="info-card-title">
-                <i class="fa-solid fa-store"></i>
-                <span>COMPLETE BUSINESS INFO & VERIFICATION</span>
+                <i class="fa-solid fa-id-card"></i>
+                <span id="cardTitleText">SELLER PROFILE PREVIEW</span>
             </div>
 
-            <form id="businessInfoForm">
+            <!-- ১. প্রফেশনাল সিভি স্টাইল প্রিভিউ সেকশন -->
+            <div id="profilePreviewSection" style="display: none;">
+                <div class="cv-preview-box">
+                    <div class="cv-header-section">
+                        <img src="" alt="Brand Logo" class="cv-logo-img" id="prevLogo">
+                        <div class="cv-title-area">
+                            <h2 id="prevBrandName">--</h2>
+                            <p id="prevBusinessDesc">--</p>
+                        </div>
+                    </div>
+                    <div class="cv-grid">
+                        <div class="cv-item">
+                            <span class="lbl">BUSINESS EMAIL</span>
+                            <span class="val" id="prevEmail">--</span>
+                        </div>
+                        <div class="cv-item">
+                            <span class="lbl">FULL NAME</span>
+                            <span class="val" id="prevFullName">--</span>
+                        </div>
+                        <div class="cv-item">
+                            <span class="lbl">WHATSAPP</span>
+                            <span class="val" id="prevWhatsapp">--</span>
+                        </div>
+                        <div class="cv-item">
+                            <span class="lbl">EMERGENCY PHONE</span>
+                            <span class="val" id="prevPhone">--</span>
+                        </div>
+                        <div class="cv-item">
+                            <span class="lbl">COUNTRY</span>
+                            <span class="val" id="prevCountry">--</span>
+                        </div>
+                        <div class="cv-item">
+                            <span class="lbl">ADDRESS</span>
+                            <span class="val" id="prevAddress">--</span>
+                        </div>
+                        <div class="cv-item">
+                            <span class="lbl" id="prevDocTypeLbl">NID NUMBER</span>
+                            <span class="val" id="prevDocNum">--</span>
+                        </div>
+                        <div class="cv-item">
+                            <span class="lbl">TRADE LICENSE</span>
+                            <span class="val" id="prevTradeLicense">--</span>
+                        </div>
+                    </div>
+                    <div>
+                        <button type="button" class="edit-profile-btn" onclick="switchToEditMode()">
+                            <i class="fa-solid fa-pen-to-square"></i> EDIT INFO
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ২. ইনফো আপডেট ফর্ম সেকশন -->
+            <form id="businessInfoForm" style="display: none;">
                 <div class="avatar-upload-container">
                     <img src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png" alt="Logo" class="avatar-preview" id="avatarPreview">
                     <div class="avatar-upload-info">
@@ -213,14 +258,10 @@
                     </div>
                 </div>
                 <button type="submit" class="section-save-btn">SAVE INFO <i class="fa-solid fa-check"></i></button>
+                <button type="button" class="edit-profile-btn" style="background: transparent; color: var(--text-gray); border: 1px solid var(--border-gold); margin-right: 10px; float: right;" onclick="cancelEditMode()">CANCEL</button>
                 <div style="clear: both;"></div>
             </form>
         </div>
-    </div>
-
-    <!-- ভাসমান লোগো চ্যাট বাটন -->
-    <div class="floating-chat-btn" onclick="openAdminChatModal()" title="Admin Support">
-        <img src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png" alt="Chat">
     </div>
 
     <!-- বটম নেভিগেশন -->
@@ -231,23 +272,6 @@
         <a href="shipment.html" class="nav-item"><i class="fa-solid fa-truck-fast"></i><span>SHIPMENT</span></a>
         <a href="info.html" class="nav-item active"><i class="fa-solid fa-user-gear"></i><span>INFO</span></a>
     </nav>
-
-    <!-- অ্যাডমিন চ্যাট মডাল বক্স -->
-    <div id="adminChatModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:2000; justify-content:center; align-items:center; padding:16px;">
-        <div style="background:#050508; border:1px solid var(--gold-solid); border-radius:16px; width:100%; max-width:400px; display:flex; flex-direction:column; overflow:hidden;">
-            <div style="padding:14px 18px; background:#000000; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(212, 175, 55, 0.2);">
-                <h4 style="font-size:0.85rem; font-weight:800; background:var(--gold-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">ADMIN SUPPORT CHAT</h4>
-                <button type="button" onclick="closeAdminChatModal()" style="background:none; border:none; color:#fff; font-size:1.1rem; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div id="chatMessagesBox" style="padding:14px; height:250px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; font-size:0.78rem;">
-                <div style="background:#12121c; padding:10px 14px; border-radius:10px; align-self:flex-start; max-width:80%; text-transform:none; color:#fff;">Welcome to rorraxy Admin Support. How can we assist you?</div>
-            </div>
-            <div style="padding:12px; background:#000000; display:flex; gap:8px; border-top:1px solid rgba(212, 175, 55, 0.15);">
-                <input type="text" id="chatInputMsg" placeholder="Type message..." style="flex:1; background:#0a0a0f; border:1px solid var(--border-gold); border-radius:20px; padding:10px 14px; color:#fff; font-size:0.78rem; outline:none; text-transform:none;">
-                <button type="button" onclick="sendAdminChatMessage()" style="background:var(--gold-gradient); border:none; width:36px; height:36px; border-radius:50%; color:#000; cursor:pointer; font-weight:bold;"><i class="fa-solid fa-paper-plane"></i></button>
-            </div>
-        </div>
-    </div>
 
     <script>
         const businessDesc = document.getElementById('businessDesc');
@@ -281,21 +305,40 @@
             reader.readAsDataURL(file);
         });
 
-        function openAdminChatModal() { document.getElementById('adminChatModal').style.display = 'flex'; }
-        function closeAdminChatModal() { document.getElementById('adminChatModal').style.display = 'none'; }
-        
-        function sendAdminChatMessage() {
-            const input = document.getElementById('chatInputMsg');
-            const text = input.value.trim();
-            if(!text) return;
-            const box = document.getElementById('chatMessagesBox');
-            box.innerHTML += `<div style="background:var(--gold-gradient); color:#000; padding:10px 14px; border-radius:10px; align-self:flex-end; max-width:80%; font-weight:700; text-transform:none;">${text}</div>`;
-            input.value = '';
-            box.scrollTop = box.scrollHeight;
+        function switchToEditMode() {
+            document.getElementById('profilePreviewSection').style.display = 'none';
+            document.getElementById('businessInfoForm').style.display = 'block';
+            document.getElementById('cardTitleText').innerText = "EDIT BUSINESS INFO & VERIFICATION";
+        }
+
+        function cancelEditMode() {
+            document.getElementById('businessInfoForm').style.display = 'none';
+            document.getElementById('profilePreviewSection').style.display = 'block';
+            document.getElementById('cardTitleText').innerText = "SELLER PROFILE PREVIEW";
+        }
+
+        function renderPreview(data) {
+            document.getElementById('prevLogo').src = data.logo_url || compressedAvatarData;
+            document.getElementById('prevBrandName').innerText = data.brand_name || "---";
+            document.getElementById('prevBusinessDesc').innerText = data.business_desc || "---";
+            document.getElementById('prevEmail').innerText = data.email || "---";
+            document.getElementById('prevFullName').innerText = data.full_name || "---";
+            document.getElementById('prevWhatsapp').innerText = data.whatsapp || "---";
+            document.getElementById('prevPhone').innerText = data.emergency_phone || "---";
+            document.getElementById('prevCountry').innerText = data.country || "---";
+            document.getElementById('prevAddress').innerText = data.full_address || "---";
+            
+            const docLabel = data.doc_type === 'BirthCert' ? 'BIRTH CERTIFICATE NUMBER' : 'NID NUMBER';
+            document.getElementById('prevDocTypeLbl').innerText = docLabel;
+            document.getElementById('prevDocNum').innerText = data.doc_number || "---";
+            document.getElementById('prevTradeLicense').innerText = data.default_payout_details || "---";
+
+            document.getElementById('profilePreviewSection').style.display = 'block';
+            document.getElementById('businessInfoForm').style.display = 'none';
+            document.getElementById('cardTitleText').innerText = "SELLER PROFILE PREVIEW";
         }
 
         document.addEventListener('DOMContentLoaded', async () => {
-            // অটোমেটিক বিজনেস ইমেল সেটআপ (লোকাল স্টোরেজ বা ডিফল্ট থেকে)
             const savedProfile = JSON.parse(localStorage.getItem('rorraxy_seller_profile') || 'null');
             if (savedProfile && savedProfile.businessEmail) {
                 document.getElementById('businessEmail').value = savedProfile.businessEmail;
@@ -303,37 +346,41 @@
                 document.getElementById('businessEmail').value = "seller@rorraxy.com";
             }
 
-            // ডাটাবেস থেকে ডাটা লোড
             try {
                 const response = await fetch('/api/seller?action=profile&seller_id=1');
                 const result = await response.json();
                 if (result.success && result.data && result.data.length > 0) {
                     const dbProfile = result.data[0];
-                    if(dbProfile.brand_name) document.getElementById('brandName').value = dbProfile.brand_name;
-                    if(dbProfile.email) document.getElementById('businessEmail').value = dbProfile.email;
-                    if(dbProfile.full_name) document.getElementById('fullName').value = dbProfile.full_name;
-                    if(dbProfile.business_desc) {
-                        document.getElementById('businessDesc').value = dbProfile.business_desc;
-                        charCount.innerText = `${dbProfile.business_desc.length}/200`;
-                    }
-                    if(dbProfile.whatsapp) document.getElementById('whatsappNum').value = dbProfile.whatsapp;
-                    if(dbProfile.emergency_phone) document.getElementById('phoneNum').value = dbProfile.emergency_phone;
-                    if(dbProfile.country) document.getElementById('countrySelect').value = dbProfile.country;
-                    if(dbProfile.full_address) document.getElementById('fullAddress').value = dbProfile.full_address;
-                    if(dbProfile.doc_type) {
-                        document.getElementById('docTypeSelect').value = dbProfile.doc_type;
+                    if(dbProfile.brand_name) {
+                        // ডেটা থাকলে ফর্ম ফিলআপ করে প্রিভিউ মোড দেখাবে
+                        document.getElementById('brandName').value = dbProfile.brand_name;
+                        document.getElementById('businessEmail').value = dbProfile.email || "seller@rorraxy.com";
+                        document.getElementById('fullName').value = dbProfile.full_name || '';
+                        document.getElementById('businessDesc').value = dbProfile.business_desc || '';
+                        charCount.innerText = `${(dbProfile.business_desc || '').length}/200`;
+                        document.getElementById('whatsappNum').value = dbProfile.whatsapp || '';
+                        document.getElementById('phoneNum').value = dbProfile.emergency_phone || '';
+                        document.getElementById('countrySelect').value = dbProfile.country || 'Bangladesh';
+                        document.getElementById('fullAddress').value = dbProfile.full_address || '';
+                        document.getElementById('docTypeSelect').value = dbProfile.doc_type || 'NID';
                         updateDocLabel();
-                    }
-                    if(dbProfile.doc_number) document.getElementById('docNumberInput').value = dbProfile.doc_number;
-                    if(dbProfile.default_payout_details) document.getElementById('tradeLicenseInput').value = dbProfile.default_payout_details;
-                    if(dbProfile.logo_url) {
-                        compressedAvatarData = dbProfile.logo_url;
-                        document.getElementById('avatarPreview').src = dbProfile.logo_url;
+                        document.getElementById('docNumberInput').value = dbProfile.doc_number || '';
+                        document.getElementById('tradeLicenseInput').value = dbProfile.default_payout_details || '';
+                        if(dbProfile.logo_url) {
+                            compressedAvatarData = dbProfile.logo_url;
+                            document.getElementById('avatarPreview').src = dbProfile.logo_url;
+                        }
+                        renderPreview(dbProfile);
+                        return;
                     }
                 }
             } catch (err) {
                 console.log("Cloudflare load notice:", err);
             }
+
+            // যদি ডেটা না থাকে তবে সরাসরি ফরম দেখাবে
+            document.getElementById('businessInfoForm').style.display = 'block';
+            document.getElementById('profilePreviewSection').style.display = 'none';
         });
 
         document.getElementById('businessInfoForm').addEventListener('submit', async (e) => {
@@ -377,15 +424,16 @@
                 });
                 const result = await response.json();
                 if (result.success) {
-                    alert('INFO SAVED SUCCESSFULLY WITH CHECKMARK!');
-                    window.location.href = 'dashboard.html';
+                    alert('INFO SAVED SUCCESSFULLY!');
+                    renderPreview(profileData);
                 } else {
                     alert('Cloudflare Sync Warning: ' + (result.error || 'Unknown error'));
+                    renderPreview(profileData);
                 }
             } catch (err) {
                 console.error(err);
                 alert('INFO SAVED LOCALLY SUCCESSFULLY!');
-                window.location.href = 'dashboard.html';
+                renderPreview(profileData);
             }
         });
     </script>
