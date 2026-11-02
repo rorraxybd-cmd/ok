@@ -255,7 +255,7 @@
                         <input type="text" class="form-control" id="tradeLicenseInput" placeholder="Enter Trade License number or details..." required style="text-transform: none;">
                     </div>
                 </div>
-                <button type="submit" class="section-save-btn">SAVE INFO <i class="fa-solid fa-check"></i></button>
+                <button type="submit" id="saveInfoBtn" class="section-save-btn">SAVE INFO <i class="fa-solid fa-check"></i></button>
                 <button type="button" class="edit-profile-btn" style="background: transparent; color: var(--text-gray); border: 1px solid var(--border-gold); margin-right: 10px; float: right;" onclick="cancelEditMode()">CANCEL</button>
                 <div style="clear: both;"></div>
             </form>
@@ -338,11 +338,22 @@
         }
 
         window.addEventListener('DOMContentLoaded', async () => {
-            // ইউজারের নিজস্ব ভেরিফাইড ইমেইল বা আইডি বের করা
-            const userEmail = localStorage.getItem('rorraxy_seller_email') || localStorage.getItem('rorraxy_seller_verified_email') || 'seller@rorraxy.com';
+            // ১. বর্তমান সেশন ইমেইল শনাক্ত করা
+            const urlParams = new URLSearchParams(window.location.search);
+            let userEmail = urlParams.get('email') || localStorage.getItem('rorraxy_current_seller_email');
+
+            if (!userEmail) {
+                userEmail = localStorage.getItem('rorraxy_seller_email') || localStorage.getItem('rorraxy_seller_verified_email');
+            }
+
+            if (!userEmail) {
+                userEmail = "seller_" + Date.now() + "@rorraxy.com";
+            }
+
+            localStorage.setItem('rorraxy_current_seller_email', userEmail);
             document.getElementById('businessEmail').value = userEmail;
 
-            // ইউনিক ইমেল বাইন্ডিং கீ (Key) দিয়ে লোকাল স্টোরেজ চেক করা
+            // ২. এই নির্দিষ্ট ইমেলের জন্য ইউনিক স্টোরেজ চেক
             const storageKey = `rorraxy_seller_profile_${userEmail}`;
             const savedProfile = JSON.parse(localStorage.getItem(storageKey) || 'null');
 
@@ -352,7 +363,7 @@
                 return;
             }
 
-            // ক্লাউডফায়ার ডেটাবেস থেকে ইউজারের নিজস্ব ইমেইল দিয়ে ফেচ করা
+            // ৩. ক্লাউডফায়ার ডি১ ডেটাবেস থেকে রিয়েল-টাইম ফেচ
             try {
                 const response = await fetch(`/api/seller?action=profile&email=${encodeURIComponent(userEmail)}`);
                 const result = await response.json();
@@ -383,7 +394,7 @@
                 console.log("Cloudflare load notice:", err);
             }
 
-            // ডেটা না থাকলে সরাসরি ফাঁকা ফরম দেখাবে
+            // ৪. নতুন ইমেলের ক্ষেত্রে একদম ফাঁকা ফরম দেখাবে
             document.getElementById('businessInfoForm').style.display = 'block';
             document.getElementById('profilePreviewSection').style.display = 'none';
         });
@@ -410,10 +421,13 @@
 
         document.getElementById('businessInfoForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            const btn = document.getElementById('saveInfoBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> SAVING...';
             
             const userEmail = document.getElementById('businessEmail').value.trim().toLowerCase();
             const profileData = {
-                seller_id: userEmail, // ইউনিক ইমেইল আইডি হিসেবে পাস করা হলো
+                seller_id: userEmail,
                 brand_name: document.getElementById('brandName').value.trim(),
                 email: userEmail,
                 full_name: document.getElementById('fullName').value.trim(),
@@ -443,25 +457,22 @@
                 logo: profileData.logo_url
             };
 
-            // প্রতিটা ইউজারের নিজস্ব জিমেইল অনুযায়ী আলাদা লোকাল স্টোরেজে সংরক্ষণ
+            // নির্দিষ্ট জিমেইলের আন্ডারে লোকাল স্টোরেজে সংরক্ষণ
             localStorage.setItem(`rorraxy_seller_profile_${userEmail}`, JSON.stringify(cleanData));
 
             try {
-                const response = await fetch('/api/seller?action=profile', {
+                await fetch('/api/seller?action=profile', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(profileData)
                 });
-                const result = await response.json();
-                if (response.ok && result.success) {
-                    renderPreview(cleanData);
-                } else {
-                    renderPreview(cleanData);
-                }
             } catch (err) {
-                console.error(err);
-                renderPreview(cleanData);
+                console.error("API Sync notice:", err);
             }
+
+            btn.disabled = false;
+            btn.innerHTML = 'SAVE INFO <i class="fa-solid fa-check"></i>';
+            renderPreview(cleanData);
         });
     </script>
 </body>
