@@ -129,7 +129,7 @@
             padding-bottom: 12px;
         }
 
-        /* ADD NEW বাটন ফিক্স (টেক্সট স্পষ্ট করার জন্য) */
+        /* ADD NEW বাটন ফিক্স */
         .add-new-btn {
             background: var(--gold-gradient);
             color: #000000 !important;
@@ -191,7 +191,6 @@
             gap: 16px;
         }
 
-        /* ঝকঝকে ও স্পষ্টভাবে বড় ছবি */
         .prod-thumb {
             width: 65px;
             height: 65px;
@@ -436,8 +435,6 @@
     </nav>
 
     <script>
-        const WORKER_BASE_URL = 'https://s.rorraxybd.workers.dev';
-
         window.addEventListener('DOMContentLoaded', () => {
             fetchProductsFromCloudflare();
         });
@@ -445,13 +442,19 @@
         async function fetchProductsFromCloudflare() {
             let products = [];
             try {
-                const response = await fetch(`${WORKER_BASE_URL}/api/get?table=products`);
+                // পুরনো ওয়ার্কার লিংক বাদ দিয়ে এখন সরাসরি ক্লাউডফায়ার ফাংশন এপিআই কল করা হচ্ছে
+                const response = await fetch('/api/products');
                 const result = await response.json();
-                if (result.success && Array.isArray(result.data) && result.data.length > 0) {
-                    products = result.data;
+                
+                // এপিআই রেসপন্স ফরম্যাট অনুযায়ী ডেটা হ্যান্ডেল করা
+                let rawData = result.data || result.results || result;
+                if (result.success && Array.isArray(rawData) && rawData.length > 0) {
+                    products = rawData;
+                } else if (Array.isArray(result) && result.length > 0) {
+                    products = result;
                 }
             } catch (err) {
-                console.warn("Cloudflare Fetch Warning:", err);
+                console.warn("Cloudflare API Fetch Warning:", err);
             }
 
             let localProducts = JSON.parse(localStorage.getItem('rorraxy_seller_products')) || [];
