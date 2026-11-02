@@ -16,7 +16,6 @@ export async function onRequest(context) {
     const action = url.searchParams.get("action"); 
     const sellerId = url.searchParams.get("seller_id");
 
-    // ১. GET রিকোয়েস্ট: সেলারের তথ্য, অর্ডার বা পেআউট দেখার জন্য
     if (request.method === "GET") {
       let query = "";
       let stmt;
@@ -46,7 +45,6 @@ export async function onRequest(context) {
       });
     }
 
-    // ২. POST রিকোয়েস্ট: সেলার প্রোফাইল সেভ বা আপডেট করার জন্য (INSERT OR REPLACE ব্যবহার করা হয়েছে)
     if (request.method === "POST") {
       const body = await request.json();
 
@@ -58,7 +56,6 @@ export async function onRequest(context) {
           default_payout_details, logo_url
         } = body;
 
-        // INSERT OR REPLACE ব্যবহার করার ফলে ডাটা ডুপ্লিকেট বা ফেইল না করে আপডেট হয়ে যাবে
         const query = `
           INSERT OR REPLACE INTO seller_profiles (
             seller_id, brand_name, full_name, business_desc, email, whatsapp, 
@@ -68,7 +65,7 @@ export async function onRequest(context) {
         `;
 
         await env.retail.prepare(query).bind(
-          seller_id || 1, // যদি seller_id না থাকে ডিফল্ট 1 ব্যবহার হবে
+          seller_id || 1, 
           brand_name || null, 
           full_name || null, 
           business_desc || "", 
@@ -77,10 +74,10 @@ export async function onRequest(context) {
           emergency_phone || null, 
           country || "Bangladesh", 
           full_address || null, 
-          doc_type || null, 
+          doc_type || "NID", 
           doc_number || null, 
           default_payout_method || "bKash", 
-          default_payout_details || null, 
+          default_payout_details || "N/A", 
           logo_url || "",
           seller_id || 1
         ).run();
