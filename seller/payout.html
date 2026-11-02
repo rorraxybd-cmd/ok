@@ -55,8 +55,8 @@
         .form-control:focus, .form-select:focus { background: #030305; }
         .form-select option { background: #08080c; color: #fff; }
 
-        /* পিংক কালার সাবমিট বাটন */
-        .withdraw-btn { width: 100%; background: var(--pink-solid); border: none; border-radius: 14px; padding: 14px; color: #ffffff; font-weight: 800; font-size: 0.85rem; cursor: pointer; text-transform: uppercase; box-shadow: 0 0 20px rgba(255, 42, 133, 0.35); transition: all 0.25s ease; }
+        /* পিংক কালার সিকিউর উইথড্র বাটন */
+        .withdraw-btn { width: 100%; background: var(--pink-solid); border: none; border-radius: 14px; padding: 14px; color: #ffffff; font-weight: 800; font-size: 0.85rem; cursor: pointer; text-transform: uppercase; box-shadow: 0 0 20px rgba(255, 42, 133, 0.35); transition: all 0.25s ease; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .withdraw-btn:hover { filter: brightness(1.12); transform: translateY(-1px); box-shadow: 0 0 30px rgba(255, 42, 133, 0.55); }
 
         .table-responsive { width: 100%; overflow-x: auto; }
@@ -126,7 +126,9 @@
                         </div>
                     </div>
                 </div>
-                <button type="submit" class="withdraw-btn">SUBMIT PAYOUT REQUEST</button>
+                <button type="submit" class="withdraw-btn" id="requestBtn">
+                    <i class="fa-solid fa-shield-check"></i> REQUEST SECURE WITHDRAWAL
+                </button>
             </form>
         </section>
 
@@ -143,20 +145,6 @@
         </section>
     </div>
 
-    <!-- পেমেন্ট 2FA ওটিপি ভেরিফিকেশন মোডাল -->
-    <div id="payoutOtpModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.88); backdrop-filter:blur(8px); z-index:9999; justify-content:center; align-items:center; padding:16px;">
-        <div style="background:#050508; border:1px solid rgba(255, 42, 133, 0.3); border-radius:24px; padding:35px 25px; width:100%; max-width:400px; text-align:center; box-shadow:0 20px 50px rgba(0,0,0,0.9);">
-            <h3 style="font-size:1.1rem; font-weight:800; background:var(--gold-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:10px;">AUTHORIZE PAYOUT</h3>
-            <p style="font-size:0.75rem; color:var(--text-gray); margin-bottom:20px; text-transform:none;">Enter the 6-digit security code sent to your registered email[cite: 5].</p>
-            
-            <input type="text" id="payoutOtpCode" maxlength="6" placeholder="------" style="width:100%; background:#000000; border:none; border-radius:14px; padding:14px; color:var(--gold-solid); font-size:1.4rem; text-align:center; font-weight:800; letter-spacing:12px; outline:none; margin-bottom:15px; box-shadow:inset 0 2px 4px rgba(0,0,0,0.8);" autocomplete="one-time-code">
-            
-            <div id="payoutOtpStatus" style="font-size:0.75rem; margin-bottom:15px; display:none; text-transform:none;"></div>
-            
-            <button type="button" onclick="closePayoutModal()" style="background:none; border:none; color:var(--text-gray); font-size:0.75rem; cursor:pointer;">CANCEL</button>
-        </div>
-    </div>
-
     <nav class="seller-bottom-nav">
         <a href="list.html" class="nav-item"><i class="fa-solid fa-list-check"></i><span>LIST</span></a>
         <a href="payout.html" class="nav-item active"><i class="fa-solid fa-hand-holding-dollar"></i><span>PAYOUT</span></a>
@@ -167,7 +155,6 @@
 
     <script>
         const WORKER_URL = "https://email.rorraxybd.workers.dev";
-        let pendingPayoutData = null;
 
         window.addEventListener('DOMContentLoaded', () => {
             loadPayoutRealtimeData();
@@ -259,7 +246,7 @@
             }
         });
 
-        // পে-আউট ফর্ম সাবমিট (মাস্ট বি ইনফো পূরণ থাকতে হবে, তারপর ইমেল OTP পাঠাবে)
+        // অটো-ভেরিফাইড ওয়ান-ক্লিক পে-আউট সাবমিট
         document.getElementById('payoutForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -288,85 +275,35 @@
             if (amount > currentAvail) { alert('INSUFFICIENT BALANCE!'); return; }
 
             const today = new Date().toLocaleDateString();
-            pendingPayoutData = { date: today, method: method, details: detailText, amount: amount, status: 'PENDING', email: savedProfile.businessEmail };
+            const payoutData = { date: today, method: method, details: detailText, amount: amount, status: 'PENDING', email: savedProfile.businessEmail };
 
-            // ওয়ার্কারে পেমেন্ট ওটিপি রিকোয়েস্ট পাঠানো
+            const requestBtn = document.getElementById('requestBtn');
+            requestBtn.disabled = true;
+            requestBtn.innerText = "PROCESSING...";
+
             try {
-                const res = await fetch(`${WORKER_URL}/send-payment-otp`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: savedProfile.businessEmail, amount: amount })
-                });
-                const data = await res.json();
-                if (res.ok && data.success) {
-                    document.getElementById('payoutOtpModal').style.display = 'flex';
-                    document.getElementById('payoutOtpCode').focus();
-                } else {
-                    alert(data.error || 'FAILED TO SEND SECURITY CODE.');
-                }
-            } catch (err) {
-                alert('NETWORK ERROR! PLEASE TRY AGAIN.');
-            }
-        });
+                let payoutRequests = JSON.parse(localStorage.getItem('rorraxy_seller_payouts') || '[]');
+                payoutRequests.unshift(payoutData);
+                localStorage.setItem('rorraxy_seller_payouts', JSON.stringify(payoutRequests));
 
-        // ৬ ডিজিট কোড টাইপ শেষ হওয়া মাত্র অটো-ভেরিফাই ও সাবমিশন
-        document.getElementById('payoutOtpCode').addEventListener('input', async (e) => {
-            const otpCode = e.target.value.trim();
-            const statusEl = id => document.getElementById(id);
-
-            if (otpCode.length === 6 && pendingPayoutData) {
                 try {
-                    const res = await fetch(`${WORKER_URL}/verify-payment-otp`, {
+                    await fetch(`/api/post`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ email: pendingPayoutData.email, otp: otpCode })
+                        body: JSON.stringify({ action: 'payouts', ...payoutData })
                     });
-                    const data = await res.json();
+                } catch (err) { console.warn("API sync error:", err); }
 
-                    if (res.ok && data.verified) {
-                        statusEl('payoutOtpStatus').style.color = '#4ade80';
-                        statusEl('payoutOtpStatus').innerText = 'PAYOUT AUTHORIZED SUCCESSFULLY!';
-                        statusEl('payoutOtpStatus').style.display = 'block';
-
-                        // লোকাল এবং এপিআই-তে সেভ করা
-                        let payoutRequests = JSON.parse(localStorage.getItem('rorraxy_seller_payouts') || '[]');
-                        payoutRequests.unshift(pendingPayoutData);
-                        localStorage.setItem('rorraxy_seller_payouts', JSON.stringify(payoutRequests));
-
-                        try {
-                            await fetch(`/api/post`, {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ action: 'payouts', ...pendingPayoutData })
-                            });
-                        } catch (err) { console.warn("API sync error:", err); }
-
-                        setTimeout(() => {
-                            closePayoutModal();
-                            loadPayoutRealtimeData();
-                            document.getElementById('payoutForm').reset();
-                            alert('PAYOUT REQUEST SUBMITTED SUCCESSFULLY!');
-                        }, 800);
-                    } else {
-                        statusEl('payoutOtpStatus').style.color = '#ff4d4d';
-                        statusEl('payoutOtpStatus').innerText = data.message || 'INVALID OR EXPIRED CODE!';
-                        statusEl('payoutOtpStatus').style.display = 'block';
-                        e.target.value = '';
-                    }
-                } catch (err) {
-                    statusEl('payoutOtpStatus').style.color = '#ff4d4d';
-                    statusEl('payoutOtpStatus').innerText = 'VERIFICATION ERROR!';
-                    statusEl('payoutOtpStatus').style.display = 'block';
-                }
+                alert('WITHDRAWAL REQUEST SUBMITTED SUCCESSFULLY!');
+                document.getElementById('payoutForm').reset();
+                loadPayoutRealtimeData();
+            } catch (err) {
+                alert('ERROR PROCESSING REQUEST!');
+            } finally {
+                requestBtn.disabled = false;
+                requestBtn.innerHTML = '<i class="fa-solid fa-shield-check"></i> REQUEST SECURE WITHDRAWAL';
             }
         });
-
-        function closePayoutModal() {
-            document.getElementById('payoutOtpModal').style.display = 'none';
-            document.getElementById('payoutOtpCode').value = '';
-            document.getElementById('payoutOtpStatus').style.display = 'none';
-            pendingPayoutData = null;
-        }
     </script>
 </body>
 </html>
