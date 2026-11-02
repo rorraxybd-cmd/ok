@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>Seller Payout - rorraxy Ecosystem</title>
     
+    <!-- Favicon Logo -->
+    <link rel="icon" type="image/png" href="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png">
+    
     <script src="/ecosystem-core.js"></script>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,11 +18,12 @@
     <style>
         :root {
             --bg-retail: #000000;
-            --card-retail: #08080c;
+            --card-retail: #050508;
             --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
+            --pink-solid: linear-gradient(135deg, #ff2a85 0%, #ff479b 100%);
             --gold-solid: #d4af37;
             --text-white: #ffffff;
-            --text-gray: #a0a0ab;
+            --text-gray: #8e8e99;
             --font-main: 'Poppins', sans-serif;
             --required-red: #ff4d4d;
         }
@@ -30,16 +34,16 @@
 
         .main-container { width: 100%; max-width: 900px; margin: 0 auto; }
         .dashboard-header { text-align: center; margin-bottom: 25px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
-        .header-logo-img { width: 90px; height: 90px; object-fit: contain; filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.6)); }
+        .header-logo-img { width: 90px; height: 90px; object-fit: contain; filter: drop-shadow(0 0 25px rgba(255, 42, 133, 0.4)); }
         .dashboard-header h1 { font-size: 1.5rem; font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
         .balance-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 25px; }
-        .balance-card { background: var(--card-retail); border-radius: 18px; padding: 20px 16px; text-align: center; display: flex; flex-direction: column; gap: 8px; border: 1px solid rgba(212, 175, 55, 0.15); }
+        .balance-card { background: var(--card-retail); border-radius: 18px; padding: 20px 16px; text-align: center; display: flex; flex-direction: column; gap: 8px; border: 1px solid rgba(255, 42, 133, 0.12); }
         .balance-card h3 { font-size: 0.68rem; color: var(--text-gray); font-weight: 700; }
         .balance-card .amount { font-size: 1.25rem; font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        .payout-card, .history-card { background: var(--card-retail); border-radius: 18px; padding: 24px 20px; margin-bottom: 25px; border: 1px solid rgba(212, 175, 55, 0.15); }
-        .section-title { font-size: 0.85rem; font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(212, 175, 55, 0.15); padding-bottom: 8px; }
+        .payout-card, .history-card { background: var(--card-retail); border-radius: 18px; padding: 24px 20px; margin-bottom: 25px; border: 1px solid rgba(255, 42, 133, 0.12); }
+        .section-title { font-size: 0.85rem; font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255, 42, 133, 0.12); padding-bottom: 8px; }
 
         .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 20px; }
         .form-group { display: flex; flex-direction: column; gap: 6px; }
@@ -47,10 +51,13 @@
         .form-group label { font-size: 0.72rem; font-weight: 700; color: var(--text-gray); }
         .req-star { color: var(--required-red); margin-left: 3px; }
 
-        .form-control, .form-select { width: 100%; background: #040407; border: none; border-radius: 12px; padding: 12px 16px; color: var(--text-white); font-size: 0.8rem; outline: none; font-family: var(--font-main); text-transform: none; }
+        .form-control, .form-select { width: 100%; background: #000000; border: none; border-radius: 12px; padding: 12px 16px; color: var(--text-white); font-size: 0.8rem; outline: none; font-family: var(--font-main); text-transform: none; box-shadow: inset 0 2px 4px rgba(0,0,0,0.8); }
+        .form-control:focus, .form-select:focus { background: #030305; }
         .form-select option { background: #08080c; color: #fff; }
 
-        .withdraw-btn { width: 100%; background: var(--gold-gradient); border: none; border-radius: 14px; padding: 14px; color: #000; font-weight: 800; font-size: 0.85rem; cursor: pointer; text-transform: uppercase; }
+        /* পিংক কালার সাবমিট বাটন */
+        .withdraw-btn { width: 100%; background: var(--pink-solid); border: none; border-radius: 14px; padding: 14px; color: #ffffff; font-weight: 800; font-size: 0.85rem; cursor: pointer; text-transform: uppercase; box-shadow: 0 0 20px rgba(255, 42, 133, 0.35); transition: all 0.25s ease; }
+        .withdraw-btn:hover { filter: brightness(1.12); transform: translateY(-1px); box-shadow: 0 0 30px rgba(255, 42, 133, 0.55); }
 
         .table-responsive { width: 100%; overflow-x: auto; }
         .payout-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.75rem; white-space: nowrap; }
@@ -61,16 +68,22 @@
         .status-badge.paid { background: rgba(34, 197, 94, 0.15); color: #4ade80; }
         .status-badge.pending { background: rgba(234, 179, 8, 0.15); color: #facc15; }
 
-        .seller-bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(3, 3, 5, 0.95); border-top: 1px solid rgba(212, 175, 55, 0.15); display: flex; justify-content: space-around; align-items: center; padding: 12px 6px; z-index: 1000; }
+        .seller-bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(3, 3, 5, 0.95); border-top: 1px solid rgba(255, 42, 133, 0.12); display: flex; justify-content: space-around; align-items: center; padding: 12px 6px; z-index: 1000; }
         .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; background: none; border: none; cursor: pointer; }
         .nav-item.active i, .nav-item.active span { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .nav-item i { font-size: 1.25rem; margin-bottom: 4px; color: var(--text-gray); }
         .nav-item span { font-size: 0.62rem; font-weight: 700; color: var(--text-gray); }
+
+        @media (max-width: 600px) {
+            .balance-grid { grid-template-columns: 1fr; }
+            .form-grid { grid-template-columns: 1fr; }
+            .form-group.full-width { grid-column: span 1; }
+        }
     </style>
 </head>
 <body>
 
-    <!-- সিকিউরিটি গেন্টিং চেক -->
+    <!-- সিকিউরিটি গেটিং চেক -->
     <script>
         if (localStorage.getItem('rorraxy_seller_verified') !== 'true') {
             window.location.href = 'index.html';
@@ -109,7 +122,7 @@
                     <div class="form-grid full-width" id="payoutDetailsGrid" style="margin-bottom: 0;">
                         <div class="form-group full-width">
                             <label>BKASH ACCOUNT NUMBER<span class="req-star">*</span></label>
-                            <input type="text" class="form-control" id="payoutAccNum" placeholder="Enter bKash number..." required>
+                            <input type="text" class="form-control" id="payoutAccNum" placeholder="Enter bKash number..." required style="text-transform: none;">
                         </div>
                     </div>
                 </div>
@@ -132,11 +145,11 @@
 
     <!-- পেমেন্ট 2FA ওটিপি ভেরিফিকেশন মোডাল -->
     <div id="payoutOtpModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.88); backdrop-filter:blur(8px); z-index:9999; justify-content:center; align-items:center; padding:16px;">
-        <div style="background:#08080c; border:1px solid rgba(212,175,55,0.35); border-radius:24px; padding:35px 25px; width:100%; max-width:400px; text-align:center; box-shadow:0 20px 50px rgba(0,0,0,0.9);">
+        <div style="background:#050508; border:1px solid rgba(255, 42, 133, 0.3); border-radius:24px; padding:35px 25px; width:100%; max-width:400px; text-align:center; box-shadow:0 20px 50px rgba(0,0,0,0.9);">
             <h3 style="font-size:1.1rem; font-weight:800; background:var(--gold-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:10px;">AUTHORIZE PAYOUT</h3>
-            <p style="font-size:0.75rem; color:var(--text-gray); margin-bottom:20px; text-transform:none;">Enter the 6-digit security code sent to your registered email.</p>
+            <p style="font-size:0.75rem; color:var(--text-gray); margin-bottom:20px; text-transform:none;">Enter the 6-digit security code sent to your registered email[cite: 5].</p>
             
-            <input type="text" id="payoutOtpCode" maxlength="6" placeholder="------" style="width:100%; background:#030305; border:1px solid rgba(255,255,255,0.1); border-radius:14px; padding:14px; color:var(--gold-solid); font-size:1.4rem; text-align:center; font-weight:800; letter-spacing:12px; outline:none; margin-bottom:15px;" autocomplete="one-time-code">
+            <input type="text" id="payoutOtpCode" maxlength="6" placeholder="------" style="width:100%; background:#000000; border:none; border-radius:14px; padding:14px; color:var(--gold-solid); font-size:1.4rem; text-align:center; font-weight:800; letter-spacing:12px; outline:none; margin-bottom:15px; box-shadow:inset 0 2px 4px rgba(0,0,0,0.8);" autocomplete="one-time-code">
             
             <div id="payoutOtpStatus" style="font-size:0.75rem; margin-bottom:15px; display:none; text-transform:none;"></div>
             
@@ -233,16 +246,16 @@
         payoutMethod.addEventListener('change', () => {
             const val = payoutMethod.value;
             if (val === 'bKash' || val === 'Nagad') {
-                payoutDetailsGrid.innerHTML = `<div class="form-group full-width"><label><span class="label-text">${val.toUpperCase()} ACCOUNT NUMBER<span class="req-star">*</span></span></label><input type="text" class="form-control" id="payoutAccNum" placeholder="Enter ${val} number..." required></div>`;
+                payoutDetailsGrid.innerHTML = `<div class="form-group full-width"><label><span class="label-text">${val.toUpperCase()} ACCOUNT NUMBER<span class="req-star">*</span></span></label><input type="text" class="form-control" id="payoutAccNum" placeholder="Enter ${val} number..." required style="text-transform: none;"></div>`;
             } else if (val === 'Bank') {
                 payoutDetailsGrid.innerHTML = `
-                    <div class="form-group full-width"><label><span class="label-text">BANK NAME<span class="req-star">*</span></span></label><input type="text" class="form-control" id="bankNameInput" placeholder="Bank name..." required></div>
-                    <div class="form-group full-width"><label><span class="label-text">ACCOUNT HOLDER NAME<span class="req-star">*</span></span></label><input type="text" class="form-control" id="bankAccName" placeholder="Full name..." required></div>
-                    <div class="form-group full-width"><label><span class="label-text">ACCOUNT NUMBER / IBAN<span class="req-star">*</span></span></label><input type="text" class="form-control" id="bankAccNum" placeholder="Account number..." required></div>
-                    <div class="form-group full-width"><label><span class="label-text">ROUTING / SWIFT CODE<span class="req-star">*</span></span></label><input type="text" class="form-control" id="bankRouting" placeholder="Routing code..." required></div>
+                    <div class="form-group full-width"><label><span class="label-text">BANK NAME<span class="req-star">*</span></span></label><input type="text" class="form-control" id="bankNameInput" placeholder="Bank name..." required style="text-transform: none;"></div>
+                    <div class="form-group full-width"><label><span class="label-text">ACCOUNT HOLDER NAME<span class="req-star">*</span></span></label><input type="text" class="form-control" id="bankAccName" placeholder="Full name..." required style="text-transform: none;"></div>
+                    <div class="form-group full-width"><label><span class="label-text">ACCOUNT NUMBER / IBAN<span class="req-star">*</span></span></label><input type="text" class="form-control" id="bankAccNum" placeholder="Account number..." required style="text-transform: none;"></div>
+                    <div class="form-group full-width"><label><span class="label-text">ROUTING / SWIFT CODE<span class="req-star">*</span></span></label><input type="text" class="form-control" id="bankRouting" placeholder="Routing code..." required style="text-transform: none;"></div>
                 `;
             } else if (val === 'Payoneer') {
-                payoutDetailsGrid.innerHTML = `<div class="form-group full-width"><label><span class="label-text">PAYONEER EMAIL<span class="req-star">*</span></span></label><input type="email" class="form-control" id="payoneerEmailInput" placeholder="Payoneer email..." required></div>`;
+                payoutDetailsGrid.innerHTML = `<div class="form-group full-width"><label><span class="label-text">PAYONEER EMAIL<span class="req-star">*</span></span></label><input type="email" class="form-control" id="payoneerEmailInput" placeholder="Payoneer email..." required style="text-transform: none;"></div>`;
             }
         });
 
