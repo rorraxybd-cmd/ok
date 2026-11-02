@@ -150,10 +150,10 @@
         }
 
         window.addEventListener('DOMContentLoaded', async () => {
-            const autoEmail = localStorage.getItem('rorraxy_affiliate_email') || 'affiliate@rorraxy.com';
+            const urlParams = new URLSearchParams(window.location.search);
+            let autoEmail = urlParams.get('email') || localStorage.getItem('rorraxy_affiliate_email') || 'affiliate@rorraxy.com';
             document.getElementById('email').value = autoEmail;
 
-            // ইউনিক ইমেল বাইন্ডিং கீ (Key) ব্যবহার করে লোকাল স্টোরেজ চেক করা
             const storageKey = `rorraxy_affiliate_info_${autoEmail}`;
             const savedInfo = localStorage.getItem(storageKey);
 
@@ -163,7 +163,6 @@
                     fillFormAndShowSummary(data);
                 } catch(e) { console.error(e); }
             } else {
-                // ক্লাউডফায়ার ডি১ ডেটাবেस থেকে রিয়েল-টাইম ফেচ করা
                 try {
                     const res = await fetch(`/api/affiliate?action=info&affiliate_id=${encodeURIComponent(autoEmail)}`);
                     const result = await res.json();
@@ -210,7 +209,7 @@
             
             const btn = document.getElementById('saveInfoBtn');
             btn.disabled = true;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> SAVING TO DATABASE...';
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> SAVING...';
 
             const userEmail = document.getElementById('email').value.trim().toLowerCase();
             const paymentMethodVal = document.getElementById('paymentMethod').value;
@@ -242,25 +241,16 @@
                 accountDetails: data.account_details
             };
 
-            // প্রতিটা ইউজারের নিজস্ব ইমেল অনুযায়ী আলাদা লোকাল স্টোরেজে সংরক্ষণ
             localStorage.setItem(`rorraxy_affiliate_info_${userEmail}`, JSON.stringify(cleanData));
 
             try {
-                const response = await fetch('/api/affiliate?action=register', {
+                await fetch('/api/affiliate?action=register', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
-                const result = await response.json();
-                
-                if (response.ok && result.success) {
-                    alert('AFFILIATE INFORMATION SAVED & SYNCED TO DATABASE SUCCESSFULLY!');
-                } else {
-                    alert('SAVED LOCALLY & SYNCED!');
-                }
             } catch (err) {
                 console.error("API Error:", err);
-                alert('AFFILIATE INFORMATION SAVED LOCALLY SUCCESSFULLY!');
             }
 
             btn.disabled = false;
