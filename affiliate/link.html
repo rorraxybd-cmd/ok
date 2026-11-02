@@ -17,7 +17,6 @@
             --bg-retail: #000000;
             --card-retail: #08080c;
             --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
-            --pink-solid: linear-gradient(135deg, #ff2a85 0%, #ff479b 100%);
             --gold-solid: #d4af37;
             --text-white: #ffffff;
             --text-gray: #a0a0ab;
@@ -35,7 +34,7 @@
         .dashboard-header h1 { font-size: 1.5rem; font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
         .header-email-box { display: inline-flex; align-items: center; gap: 8px; background: var(--card-retail); padding: 6px 16px; border-radius: 25px; text-decoration: none; text-transform: lowercase; font-size: 0.78rem; color: var(--text-gray); border: 1px solid var(--border-color); }
-        .header-email-box i { color: #ff2a85; }
+        .header-email-box i { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
         .generator-card { background: var(--card-retail); border-radius: 18px; padding: 24px 20px; margin-bottom: 25px; border: 1px solid var(--border-color); }
         .form-group { margin-bottom: 18px; }
@@ -43,19 +42,20 @@
         .form-control, .form-select { width: 100%; background: #040407; border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 16px; color: var(--text-white); font-size: 0.8rem; outline: none; font-family: var(--font-main); text-transform: none; }
         .form-select option { background: #08080c; color: var(--text-white); }
         
-        .generate-btn { width: 100%; background: var(--gold-gradient); border: none; border-radius: 14px; padding: 14px; color: #000; font-weight: 800; font-size: 0.85rem; cursor: pointer; text-transform: uppercase; box-shadow: 0 4px 15px rgba(212,175,55,0.25); transition: transform 0.2s; }
+        /* জেনারেট লিংক বাটন ছোট ও আকর্ষণীয় গোল্ডেন গ্রেডিয়েন্ট */
+        .generate-btn { width: 100%; background: var(--gold-gradient); border: none; border-radius: 12px; padding: 12px; color: #000; font-weight: 800; font-size: 0.82rem; cursor: pointer; text-transform: uppercase; box-shadow: 0 4px 15px rgba(212,175,55,0.2); transition: transform 0.2s; }
         .generate-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
         
         .result-box { margin-top: 20px; background: #040407; border-radius: 14px; padding: 18px; border: 1px solid var(--border-color); display: none; }
         .result-box.active { display: block; }
         .result-label { font-size: 0.72rem; color: var(--gold-solid); font-weight: 700; margin-bottom: 8px; }
-        .result-flex { display: flex; gap: 10px; margin-bottom: 15px; }
+        .result-flex { display: flex; gap: 10px; margin-bottom: 12px; }
         .result-input { flex: 1; background: #000; border: 1px solid var(--border-color); border-radius: 10px; padding: 10px 14px; color: var(--text-white); font-size: 0.78rem; outline: none; text-transform: none; }
         .copy-btn { background: var(--gold-gradient); border: none; border-radius: 10px; padding: 0 16px; color: #000; font-weight: 800; font-size: 0.78rem; cursor: pointer; }
         
-        /* শেয়ার বাটন স্টাইল */
-        .universal-share-btn { width: 100%; background: var(--pink-solid); border: none; border-radius: 12px; padding: 12px; color: #fff; font-weight: 800; font-size: 0.8rem; cursor: pointer; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 0 20px rgba(255,42,133,0.35); transition: all 0.25s ease; }
-        .universal-share-btn:hover { filter: brightness(1.12); transform: translateY(-1px); }
+        /* লম্বালম্বি ও সুন্দর শেয়ার বাটন (গোল্ডেন গ্রেডিয়েন্ট থিমযুক্ত) */
+        .universal-share-btn { width: 100%; background: var(--gold-gradient); border: none; border-radius: 12px; padding: 12px; color: #000; font-weight: 800; font-size: 0.8rem; cursor: pointer; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 0 20px rgba(212,175,55,0.25); transition: all 0.25s ease; }
+        .universal-share-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
 
         /* বটম নেভিগেশন মেনু */
         .affiliate-bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(3, 3, 5, 0.95); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; align-items: center; padding: 10px 6px; z-index: 1000; }
@@ -94,18 +94,18 @@
                 <input type="text" class="form-control" id="targetUrlInput" placeholder="Paste specific product link from store..." style="text-transform: none;">
             </div>
 
-            <button type="button" class="generate-btn" id="generateBtn">GENERATE CLOUDFLARE TRACKING LINK</button>
+            <button type="button" class="generate-btn" id="generateBtn">GENERATE LINK</button>
 
             <div class="result-box" id="resultBox">
-                <div class="result-label">YOUR UNIQUE AFFILIATE LINK:</div>
+                <div class="result-label">AFFILIATE LINK:</div>
                 <div class="result-flex">
                     <input type="text" class="result-input" id="generatedLinkOutput" readonly>
                     <button type="button" class="copy-btn" id="copyBtn">COPY</button>
                 </div>
 
-                <!-- ইউনিভার্সাল শেয়ার বাটন (মোবাইল ও ডেস্কটপ নেটিভ শেয়ারিং) -->
+                <!-- ইউনিভার্সাল নেটিভ শেয়ার বাটন -->
                 <button type="button" class="universal-share-btn" id="universalShareBtn">
-                    <i class="fa-solid fa-share-nodes"></i> SHARE LINK ANYWHERE
+                    <i class="fa-solid fa-share-nodes"></i> SHARE LINK
                 </button>
             </div>
         </section>
@@ -145,7 +145,6 @@
             document.getElementById('generatedLinkOutput').value = trackingLink;
             document.getElementById('resultBox').classList.add('active');
 
-            // ব্যাকএন্ড ডেটাবেসে সিঙ্ক করার জন্য
             try {
                 await fetch(`/api/affiliate?action=conversion`, {
                     method: 'POST',
@@ -160,7 +159,6 @@
             } catch(e) { console.warn("Cloudflare D1 sync warning, fallback active."); }
         });
 
-        // কপি বাটন ফাংশন
         document.getElementById('copyBtn').addEventListener('click', () => {
             const copyInput = document.getElementById('generatedLinkOutput');
             copyInput.select();
@@ -169,7 +167,6 @@
             setTimeout(() => { document.getElementById('copyBtn').innerText = "COPY"; }, 2000);
         });
 
-        // ইউনিভার্সাল নেটিভ শেয়ার বাটন (মোবাইল ও ডেস্কটপের জন্য যেকোনো অ্যাপে শেয়ার করার অপشن)
         document.getElementById('universalShareBtn').addEventListener('click', async () => {
             if (!currentTrackingLink) return;
 
@@ -184,7 +181,6 @@
                     console.log('Error sharing:', error);
                 }
             } else {
-                // যদি নেটিভ শেয়ার সাপোর্ট না করে তবে ক্লিপবোর্ডে কপি হয়ে যাবে
                 navigator.clipboard.writeText(currentTrackingLink);
                 alert('LINK COPIED TO CLIPBOARD! YOU CAN PASTE IT ANYWHERE.');
             }
