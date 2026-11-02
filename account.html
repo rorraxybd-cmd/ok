@@ -18,7 +18,7 @@
     <style>
         :root {
             --bg-body: #000000;
-            --card-bg: #08080c;
+            --card-bg: #07070a;
             --gold-color: #d4af37;
             --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
             --text-main: #ffffff;
@@ -60,7 +60,7 @@
 
         .account-container {
             width: 100%;
-            max-width: 720px;
+            max-width: 620px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -74,27 +74,26 @@
             to { opacity: 1; transform: scale(1); }
         }
 
-        /* Clean Search Bar */
+        /* Clean Soft Search Bar without harsh borders */
         .search-tracking-box {
             width: 100%;
             background: var(--card-bg);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            border-radius: 14px;
-            padding: 8px 12px;
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            border-radius: 12px;
+            padding: 6px 10px;
             display: flex;
             align-items: center;
             gap: 8px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
         }
 
         .search-input-field {
             flex: 1;
-            background: #040407;
-            border: 1px solid rgba(212, 175, 55, 0.12);
-            border-radius: 10px;
-            padding: 9px 12px;
+            background: #030305;
+            border: 1px solid rgba(212, 175, 55, 0.08);
+            border-radius: 8px;
+            padding: 8px 12px;
             color: #fff;
-            font-size: 0.74rem;
+            font-size: 0.72rem;
             outline: none;
             font-family: var(--font-family);
         }
@@ -105,11 +104,10 @@
             border: none;
             color: #000;
             font-weight: 900;
-            font-size: 0.72rem;
-            padding: 9px 16px;
-            border-radius: 10px;
+            font-size: 0.7rem;
+            padding: 8px 14px;
+            border-radius: 8px;
             cursor: pointer;
-            box-shadow: 0 3px 12px rgba(212, 175, 55, 0.25);
             white-space: nowrap;
         }
 
@@ -121,25 +119,24 @@
             justify-content: center;
             text-align: center;
             padding: 50px 20px;
-            gap: 24px;
+            gap: 20px;
         }
 
         .top-brand-logo {
-            width: 120px;
+            width: 100px;
             height: auto;
             object-fit: contain;
-            filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.5));
         }
 
         .mode-status-badge {
-            background: rgba(212, 175, 55, 0.1);
-            border: 1px solid rgba(212, 175, 55, 0.3);
+            background: rgba(212, 175, 55, 0.08);
+            border: 1px solid rgba(212, 175, 55, 0.2);
             border-radius: 20px;
-            padding: 6px 16px;
-            font-size: 0.68rem;
+            padding: 5px 14px;
+            font-size: 0.65rem;
             font-weight: 800;
             color: var(--gold-color);
-            letter-spacing: 1px;
+            letter-spacing: 0.8px;
             display: inline-flex;
             align-items: center;
             gap: 6px;
@@ -149,14 +146,13 @@
             background: var(--gold-gradient);
             color: #000;
             font-weight: 900;
-            font-size: 0.85rem;
-            padding: 12px 35px;
-            border-radius: 30px;
+            font-size: 0.8rem;
+            padding: 10px 30px;
+            border-radius: 25px;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            box-shadow: 0 8px 30px rgba(212, 175, 55, 0.4);
             border: none;
             cursor: pointer;
         }
@@ -164,109 +160,93 @@
         /* MEMO & PREVIEW CARD */
         .memo-preview-card {
             background: var(--card-bg);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            border-radius: 18px;
-            padding: 20px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 16px;
+            padding: 18px;
             width: 100%;
             display: flex;
             flex-direction: column;
-            gap: 14px;
-            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.8);
+            gap: 12px;
         }
 
         .memo-top-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding-bottom: 10px;
         }
 
         .download-pdf-btn {
             background: var(--gold-gradient);
             color: #000;
             border: none;
-            padding: 11px 20px;
-            border-radius: 25px;
-            font-size: 0.74rem;
+            padding: 10px 18px;
+            border-radius: 20px;
+            font-size: 0.72rem;
             font-weight: 900;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
+            gap: 6px;
             transition: transform 0.1s;
         }
         .download-pdf-btn:active { transform: scale(0.96); }
 
         .memo-details-grid {
-            background: #040407;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            padding: 10px 14px;
-            font-size: 0.7rem;
+            background: #030305;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 0.68rem;
             color: var(--text-muted);
-            line-height: 1.6;
+            line-height: 1.5;
         }
         .memo-details-grid span { color: #fff; font-weight: 700; }
 
-        /* ITEMS TABLE */
+        /* VERTICAL ITEMS TABLE */
         .memo-items-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             margin-top: 2px;
         }
         .memo-items-table th, .memo-items-table td {
-            padding: 9px 6px;
+            padding: 8px 6px;
             text-align: left;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
         .memo-items-table th {
             background: var(--gold-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: 900;
-            font-size: 0.68rem;
+            font-size: 0.65rem;
             letter-spacing: 0.5px;
-        }
-        .table-item-row {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .table-thumb {
-            width: 32px;
-            height: 32px;
-            border-radius: 6px;
-            object-fit: cover;
-            border: 1px solid rgba(212,175,55,0.2);
-            background: #000;
         }
 
         .memo-total-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 900;
             color: var(--gold-color);
-            border-top: 1px solid rgba(212, 175, 55, 0.15);
-            padding-top: 10px;
+            border-top: 1px solid rgba(212, 175, 55, 0.12);
+            padding-top: 8px;
             margin-top: 2px;
         }
 
         .section-title {
-            font-size: 0.74rem;
+            font-size: 0.72rem;
             font-weight: 800;
             background: var(--gold-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            letter-spacing: 0.8px;
+            letter-spacing: 0.6px;
             display: flex;
             align-items: center;
             gap: 6px;
-            margin-top: 4px;
         }
     </style>
 </head>
@@ -276,7 +256,7 @@
 
     <div class="account-container">
         
-        <!-- Clean Search Tracking Bar -->
+        <!-- Clean Soft Search Tracking Bar -->
         <div class="search-tracking-box">
             <input type="text" id="orderSearchInput" class="search-input-field" placeholder="ENTER MASTER ID OR PHONE NUMBER">
             <button onclick="executeOrderSearch()" class="search-submit-btn"><i class="fa-solid fa-magnifying-glass"></i> TRACK</button>
@@ -290,6 +270,7 @@
 
     <script>
         const API_BASE_URL = ''; 
+        const BRAND_LOGO_URL = 'https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png';
         let currentOrderData = null;
 
         window.onload = function() {
@@ -367,11 +348,11 @@
             const container = document.getElementById('accountDynamicContent');
             container.innerHTML = `
                 <div class="empty-orders-screen">
-                    <img src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png" class="top-brand-logo" alt="rorraxy Logo">
+                    <img src="${BRAND_LOGO_URL}" class="top-brand-logo" alt="rorraxy Logo">
                     <div class="mode-status-badge">
                         <i class="fa-solid fa-circle-check"></i> ACTIVE CHANNEL: RETAIL ACCOUNT
                     </div>
-                    <p style="font-size:0.72rem; color:var(--text-muted);">NO ACTIVE ORDERS FOUND</p>
+                    <p style="font-size:0.7rem; color:var(--text-muted);">NO ACTIVE ORDERS FOUND</p>
                     <button onclick="window.location.href='/index.html'" class="shop-now-btn">
                         <i class="fa-solid fa-bag-shopping"></i> START SHOPPING
                     </button>
@@ -395,17 +376,11 @@
                 let itemPriceNum = parseFloat(String(item.price || '0').replace('$', '')) || 0;
                 let itemTotal = itemPriceNum * (item.qty || 1);
                 totalAmt += itemTotal;
-                let imgUrl = item.img || item.image_url || 'https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png';
                 let title = item.title || item.product_title || 'Retail Product';
 
                 itemsTableHtml += `
                     <tr>
-                        <td>
-                            <div class="table-item-row">
-                                <img src="${imgUrl}" class="table-thumb" crossorigin="anonymous" alt="Product">
-                                <span style="font-size:0.72rem; font-weight:700; color:#fff;">${title}</span>
-                            </div>
-                        </td>
+                        <td style="font-size:0.7rem; font-weight:700; color:#fff;">${title}</td>
                         <td style="text-align:center; font-weight:700;">${item.qty || 1}</td>
                         <td style="text-align:right; color:var(--gold-color); font-weight:900;">$${itemTotal.toFixed(2)}</td>
                     </tr>
@@ -421,16 +396,16 @@
 
                 <div class="memo-preview-card" id="printableMemoArea">
                     <div class="memo-top-row">
-                        <div style="display:flex; align-items:center; gap:10px;">
-                            <img src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png" crossorigin="anonymous" style="width:42px; height:auto;" alt="Logo">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <img src="${BRAND_LOGO_URL}" crossorigin="anonymous" style="width:34px; height:auto;" alt="Logo">
                             <div>
-                                <h2 style="font-size:0.88rem; font-weight:900; background:var(--gold-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">RORRAXY RETAIL</h2>
-                                <p style="font-size:0.52rem; color:var(--text-muted);">DIGITAL MEMO</p>
+                                <h2 style="font-size:0.8rem; font-weight:900; background:var(--gold-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">RORRAXY RETAIL</h2>
+                                <p style="font-size:0.48rem; color:var(--text-muted);">DIGITAL MEMO</p>
                             </div>
                         </div>
                         <div style="text-align:right;">
-                            <p style="font-size:0.72rem; font-weight:900; color:#fff;">#${mainOrderId}</p>
-                            <p style="font-size:0.52rem; color:var(--text-muted);">${orderDate}</p>
+                            <p style="font-size:0.68rem; font-weight:900; color:#fff;">#${mainOrderId}</p>
+                            <p style="font-size:0.48rem; color:var(--text-muted);">${orderDate}</p>
                         </div>
                     </div>
 
