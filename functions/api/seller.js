@@ -1,124 +1,63 @@
-export async function onRequest(context) {
-  const { request, env } = context;
-  
-  const corsHeaders = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "GET, POST, PUT, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
-  };
+window.addEventListener('DOMContentLoaded', async () => {
+            // ১. ভেরিফাইড প্যানেল বা সেশন থেকে বর্তমান ইউজারের সঠিক ইমেইল বের করা
+            const urlParams = new URLSearchParams(window.location.search);
+            let userEmail = urlParams.get('email') || localStorage.getItem('rorraxy_current_seller_email');
 
-  if (request.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
-  }
+            if (!userEmail) {
+                userEmail = localStorage.getItem('rorraxy_seller_email') || localStorage.getItem('rorraxy_seller_verified_email');
+            }
 
-  try {
-    const url = new URL(request.url);
-    const action = url.searchParams.get("action"); 
-    const sellerId = url.searchParams.get("seller_id");
+            if (!userEmail) {
+                userEmail = "seller_" + Date.now() + "@rorraxy.com";
+            }
 
-    if (request.method === "GET") {
-      let query = "";
-      let stmt;
+            localStorage.setItem('rorraxy_current_seller_email', userEmail);
+            document.getElementById('businessEmail').value = userEmail;
 
-      if (action === "profile") {
-        query = sellerId ? "SELECT * FROM seller_profiles WHERE seller_id = ?" : "SELECT * FROM seller_profiles";
-        stmt = sellerId ? env.retail.prepare(query).bind(sellerId) : env.retail.prepare(query);
-      } else if (action === "orders") {
-        query = sellerId ? "SELECT * FROM seller_orders WHERE seller_id = ?" : "SELECT * FROM seller_orders";
-        stmt = sellerId ? env.retail.prepare(query).bind(sellerId) : env.retail.prepare(query);
-      } else if (action === "payouts") {
-        query = sellerId ? "SELECT * FROM seller_payouts WHERE seller_id = ?" : "SELECT * FROM seller_payouts";
-        stmt = sellerId ? env.retail.prepare(query).bind(sellerId) : env.retail.prepare(query);
-      } else if (action === "chats") {
-        query = sellerId ? "SELECT * FROM seller_support_chats WHERE seller_id = ?" : "SELECT * FROM seller_support_chats";
-        stmt = sellerId ? env.retail.prepare(query).bind(sellerId) : env.retail.prepare(query);
-      } else {
-        return new Response(JSON.stringify({ success: false, error: "Invalid action parameter" }), {
-          status: 400,
-          headers: { ...corsHeaders, "Content-Type": "application/json" }
+            // ২. লোকাল স্টোরেজ চেক
+            const storageKey = `rorraxy_seller_profile_${userEmail}`;
+            const savedProfile = JSON.parse(localStorage.getItem(storageKey) || 'null');
+
+            if (savedProfile && savedProfile.brandName) {
+                fillFormValues(savedProfile);
+                renderPreview(savedProfile);
+                return;
+            }
+
+            // ৩. ক্লাউডফায়ার ডেটাবেস থেকে স্ট্যাটিক আইডি ১ বাদ দিয়ে নির্দিষ্ট ইমেল দিয়ে কুয়েরি করা
+            try {
+                const response = await fetch(`/api/seller?action=profile&email=${encodeURIComponent(userEmail)}`);
+                const result = await response.json();
+                
+                // যদি ডেটাবেসে এই ইমেলের প্রোফাইল পাওয়া যায়
+                if (result.success && result.data && result.data.length > 0) {
+                    const dbProfile = result.data[0];
+                    if(dbProfile.brand_name) {
+                        const formattedData = {
+                            brandName: dbProfile.brand_name,
+                            businessEmail: dbProfile.email || userEmail,
+                            fullName: dbProfile.full_name || '',
+                            businessDesc: dbProfile.business_desc || '',
+                            whatsapp: dbProfile.whatsapp || '',
+                            phone: dbProfile.emergency_phone || '',
+                            country: dbProfile.country || 'Bangladesh',
+                            address: dbProfile.full_address || '',
+                            docType: dbProfile.doc_type || 'NID',
+                            docNum: dbProfile.doc_number || '',
+                            tradeLicense: dbProfile.default_payout_details || '',
+                            logo: dbProfile.logo_url || compressedAvatarData
+                        };
+                        localStorage.setItem(storageKey, JSON.stringify(formattedData));
+                        fillFormValues(formattedData);
+                        renderPreview(formattedData);
+                        return;
+                    }
+                }
+            } catch (err) {
+                console.log("Cloudflare load notice:", err);
+            }
+
+            // ৪. ডেটা না থাকলে একদম ফাঁকা ফরম দেখাবে যাতে নতুন ইউজার তার তথ্য দিতে পারে
+            document.getElementById('businessInfoForm').style.display = 'block';
+            document.getElementById('profilePreviewSection').style.display = 'none';
         });
-      }
-
-      const { results } = await stmt.all();
-      return new Response(JSON.stringify({ success: true, data: results }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" }
-      });
-    }
-
-    if (request.method === "POST") {
-      const body = await request.json();
-
-      if (action === "profile") {
-        const {
-          seller_id, brand_name, full_name, business_desc, email, 
-          whatsapp, emergency_phone, country, full_address, 
-          doc_type, doc_number, default_payout_method, 
-          default_payout_details, logo_url
-        } = body;
-
-        // created_at এবং updated_at হ্যান্ডেল করার জন্য datetime('now') যুক্ত করা হয়েছে
-        const query = `
-          INSERT OR REPLACE INTO seller_profiles (
-            seller_id, brand_name, full_name, business_desc, email, whatsapp, 
-            emergency_phone, country, full_address, doc_type, doc_number, 
-            default_payout_method, default_payout_details, logo_url, status, created_at, updated_at
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'ACTIVE', 
-            COALESCE((SELECT created_at FROM seller_profiles WHERE seller_id = ?), datetime('now')), 
-            datetime('now')
-          )
-        `;
-
-        await env.retail.prepare(query).bind(
-          seller_id || 1, 
-          brand_name || "", 
-          full_name || "", 
-          business_desc || "", 
-          email || "", 
-          whatsapp || "", 
-          emergency_phone || "", 
-          country || "Bangladesh", 
-          full_address || "", 
-          doc_type || "NID", 
-          doc_number || "", 
-          default_payout_method || "bKash", 
-          default_payout_details || "N/A", 
-          logo_url || "",
-          seller_id || 1
-        ).run();
-
-        return new Response(JSON.stringify({ success: true, message: "Seller profile saved successfully!" }), {
-          headers: { ...corsHeaders, "Content-Type": "application/json" }
-        });
-      }
-
-      if (action === "chat") {
-        const { seller_id, sender_type, message } = body;
-        const query = `
-          INSERT INTO seller_support_chats (seller_id, sender_type, message, is_read, created_at)
-          VALUES (?, ?, ?, 0, datetime('now'))
-        `;
-        await env.retail.prepare(query).bind(seller_id || 1, sender_type || "seller", message || "").run();
-
-        return new Response(JSON.stringify({ success: true, message: "Message sent successfully!" }), {
-          headers: { ...corsHeaders, "Content-Type": "application/json" }
-        });
-      }
-
-      return new Response(JSON.stringify({ success: false, error: "Invalid post action" }), {
-        status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" }
-      });
-    }
-
-    return new Response(JSON.stringify({ success: false, error: "Method not allowed" }), {
-      status: 405,
-      headers: { ...corsHeaders, "Content-Type": "application/json" }
-    });
-
-  } catch (err) {
-    return new Response(JSON.stringify({ success: false, error: err.message }), {
-      status: 500,
-      headers: { ...corsHeaders, "Content-Type": "application/json" }
-    });
-  }
-}
