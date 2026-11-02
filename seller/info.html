@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>Seller Settings - rorraxy Ecosystem</title>
     
+    <!-- Favicon Logo -->
+    <link rel="icon" type="image/png" href="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png">
+    
     <script src="/ecosystem-core.js"></script>
    
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,11 +18,12 @@
     <style>
         :root {
             --bg-retail: #000000;
-            --card-retail: #08080c;
+            --card-retail: #050508;
             --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
+            --pink-solid: linear-gradient(135deg, #ff2a85 0%, #ff479b 100%);
             --gold-solid: #d4af37;
             --text-white: #ffffff;
-            --text-gray: #a0a0ab;
+            --text-gray: #8e8e99;
             --font-main: 'Poppins', sans-serif;
             --required-red: #ff4d4d;
         }
@@ -31,20 +35,20 @@
         .main-container { width: 100%; max-width: 900px; margin: 0 auto; }
         
         .dashboard-header { text-align: center; margin-bottom: 25px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
-        .header-logo-img { width: 85px; height: 85px; object-fit: contain; }
+        .header-logo-img { width: 85px; height: 85px; object-fit: contain; filter: drop-shadow(0 0 20px rgba(255, 42, 133, 0.3)); }
         .dashboard-header h1 { font-size: 1.5rem; font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
         .accordion-wrapper { display: flex; flex-direction: column; gap: 14px; margin-bottom: 30px; }
         
         .accordion-item {
-            background: #08080c;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
+            background: var(--card-retail);
+            border: 1px solid rgba(255, 42, 133, 0.12);
+            border-radius: 16px;
             overflow: hidden;
             transition: border-color 0.3s;
         }
 
-        .accordion-item.active { border-color: rgba(212, 175, 55, 0.4); }
+        .accordion-item.active { border-color: rgba(255, 42, 133, 0.35); }
 
         .accordion-header {
             padding: 18px 20px;
@@ -52,7 +56,7 @@
             align-items: center;
             justify-content: space-between;
             cursor: pointer;
-            background: #08080c;
+            background: var(--card-retail);
             user-select: none;
         }
 
@@ -75,12 +79,12 @@
             overflow: hidden;
             transition: max-height 0.4s ease, padding 0.4s ease;
             padding: 0 20px;
-            background: #040407;
+            background: #000000;
             border-top: 1px solid transparent;
         }
 
         .accordion-item.active .accordion-body {
-            max-height: 1500px;
+            max-height: 1600px;
             padding: 20px;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
@@ -99,26 +103,28 @@
         .char-counter { font-size: 0.62rem; color: var(--text-gray); text-transform: none; }
 
         .form-control, .form-select, textarea.form-control { 
-            width: 100%; background: #08080c; border: 1px solid rgba(255, 255, 255, 0.1); 
-            border-radius: 10px; padding: 12px 16px; color: var(--text-white); font-size: 0.8rem; 
+            width: 100%; background: #000000; border: none; 
+            border-radius: 12px; padding: 12px 16px; color: var(--text-white); font-size: 0.8rem; 
             outline: none; font-family: var(--font-main); text-transform: none; 
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.8);
         }
-        .form-control:focus, .form-select:focus { border-color: var(--gold-solid); }
+        .form-control:focus, .form-select:focus { background: #030305; }
         .form-select option { background: #08080c; color: #fff; }
 
         .avatar-upload-container { display: flex; align-items: center; gap: 16px; padding: 15px 0; margin-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.06); }
         .avatar-preview { width: 65px; height: 65px; border-radius: 50%; object-fit: cover; border: 1px solid var(--gold-solid); }
-        .avatar-upload-lbl { background: rgba(212, 175, 55, 0.15); border: 1px solid rgba(212, 175, 55, 0.3); padding: 8px 16px; border-radius: 8px; color: var(--gold-solid); font-size: 0.72rem; font-weight: 700; cursor: pointer; }
+        .avatar-upload-lbl { background: rgba(255, 42, 133, 0.12); border: 1px solid rgba(255, 42, 133, 0.3); padding: 8px 16px; border-radius: 10px; color: #ff2a85; font-size: 0.72rem; font-weight: 700; cursor: pointer; }
         .file-input-hidden { display: none; }
 
-        .setting-action-row { display: flex; align-items: center; justify-content: space-between; background: #08080c; padding: 16px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.05); }
+        .setting-action-row { display: flex; align-items: center; justify-content: space-between; background: var(--card-retail); padding: 16px; border-radius: 12px; border: 1px solid rgba(255, 42, 133, 0.12); }
         .setting-action-info h4 { font-size: 0.8rem; font-weight: 700; color: var(--text-white); }
         .setting-action-info p { font-size: 0.7rem; color: var(--text-gray); text-transform: none; margin-top: 2px; }
-        .action-sub-btn { background: rgba(212, 175, 55, 0.15); border: 1px solid rgba(212, 175, 55, 0.3); color: var(--gold-solid); padding: 8px 16px; border-radius: 8px; font-size: 0.72rem; font-weight: 700; text-decoration: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+        .action-sub-btn { background: var(--pink-solid); border: none; color: #ffffff; padding: 9px 18px; border-radius: 10px; font-size: 0.72rem; font-weight: 700; text-decoration: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 0 15px rgba(255,42,133,0.3); }
 
-        .section-save-btn { background: var(--gold-gradient); border: none; border-radius: 10px; padding: 10px 20px; color: #000; font-weight: 900; font-size: 0.75rem; cursor: pointer; text-transform: uppercase; margin-top: 14px; float: right; }
+        .section-save-btn { background: var(--pink-solid); border: none; border-radius: 12px; padding: 13px 22px; color: #ffffff; font-weight: 800; font-size: 0.8rem; cursor: pointer; text-transform: uppercase; margin-top: 14px; float: right; box-shadow: 0 0 20px rgba(255,42,133,0.35); }
+        .section-save-btn:hover { filter: brightness(1.1); }
 
-        .seller-bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(3, 3, 5, 0.95); border-top: 1px solid rgba(212, 175, 55, 0.15); display: flex; justify-content: space-around; align-items: center; padding: 12px 6px; z-index: 1000; }
+        .seller-bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(3, 3, 5, 0.95); border-top: 1px solid rgba(255, 42, 133, 0.12); display: flex; justify-content: space-around; align-items: center; padding: 12px 6px; z-index: 1000; }
         .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; background: none; border: none; cursor: pointer; }
         .nav-item.active i, .nav-item.active span { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .nav-item i { font-size: 1.25rem; margin-bottom: 4px; color: var(--text-gray); }
@@ -132,7 +138,7 @@
 </head>
 <body>
 
-    <!-- সিকিউরিটি গেন্টিং চেক -->
+    <!-- সিকিউরিটি গেটিং চেক -->
     <script>
         if (localStorage.getItem('rorraxy_seller_verified') !== 'true') {
             window.location.href = 'index.html';
@@ -171,9 +177,18 @@
                                 <label><span class="label-text">BRAND NAME<span class="req-star">*</span></span></label>
                                 <input type="text" class="form-control" id="brandName" placeholder="rorraxy store" required>
                             </div>
+                            <!-- ওটিপি এবং ভেরিফিকেশনের জন্য অপরিহার্য বিজনেস ইমেল ফিল্ড -->
+                            <div class="form-group">
+                                <label><span class="label-text">BUSINESS EMAIL (VERIFIED)<span class="req-star">*</span></span></label>
+                                <input type="email" class="form-control" id="businessEmail" placeholder="seller@gmail.com" required style="text-transform: none;">
+                            </div>
                             <div class="form-group">
                                 <label><span class="label-text">FULL NAME<span class="req-star">*</span></span></label>
                                 <input type="text" class="form-control" id="fullName" placeholder="Owner full name..." required>
+                            </div>
+                            <div class="form-group">
+                                <label><span class="label-text">WHATSAPP<span class="req-star">*</span></span></label>
+                                <input type="tel" class="form-control" id="whatsappNum" placeholder="+8801700000000" required>
                             </div>
                             <div class="form-group full-width">
                                 <label>
@@ -181,10 +196,6 @@
                                     <span class="char-counter" id="charCount">0/200</span>
                                 </label>
                                 <textarea class="form-control" id="businessDesc" rows="3" maxlength="200" placeholder="Briefly describe products..." required></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label><span class="label-text">WHATSAPP<span class="req-star">*</span></span></label>
-                                <input type="tel" class="form-control" id="whatsappNum" placeholder="+8801700000000" required>
                             </div>
                             <div class="form-group">
                                 <label><span class="label-text">PHONE<span class="req-star">*</span></span></label>
@@ -215,7 +226,7 @@
                             </div>
                             <div class="form-group">
                                 <label><span class="label-text" id="docNumLabel">NID NUMBER<span class="req-star">*</span></span></label>
-                                <input type="text" class="form-control" id="docNumberInput" placeholder="Enter ID number..." required>
+                                <input type="text" class="form-control" id="docNumberInput" placeholder="Enter ID number..." required style="text-transform: none;">
                             </div>
                         </div>
                         <button type="submit" class="section-save-btn">UPDATE & SAVE INFO <i class="fa-solid fa-check"></i></button>
@@ -256,17 +267,17 @@
 
     <!-- অ্যাডমিন চ্যাট মডাল বক্স -->
     <div id="adminChatModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:2000; justify-content:center; align-items:center; padding:16px;">
-        <div style="background:#08080c; border:1px solid rgba(212,175,55,0.4); border-radius:16px; width:100%; max-width:400px; display:flex; flex-direction:column; overflow:hidden;">
-            <div style="padding:14px 18px; background:#030305; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(212,175,55,0.2);">
+        <div style="background:#050508; border:1px solid rgba(255, 42, 133, 0.35); border-radius:16px; width:100%; max-width:400px; display:flex; flex-direction:column; overflow:hidden;">
+            <div style="padding:14px 18px; background:#000000; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255, 42, 133, 0.15);">
                 <h4 style="font-size:0.85rem; background:var(--gold-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">ADMIN SUPPORT CHAT</h4>
                 <button type="button" onclick="closeAdminChatModal()" style="background:none; border:none; color:#fff; font-size:1.1rem; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div id="chatMessagesBox" style="padding:14px; height:250px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; font-size:0.78rem;">
                 <div style="background:#12121c; padding:10px 14px; border-radius:10px; align-self:flex-start; max-width:80%; text-transform:none;">Welcome to rorraxy Admin Support. How can we assist you?</div>
             </div>
-            <div style="padding:12px; background:#030305; display:flex; gap:8px;">
-                <input type="text" id="chatInputMsg" placeholder="Type message..." style="flex:1; background:#000; border:1px solid rgba(255,255,255,0.1); border-radius:20px; padding:10px 14px; color:#fff; font-size:0.78rem; outline:none; text-transform:none;">
-                <button type="button" onclick="sendAdminChatMessage()" style="background:var(--gold-gradient); border:none; width:36px; height:36px; border-radius:50%; color:#000; cursor:pointer;"><i class="fa-solid fa-paper-plane"></i></button>
+            <div style="padding:12px; background:#000000; display:flex; gap:8px;">
+                <input type="text" id="chatInputMsg" placeholder="Type message..." style="flex:1; background:#000; border:none; border-radius:20px; padding:10px 14px; color:#fff; font-size:0.78rem; outline:none; text-transform:none; box-shadow:inset 0 2px 4px rgba(0,0,0,0.8);">
+                <button type="button" onclick="sendAdminChatMessage()" style="background:var(--pink-solid); border:none; width:36px; height:36px; border-radius:50%; color:#fff; cursor:pointer; box-shadow:0 0 10px rgba(255,42,133,0.4);"><i class="fa-solid fa-paper-plane"></i></button>
             </div>
         </div>
     </div>
@@ -319,7 +330,7 @@
             const text = input.value.trim();
             if(!text) return;
             const box = document.getElementById('chatMessagesBox');
-            box.innerHTML += `<div style="background:var(--gold-gradient); color:#000; padding:10px 14px; border-radius:10px; align-self:flex-end; max-width:80%; font-weight:600; text-transform:none;">${text}</div>`;
+            box.innerHTML += `<div style="background:var(--pink-solid); color:#fff; padding:10px 14px; border-radius:10px; align-self:flex-end; max-width:80%; font-weight:600; text-transform:none; box-shadow:0 0 10px rgba(255,42,133,0.3);">${text}</div>`;
             input.value = '';
             box.scrollTop = box.scrollHeight;
         }
@@ -328,6 +339,7 @@
             let savedData = JSON.parse(localStorage.getItem('rorraxy_seller_profile') || 'null');
             if (savedData) {
                 if(savedData.brandName) document.getElementById('brandName').value = savedData.brandName;
+                if(savedData.businessEmail) document.getElementById('businessEmail').value = savedData.businessEmail;
                 if(savedData.fullName) document.getElementById('fullName').value = savedData.fullName;
                 if(savedData.businessDesc) {
                     document.getElementById('businessDesc').value = savedData.businessDesc;
@@ -353,6 +365,7 @@
             e.preventDefault();
             const profileData = JSON.parse(localStorage.getItem('rorraxy_seller_profile') || '{}');
             profileData.brandName = document.getElementById('brandName').value;
+            profileData.businessEmail = document.getElementById('businessEmail').value.trim().toLowerCase();
             profileData.fullName = document.getElementById('fullName').value;
             profileData.businessDesc = businessDesc.value;
             profileData.whatsapp = document.getElementById('whatsappNum').value;
