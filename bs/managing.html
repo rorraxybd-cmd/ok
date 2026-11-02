@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>rorraxy | Managing Director Directory</title>
     
-    <!-- সেন্ট্রাল স্ক্রিপ্ট ট্যাগ -->
     <script src="/ecosystem-core.js"></script>
 
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1PD_g_agcbmm7bbJTHoOWss8YtQ17LNsb=s400">
@@ -14,33 +13,20 @@
     
     <style>
         :root {
-            --bg-black: #030303;
-            --surface-bg: #0a0a0a;
-            --card-bg: #0f0f0f;
-            --gold-gradient: linear-gradient(135deg, #ffe58f 0%, #d4af37 35%, #fff3a3 60%, #aa771c 100%);
+            --bg-black: #000000;
+            --surface-bg: rgba(12, 12, 15, 0.92);
+            --card-bg: rgba(8, 8, 12, 0.85);
+            --gold-gradient: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
             --gold-solid: #d4af37;
-            --gold-glow: rgba(212, 175, 55, 0.35);
             --text-white: #ffffff;
-            --text-gray: #bcbcbc;
+            --text-gray: #c0c0c8;
             --font-luxury: 'Cinzel', serif;
             --font-body: 'Poppins', sans-serif;
-            --cubic-smooth: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-            -webkit-tap-highlight-color: transparent; 
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
-        html { 
-            width: 100%; 
-            background-color: var(--bg-black); 
-            scroll-behavior: smooth; 
-            overflow-x: hidden;
-        }
-        
+        html { width: 100%; background-color: var(--bg-black); scroll-behavior: smooth; overflow-x: hidden; }
         body { 
             width: 100%; 
             min-height: 100vh; 
@@ -56,377 +42,149 @@
 
         h1, h2, h3, h4, h5 { font-family: var(--font-luxury); }
 
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translate3d(0, -15px, 0); }
-            to { opacity: 1; transform: translate3d(0, 0, 0); }
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translate3d(0, 20px, 0); }
-            to { opacity: 1; transform: translate3d(0, 0, 0); }
-        }
-
-        @keyframes pulseGlow {
-            0%, 100% { filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.3)); }
-            50% { filter: drop-shadow(0 0 16px rgba(212, 175, 55, 0.6)); }
-        }
-
         header.app-header {
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            padding: 12px 20px;
-            background: rgba(3, 3, 3, 0.92); 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            z-index: 1000;
-            backdrop-filter: blur(12px); 
-            -webkit-backdrop-filter: blur(12px);
-            width: 100%; 
-            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
-            animation: fadeInDown 0.4s var(--cubic-smooth);
+            display: flex; justify-content: center; align-items: center; padding: 12px 20px;
+            background: rgba(0, 0, 0, 0.92); position: fixed; top: 0; left: 0; z-index: 1000;
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            width: 100%; border-bottom: 1px solid rgba(212, 175, 55, 0.12);
         }
         .brand-logo-link { display: flex; align-items: center; justify-content: center; text-decoration: none; }
-        .logo { 
-            width: 65px; 
-            height: 65px; 
-            border-radius: 50%; 
-            object-fit: contain; 
-            animation: pulseGlow 3s infinite ease-in-out;
-            transition: transform 0.25s var(--cubic-smooth);
-            will-change: transform;
-        }
-        .logo:hover {
-            transform: scale(1.06);
-        }
+        .logo { width: 65px; height: 65px; border-radius: 50%; object-fit: contain; }
 
         .main-wrapper { 
-            width: 100%; 
-            max-width: 1350px; 
-            margin: 0 auto; 
-            padding: 0 16px; 
-            display: flex;
-            flex-direction: column;
-            gap: 22px;
+            width: 100%; max-width: 1350px; margin: 0 auto; padding: 0 16px; 
+            display: flex; flex-direction: column; gap: 22px;
         }
 
         .luxury-hero { 
-            background: var(--surface-bg); 
-            border-radius: 16px;
-            padding: 22px 18px; 
-            text-align: center; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-            border: 1px solid rgba(212, 175, 55, 0.25);
-            animation: fadeInUp 0.4s var(--cubic-smooth);
-            position: relative;
-            overflow: hidden;
+            background: var(--surface-bg); border-radius: 16px; padding: 22px 18px; text-align: center; 
+            border: 1px solid rgba(212, 175, 55, 0.12);
         }
 
-        .hero-title { 
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            margin-bottom: 6px; 
-            width: 100%;
-        }
+        .hero-title { display: flex; flex-direction: column; gap: 6px; margin-bottom: 6px; width: 100%; }
         .hero-top-text {
-            font-size: clamp(1.3rem, 3.8vw, 1.8rem);
-            font-weight: 800;
-            background: var(--gold-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
+            font-size: clamp(1.3rem, 3.8vw, 1.8rem); font-weight: 800;
+            background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-transform: uppercase; letter-spacing: 1.2px;
         }
-        .hero-sub { 
-            font-size: 0.85rem; 
-            color: var(--text-gray); 
-            line-height: 1.5; 
-            max-width: 700px; 
-            margin: 0 auto; 
-            word-wrap: break-word;
-        }
+        .hero-sub { font-size: 0.85rem; color: var(--text-gray); line-height: 1.5; max-width: 700px; margin: 0 auto; }
 
-        .search-filter-container {
-            background: transparent;
-            padding: 0;
-            max-width: 440px;
-            margin: 0 auto;
-            width: 100%;
-            animation: fadeInUp 0.4s var(--cubic-smooth);
-        }
+        .search-filter-container { max-width: 440px; margin: 0 auto; width: 100%; }
         .search-action-group { display: flex; gap: 8px; align-items: center; }
         
         .search-box-wrapper { position: relative; flex: 1; display: flex; align-items: center; }
-        .search-box-wrapper i { position: absolute; left: 12px; color: #d4af37; font-size: 0.85rem; }
+        .search-box-wrapper i { position: absolute; left: 12px; color: var(--gold-solid); font-size: 0.85rem; }
         .search-input {
-            width: 100%;
-            background: var(--surface-bg);
-            border: 1px solid rgba(212, 175, 55, 0.35);
-            border-radius: 10px;
-            padding: 10px 12px 10px 36px;
-            color: var(--text-white);
-            font-family: var(--font-body);
-            font-size: 0.85rem;
-            outline: none;
-            transition: all 0.2s ease;
+            width: 100%; background: rgba(4, 4, 6, 0.6);
+            border: 1px solid rgba(212, 175, 55, 0.12); border-radius: 10px;
+            padding: 10px 12px 10px 36px; color: var(--text-white);
+            font-family: var(--font-body); font-size: 0.85rem; outline: none; transition: all 0.2s ease;
         }
-        .search-input:focus { 
-            border-color: #d4af37; 
-            box-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
-            background: #0f0f0f;
-        }
+        .search-input::placeholder { color: rgba(192, 192, 200, 0.45); }
+        .search-input:focus { border-color: rgba(212, 175, 55, 0.35); background: rgba(4, 4, 6, 0.85); }
+        
         .search-btn {
-            background: var(--gold-gradient);
-            color: #030303;
-            font-family: var(--font-luxury);
-            font-weight: 800;
-            font-size: 0.78rem;
-            text-transform: uppercase;
-            padding: 10px 18px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.2s var(--cubic-smooth);
-            white-space: nowrap;
-            box-shadow: 0 2px 10px rgba(212, 175, 55, 0.25);
+            background: var(--gold-gradient); color: #000; font-family: var(--font-luxury);
+            font-weight: 800; font-size: 0.78rem; text-transform: uppercase;
+            padding: 10px 18px; border: none; border-radius: 10px; cursor: pointer;
+            transition: all 0.2s ease; white-space: nowrap;
         }
-        .search-btn:hover { 
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.5);
-            transform: translateY(-1px);
-        }
+        .search-btn:hover { background: #ffffff; color: #000000; }
 
         .continent-section {
-            background: var(--surface-bg);
-            border-radius: 16px;
-            padding: 20px 16px;
-            border: 1px solid rgba(212, 175, 55, 0.18);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+            background: var(--surface-bg); border-radius: 16px; padding: 20px 16px;
+            border: 1px solid rgba(212, 175, 55, 0.12);
         }
         .continent-title {
-            font-size: clamp(1.05rem, 2.8vw, 1.2rem);
-            font-weight: 800;
-            background: var(--gold-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            font-size: clamp(1.05rem, 2.8vw, 1.2rem); font-weight: 800;
+            background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
         }
 
         .countries-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
         }
-        @media (min-width: 600px) {
-            .countries-grid { grid-template-columns: repeat(3, 1fr); gap: 12px; }
-        }
-        @media (min-width: 992px) {
-            .countries-grid { grid-template-columns: repeat(5, 1fr); gap: 14px; }
-        }
+        @media (min-width: 600px) { .countries-grid { grid-template-columns: repeat(3, 1fr); gap: 12px; } }
+        @media (min-width: 992px) { .countries-grid { grid-template-columns: repeat(5, 1fr); gap: 14px; } }
 
         .country-card {
-            background: var(--card-bg);
-            border: 1px solid rgba(212, 175, 55, 0.15);
-            border-radius: 12px;
-            padding: 14px 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            gap: 6px;
-            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            will-change: transform;
+            background: var(--card-bg); border: 1px solid rgba(212, 175, 55, 0.12);
+            border-radius: 12px; padding: 14px 10px; display: flex; flex-direction: column;
+            align-items: center; text-align: center; gap: 6px; transition: all 0.2s ease;
         }
-        .country-card:hover {
-            transform: translateY(-3px);
-            border-color: rgba(212, 175, 55, 0.5);
-            box-shadow: 0 6px 18px rgba(212, 175, 55, 0.2);
-        }
-        .country-flag { 
-            font-size: 2rem; 
-            line-height: 1; 
-        }
-        .country-name { 
-            font-size: 0.82rem; 
-            font-weight: 600; 
-            color: var(--text-white); 
-            width: 100%;
-            word-wrap: break-word;
-        }
+        .country-card:hover { border-color: rgba(212, 175, 55, 0.35); transform: translateY(-2px); }
+        .country-flag { font-size: 2rem; line-height: 1; }
+        .country-name { font-size: 0.82rem; font-weight: 600; color: var(--text-white); width: 100%; }
         
         .join-btn {
-            margin-top: 4px;
-            width: 100%;
-            background: transparent;
-            border: 1px solid rgba(212, 175, 55, 0.4);
-            color: #ffe58f;
-            padding: 6px 8px;
-            border-radius: 6px;
-            font-size: 0.72rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.2s var(--cubic-smooth);
-            font-family: var(--font-luxury);
-            letter-spacing: 0.5px;
+            margin-top: 4px; width: 100%; background: transparent;
+            border: 1px solid rgba(212, 175, 55, 0.3); color: #ffe58f;
+            padding: 6px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: 700;
+            text-transform: uppercase; cursor: pointer; transition: all 0.2s ease;
+            font-family: var(--font-luxury); letter-spacing: 0.5px;
         }
-        .join-btn:hover {
-            background: var(--gold-gradient);
-            color: #030303;
-            border-color: transparent;
-            box-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
-        }
+        .join-btn:hover { background: var(--gold-gradient); color: #000; border-color: transparent; }
 
         .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.88);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            z-index: 2000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 16px;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.25s ease, visibility 0.25s ease;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px); z-index: 2000; display: flex;
+            justify-content: center; align-items: center; padding: 16px;
+            opacity: 0; visibility: hidden; transition: all 0.25s ease;
         }
-        .modal-overlay.active { 
-            opacity: 1; 
-            visibility: visible; 
-        }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
         
         .modal-content {
-            background: #080808;
-            border: 1px solid rgba(212, 175, 55, 0.45);
-            border-radius: 18px;
-            width: 100%;
-            max-width: 480px;
-            padding: 24px 20px;
-            position: relative;
-            box-shadow: 0 0 35px rgba(212, 175, 55, 0.25);
-            transform: scale(0.92) translate3d(0, 10px, 0);
-            transition: transform 0.25s var(--cubic-smooth);
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        .modal-overlay.active .modal-content { 
-            transform: scale(1) translate3d(0, 0, 0); 
+            background: rgba(12, 12, 15, 0.98); border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 16px; width: 100%; max-width: 480px; padding: 24px 20px;
+            position: relative; max-height: 90vh; overflow-y: auto;
         }
         
         .modal-close-btn {
-            position: absolute;
-            top: 14px; right: 14px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(212, 175, 55, 0.25);
-            color: var(--text-gray);
-            width: 32px; height: 32px;
-            border-radius: 50%;
-            font-size: 0.9rem;
-            cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            transition: all 0.2s ease;
+            position: absolute; top: 14px; right: 14px; background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.2); color: var(--text-gray);
+            width: 30px; height: 30px; border-radius: 50%; font-size: 0.85rem;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;
         }
-        .modal-close-btn:hover { 
-            background: rgba(212, 175, 55, 0.2); 
-            color: #fff; 
-            border-color: #d4af37;
-        }
+        .modal-close-btn:hover { background: rgba(212, 175, 55, 0.2); color: #fff; }
 
-        .modal-country-header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .modal-flag { 
-            font-size: 2.8rem; 
-            margin-bottom: 4px; 
-            display: inline-block;
-            filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.3));
-        }
+        .modal-country-header { text-align: center; margin-bottom: 20px; }
+        .modal-flag { font-size: 2.8rem; margin-bottom: 4px; display: inline-block; }
         .modal-title {
-            font-size: clamp(1.1rem, 3.2vw, 1.25rem);
-            font-weight: 800;
-            background: var(--gold-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
+            font-size: clamp(1.1rem, 3.2vw, 1.25rem); font-weight: 800;
+            background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-transform: uppercase; letter-spacing: 0.8px;
         }
-        .modal-subtitle {
-            font-size: 0.82rem;
-            color: var(--text-gray);
-            margin-top: 2px;
-        }
+        .modal-subtitle { font-size: 0.82rem; color: var(--text-gray); margin-top: 2px; }
 
-        .ecosystem-form { display: flex; flex-direction: column; gap: 14px; }
+        /* সফট ও ক্লিন ফর্ম ডিজাইন (লেবেল ছাড়া, সরাসরি সফট প্লেসহোল্ডার) */
+        .ecosystem-form { display: flex; flex-direction: column; gap: 12px; }
         .form-group { display: flex; flex-direction: column; gap: 5px; text-align: left; }
         
-        .form-label { 
-            font-size: 0.8rem; 
-            font-weight: 600; 
-            color: #d4af37;
-            font-family: var(--font-luxury);
-            letter-spacing: 0.5px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        
-        .required-star {
-            color: #ff4d4d;
-            font-weight: bold;
-            font-size: 0.9rem;
-            line-height: 1;
-        }
-
         .form-input, .form-textarea {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            border-radius: 8px;
-            padding: 10px 12px;
-            color: var(--text-white);
-            font-family: var(--font-body);
-            font-size: 0.85rem;
-            outline: none;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            width: 100%; background: rgba(4, 4, 6, 0.6);
+            border: 1px solid rgba(212, 175, 55, 0.12); border-radius: 10px;
+            padding: 12px 14px; color: var(--text-white); font-family: var(--font-body);
+            font-size: 0.85rem; outline: none; transition: all 0.2s ease;
         }
-        .form-input:focus, .form-textarea:focus { 
-            border-color: #d4af37; 
-            box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
-            background: rgba(255, 255, 255, 0.05);
+        .form-input::placeholder, .form-textarea::placeholder {
+            color: rgba(192, 192, 200, 0.45); font-size: 0.8rem; opacity: 1;
         }
+        .form-input:focus, .form-textarea:focus {
+            border-color: rgba(212, 175, 55, 0.35); background: rgba(4, 4, 6, 0.85);
+        }
+        .form-textarea { min-height: 100px; resize: vertical; }
         
         .modal-submit-btn {
-            width: 100%;
-            background: var(--gold-gradient);
-            color: #030303;
-            font-family: var(--font-luxury);
-            font-weight: 800;
-            font-size: 0.88rem;
-            text-transform: uppercase;
-            padding: 11px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 6px;
-            transition: all 0.2s var(--cubic-smooth);
-            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+            width: 100%; background: var(--gold-gradient); color: #000;
+            font-family: var(--font-luxury); font-weight: 900; font-size: 0.8rem;
+            text-transform: uppercase; padding: 11px 22px; border: none;
+            border-radius: 24px; cursor: pointer; margin-top: 4px;
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.2); transition: all 0.2s ease;
+            letter-spacing: 0.5px;
         }
-        .modal-submit-btn:hover { 
-            box-shadow: 0 6px 18px rgba(212, 175, 55, 0.5);
-            transform: translateY(-1px);
-        }
-        .modal-submit-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
+        .modal-submit-btn:hover { background: #ffffff; color: #000000; }
+        .modal-submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
     </style>
 </head>
 <body>
@@ -460,6 +218,7 @@
 
         <div id="continentsContainer" style="display: flex; flex-direction: column; gap: 24px;">
             
+            <!-- Asia -->
             <div class="continent-section" data-continent="asia">
                 <h3 class="continent-title">🌏 Asia (49 Countries)</h3>
                 <div class="countries-grid">
@@ -515,6 +274,7 @@
                 </div>
             </div>
 
+            <!-- Europe -->
             <div class="continent-section" data-continent="europe">
                 <h3 class="continent-title">🇪🇺 Europe (43 Countries)</h3>
                 <div class="countries-grid">
@@ -564,6 +324,7 @@
                 </div>
             </div>
 
+            <!-- North America -->
             <div class="continent-section" data-continent="north-america">
                 <h3 class="continent-title">🌎 North America (23 Countries)</h3>
                 <div class="countries-grid">
@@ -593,6 +354,7 @@
                 </div>
             </div>
 
+            <!-- South America -->
             <div class="continent-section" data-continent="south-america">
                 <h3 class="continent-title">🌎 South America (12 Countries)</h3>
                 <div class="countries-grid">
@@ -611,6 +373,7 @@
                 </div>
             </div>
 
+            <!-- Africa -->
             <div class="continent-section" data-continent="africa">
                 <h3 class="continent-title">🌍 Africa (51 Countries)</h3>
                 <div class="countries-grid">
@@ -668,6 +431,7 @@
                 </div>
             </div>
 
+            <!-- Oceania -->
             <div class="continent-section" data-continent="oceania">
                 <h3 class="continent-title">🌊 Oceania (14 Countries)</h3>
                 <div class="countries-grid">
@@ -691,7 +455,7 @@
         </div>
     </div>
 
-    <!-- Dynamic Form Application Modal -->
+    <!-- Application Modal -->
     <div class="modal-overlay" id="appModal" onclick="handleOverlayClick(event)">
         <div class="modal-content">
             <button type="button" class="modal-close-btn" onclick="closeModal()"><i class="fas fa-times"></i></button>
@@ -701,165 +465,52 @@
                 <p class="modal-subtitle">Regional Partnership for <span id="targetCountryText" style="color: #ffe58f; font-weight: 600;">Country</span></p>
             </div>
 
-            <form class="ecosystem-form" id="mdApplicationForm" onsubmit="handleFormSubmit(event)">
+            <!-- লেবেল ছাড়া সফট প্লেসহোল্ডার ইনপুট ফর্ম -->
+            <form class="ecosystem-form" id="mdApplicationForm">
                 <div class="form-group">
-                    <label for="fullName" class="form-label">
-                        Full Name <span class="required-star">*</span>
-                    </label>
-                    <input type="text" id="fullName" class="form-input" placeholder="Enter your full name" required>
+                    <input type="text" id="fullName" class="form-input" placeholder="Enter your full name *" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="email" class="form-label">
-                        Email Address <span class="required-star">*</span>
-                    </label>
-                    <input type="email" id="email" class="form-input" placeholder="Enter your email (e.g., Gmail, Apple, Outlook, Yahoo)" required>
+                    <input type="email" id="email" class="form-input" placeholder="Enter your email (e.g., Gmail, Apple, Outlook, Yahoo) *" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="whatsapp" class="form-label">
-                        WhatsApp Number <span class="required-star">*</span>
-                    </label>
-                    <input type="tel" id="whatsapp" class="form-input" placeholder="Enter your WhatsApp number" required>
+                    <input type="tel" id="whatsapp" class="form-input" placeholder="Enter your WhatsApp number *" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="budget" class="form-label">
-                        Investment Budget ($) <span class="required-star">*</span>
-                    </label>
-                    <input type="number" id="budget" class="form-input" placeholder="Enter your budget amount" required>
+                    <input type="number" id="budget" class="form-input" placeholder="Enter your budget amount in USD *" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="strategicPlan" class="form-label">
-                        Strategic Plan <span class="required-star">*</span>
-                    </label>
-                    <textarea id="strategicPlan" class="form-textarea" rows="3" placeholder="Outline your vision and strategic plan..." required></textarea>
+                    <textarea id="strategicPlan" class="form-textarea" placeholder="Outline your vision and strategic plan... *" required></textarea>
                 </div>
                 
-                <button type="submit" id="submitBtn" class="modal-submit-btn">Submit Application</button>
+                <button type="submit" id="submitBtn" class="modal-submit-btn">SUBMIT</button>
             </form>
         </div>
     </div>
 
-    <!-- Firebase Integration & Geo-Tracking Module Script -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDokhLgGoe4Ib7oxUJ8zczLFWj0YJKk57Y",
-            authDomain: "rorraxy-fcb91.firebaseapp.com",
-            projectId: "rorraxy-fcb91",
-            storageBucket: "rorraxy-fcb91.firebasestorage.app",
-            messagingSenderId: "880891394208",
-            appId: "1:880891394208:web:3bd8ccacf68ad5d53af1c5",
-            measurementId: "G-0XTRV9TPM3"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        // অটো কান্ট্রি ও ফ্ল্যাগ ডিটেকশন (IP Geolocation)
-        window.addEventListener('DOMContentLoaded', async () => {
-            try {
-                const res = await fetch('https://ipapi.co/json/');
-                const data = await res.json();
-                if (data && data.country_name) {
-                    let flag = "🇧🇩";
-                    const code = data.country_code;
-                    if (code === "SA") flag = "🇸🇦";
-                    else if (code === "PK") flag = "🇵🇰";
-                    else if (code === "AE") flag = "🇦🇪";
-                    else if (code === "US") flag = "🇺🇸";
-                    else if (code === "IN") flag = "🇮🇳";
-                    else if (code === "GB") flag = "🇬🇧";
-                    else if (code === "CA") flag = "🇨🇦";
-                    else if (code === "AU") flag = "🇦🇺";
-
-                    // যদি ইউজার সরাসরি ফর্ম ওপেন করে, তবে তার অটো-ডিটেক্টেড কান্ট্রি সেট থাকবে
-                    window.detectedCountryFlag = flag;
-                    window.detectedCountryName = data.country_name;
-                }
-            } catch (err) {
-                console.log("Auto-detection fallback active");
-                window.detectedCountryFlag = "🇧🇩";
-                window.detectedCountryName = "Bangladesh";
-            }
-        });
-
-        window.handleFormSubmit = async function(e) {
-            e.preventDefault();
-            
-            const submitBtn = document.getElementById('submitBtn');
-            const targetCountry = document.getElementById('targetCountryText').innerText;
-            const fullName = document.getElementById('fullName').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const whatsapp = document.getElementById('whatsapp').value.trim();
-            const budget = document.getElementById('budget').value;
-            const strategicPlan = document.getElementById('strategicPlan').value.trim();
-
-            submitBtn.disabled = true;
-            submitBtn.innerText = "Submitting...";
-
-            try {
-                const payload = {
-                    country: targetCountry,
-                    fullName: fullName,
-                    email: email,
-                    whatsapp: whatsapp,
-                    budget: Number(budget),
-                    strategicPlan: strategicPlan,
-                    submittedAt: serverTimestamp()
-                };
-
-                // ফায়ারবেসে ডেটা সংরক্ষণ
-                await addDoc(collection(db, "managing_directors"), payload);
-
-                // গ্লোবাল ক্লাউড সিঙ্ক ব্রিজ থাকলে সেখানেও ব্যাকআপ পুশ করা
-                if (window.rorraxyCloud && typeof window.rorraxyCloud.save === 'function') {
-                    await window.rorraxyCloud.save('managing_directors', payload);
-                }
-
-                alert('Submitted successfully! Application received for ' + targetCountry);
-                document.getElementById('mdApplicationForm').reset();
-                closeModal();
-            } catch (error) {
-                console.error("Firestore Error: ", error);
-                alert("Submission failed: " + error.message);
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerText = "Submit Application";
-            }
-        };
-    </script>
-
-    <!-- Core Interactive UI JavaScript -->
+    <!-- Frontend Script (কোনো পপআপ নোটিফিকেশন ছাড়া ব্যাকগ্রাউন্ডে Cloudflare API তে সাবমিট করার ব্যবস্থা) -->
     <script>
-        function openModal(flag, country) {
-            // যদি ইউজার নির্দিষ্ট কোনো দেশের কার্ডে ক্লিক করে, তবে সেই দেশের নাম ও পতাকা বসবে
-            // আর যদি কান্ট্রি প্যারামিটার না থাকে, তবে স্বয়ংক্রিয়ভাবে ট্র্যাক করা কান্ট্রি বসবে
-            const displayFlag = flag || window.detectedCountryFlag || '🇧🇩';
-            const displayCountry = country || window.detectedCountryName || 'Bangladesh';
+        const mdApplicationForm = document.getElementById('mdApplicationForm');
+        const submitBtn = document.getElementById('submitBtn');
 
-            document.getElementById('modalFlag').innerText = displayFlag;
-            document.getElementById('targetCountryText').innerText = displayCountry;
-            
-            const modal = document.getElementById('appModal');
-            modal.classList.add('active');
+        function openModal(flag, country) {
+            document.getElementById('modalFlag').innerText = flag;
+            document.getElementById('targetCountryText').innerText = country;
+            document.getElementById('appModal').classList.add('active');
             document.body.style.overflow = 'hidden'; 
         }
 
         function closeModal() {
-            const modal = document.getElementById('appModal');
-            modal.classList.remove('active');
+            document.getElementById('appModal').classList.remove('active');
             document.body.style.overflow = ''; 
         }
 
         function handleOverlayClick(e) {
-            if (e.target.id === 'appModal') {
-                closeModal();
-            }
+            if (e.target.id === 'appModal') closeModal();
         }
 
         const searchInput = document.getElementById('directorySearchInput');
@@ -870,25 +521,61 @@
             
             cards.forEach(card => {
                 const name = card.getAttribute('data-name');
-                if (name.includes(filter)) {
-                    card.style.display = "flex";
-                } else {
-                    card.style.display = "none";
-                }
+                card.style.display = name.includes(filter) ? "flex" : "none";
             });
 
             sections.forEach(section => {
                 const visibleCards = section.querySelectorAll('.country-card[style*="display: flex"]');
-                if (filter !== "" && visibleCards.length === 0) {
-                    section.style.display = "none";
-                } else {
-                    section.style.display = "block";
-                }
+                section.style.display = (filter !== "" && visibleCards.length === 0) ? "none" : "block";
             });
         });
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') closeModal();
+        });
+
+        // Cloudflare API (/api/managing) এ ডেটা পাঠানোর হ্যান্ডলার (নোটিফিকেশন পপআপ ছাড়া)
+        mdApplicationForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const targetCountry = document.getElementById('targetCountryText').innerText;
+            const fullName = document.getElementById('fullName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const whatsapp = document.getElementById('whatsapp').value.trim();
+            const budget = document.getElementById('budget').value;
+            const strategicPlan = document.getElementById('strategicPlan').value.trim();
+
+            if (!fullName || !email || !whatsapp || !budget || !strategicPlan) return;
+
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'SENDING...';
+
+            try {
+                const payload = {
+                    country: targetCountry,
+                    fullName: fullName,
+                    email: email,
+                    whatsapp: whatsapp,
+                    budget: Number(budget),
+                    strategicPlan: strategicPlan
+                };
+
+                const response = await fetch('/api/managing', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    mdApplicationForm.reset();
+                    closeModal();
+                }
+            } catch (error) {
+                console.error("Submission Error:", error);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerText = 'SUBMIT';
+            }
         });
     </script>
 </body>
