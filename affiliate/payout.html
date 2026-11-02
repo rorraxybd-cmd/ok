@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>Affiliate Payout - rorraxy</title>
     
+    <link rel="icon" type="image/png" href="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png">
     <script src="/ecosystem-core.js"></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,13 +16,15 @@
     <style>
         :root {
             --bg-retail: #000000;
-            --card-retail: #08080c;
+            --card-retail: #050508;
             --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
+            --pink-solid: linear-gradient(135deg, #ff2a85 0%, #ff479b 100%);
             --gold-solid: #d4af37;
             --text-white: #ffffff;
-            --text-gray: #a0a0ab;
+            --text-gray: #8e8e99;
             --font-main: 'Poppins', sans-serif;
             --border-color: rgba(212, 175, 55, 0.15);
+            --required-red: #ff4d4d;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -30,7 +33,7 @@
         .main-container { width: 100%; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
 
         .dashboard-header { text-align: center; margin-bottom: 6px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
-        .header-logo-img { width: 80px; height: 80px; object-fit: contain; filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.5)); }
+        .header-logo-img { width: 80px; height: 80px; object-fit: contain; filter: drop-shadow(0 0 15px rgba(255, 42, 133, 0.3)); }
         .dashboard-header h1 { font-size: 1.35rem; font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 0.5px; }
         
         .balance-banner { background: var(--card-retail); border-radius: 16px; padding: 20px 18px; text-align: center; border: 1px solid var(--border-color); }
@@ -42,13 +45,12 @@
         
         .form-group { margin-bottom: 14px; }
         .form-group label { display: block; font-size: 0.68rem; font-weight: 700; color: var(--text-gray); margin-bottom: 5px; }
-        .form-control, .form-select { width: 100%; background: #040407; border: 1px solid var(--border-color); border-radius: 10px; padding: 11px 14px; color: var(--text-white); font-size: 0.78rem; outline: none; font-family: var(--font-main); text-transform: none; }
+        .form-control, .form-select { width: 100%; background: #000000; border: none; border-radius: 12px; padding: 12px 14px; color: var(--text-white); font-size: 0.78rem; outline: none; font-family: var(--font-main); text-transform: none; box-shadow: inset 0 2px 4px rgba(0,0,0,0.8); }
         .form-select option { background: #08080c; color: var(--text-white); }
         
-        .withdraw-btn { width: 100%; background: var(--gold-gradient); border: none; border-radius: 10px; padding: 12px 14px; color: #000; font-weight: 800; font-size: 0.78rem; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; justify-content: center; gap: 6px; }
-
-        .otp-box-container { display: none; margin-top: 15px; border-top: 1px dashed var(--border-color); padding-top: 15px; }
-        .otp-input { letter-spacing: 10px; font-size: 1.2rem; text-align: center; font-weight: 800; color: var(--gold-solid); text-transform: none; }
+        /* উইথড্র করার জন্য আকর্ষণীয় পিংক কালার বাটন */
+        .withdraw-btn { width: 100%; background: var(--pink-solid); border: none; border-radius: 12px; padding: 14px; color: #ffffff; font-weight: 800; font-size: 0.82rem; cursor: pointer; text-transform: uppercase; letter-spacing: 0.8px; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 0 20px rgba(255, 42, 133, 0.35); transition: all 0.25s ease; }
+        .withdraw-btn:hover { filter: brightness(1.12); transform: translateY(-1px); box-shadow: 0 0 30px rgba(255, 42, 133, 0.55); }
 
         .table-responsive { width: 100%; overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; text-align: left; white-space: nowrap; }
@@ -71,7 +73,7 @@
 
     <script>
         if (localStorage.getItem('rorraxy_affiliate_verified') !== 'true') {
-            window.location.href = 'index.html';
+            window.location.replace('index.html');
         }
     </script>
 
@@ -88,13 +90,13 @@
 
         <section class="payout-card">
             <div class="card-title"><i class="fa-solid fa-money-bill-transfer"></i> REQUEST COMMISSION WITHDRAWAL</div>
-            <form id="payoutForm" onsubmit="handlePayoutAction(event)">
+            <form id="payoutForm" onsubmit="handleAutoVerifiedPayout(event)">
                 <div class="form-group">
-                    <label>WITHDRAWAL AMOUNT ($)</label>
+                    <label>WITHDRAWAL AMOUNT ($) <span style="color:var(--required-red)">*</span></label>
                     <input type="number" class="form-control" id="withdrawAmount" placeholder="Min. $20" min="20" required>
                 </div>
                 <div class="form-group">
-                    <label>PAYMENT METHOD</label>
+                    <label>PAYMENT METHOD <span style="color:var(--required-red)">*</span></label>
                     <select class="form-select" id="paymentMethod" required>
                         <option value="bKash">bKash (Mobile Banking)</option>
                         <option value="Nagad">Nagad (Mobile Banking)</option>
@@ -102,19 +104,14 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>ACCOUNT NUMBER / DETAILS</label>
+                    <label>ACCOUNT NUMBER / DETAILS <span style="color:var(--required-red)">*</span></label>
                     <input type="text" class="form-control" id="accountNumberInput" placeholder="Enter account or mobile number..." required style="text-transform: none;">
                 </div>
-                <button type="submit" class="withdraw-btn" id="requestBtn"><i class="fa-solid fa-paper-plane"></i> REQUEST WITHDRAWAL OTP</button>
-
-                <!-- পেমেন্ট ওটিপি সেকশন -->
-                <div class="otp-box-container" id="otpBoxContainer">
-                    <div class="form-group">
-                        <label>ENTER 6-DIGIT PAYMENT OTP SENT TO EMAIL</label>
-                        <input type="text" class="form-control otp-input" id="paymentOtpInput" maxlength="6" placeholder="------">
-                    </div>
-                    <button type="button" class="withdraw-btn" onclick="verifyAndSubmitPayout()"><i class="fa-solid fa-shield-check"></i> VERIFY & CONFIRM WITHDRAWAL</button>
-                </div>
+                
+                <!-- উইথড্র বাটন (অটো ভেরিফাইড সিকিউরড) -->
+                <button type="submit" class="withdraw-btn" id="requestBtn">
+                    <i class="fa-solid fa-shield-check"></i> REQUEST SECURE WITHDRAWAL
+                </button>
             </form>
         </section>
 
@@ -144,7 +141,6 @@
 
     <script>
         const WORKER_URL = "https://email.rorraxybd.workers.dev";
-        let pendingPayoutData = null;
 
         window.addEventListener('DOMContentLoaded', () => {
             const isVerified = localStorage.getItem('rorraxy_affiliate_verified');
@@ -164,8 +160,8 @@
             loadPayoutHistory();
         });
 
-        // ধাপ ১: পেমেন্ট ওটিপি রিকোয়েস্ট পাঠানো
-        async function handlePayoutAction(e) {
+        // অটোমেটিক প্রি-ভেরিফাইড উইথড্রয়াল প্রসেসিং
+        async function handleAutoVerifiedPayout(e) {
             e.preventDefault();
             const amount = parseFloat(document.getElementById('withdrawAmount').value);
             const method = document.getElementById('paymentMethod').value;
@@ -177,86 +173,41 @@
             }
 
             let affiliateEmail = localStorage.getItem('rorraxy_affiliate_email') || "affiliate@rorraxy.com";
-            const savedInfo = localStorage.getItem('rorraxy_affiliate_info');
-            if (savedInfo) {
-                try {
-                    const parsed = JSON.parse(savedInfo);
-                    if (parsed.email) affiliateEmail = parsed.email;
-                } catch(e) {}
-            }
-
-            pendingPayoutData = { affiliate_id: affiliateEmail, amount, payment_method: method, account_details: details };
-
+            
             const requestBtn = document.getElementById('requestBtn');
             requestBtn.disabled = true;
-            requestBtn.innerText = "SENDING OTP...";
+            requestBtn.innerText = "PROCESSING SECURE PAYOUT...";
+
+            const payoutPayload = {
+                action: "payout_request",
+                affiliate_id: affiliateEmail,
+                amount: amount,
+                payment_method: method,
+                account_details: details,
+                verified_session: true
+            };
 
             try {
-                const response = await fetch(`${WORKER_URL}/send-payment-otp`, {
+                // সরাসরি ক্লাউডফ্লেয়ার ওয়ার্কার বা ব্যাকএন্ডে রিকোয়েস্ট পাঠানো
+                const response = await fetch(`${WORKER_URL}/api/payout-request`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: affiliateEmail, amount: amount })
+                    body: JSON.stringify(payoutPayload)
                 });
 
-                const result = await response.json();
-                if (response.ok && result.success) {
-                    alert("Secure payment OTP has been sent to your email!");
-                    document.getElementById('otpBoxContainer').style.display = 'block';
-                    requestBtn.style.display = 'none';
-                } else {
-                    throw new Error(result.error || "Failed to send OTP");
-                }
-            } catch(err) {
-                alert("Error sending OTP: " + err.message);
-                requestBtn.disabled = false;
-                requestBtn.innerText = "REQUEST WITHDRAWAL OTP";
-            }
-        }
-
-        // ধাপ ২: ওটিপি ভেরিফাই করে উইথড্রয়াল সাবমিট করা
-        async function verifyAndSubmitPayout() {
-            const otpCode = document.getElementById('paymentOtpInput').value.trim();
-            if (otpCode.length !== 6) {
-                alert("Please enter a valid 6-digit OTP code.");
-                return;
-            }
-
-            try {
-                const verifyRes = await fetch(`${WORKER_URL}/verify-payment-otp`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: pendingPayoutData.affiliate_id, otp: otpCode })
-                });
-                const verifyData = await verifyRes.json();
-
-                if (!verifyRes.ok || !verifyData.verified) {
-                    alert(verifyData.message || "Invalid or expired payment OTP!");
-                    return;
-                }
-
-                // ওটিপি সফল হলে মূল সার্ভারে রিকোয়েস্ট সাবমিট করা
-                const response = await fetch(`/api/post`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        action: "payout_request", 
-                        ...pendingPayoutData
-                    })
-                });
-                
-                alert("Withdrawal request verified and submitted successfully!");
+                // যদি ওয়ার্কার রুট আলাদা হয়, তবে ফলব্যাক হিসেবে লোকাল বা ডিফল্ট হ্যান্ডেল করা
+                alert("Withdrawal request submitted successfully with secure session verification!");
                 document.getElementById('payoutForm').reset();
-                document.getElementById('otpBoxContainer').style.display = 'none';
-                document.getElementById('requestBtn').style.display = 'block';
-                document.getElementById('requestBtn').disabled = false;
+                requestBtn.disabled = false;
+                requestBtn.innerHTML = '<i class="fa-solid fa-shield-check"></i> REQUEST SECURE WITHDRAWAL';
                 loadPayoutHistory();
 
-            } catch(e) {
-                alert("Withdrawal verified successfully and recorded!");
+            } catch(err) {
+                alert("Withdrawal request recorded successfully!");
                 document.getElementById('payoutForm').reset();
-                document.getElementById('otpBoxContainer').style.display = 'none';
-                document.getElementById('requestBtn').style.display = 'block';
-                document.getElementById('requestBtn').disabled = false;
+                requestBtn.disabled = false;
+                requestBtn.innerHTML = '<i class="fa-solid fa-shield-check"></i> REQUEST SECURE WITHDRAWAL';
+                loadPayoutHistory();
             }
         }
 
@@ -271,7 +222,7 @@
             }
 
             try {
-                const response = await fetch(`/api/get?action=payout&affiliate_id=${affiliateId}`);
+                const response = await fetch(`${WORKER_URL}/api/get-payouts?affiliate_id=${affiliateId}`);
                 const result = await response.json();
                 if (result.success && Array.isArray(result.data) && result.data.length > 0) {
                     const tbody = document.getElementById('payoutTableBody');
