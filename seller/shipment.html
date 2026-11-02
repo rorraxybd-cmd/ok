@@ -66,7 +66,12 @@
     </style>
 </head>
 <body>
-
+<!-- সিকিউরিটি গার্ড চেক -->
+    <script>
+        if (localStorage.getItem('rorraxy_seller_verified') !== 'true') {
+            window.location.replace('index.html');
+        }
+    </script>
     <div class="seller-wrapper">
         <header class="seller-header">
             <div class="seller-brand">
