@@ -1,63 +1,64 @@
-window.addEventListener('DOMContentLoaded', async () => {
-            // ১. ভেরিফাইড প্যানেল বা সেশন থেকে বর্তমান ইউজারের সঠিক ইমেইল বের করা
-            const urlParams = new URLSearchParams(window.location.search);
-            let userEmail = urlParams.get('email') || localStorage.getItem('rorraxy_current_seller_email');
+// ক্লাউডফায়ার ওয়ার্কার্স ব্যাকএন্ড এপিআই হ্যান্ডলার উদাহরণ (Backend API Logic)
+export async function onRequest(context) {
+    const { request, env } = context;
+    const url = new URL(request.url);
+    const action = url.searchParams.get('action');
+    const emailParam = url.searchParams.get('email');
 
-            if (!userEmail) {
-                userEmail = localStorage.getItem('rorraxy_seller_email') || localStorage.getItem('rorraxy_seller_verified_email');
-            }
+    if (request.method === 'GET' && action === 'profile') {
+        if (!emailParam) {
+            return Response.json({ success: false, error: "Email is required" }, { status: 400 });
+        }
+        // নির্দিষ্ট ইমেইল দিয়ে ডেটাবেস থেকে কুয়েরি করা
+        const { results } = await env.DB.prepare(
+            "SELECT * FROM seller_profiles WHERE email = ?"
+        ).bind(emailParam).all();
 
-            if (!userEmail) {
-                userEmail = "seller_" + Date.now() + "@rorraxy.com";
-            }
+        return Response.json({ success: true, data: results });
+    }
 
-            localStorage.setItem('rorraxy_current_seller_email', userEmail);
-            document.getElementById('businessEmail').value = userEmail;
+    if (request.method === 'POST' && action === 'profile') {
+        const body = await request.json();
+        const email = body.email;
 
-            // ২. লোকাল স্টোরেজ চেক
-            const storageKey = `rorraxy_seller_profile_${userEmail}`;
-            const savedProfile = JSON.parse(localStorage.getItem(storageKey) || 'null');
+        if (!email) {
+            return Response.json({ success: false, error: "Email is missing" }, { status: 400 });
+        }
 
-            if (savedProfile && savedProfile.brandName) {
-                fillFormValues(savedProfile);
-                renderPreview(savedProfile);
-                return;
-            }
+        // ডেটাবেসে ইমেইল দিয়ে চেক করা আগে থেকে আছে কি না, থাকলে আপডেট আর না হলে ইনসার্ট (UPSERT)
+        await env.DB.prepare(`
+            INSERT INTO seller_profiles (seller_id, brand_name, full_name, business_desc, email, whatsapp, emergency_phone, country, full_address, doc_type, doc_number, default_payout_details, logo_url)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ON CONFLICT(email) DO UPDATE SET
+            brand_name = excluded.brand_name,
+            full_name = excluded.full_name,
+            business_desc = excluded.business_desc,
+            whatsapp = excluded.whatsapp,
+            emergency_phone = excluded.emergency_phone,
+            country = excluded.country,
+            full_address = excluded.full_address,
+            doc_type = excluded.doc_type,
+            doc_number = excluded.doc_number,
+            default_payout_details = excluded.default_payout_details,
+            logo_url = excluded.logo_url
+        `).bind(
+            email, // seller_id হিসেবে ইমেইল ব্যবহার করা হলো যাতে ইউনিক থাকে
+            body.brand_name,
+            body.full_name,
+            body.business_desc,
+            email,
+            body.whatsapp,
+            body.emergency_phone,
+            body.country,
+            body.full_address,
+            body.doc_type,
+            body.doc_number,
+            body.default_payout_details,
+            body.logo_url
+        ).run();
 
-            // ৩. ক্লাউডফায়ার ডেটাবেস থেকে স্ট্যাটিক আইডি ১ বাদ দিয়ে নির্দিষ্ট ইমেল দিয়ে কুয়েরি করা
-            try {
-                const response = await fetch(`/api/seller?action=profile&email=${encodeURIComponent(userEmail)}`);
-                const result = await response.json();
-                
-                // যদি ডেটাবেসে এই ইমেলের প্রোফাইল পাওয়া যায়
-                if (result.success && result.data && result.data.length > 0) {
-                    const dbProfile = result.data[0];
-                    if(dbProfile.brand_name) {
-                        const formattedData = {
-                            brandName: dbProfile.brand_name,
-                            businessEmail: dbProfile.email || userEmail,
-                            fullName: dbProfile.full_name || '',
-                            businessDesc: dbProfile.business_desc || '',
-                            whatsapp: dbProfile.whatsapp || '',
-                            phone: dbProfile.emergency_phone || '',
-                            country: dbProfile.country || 'Bangladesh',
-                            address: dbProfile.full_address || '',
-                            docType: dbProfile.doc_type || 'NID',
-                            docNum: dbProfile.doc_number || '',
-                            tradeLicense: dbProfile.default_payout_details || '',
-                            logo: dbProfile.logo_url || compressedAvatarData
-                        };
-                        localStorage.setItem(storageKey, JSON.stringify(formattedData));
-                        fillFormValues(formattedData);
-                        renderPreview(formattedData);
-                        return;
-                    }
-                }
-            } catch (err) {
-                console.log("Cloudflare load notice:", err);
-            }
+        return Response.json({ success: true, message: "Profile saved successfully" });
+    }
 
-            // ৪. ডেটা না থাকলে একদম ফাঁকা ফরম দেখাবে যাতে নতুন ইউজার তার তথ্য দিতে পারে
-            document.getElementById('businessInfoForm').style.display = 'block';
-            document.getElementById('profilePreviewSection').style.display = 'none';
-        });
+    return Response.json({ success: false, error: "Invalid action" }, { status: 400 });
+}
