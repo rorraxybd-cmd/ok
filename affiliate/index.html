@@ -123,14 +123,6 @@
             align-items: center;
         }
 
-        .otp-input {
-            letter-spacing: 14px;
-            font-size: 1.3rem;
-            text-align: center;
-            font-weight: 800;
-            color: var(--gold-solid);
-        }
-
         .auth-btn {
             width: 100%;
             background: var(--gold-gradient);
@@ -156,27 +148,21 @@
             margin-top: -6px;
             display: none;
         }
-        .status-msg.error { color: #ff4d4d; }
+        .status-msg.error { color: var(--required-red); }
         .status-msg.success { color: #2ecc71; }
 
-        .resend-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.68rem;
-            color: var(--text-gray);
-            text-transform: none;
-        }
-
-        .resend-btn {
+        .magic-link-box {
+            background: #030305;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 16px;
+            padding: 15px;
+            word-break: break-all;
+            font-size: 0.75rem;
             color: var(--gold-solid);
-            background: none;
-            border: none;
-            font-weight: 700;
-            cursor: pointer;
-            text-transform: uppercase;
+            text-transform: none;
+            display: none;
+            margin-top: 10px;
         }
-        .resend-btn:disabled { color: var(--text-gray); cursor: not-allowed; }
 
         @media (max-width: 480px) {
             .auth-card { padding: 34px 20px; gap: 18px; }
@@ -199,31 +185,21 @@
             
             <h2 class="auth-title">AFFILIATE VERIFICATION</h2>
 
-            <!-- Step 1: Email Form -->
-            <form id="emailStepForm" class="auth-form">
+            <!-- Magic Link Request Form -->
+            <form id="magicLinkForm" class="auth-form">
                 <div class="form-group">
                     <label>EMAIL ADDRESS <span style="color:var(--required-red)">*</span></label>
                     <input type="email" class="form-control" id="affiliateEmail" placeholder="Enter your email address..." required style="text-transform: none;" autocomplete="email">
-                    <span class="email-hint"><i class="fa-regular fa-circle-check"></i> Supports Gmail, Yahoo, Outlook, Apple Mail...</span>
+                    <span class="email-hint"><i class="fa-regular fa-circle-check"></i> Secure Magic Link verification</span>
                 </div>
-                <div id="emailStatus" class="status-msg"></div>
-                <button type="submit" class="auth-btn" id="sendOtpBtn">GET CODE</button>
-            </form>
+                
+                <div id="formStatus" class="status-msg"></div>
+                
+                <!-- জেনারেট হওয়া ম্যাজিক লিংক প্রদর্শনের বক্স (টেস্টিং বা সরাসরি ক্লিকের জন্য) -->
+                <div id="magicLinkBox" class="magic-link-box"></div>
 
-            <!-- Step 2: 6-Digit OTP Form -->
-            <form id="otpStepForm" class="auth-form" style="display: none;">
-                <div class="form-group">
-                    <label>ENTER 6-DIGIT CODE <span style="color:var(--required-red)">*</span></label>
-                    <input type="text" class="form-control otp-input" id="otpCode" maxlength="6" pattern="\d{6}" placeholder="------" required autocomplete="one-time-code">
-                </div>
-                <div class="resend-row">
-                    <span id="timerText">Expires in: <b id="countdown" style="color:var(--gold-solid)">03:00</b></span>
-                    <button type="button" class="resend-btn" id="resendOtpBtn" disabled>RESEND CODE</button>
-                </div>
-                <div id="otpStatus" class="status-msg"></div>
-                <button type="submit" class="auth-btn" id="verifyOtpBtn" style="display:none;">VERIFY</button>
+                <button type="submit" class="auth-btn" id="sendLinkBtn">SEND MAGIC LINK</button>
             </form>
-
         </div>
     </div>
 
@@ -231,18 +207,11 @@
         // ক্লাউডফ্লেয়ার ওয়ার্কারের সঠিক এন্ডপয়েন্ট লিংক
         const WORKER_URL = "https://email.rorraxybd.workers.dev";
 
-        const emailStepForm = document.getElementById('emailStepForm');
-        const otpStepForm = document.getElementById('otpStepForm');
+        const magicLinkForm = document.getElementById('magicLinkForm');
         const affiliateEmailInput = document.getElementById('affiliateEmail');
-        const otpCodeInput = document.getElementById('otpCode');
-        const sendOtpBtn = document.getElementById('sendOtpBtn');
-        const resendOtpBtn = document.getElementById('resendOtpBtn');
-        const emailStatus = document.getElementById('emailStatus');
-        const otpStatus = document.getElementById('otpStatus');
-        const countdownEl = document.getElementById('countdown');
-
-        let activeEmail = '';
-        let timerInterval = null;
+        const sendLinkBtn = document.getElementById('sendLinkBtn');
+        const formStatus = document.getElementById('formStatus');
+        const magicLinkBox = document.getElementById('magicLinkBox');
 
         function showStatus(element, message, isError = false) {
             element.innerText = message;
@@ -250,123 +219,45 @@
             element.style.display = 'block';
         }
 
-        function startTimer(durationSeconds) {
-            clearInterval(timerInterval);
-            let timer = durationSeconds;
-            resendOtpBtn.disabled = true;
-
-            timerInterval = setInterval(() => {
-                const minutes = Math.floor(timer / 60);
-                const seconds = timer % 60;
-                countdownEl.innerText = `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-
-                if (--timer < 0) {
-                    clearInterval(timerInterval);
-                    countdownEl.innerText = "EXPIRED";
-                    resendOtpBtn.disabled = false;
-                }
-            }, 1000);
-        }
-
-        emailStepForm.addEventListener('submit', async (e) => {
+        magicLinkForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            activeEmail = affiliateEmailInput.value.trim().toLowerCase();
+            const email = affiliateEmailInput.value.trim().toLowerCase();
 
-            if (!activeEmail) return;
+            if (!email) return;
 
-            sendOtpBtn.disabled = true;
-            sendOtpBtn.innerText = "SENDING...";
-            emailStatus.style.display = 'none';
+            sendLinkBtn.disabled = true;
+            sendLinkBtn.innerText = "GENERATING LINK...";
+            formStatus.style.display = 'none';
+            magicLinkBox.style.display = 'none';
 
             try {
-                const response = await fetch(`${WORKER_URL}/send-otp`, {
+                const response = await fetch(`${WORKER_URL}/api/send-magic-link`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: activeEmail })
+                    body: JSON.stringify({ email: email })
                 });
 
                 const data = await response.json();
 
                 if (response.ok && data.success) {
-                    emailStepForm.style.display = 'none';
-                    otpStepForm.style.display = 'flex';
-                    showStatus(otpStatus, 'Verification code sent to your email!', false);
-                    startTimer(180);
-                    otpCodeInput.focus();
-                } else {
-                    showStatus(emailStatus, data.error || 'Failed to send OTP. Try again.', true);
-                }
-            } catch (err) {
-                showStatus(emailStatus, 'Network error! Please check connection.', true);
-            } finally {
-                sendOtpBtn.disabled = false;
-                sendOtpBtn.innerText = "GET CODE";
-            }
-        });
-
-        // অটো-ভেরিফাই (৬ ডিজিট পূর্ণ হওয়ার সাথে সাথে)
-        otpCodeInput.addEventListener('input', async (e) => {
-            const otpCode = e.target.value.trim();
-            
-            if (otpCode.length === 6) {
-                otpCodeInput.disabled = true;
-                otpStatus.style.display = 'none';
-
-                try {
-                    const response = await fetch(`${WORKER_URL}/verify-otp`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ email: activeEmail, otp: otpCode })
-                    });
-
-                    const data = await response.json();
-
-                    if (response.ok && data.verified) {
-                        localStorage.setItem('rorraxy_affiliate_verified', 'true');
-                        localStorage.setItem('rorraxy_affiliate_email', activeEmail);
-                        
-                        showStatus(otpStatus, 'Verification Successful! Redirecting...', false);
-                        setTimeout(() => {
-                            window.location.href = 'dashboard.html';
-                        }, 800);
-                    } else {
-                        showStatus(otpStatus, data.message || 'Invalid or expired code!', true);
-                        otpCodeInput.disabled = false;
-                        otpCodeInput.value = '';
-                        otpCodeInput.focus();
+                    showStatus(formStatus, 'Magic link generated successfully! Click below to verify:', false);
+                    
+                    // ব্যাকএন্ড থেকে আসা ম্যাজিক লিংকটি স্ক্রিনে দেখিয়ে দেওয়া হচ্ছে (যাতে সরাসরি ক্লিক করে টেস্ট করা যায়)
+                    if (data.magicLink) {
+                        magicLinkBox.innerHTML = `Secure Link: <a href="${data.magicLink}" style="color: var(--text-white); text-decoration: underline;" target="_blank">${data.magicLink}</a>`;
+                        magicLinkBox.style.display = 'block';
                     }
-                } catch (err) {
-                    showStatus(otpStatus, 'Verification error! Try again.', true);
-                    otpCodeInput.disabled = false;
-                    otpCodeInput.focus();
-                }
-            }
-        });
-
-        resendOtpBtn.addEventListener('click', async () => {
-            resendOtpBtn.disabled = true;
-            showStatus(otpStatus, 'Resending code...', false);
-
-            try {
-                const response = await fetch(`${WORKER_URL}/send-otp`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: activeEmail })
-                });
-
-                const data = await response.json();
-
-                if (response.ok && data.success) {
-                    showStatus(otpStatus, 'A new code has been sent!', false);
-                    otpCodeInput.value = '';
-                    startTimer(180);
+                    
+                    sendLinkBtn.innerText = "LINK SENT";
                 } else {
-                    showStatus(otpStatus, data.error || 'Failed to resend code.', true);
-                    resendOtpBtn.disabled = false;
+                    showStatus(formStatus, data.error || 'Failed to generate link. Try again.', true);
+                    sendLinkBtn.disabled = false;
+                    sendLinkBtn.innerText = "SEND MAGIC LINK";
                 }
             } catch (err) {
-                showStatus(otpStatus, 'Network error!', true);
-                resendOtpBtn.disabled = false;
+                showStatus(formStatus, 'Network error! Please check connection.', true);
+                sendLinkBtn.disabled = false;
+                sendLinkBtn.innerText = "SEND MAGIC LINK";
             }
         });
     </script>
