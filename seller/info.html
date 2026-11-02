@@ -115,7 +115,6 @@
 </head>
 <body>
 
-    <!-- সিকিউরিটি গেটিং চেক -->
     <script>
         if (localStorage.getItem('rorraxy_seller_verified') !== 'true') {
             window.location.href = '/seller/index.html';
@@ -262,7 +261,6 @@
         </div>
     </div>
 
-    <!-- বটম নেভিগেশন -->
     <nav class="seller-bottom-nav">
         <a href="/seller/list.html" class="nav-item"><i class="fa-solid fa-list-check"></i><span>LIST</span></a>
         <a href="/seller/payout.html" class="nav-item"><i class="fa-solid fa-hand-holding-dollar"></i><span>PAYOUT</span></a>
@@ -338,13 +336,9 @@
         }
 
         window.addEventListener('DOMContentLoaded', async () => {
-            // ১. বর্তমান সেশন ইমেইল শনাক্ত করা
+            // ১. ভেরিফিকেশন প্যানেল বা সঠিক সেশন থেকে বর্তমান ইউজারের ইমেইল নেওয়া (পুরনো ক্যাশ ইমেইল এড়িয়ে চলা)
             const urlParams = new URLSearchParams(window.location.search);
-            let userEmail = urlParams.get('email') || localStorage.getItem('rorraxy_current_seller_email');
-
-            if (!userEmail) {
-                userEmail = localStorage.getItem('rorraxy_seller_email') || localStorage.getItem('rorraxy_seller_verified_email');
-            }
+            let userEmail = urlParams.get('email') || localStorage.getItem('rorraxy_seller_verified_email') || localStorage.getItem('rorraxy_seller_email');
 
             if (!userEmail) {
                 userEmail = "seller_" + Date.now() + "@rorraxy.com";
@@ -353,7 +347,7 @@
             localStorage.setItem('rorraxy_current_seller_email', userEmail);
             document.getElementById('businessEmail').value = userEmail;
 
-            // ২. এই নির্দিষ্ট ইমেলের জন্য ইউনিক স্টোরেজ চেক
+            // ২. এই নির্দিষ্ট ইমেইলের জন্য আলাদা লোকাল স্টোরেজ কী (Key) চেক
             const storageKey = `rorraxy_seller_profile_${userEmail}`;
             const savedProfile = JSON.parse(localStorage.getItem(storageKey) || 'null');
 
@@ -363,7 +357,7 @@
                 return;
             }
 
-            // ৩. ক্লাউডফায়ার ডি১ ডেটাবেস থেকে রিয়েল-টাইম ফেচ
+            // ৩. ক্লাউডফায়ার ডেটাবেস থেকে ইউনিক ইমেল দিয়ে রিয়েল-টাইম ফেচ
             try {
                 const response = await fetch(`/api/seller?action=profile&email=${encodeURIComponent(userEmail)}`);
                 const result = await response.json();
@@ -394,7 +388,7 @@
                 console.log("Cloudflare load notice:", err);
             }
 
-            // ৪. নতুন ইমেলের ক্ষেত্রে একদম ফাঁকা ফরম দেখাবে
+            // ৪. নতুন বা ভিন্ন জিমেইল হলে কোনো ডেটা দেখাবে না, সরাসরি একদম ফাঁকা ফর্ম দেখাবে
             document.getElementById('businessInfoForm').style.display = 'block';
             document.getElementById('profilePreviewSection').style.display = 'none';
         });
@@ -457,7 +451,7 @@
                 logo: profileData.logo_url
             };
 
-            // নির্দিষ্ট জিমেইলের আন্ডারে লোকাল স্টোরেজে সংরক্ষণ
+            // নির্দিষ্ট জিমেইলের আন্ডারে আলাদা লোকাল স্টোরেজে সংরক্ষণ
             localStorage.setItem(`rorraxy_seller_profile_${userEmail}`, JSON.stringify(cleanData));
 
             try {
