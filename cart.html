@@ -153,6 +153,7 @@
 
         .brand-badge-bkash { background: #e2136e; color: #ffffff; font-size: 0.65rem; font-weight: 900; padding: 4px 10px; border-radius: 6px; }
         .brand-badge-nagad { background: linear-gradient(135deg, #f7931e, #ff5000); color: #ffffff; font-size: 0.65rem; font-weight: 900; padding: 4px 10px; border-radius: 6px; }
+        .brand-badge-payoneer { background: linear-gradient(135deg, #ff4800, #ff0055); color: #ffffff; font-size: 0.65rem; font-weight: 900; padding: 4px 10px; border-radius: 6px; }
 
         .payment-dropdown-content { display: none; padding: 16px; border-top: 1px solid rgba(255,255,255,0.06); background: rgba(6, 6, 10, 0.7); width: 100%; }
         .payment-method-item.active .payment-dropdown-content { display: block; }
@@ -278,8 +279,20 @@
                 </div>
 
                 <div class="payment-accordion-group">
+
+                    <!-- PAYONEER CHECKOUT (GLOBAL) -->
+                    <div class="payment-method-item active" id="method-payoneer" onclick="selectPaymentMethod('Payoneer Checkout', 'method-payoneer')">
+                        <div class="payment-method-header">
+                            <div class="payment-method-title">
+                                <i class="fa-solid fa-globe" style="color:var(--gold-solid);"></i>
+                                <span>PAYONEER CHECKOUT</span>
+                            </div>
+                            <div class="brand-badge-payoneer">PAYONEER</div>
+                        </div>
+                    </div>
                     
-                    <div class="payment-method-item active" id="method-card" onclick="selectPaymentMethod('Credit / Debit Card', 'method-card')">
+                    <!-- CREDIT / DEBIT CARD (SSLCOMMERZ / GLOBAL CARD) -->
+                    <div class="payment-method-item" id="method-card" onclick="selectPaymentMethod('Credit / Debit Card', 'method-card')">
                         <div class="payment-method-header">
                             <div class="payment-method-title">
                                 <i class="fa-solid fa-credit-card" style="color:var(--gold-solid);"></i>
@@ -308,6 +321,7 @@
                         </div>
                     </div>
 
+                    <!-- BKASH MOBILE BANKING -->
                     <div class="payment-method-item" id="method-bkash" onclick="selectPaymentMethod('bKash Mobile Banking', 'method-bkash')">
                         <div class="payment-method-header">
                             <div class="payment-method-title">
@@ -324,6 +338,7 @@
                         </div>
                     </div>
 
+                    <!-- NAGAD MOBILE BANKING -->
                     <div class="payment-method-item" id="method-nagad" onclick="selectPaymentMethod('Nagad Mobile Banking', 'method-nagad')">
                         <div class="payment-method-header">
                             <div class="payment-method-title">
@@ -340,6 +355,7 @@
                         </div>
                     </div>
 
+                    <!-- CASH ON DELIVERY -->
                     <div class="payment-method-item" id="method-cod" onclick="selectPaymentMethod('Cash on Delivery', 'method-cod')">
                         <div class="payment-method-header">
                             <div class="payment-method-title">
@@ -398,7 +414,7 @@
         let currentExchangeRate = 120;
         let currentCurrencyCode = "BDT";
         let currentCountryFlag = "🇧🇩";
-        window.selectedPaymentType = "Credit / Debit Card";
+        window.selectedPaymentType = "Payoneer Checkout";
 
         window.addEventListener('DOMContentLoaded', () => {
             renderCartList();
@@ -765,7 +781,7 @@
                 customer_phone: orderPayload.customer.phone,
                 shipping_address: orderPayload.customer.address,
                 customer_country: "Bangladesh",
-                payment_method: window.selectedPaymentType || "Credit / Debit Card",
+                payment_method: window.selectedPaymentType || "Payoneer Checkout",
                 payment_status: (window.selectedPaymentType === "Cash on Delivery") ? "Pending" : "Paid",
                 transaction_id: "TRX-" + Math.floor(10000000 + Math.random() * 90000000),
                 total_amount: totalAmountVal,
