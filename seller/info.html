@@ -119,7 +119,7 @@
     <!-- সিকিউরিটি গেটিং চেক -->
     <script>
         if (localStorage.getItem('rorraxy_seller_verified') !== 'true') {
-            window.location.href = 'index.html';
+            window.location.href = '/seller/index.html';
         }
     </script>
 
@@ -266,11 +266,11 @@
 
     <!-- বটম নেভিগেশন -->
     <nav class="seller-bottom-nav">
-        <a href="list.html" class="nav-item"><i class="fa-solid fa-list-check"></i><span>LIST</span></a>
-        <a href="payout.html" class="nav-item"><i class="fa-solid fa-hand-holding-dollar"></i><span>PAYOUT</span></a>
-        <button type="button" class="nav-item" onclick="location.href='dashboard.html'"><i class="fa-solid fa-house"></i><span>HOME</span></button>
-        <a href="shipment.html" class="nav-item"><i class="fa-solid fa-truck-fast"></i><span>SHIPMENT</span></a>
-        <a href="info.html" class="nav-item active"><i class="fa-solid fa-user-gear"></i><span>INFO</span></a>
+        <a href="/seller/list.html" class="nav-item"><i class="fa-solid fa-list-check"></i><span>LIST</span></a>
+        <a href="/seller/payout.html" class="nav-item"><i class="fa-solid fa-hand-holding-dollar"></i><span>PAYOUT</span></a>
+        <button type="button" class="nav-item" onclick="location.href='/seller/dashboard.html'"><i class="fa-solid fa-house"></i><span>HOME</span></button>
+        <a href="/seller/shipment.html" class="nav-item"><i class="fa-solid fa-truck-fast"></i><span>SHIPMENT</span></a>
+        <a href="/seller/info.html" class="nav-item active"><i class="fa-solid fa-user-gear"></i><span>INFO</span></a>
     </nav>
 
     <script>
