@@ -31,7 +31,6 @@
             --text-gray: #8e8e99;
             --font-main: 'Poppins', sans-serif;
             --border-color: rgba(212, 175, 55, 0.2);
-            --accent-green: #22c55e;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -99,29 +98,35 @@
             height: 100% !important; 
         }
 
-        /* অন/অফ (Toggle View) ডাইনামিক প্যানেল সিএসএস */
-        .toggle-panel { display: none; width: 100%; margin-top: 10px; }
-        .toggle-panel.active { display: block; animation: panelFadeIn 0.25s ease-out; }
-        @keyframes panelFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-
-        .content-card { background: var(--card-retail); border-radius: 18px; padding: 22px 18px; border: 1px solid var(--border-color); width: 100%; }
-        .card-title { font-size: 0.85rem; font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
-        .form-group { margin-bottom: 14px; display: flex; flex-direction: column; gap: 6px; }
-        .form-group label { font-size: 0.70rem; font-weight: 700; color: var(--text-gray); }
-        .form-control, .form-select { width: 100%; background: #000; border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 14px; color: #fff; font-size: 0.78rem; outline: none; text-transform: none; }
-        .btn-gold { width: 100%; background: var(--gold-gradient); border: none; border-radius: 12px; padding: 12px; color: #000; font-weight: 800; font-size: 0.82rem; cursor: pointer; text-transform: uppercase; box-shadow: 0 4px 15px rgba(212,175,55,0.2); }
-        .summary-box { display: none; background: #000000; padding: 16px; border-radius: 12px; border: 1px solid var(--border-color); flex-direction: column; gap: 10px; text-transform: none; }
-        .summary-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; border-bottom: 1px solid rgba(255,255,255,0.04); padding-bottom: 6px; }
-        .summary-row span:first-child { color: var(--text-gray); font-weight: 600; }
-        .summary-row span:last-child { color: var(--text-white); font-weight: 700; }
-        .edit-badge { color: var(--gold-solid); cursor: pointer; font-weight: 700; font-size: 0.75rem; display: inline-flex; align-items: center; gap: 5px; background: rgba(212,175,55,0.1); padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border-color); }
-
-        /* Bottom Fixed Navigation Menu - ৫টি মেনু ফিক্সড ও পাশাপাশি */
-        .seller-bottom-nav { position: fixed !important; bottom: 0 !important; left: 0 !important; width: 100% !important; background: rgba(3, 3, 5, 0.98) !important; border-top: 1px solid var(--border-color) !important; display: flex !important; flex-direction: row !important; justify-content: space-around !important; align-items: center !important; padding: 10px 4px !important; z-index: 1000 !important; backdrop-filter: blur(10px); }
-        .nav-item { display: flex !important; flex-direction: column !important; align-items: center !important; flex: 1 !important; background: none !important; border: none !important; cursor: pointer !important; white-space: nowrap !important; }
+        /* Bottom Fixed Navigation Menu (সঠিক রুট পাথসহ ৫টি মেনু) */
+        .seller-bottom-nav { 
+            position: fixed !important; 
+            bottom: 0 !important; 
+            left: 0 !important; 
+            width: 100% !important; 
+            background: rgba(3, 3, 5, 0.98) !important; 
+            border-top: 1px solid var(--border-color) !important; 
+            display: flex !important; 
+            flex-direction: row !important; 
+            justify-content: space-around !important; 
+            align-items: center !important; 
+            padding: 10px 4px !important; 
+            z-index: 1000 !important; 
+        }
+        .nav-item { 
+            display: flex !important; 
+            flex-direction: column !important; 
+            align-items: center !important; 
+            text-decoration: none !important; 
+            flex: 1 !important; 
+            background: none !important; 
+            border: none !important; 
+            cursor: pointer !important; 
+            white-space: nowrap !important;
+        }
         .nav-item.active i, .nav-item.active span { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .nav-item i { font-size: 1.25rem; margin-bottom: 4px; color: var(--text-gray); }
-        .nav-item span { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.5px; color: var(--text-gray); }
+        .nav-item i { font-size: 1.15rem; margin-bottom: 3px; color: var(--text-gray); }
+        .nav-item span { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.3px; color: var(--text-gray); }
 
         @media (max-width: 1024px) {
             .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
@@ -153,14 +158,15 @@
                     <i class="fa-solid fa-envelope"></i>
                     <span id="headerUserEmail">affiliate@rorraxy.com</span>
                 </a>
+                <!-- মাল্টি-ডিভাইস সিঙ্ক বাটন -->
                 <button type="button" class="sync-device-btn" onclick="openMultiDeviceSyncModal()">
                     <i class="fa-solid fa-qrcode"></i> SYNC DEVICE
                 </button>
             </div>
         </header>
 
-        <!-- মূল ড্যাশবোর্ড গ্রাফ ও স্ট্যাটস -->
-        <section class="stats-grid" id="mainStatsSection">
+        <!-- Stats Overview with Animated Golden Graphs -->
+        <section class="stats-grid">
             <div class="stat-card">
                 <h3>TOTAL EARNINGS</h3>
                 <div class="value" id="statEarningsVal">$0.00</div>
@@ -182,122 +188,6 @@
                 <div class="graph-container"><canvas id="chartReferrals"></canvas></div>
             </div>
         </section>
-
-        <!-- ১. LINKS PANEL (ON/OFF) -->
-        <section id="panel-links" class="toggle-panel">
-            <div class="content-card">
-                <div class="card-title"><span><i class="fa-solid fa-link"></i> AFFILIATE LINK GENERATOR</span></div>
-                <div class="form-group">
-                    <label>SELECT PLATFORM</label>
-                    <select class="form-select" id="platformSelect">
-                        <option value="https://r.rorraxy.com">RETAIL STORE (8% COMMISSION)</option>
-                        <option value="https://w.rorraxy.com">WHOLESALE STORE (2% COMMISSION)</option>
-                        <option value="https://rorraxy.com">ENTERPRISE SERVICES (10% COMMISSION)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>TARGET PRODUCT URL (OPTIONAL)</label>
-                    <input type="text" class="form-control" id="targetUrlInput" placeholder="Paste product URL..." style="text-transform: none;">
-                </div>
-                <button type="button" class="btn-gold" id="generateBtn">GENERATE LINK</button>
-                <div id="resultBox" style="display:none; margin-top:16px;">
-                    <input type="text" class="form-control" id="generatedLinkOutput" readonly style="margin-bottom:10px; text-transform:none;">
-                    <button type="button" class="btn-gold" id="universalShareBtn"><i class="fa-solid fa-share-nodes"></i> SHARE LINK</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- ২. PAYOUT PANEL (ON/OFF) -->
-        <section id="panel-payout" class="toggle-panel">
-            <div class="content-card">
-                <div class="card-title"><span><i class="fa-solid fa-wallet"></i> WITHDRAWAL REQUEST</span></div>
-                <form id="payoutForm" onsubmit="handlePayoutSubmit(event)">
-                    <div class="form-group">
-                        <label>AMOUNT ($)</label>
-                        <input type="number" class="form-control" id="withdrawAmount" placeholder="Min $20" min="20" required>
-                    </div>
-                    <div class="form-group">
-                        <label>PAYMENT METHOD</label>
-                        <select class="form-select" id="payoutMethod" required>
-                            <option value="bKash">bKash</option>
-                            <option value="Nagad">Nagad</option>
-                            <option value="Bank">Bank Transfer</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>ACCOUNT NUMBER</label>
-                        <input type="text" class="form-control" id="payoutAccount" required placeholder="Enter number..." style="text-transform: none;">
-                    </div>
-                    <button type="submit" class="btn-gold">REQUEST WITHDRAWAL</button>
-                </form>
-            </div>
-        </section>
-
-        <!-- ৩. REPORTS PANEL (ON/OFF) -->
-        <section id="panel-reports" class="toggle-panel">
-            <div class="content-card">
-                <div class="card-title"><span><i class="fa-solid fa-file-invoice-dollar"></i> CONVERSION LOGS</span></div>
-                <div style="overflow-x:auto;">
-                    <table style="width:100%; border-collapse:collapse; text-align:left;">
-                        <thead>
-                            <tr style="color:var(--text-gray); border-bottom:1px solid var(--border-color); font-size:0.65rem;">
-                                <th style="padding:8px;">DATE</th>
-                                <th style="padding:8px;">ORDER ID</th>
-                                <th style="padding:8px;">COMMISSION</th>
-                                <th style="padding:8px;">STATUS</th>
-                            </tr>
-                        </thead>
-                        <tbody id="reportTableBody" style="font-size:0.75rem;">
-                            <tr><td colspan="4" style="padding:12px; text-align:center; color:var(--text-gray);">No logs found.</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- ৪. SETTINGS PANEL (ON/OFF - ইমেইল ভিত্তিক প্রোফাইল) -->
-        <section id="panel-settings" class="toggle-panel">
-            <div class="content-card">
-                <div class="card-title">
-                    <span><i class="fa-solid fa-user-gear"></i> AFFILIATE PROFILE SETTINGS</span>
-                    <span id="infoCheckMark" style="display:none; color:var(--accent-green); font-size:0.70rem;"><i class="fa-solid fa-circle-check"></i> SAVED</span>
-                </div>
-
-                <form id="affiliateInfoForm" onsubmit="saveAffiliateInfo(event)">
-                    <div class="form-group"><label>FIRST NAME *</label><input type="text" id="firstName" class="form-control" required style="text-transform:none;"></div>
-                    <div class="form-group"><label>LAST NAME *</label><input type="text" id="lastName" class="form-control" required style="text-transform:none;"></div>
-                    <div class="form-group"><label>EMAIL (AUTOMATIC)</label><input type="email" id="email" class="form-control" readonly style="text-transform:none;"></div>
-                    <div class="form-group"><label>PHONE / WHATSAPP *</label><input type="tel" id="phone" class="form-control" placeholder="+8801700000000" required style="text-transform:none;"></div>
-                    <div class="form-group"><label>PROMO CHANNEL *</label><input type="text" id="promoChannel" class="form-control" placeholder="YouTube, Facebook or Website URL" required style="text-transform:none;"></div>
-                    <div class="form-group">
-                        <label>PAYMENT METHOD *</label>
-                        <select id="paymentMethod" class="form-select" onchange="handlePaymentMethodChange()" required>
-                            <option value="">Select Method</option>
-                            <option value="bKash">bKash</option>
-                            <option value="Nagad">Nagad</option>
-                            <option value="Bank Transfer">Bank Transfer</option>
-                        </select>
-                    </div>
-                    <div class="form-group" id="accountDetailsGroup" style="display:none;">
-                        <label id="accountLabel">ACCOUNT NUMBER *</label>
-                        <input type="text" id="accountNumberInput" class="form-control" placeholder="Enter account details..." style="text-transform:none;">
-                    </div>
-                    <button type="submit" id="saveInfoBtn" class="btn-gold" style="margin-top:10px;"><i class="fa-solid fa-floppy-disk"></i> SAVE SETTINGS</button>
-                </form>
-
-                <div class="summary-box" id="infoSummaryBox">
-                    <div class="summary-row"><span>FULL NAME:</span> <span id="sumName"></span></div>
-                    <div class="summary-row"><span>EMAIL:</span> <span id="sumEmail"></span></div>
-                    <div class="summary-row"><span>PHONE:</span> <span id="sumPhone"></span></div>
-                    <div class="summary-row"><span>PAYMENT METHOD:</span> <span id="sumMethod"></span></div>
-                    <div class="summary-row"><span>ACCOUNT DETAILS:</span> <span id="sumAccount"></span></div>
-                    <div class="summary-row"><span>CHANNEL:</span> <span id="sumChannel"></span></div>
-                    <div style="display: flex; justify-content: flex-end; margin-top: 8px;">
-                        <span class="edit-badge" onclick="editAffiliateInfo()"><i class="fa-solid fa-pen-to-square"></i> EDIT PROFILE</span>
-                    </div>
-                </div>
-            </div>
-        </section>
     </div>
 
     <!-- মাল্টি-ডিভাইস কিউআর সিঙ্ক মোডাল -->
@@ -306,77 +196,47 @@
             <h3 style="font-size:1.15rem; font-weight:800; background:var(--gold-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:8px;">MULTI-DEVICE SYNC</h3>
             <p style="font-size:0.75rem; color:var(--text-gray); margin-bottom:22px; text-transform:none;">Scan this secure QR code with your mobile or target device camera to instantly sync affiliate session & data.</p>
             
-            <div id="qrcodeContainer" style="background:#ffffff; padding:16px; border-radius:16px; display:inline-block; margin-bottom:20px;"></div>
+            <div id="qrcodeContainer" style="background:#ffffff; padding:16px; border-radius:16px; display:inline-block; margin-bottom:20px; box-shadow:0 0 25px rgba(212,175,55,0.2);"></div>
             
             <div id="syncStatusText" style="font-size:0.75rem; color:#4ade80; margin-bottom:18px; text-transform:none; font-weight:600;">Secure session handshake ready...</div>
             
-            <button type="button" onclick="closeMultiDeviceSyncModal()" class="btn-gold">CLOSE & RETURN</button>
+            <button type="button" onclick="closeMultiDeviceSyncModal()" style="width:100%; background:var(--gold-gradient); border:none; border-radius:12px; padding:12px; color:#000; font-weight:800; font-size:0.8rem; cursor:pointer; text-transform:uppercase;">CLOSE & RETURN</button>
         </div>
     </div>
 
-    <!-- Affiliate Bottom Fixed Navigation Menu (On/Off Toggle Buttons) -->
+    <!-- Affiliate Bottom Navigation Menu (আলাদা পেজ লিংকের সাথে সংযুক্ত) -->
     <nav class="seller-bottom-nav">
-        <button type="button" class="nav-item active" onclick="toggleMenu('overview', this)">
+        <a href="/affiliate/dashboard.html" class="nav-item active">
             <i class="fa-solid fa-chart-line"></i>
             <span>OVERVIEW</span>
-        </button>
-        <button type="button" class="nav-item" onclick="toggleMenu('links', this)">
+        </a>
+        <a href="/affiliate/links.html" class="nav-item">
             <i class="fa-solid fa-link"></i>
             <span>LINKS</span>
-        </button>
-        <button type="button" class="nav-item" onclick="toggleMenu('payout', this)">
+        </a>
+        <a href="/affiliate/payout.html" class="nav-item">
             <i class="fa-solid fa-wallet"></i>
             <span>PAYOUT</span>
-        </button>
-        <button type="button" class="nav-item" onclick="toggleMenu('reports', this)">
+        </a>
+        <a href="/affiliate/reports.html" class="nav-item">
             <i class="fa-solid fa-file-invoice-dollar"></i>
             <span>REPORTS</span>
-        </button>
-        <button type="button" class="nav-item" onclick="toggleMenu('settings', this)">
+        </a>
+        <a href="/affiliate/info.html" class="nav-item">
             <i class="fa-solid fa-user-gear"></i>
             <span>SETTINGS</span>
-        </button>
+        </a>
     </nav>
 
     <script>
-        // বাটনে ক্লিক করলে অন/অফ (Toggle) লজিক
-        function toggleMenu(menuName, btnEl) {
-            const allPanels = document.querySelectorAll('.toggle-panel');
-            const allNavBtns = document.querySelectorAll('.nav-item');
-
-            if (menuName === 'overview') {
-                allPanels.forEach(p => p.classList.remove('active'));
-                allNavBtns.forEach(b => b.classList.remove('active'));
-                btnEl.classList.add('active');
-                return;
-            }
-
-            const targetPanel = document.getElementById(`panel-${menuName}`);
-            const isAlreadyActive = targetPanel.classList.contains('active');
-
-            // সব প্যানেল বন্ধ করা
-            allPanels.forEach(p => p.classList.remove('active'));
-            allNavBtns.forEach(b => b.classList.remove('active'));
-
-            if (!isAlreadyActive) {
-                targetPanel.classList.add('active');
-                btnEl.classList.add('active');
-            } else {
-                // বন্ধ হয়ে আবার ওভারভিউ সিলেক্ট হবে
-                document.querySelector('.nav-item').classList.add('active');
-            }
-        }
-
         window.addEventListener('DOMContentLoaded', () => {
-            const savedEmail = localStorage.getItem('rorraxy_affiliate_email') || 'affiliate@rorraxy.com';
-            document.getElementById('headerUserEmail').innerText = savedEmail;
-            document.getElementById('email').value = savedEmail;
-
+            const savedEmail = localStorage.getItem('rorraxy_affiliate_email');
+            if (savedEmail) {
+                document.getElementById('headerUserEmail').innerText = savedEmail;
+            }
             loadAffiliateStatsFromCloudflare();
-            loadAffiliateProfile(savedEmail);
         });
 
-        // মাল্টি-ডিভাইস সিঙ্ক মোডাল
         window.openMultiDeviceSyncModal = function() {
             document.getElementById('deviceSyncModal').style.display = 'flex';
             const qrcodeDiv = document.getElementById('qrcodeContainer');
@@ -399,135 +259,6 @@
             document.getElementById('deviceSyncModal').style.display = 'none';
         }
 
-        // সেটিংস পেমেন্ট মেথড ফিল্ড হ্যান্ডলার
-        function handlePaymentMethodChange() {
-            const method = document.getElementById('paymentMethod').value;
-            const group = document.getElementById('accountDetailsGroup');
-            const label = document.getElementById('accountLabel');
-            if(!method) {
-                group.style.display = 'none';
-                return;
-            }
-            group.style.display = 'flex';
-            label.innerText = `${method.toUpperCase()} ACCOUNT / DETAILS *`;
-        }
-
-        // ইউজারের নিজস্ব ইমেইল ধরে প্রোফাইল ডেটা লোড
-        async function loadAffiliateProfile(email) {
-            const storageKey = `rorraxy_affiliate_info_${email}`;
-            const savedInfo = localStorage.getItem(storageKey);
-
-            if (savedInfo) {
-                try {
-                    const data = JSON.parse(savedInfo);
-                    fillFormAndShowSummary(data);
-                    return;
-                } catch(e) {}
-            }
-
-            try {
-                const res = await fetch(`/api/affiliate?action=info&affiliate_id=${encodeURIComponent(email)}`);
-                const result = await res.json();
-                if (result.success && result.data && result.data.length > 0) {
-                    const dbData = result.data[0];
-                    const formattedData = {
-                        firstName: dbData.first_name || '',
-                        lastName: dbData.last_name || '',
-                        phone: dbData.phone || '',
-                        promoChannel: dbData.promo_channel || '',
-                        paymentMethod: dbData.payment_method || '',
-                        accountDetails: dbData.account_details || ''
-                    };
-                    localStorage.setItem(storageKey, JSON.stringify(formattedData));
-                    fillFormAndShowSummary(formattedData);
-                }
-            } catch(err) {
-                console.warn("Profile fetch notice:", err);
-            }
-        }
-
-        function fillFormAndShowSummary(data) {
-            document.getElementById('firstName').value = data.firstName || '';
-            document.getElementById('lastName').value = data.lastName || '';
-            document.getElementById('phone').value = data.phone || '';
-            document.getElementById('promoChannel').value = data.promoChannel || '';
-            document.getElementById('paymentMethod').value = data.paymentMethod || '';
-            document.getElementById('accountNumberInput').value = data.accountDetails || '';
-            
-            handlePaymentMethodChange();
-            if (data.firstName) {
-                showSummary(data);
-            }
-        }
-
-        // কোনো পপআপ ছাড়াই সাইলেন্ট ব্যাকগ্রাউন্ড সিঙ্ক
-        async function saveAffiliateInfo(e) {
-            e.preventDefault();
-            const btn = document.getElementById('saveInfoBtn');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> SAVING...';
-
-            const email = document.getElementById('email').value.trim().toLowerCase();
-            const data = {
-                first_name: document.getElementById('firstName').value.trim(),
-                last_name: document.getElementById('lastName').value.trim(),
-                email: email,
-                phone: document.getElementById('phone').value.trim(),
-                promo_channel: document.getElementById('promoChannel').value.trim(),
-                payment_method: document.getElementById('paymentMethod').value,
-                account_details: document.getElementById('accountNumberInput').value.trim(),
-                auth_provider: "email",
-                auth_id: email
-            };
-
-            const cleanData = {
-                firstName: data.first_name,
-                lastName: data.last_name,
-                email: email,
-                phone: data.phone,
-                promoChannel: data.promo_channel,
-                paymentMethod: data.payment_method,
-                accountDetails: data.account_details
-            };
-
-            // ইউনিক ইমেইল দিয়ে স্থানীয়ভাবে সেভ
-            localStorage.setItem(`rorraxy_affiliate_info_${email}`, JSON.stringify(cleanData));
-
-            try {
-                await fetch('/api/affiliate?action=register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                });
-            } catch(err) {
-                console.warn("API sync fallback active.");
-            }
-
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> SAVE SETTINGS';
-            showSummary(cleanData);
-        }
-
-        function showSummary(data) {
-            document.getElementById('sumName').innerText = `${data.firstName || ''} ${data.lastName || ''}`;
-            document.getElementById('sumEmail').innerText = document.getElementById('email').value;
-            document.getElementById('sumPhone').innerText = data.phone || '';
-            document.getElementById('sumMethod').innerText = data.paymentMethod || '';
-            document.getElementById('sumAccount').innerText = data.accountDetails || '';
-            document.getElementById('sumChannel').innerText = data.promoChannel || '';
-
-            document.getElementById('affiliateInfoForm').style.display = 'none';
-            document.getElementById('infoSummaryBox').style.display = 'flex';
-            document.getElementById('infoCheckMark').style.display = 'inline-flex';
-        }
-
-        function editAffiliateInfo() {
-            document.getElementById('affiliateInfoForm').style.display = 'block';
-            document.getElementById('infoSummaryBox').style.display = 'none';
-            document.getElementById('infoCheckMark').style.display = 'none';
-        }
-
-        // ক্লাউডফায়ার থেকে স্ট্যাটস ডাটা ফেচ
         async function loadAffiliateStatsFromCloudflare() {
             try {
                 const response = await fetch('/api/affiliate?action=stats');
@@ -539,13 +270,22 @@
                     document.getElementById('statBalanceVal').innerText = `$${parseFloat(stats.available_balance || 0).toFixed(2)}`;
                     document.getElementById('statClicksVal').innerText = stats.total_clicks || "0";
                     document.getElementById('statReferralsVal').innerText = stats.total_referrals || "0";
+                } else {
+                    document.getElementById('statEarningsVal').innerText = "$0.00";
+                    document.getElementById('statBalanceVal').innerText = "$0.00";
+                    document.getElementById('statClicksVal').innerText = "0";
+                    document.getElementById('statReferralsVal').innerText = "0";
                 }
             } catch (e) {
                 console.warn("Affiliate API Sync Notice:", e);
+                document.getElementById('statEarningsVal').innerText = "$0.00";
+                document.getElementById('statBalanceVal').innerText = "$0.00";
+                document.getElementById('statClicksVal').innerText = "0";
+                document.getElementById('statReferralsVal').innerText = "0";
             }
         }
 
-        // গোল্ডেন চার্ট অ্যানিমেশন
+        // অ্যানিমেশনসহ সুন্দর গোল্ডেন গ্রেডিয়েন্ট গ্রাফ রেন্ডার ফাংশন
         function createDynamicSparkline(canvasId, dataPoints, isBar = false) {
             const canvas = document.getElementById(canvasId);
             if (!canvas) return;
@@ -574,9 +314,18 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    animation: { duration: 1200, easing: 'easeInOutQuart' },
-                    plugins: { legend: { display: false }, tooltip: { enabled: false } },
-                    scales: { x: { display: false }, y: { display: false, min: 0 } }
+                    animation: { 
+                        duration: 1500, 
+                        easing: 'easeInOutQuart' 
+                    },
+                    plugins: { 
+                        legend: { display: false }, 
+                        tooltip: { enabled: false } 
+                    },
+                    scales: { 
+                        x: { display: false }, 
+                        y: { display: false, min: 0 } 
+                    }
                 }
             });
         }
@@ -584,39 +333,11 @@
         window.addEventListener('load', () => {
             setTimeout(() => {
                 createDynamicSparkline('chartEarnings', [10, 25, 18, 35, 28, 45, 30]);
-                createDynamicSparkline('chartBalance', [5, 15, 12, 22, 18, 30, 25]);
+                createDynamicSpanline = createDynamicSparkline('chartBalance', [5, 15, 12, 22, 18, 30, 25]);
                 createDynamicSparkline('chartClicks', [20, 45, 35, 60, 50, 80, 65], true);
                 createDynamicSparkline('chartReferrals', [2, 6, 4, 10, 8, 15, 12]);
             }, 100);
         });
-
-        // লিংক জেনারেটর
-        document.getElementById('generateBtn').addEventListener('click', () => {
-            const base = document.getElementById('platformSelect').value;
-            const target = document.getElementById('targetUrlInput').value.trim();
-            const email = localStorage.getItem('rorraxy_affiliate_email') || "AFF-DIRECT";
-            let link = `${base}?ref=${encodeURIComponent(email)}`;
-            if(target) link = `${base}/item?url=${encodeURIComponent(target)}&ref=${encodeURIComponent(email)}`;
-            
-            document.getElementById('generatedLinkOutput').value = link;
-            document.getElementById('resultBox').style.display = 'block';
-        });
-
-        document.getElementById('universalShareBtn').addEventListener('click', () => {
-            const val = document.getElementById('generatedLinkOutput').value;
-            if(navigator.share) {
-                navigator.share({ title: 'rorraxy Affiliate', url: val });
-            } else {
-                navigator.clipboard.writeText(val);
-                alert('LINK COPIED TO CLIPBOARD!');
-            }
-        });
-
-        async function handlePayoutSubmit(e) {
-            e.preventDefault();
-            alert("Withdrawal request submitted successfully!");
-            document.getElementById('payoutForm').reset();
-        }
     </script>
 </body>
 </html>
