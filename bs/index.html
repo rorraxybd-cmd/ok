@@ -460,7 +460,6 @@
             gap: 5px;
         }
 
-        /* অতিরিক্ত বর্ডার ও শ্যাডো রিমুভ করে একদম সফট এবং ক্লিন স্টাইল */
         .form-input, .form-textarea {
             width: 100%;
             background: rgba(4, 4, 6, 0.6);
@@ -475,7 +474,6 @@
             transition: all 0.2s ease;
         }
 
-        /* প্লেসহোল্ডার টেক্সট একদম হালকা, সফট ও অস্পষ্ট করা হয়েছে */
         .form-input::placeholder, .form-textarea::placeholder {
             color: rgba(192, 192, 200, 0.45);
             font-size: 0.8rem;
@@ -552,7 +550,6 @@
                     </div>
                 </div>
 
-                <!-- লেবেল রিমুভ করে সরাসরি ফিল্ডের ভেতরে সফট প্লেসহোল্ডার যুক্ত করা হয়েছে -->
                 <form class="ecosystem-form" id="ecosystemContactForm">
                     <div class="form-group">
                         <input type="text" id="fullName" class="form-input" placeholder="Enter your full name *" required>
@@ -644,7 +641,7 @@
         }
         fetchEcosystemGeoLocation();
 
-        // Cloudflare Pages Function (/api/business) এর সাথে ডাইরেক্ট কানেকশন
+        // নোটিফিকেশন পপআপ সম্পূর্ণ রিমুভ করে ব্যাকগ্রাউন্ডে Cloudflare D1 এ ডাটা সেভ করার কোড
         ecosystemContactForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -655,7 +652,6 @@
             const businessPlan = document.getElementById('businessPlan').value.trim();
 
             if (!fullName || !email || !whatsapp || !budget || !businessPlan) {
-                alert("Please fill in all required fields.");
                 return;
             }
 
@@ -682,18 +678,11 @@
                     body: JSON.stringify(payload)
                 });
 
-                const result = await response.json();
-
-                if (response.ok && result.success) {
-                    alert("Submitted successfully to Cloudflare D1!");
+                if (response.ok) {
                     ecosystemContactForm.reset();
-                } else {
-                    throw new Error(result.error || "Failed to submit");
                 }
-
             } catch (error) {
                 console.error("Submission Error:", error);
-                alert("Failed to submit data. Please try again.");
             } finally {
                 submitProposalBtn.disabled = false;
                 submitProposalBtn.innerText = 'SUBMIT';
