@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <title>rorraxy - Global Retail Checkout</title>
+    <title>rorraxy - Retail Checkout</title>
     
     <script src="/ecosystem-core.js"></script>
     
@@ -18,7 +18,7 @@
 
     <style>
         :root {
-            --bg-retail: #030305;
+            --bg-retail: #000000;
             --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
             --green-gradient: linear-gradient(135deg, #00b09b, #96c93d);
             --gold-solid: #d4af37;
@@ -26,7 +26,7 @@
             --text-white: #ffffff;
             --text-gray: #a0a0b8;
             --font-main: 'Poppins', 'Plus Jakarta Sans', sans-serif;
-            --card-bg: #0a0a0f;
+            --card-bg: #09090d;
             --input-bg: #12121a;
         }
 
@@ -39,34 +39,34 @@
         }
 
         .checkout-container {
-            max-width: 760px; width: 100%; margin: 0 auto; padding: 20px 12px 110px 12px; display: flex; flex-direction: column; gap: 16px;
+            max-width: 780px; width: 100%; margin: 0 auto; padding: 20px 12px 110px 12px; display: flex; flex-direction: column; gap: 16px;
         }
 
         .cart-brand-logo {
-            width: 100px; height: auto; object-fit: contain; margin: 0 auto; display: block;
-            filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.25));
+            width: 105px; height: auto; object-fit: contain; margin: 0 auto; display: block;
+            filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.3));
         }
 
         .cart-items-box {
             background: var(--card-bg); border-radius: 14px; padding: 12px; width: 100%;
             display: flex; flex-direction: column; gap: 8px; max-height: 320px; overflow-y: auto;
-            border: 1px solid rgba(212,175,55,0.1);
+            border: 1px solid rgba(212,175,55,0.12);
         }
         .cart-row-item { 
             display: flex; align-items: center; justify-content: space-between; background: #0f0f17; padding: 8px 10px; border-radius: 10px; gap: 8px;
             border: 1px solid rgba(255,255,255,0.03);
         }
-        .cart-img { width: 40px; height: 40px; object-fit: cover; border-radius: 6px; background: #000; flex-shrink: 0; }
+        .cart-img { width: 42px; height: 42px; object-fit: cover; border-radius: 6px; background: #000; flex-shrink: 0; }
 
         .summary-card-box {
             width: 100%; background: var(--card-bg); padding: 14px; border-radius: 12px;
-            display: flex; flex-direction: column; gap: 8px; border: 1px solid rgba(212,175,55,0.1);
+            display: flex; flex-direction: column; gap: 8px; border: 1px solid rgba(212,175,55,0.12);
         }
         .summary-row { display: flex; justify-content: space-between; align-items: center; width: 100%; font-size: 0.72rem; }
 
         .address-form-section {
             display: flex; background: var(--card-bg); border-radius: 16px; padding: 16px 14px; flex-direction: column; gap: 12px; 
-            border: 1px solid rgba(212,175,55,0.12);
+            border: 1px solid rgba(212,175,55,0.14);
         }
         .section-center-header { text-align: center; border-bottom: 1px solid rgba(212,175,55,0.08); padding-bottom: 8px; }
         .section-center-header h2 { font-size: 0.82rem; font-weight: 800; letter-spacing: 1px; display: inline-flex; align-items: center; gap: 6px; }
@@ -74,7 +74,7 @@
         .luxury-form-label { font-size: 0.62rem; color: #ffffff !important; font-weight: 700; letter-spacing: 0.5px; display: block; margin-bottom: 4px; }
         .luxury-form-input {
             background: var(--input-bg) !important; border: 1px solid rgba(212, 175, 55, 0.15) !important; 
-            padding: 10px 12px !important; border-radius: 9px !important; color: #ffffff !important; 
+            padding: 11px 12px !important; border-radius: 9px !important; color: #ffffff !important; 
             font-size: 0.8rem !important; font-family: var(--font-main) !important; width: 100% !important; outline: none !important;
         }
         .luxury-form-input:focus { border-color: var(--gold-solid) !important; }
@@ -85,7 +85,7 @@
         .phone-field-wrapper { flex: 1; position: relative; width: 100%; min-width: 0; }
 
         .btn-saved-address {
-            background: var(--gold-gradient); color: #000000; border: none; padding: 0 12px; height: 40px;
+            background: var(--gold-gradient); color: #000000; border: none; padding: 0 12px; height: 42px;
             border-radius: 9px; font-weight: 800; cursor: pointer; display: flex; align-items: center;
             justify-content: center; gap: 5px; font-size: 0.58rem; flex-shrink: 0;
             white-space: nowrap; font-family: var(--font-main); letter-spacing: 0.3px;
@@ -94,7 +94,7 @@
 
         .iti { width: 100% !important; }
         .iti__selected-flag { background-color: rgba(255, 255, 255, 0.03) !important; border-radius: 9px 0 0 9px !important; border-right: 1px solid rgba(212, 175, 55, 0.15) !important; }
-        .iti input[type="tel"] { padding-left: 85px !important; width: 100% !important; color: #ffffff !important; }
+        .iti input[type="tel"] { padding-left: 88px !important; width: 100% !important; color: #ffffff !important; }
         .iti__country-list { 
             background-color: #0b0b10 !important; border: 1px solid rgba(212, 175, 55, 0.3) !important; 
             color: #ffffff !important; text-transform: none !important; max-height: 200px !important; width: 260px !important; z-index: 99999 !important;
@@ -138,19 +138,23 @@
             border-radius: 12px; overflow: hidden; transition: all 0.2s ease; cursor: pointer; width: 100%;
         }
         .payment-method-item.active { border-color: var(--gold-solid); background: rgba(24, 24, 36, 0.95); }
-        .payment-method-header { padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-        .payment-method-title { display: flex; align-items: center; gap: 10px; font-size: 0.76rem; font-weight: 800; color: #fff; }
+        .payment-method-header { padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
+        .payment-method-title { display: flex; align-items: center; justify-content: space-between; font-size: 0.76rem; font-weight: 800; color: #fff; }
 
-        .brand-badge-payoneer { background: linear-gradient(135deg, #ff4800, #ff0055); color: #ffffff; font-size: 0.6rem; font-weight: 900; padding: 3px 8px; border-radius: 5px; }
-        .brand-badge-ssl { background: linear-gradient(135deg, #0052d4, #4364f7); color: #ffffff; font-size: 0.6rem; font-weight: 900; padding: 3px 8px; border-radius: 5px; }
-        .brand-badge-bkash { background: #e2136e; color: #ffffff; font-size: 0.6rem; font-weight: 900; padding: 3px 8px; border-radius: 5px; }
+        .badge-global-gold { background: var(--gold-gradient); color: #000; font-size: 0.58rem; font-weight: 900; padding: 3px 8px; border-radius: 5px; letter-spacing: 0.5px; }
+        .badge-local-bd { background: linear-gradient(135deg, #0052d4, #4364f7); color: #fff; font-size: 0.58rem; font-weight: 900; padding: 3px 8px; border-radius: 5px; }
+        .badge-bkash-bd { background: #e2136e; color: #fff; font-size: 0.58rem; font-weight: 900; padding: 3px 8px; border-radius: 5px; }
 
-        .global-card-icons { display: flex; gap: 6px; align-items: center; margin-top: 6px; }
-        .global-card-icons i { font-size: 1.1rem; color: #d1d1e0; }
+        .payout-icons-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 4px; }
+        .payout-badge {
+            display: inline-flex; align-items: center; gap: 4px; background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 6px;
+            font-size: 0.62rem; font-weight: 700; color: #e0e0e0; border: 1px solid rgba(255,255,255,0.08); text-transform: none !important;
+        }
+        .payout-badge i { font-size: 0.85rem; }
 
         .single-fixed-checkout-wrapper {
             position: fixed; bottom: 0; left: 0; right: 0; z-index: 99999;
-            background: rgba(3, 3, 5, 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
             padding: 10px 12px; display: flex; justify-content: center; align-items: center; gap: 8px;
             border-top: 1px solid rgba(212, 175, 55, 0.15);
         }
@@ -268,46 +272,52 @@
 
                 <div class="payment-accordion-group">
 
-                    <!-- PAYONEER CHECKOUT (GLOBAL) -->
-                    <div class="payment-method-item active" id="method-payoneer" onclick="selectPaymentMethod('Payoneer Checkout', 'method-payoneer')">
+                    <!-- INTERNATIONAL PAYMENT GATEWAY -->
+                    <div class="payment-method-item active" id="method-payoneer" onclick="selectPaymentMethod('International Cards / Wallet', 'method-payoneer')">
                         <div class="payment-method-header">
                             <div class="payment-method-title">
-                                <i class="fa-solid fa-globe" style="color:var(--gold-solid);"></i>
-                                <span>PAYONEER CHECKOUT</span>
+                                <span><i class="fa-solid fa-globe" style="color:var(--gold-solid); margin-right:6px;"></i> INTERNATIONAL CARDS & WALLETS</span>
+                                <span class="badge-global-gold">150+ CURRENCIES</span>
                             </div>
-                            <div class="brand-badge-payoneer">GLOBAL</div>
-                        </div>
-                        <div style="padding: 0 16px 14px 16px;">
-                            <div class="global-card-icons">
-                                <i class="fa-brands fa-cc-visa" style="color:#fff;"></i>
-                                <i class="fa-brands fa-cc-mastercard" style="color:#ff5f00;"></i>
-                                <i class="fa-brands fa-cc-amex" style="color:#006fcf;"></i>
-                                <i class="fa-brands fa-cc-discover" style="color:#f9a01b;"></i>
-                                <i class="fa-brands fa-google-pay" style="color:#ea4335;"></i>
-                                <i class="fa-brands fa-apple-pay" style="color:#fff;"></i>
+                            <div class="payout-icons-row">
+                                <span class="payout-badge"><i class="fa-brands fa-cc-visa" style="color:#fff;"></i> VISA</span>
+                                <span class="payout-badge"><i class="fa-brands fa-cc-mastercard" style="color:#ff5f00;"></i> MASTERCARD</span>
+                                <span class="payout-badge"><i class="fa-brands fa-cc-amex" style="color:#006fcf;"></i> AMEX</span>
+                                <span class="payout-badge"><i class="fa-brands fa-cc-discover" style="color:#f9a01b;"></i> DISCOVER</span>
+                                <span class="payout-badge"><i class="fa-brands fa-apple-pay" style="color:#fff;"></i> APPLE PAY</span>
+                                <span class="payout-badge"><i class="fa-brands fa-google-pay" style="color:#ea4335;"></i> G PAY</span>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- SSLCOMMERZ (LOCAL CARDS & WALLETS) -->
-                    <div class="payment-method-item" id="method-ssl" onclick="selectPaymentMethod('SSLCommerz Gateway', 'method-ssl')">
+                    <!-- BANGLADESH LOCAL GATEWAY -->
+                    <div class="payment-method-item" id="method-ssl" onclick="selectPaymentMethod('BD Local Gateway (SSL)', 'method-ssl')">
                         <div class="payment-method-header">
                             <div class="payment-method-title">
-                                <i class="fa-solid fa-credit-card" style="color:#4364f7;"></i>
-                                <span>SSLCOMMERZ (LOCAL CARDS & WALLETS)</span>
+                                <span><i class="fa-solid fa-building-columns" style="color:#4364f7; margin-right:6px;"></i> BANGLADESH LOCAL CARDS & WALLETS</span>
+                                <span class="badge-local-bd">BDT PAYMENT</span>
                             </div>
-                            <div class="brand-badge-ssl">SSLCOMMERZ</div>
+                            <div class="payout-icons-row">
+                                <span class="payout-badge" style="color:#e2136e; font-weight:800;"><i class="fa-solid fa-mobile-screen"></i> bKash</span>
+                                <span class="payout-badge" style="color:#f7931e; font-weight:800;"><i class="fa-solid fa-wallet"></i> Nagad</span>
+                                <span class="payout-badge" style="color:#8c3494; font-weight:800;"><i class="fa-solid fa-rocket"></i> Rocket</span>
+                                <span class="payout-badge"><i class="fa-brands fa-cc-visa" style="color:#fff;"></i> Local Visa</span>
+                                <span class="payout-badge"><i class="fa-brands fa-cc-mastercard" style="color:#ff5f00;"></i> Mastercard</span>
+                                <span class="payout-badge"><i class="fa-solid fa-money-check-dollar"></i> Net Banking</span>
+                            </div>
                         </div>
                     </div>
 
                     <!-- BKASH DIRECT CHECKOUT (BACKUP) -->
-                    <div class="payment-method-item" id="method-bkash" onclick="selectPaymentMethod('bKash Direct PGW', 'method-bkash')">
+                    <div class="payment-method-item" id="method-bkash" onclick="selectPaymentMethod('bKash Direct Wallet', 'method-bkash')">
                         <div class="payment-method-header">
                             <div class="payment-method-title">
-                                <i class="fa-solid fa-mobile-screen-button" style="color:#e2136e;"></i>
-                                <span>BKASH DIRECT CHECKOUT</span>
+                                <span><i class="fa-solid fa-mobile-screen-button" style="color:#e2136e; margin-right:6px;"></i> BKASH DIRECT CHECKOUT</span>
+                                <span class="badge-bkash-bd">FAST CHECKOUT</span>
                             </div>
-                            <div class="brand-badge-bkash">bKash</div>
+                            <div class="payout-icons-row">
+                                <span class="payout-badge" style="color:#e2136e; font-weight:800;"><i class="fa-solid fa-check-circle"></i> 1-Tap bKash Personal/Merchant Pay</span>
+                            </div>
                         </div>
                     </div>
 
@@ -351,7 +361,7 @@
         let currentExchangeRate = 120;
         let currentCurrencyCode = "BDT";
         let currentCountryFlag = "🇧🇩";
-        window.selectedPaymentType = "Payoneer Checkout";
+        window.selectedPaymentType = "International Cards / Wallet";
 
         window.addEventListener('DOMContentLoaded', () => {
             renderCartList();
@@ -718,7 +728,7 @@
                 customer_phone: orderPayload.customer.phone,
                 shipping_address: orderPayload.customer.address,
                 customer_country: "Bangladesh",
-                payment_method: window.selectedPaymentType || "Payoneer Checkout",
+                payment_method: window.selectedPaymentType || "International Cards / Wallet",
                 payment_status: "Paid",
                 transaction_id: "TRX-" + Math.floor(10000000 + Math.random() * 90000000),
                 total_amount: totalAmountVal,
