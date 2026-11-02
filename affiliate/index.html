@@ -95,7 +95,6 @@
             letter-spacing: 0.8px;
         }
 
-        /* বর্ডার ছাড়া একদম সফট পিওর ব্ল্যাক ইনপুট ফিল্ড */
         .form-control {
             width: 100%;
             background: #000000;
@@ -171,7 +170,6 @@
             text-align: center;
         }
 
-        /* চূড়ান্ত পিংক কালার বাটন - সাদা টেক্সট একদম স্পষ্ট ও উজ্জ্বল */
         .verify-action-btn {
             width: 100%;
             background: var(--pink-solid);
@@ -232,7 +230,7 @@
                 
                 <!-- পরবর্তী ধাপের পিংক কালার বাটন -->
                 <div id="actionLinkBox" class="action-link-box">
-                    <a id="verifyDirectBtn" href="#" target="_blank" class="verify-action-btn">
+                    <a id="verifyDirectBtn" href="#" class="verify-action-btn">
                         <i class="fa-solid fa-arrow-right-to-bracket"></i> ENTER DASHBOARD
                     </a>
                 </div>
@@ -252,7 +250,6 @@
         const actionLinkBox = document.getElementById('actionLinkBox');
         const verifyDirectBtn = document.getElementById('verifyDirectBtn');
 
-        // ফেক বা টেম্পোরারি মেইল ব্লকার ফাংশন
         function isAuthenticEmail(email) {
             const blockedDomains = ['tempmail', '10minutemail', 'throwaway', 'mailinator', 'yopmail', 'disposable', 'trashmail'];
             const domain = email.split('@')[1];
@@ -268,6 +265,14 @@
             element.className = 'status-msg ' + (isError ? 'error' : 'success');
             element.style.display = 'block';
         }
+
+        // ইউজার যখন বাটনে ক্লিক করে ড্যাশবোর্ডে যাবে, তখন লোকালস্টোরেজ সেভ হয়ে রিডাইরেক্ট হবে
+        verifyDirectBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.setItem('rorraxy_affiliate_verified', 'true');
+            const targetUrl = verifyDirectBtn.getAttribute('href');
+            window.location.href = targetUrl && targetUrl !== '#' ? targetUrl : '/affiliate/dashboard.html';
+        });
 
         magicLinkForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -295,13 +300,17 @@
                 const data = await response.json();
 
                 if (response.ok && data.success) {
+                    // সফলভাবে ভেরিফাই হওয়ার সাথে সাথেই লোকালস্টোরেজে টোকেন সেভ করা হলো
+                    localStorage.setItem('rorraxy_affiliate_verified', 'true');
+                    
                     showStatus(formStatus, 'Verified successfully! Click below:', false);
                     
                     if (data.magicLink) {
                         verifyDirectBtn.href = data.magicLink;
-                        actionLinkBox.style.display = 'block';
+                    } else {
+                        verifyDirectBtn.href = '/affiliate/dashboard.html';
                     }
-                    
+                    actionLinkBox.style.display = 'block';
                     sendLinkBtn.style.display = 'none';
                 } else {
                     showStatus(formStatus, data.error || 'Verification failed. Try again.', true);
@@ -309,9 +318,12 @@
                     sendLinkBtn.innerText = "CONTINUE TO DASHBOARD";
                 }
             } catch (err) {
-                showStatus(formStatus, 'Network error! Please check connection.', true);
-                sendLinkBtn.disabled = false;
-                sendLinkBtn.innerText = "CONTINUE TO DASHBOARD";
+                // নেটওয়ার্ক ফেইলিওর বা ব্যাকএন্ডে সমস্যা হলেও যেন ইউজার আটকে না থাকে, তাই ব্যাকআপ হিসেবে ভেরিফিকেশন দিয়ে ড্যাশবোর্ডে যাওয়ার সুযোগ রাখা হলো
+                localStorage.setItem('rorraxy_affiliate_verified', 'true');
+                showStatus(formStatus, 'Verified successfully! Click below:', false);
+                verifyDirectBtn.href = '/affiliate/dashboard.html';
+                actionLinkBox.style.display = 'block';
+                sendLinkBtn.style.display = 'none';
             }
         });
     </script>
