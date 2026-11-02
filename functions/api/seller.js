@@ -13,7 +13,7 @@ export async function onRequest(context) {
 
   try {
     const url = new URL(request.url);
-    const action = url.searchParams.get("action"); // কোন টেবিল বা কাজ দেখতে চান (profile, orders, payouts, chats)
+    const action = url.searchParams.get("action"); 
     const sellerId = url.searchParams.get("seller_id");
 
     // ১. GET রিকোয়েস্ট: সেলারের তথ্য, অর্ডার বা পেআউট দেখার জন্য
@@ -46,7 +46,7 @@ export async function onRequest(context) {
       });
     }
 
-    // ২. POST রিকোয়েস্ট: নতুন সেলার প্রোফাইল, অর্ডার বা চ্যাট মেসেজ সেভ করার জন্য
+    // ২. POST রিকোয়েস্ট: সেলার প্রোফাইল সেভ বা আপডেট করার জন্য (INSERT OR REPLACE ব্যবহার করা হয়েছে)
     if (request.method === "POST") {
       const body = await request.json();
 
@@ -58,22 +58,34 @@ export async function onRequest(context) {
           default_payout_details, logo_url
         } = body;
 
+        // INSERT OR REPLACE ব্যবহার করার ফলে ডাটা ডুপ্লিকেট বা ফেইল না করে আপডেট হয়ে যাবে
         const query = `
-          INSERT INTO seller_profiles (
+          INSERT OR REPLACE INTO seller_profiles (
             seller_id, brand_name, full_name, business_desc, email, whatsapp, 
             emergency_phone, country, full_address, doc_type, doc_number, 
-            default_payout_method, default_payout_details, logo_url, status, created_at
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'ACTIVE', datetime('now'))
+            default_payout_method, default_payout_details, logo_url, status, created_at, updated_at
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'ACTIVE', COALESCE((SELECT created_at FROM seller_profiles WHERE seller_id = ?), datetime('now')), datetime('now'))
         `;
 
         await env.retail.prepare(query).bind(
-          seller_id, brand_name || null, full_name || null, business_desc || "", 
-          email || null, whatsapp || null, emergency_phone || null, country || "Bangladesh", 
-          full_address || null, doc_type || null, doc_number || null, 
-          default_payout_method || "bKash", default_payout_details || null, logo_url || ""
+          seller_id || 1, // যদি seller_id না থাকে ডিফল্ট 1 ব্যবহার হবে
+          brand_name || null, 
+          full_name || null, 
+          business_desc || "", 
+          email || null, 
+          whatsapp || null, 
+          emergency_phone || null, 
+          country || "Bangladesh", 
+          full_address || null, 
+          doc_type || null, 
+          doc_number || null, 
+          default_payout_method || "bKash", 
+          default_payout_details || null, 
+          logo_url || "",
+          seller_id || 1
         ).run();
 
-        return new Response(JSON.stringify({ success: true, message: "Seller profile created successfully!" }), {
+        return new Response(JSON.stringify({ success: true, message: "Seller profile saved successfully!" }), {
           headers: { ...corsHeaders, "Content-Type": "application/json" }
         });
       }
@@ -84,7 +96,7 @@ export async function onRequest(context) {
           INSERT INTO seller_support_chats (seller_id, sender_type, message, is_read, created_at)
           VALUES (?, ?, ?, 0, datetime('now'))
         `;
-        await env.retail.prepare(query).bind(seller_id, sender_type, message).run();
+        await env.retail.prepare(query).bind(seller_id || 1, sender_type, message).run();
 
         return new Response(JSON.stringify({ success: true, message: "Message sent successfully!" }), {
           headers: { ...corsHeaders, "Content-Type": "application/json" }
