@@ -30,7 +30,7 @@
             --font-main: 'Poppins', 'Plus Jakarta Sans', sans-serif;
             --card-bg: #09090d;
             --input-bg: #12121a;
-            --border-color: rgba(212, 175, 55, 0.2);
+            --border-color: rgba(212, 175, 55, 0.15);
         }
 
         * { box-sizing: border-box !important; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -69,7 +69,7 @@
 
         .address-form-section {
             display: flex; background: var(--card-bg); border-radius: 16px; padding: 16px 14px; flex-direction: column; gap: 12px; 
-            border: 1px solid rgba(212,175,55,0.15); box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            border: 1px solid rgba(212,175,55,0.15);
         }
         .section-center-header { text-align: center; border-bottom: 1px solid rgba(212,175,55,0.1); padding-bottom: 8px; }
         .section-center-header h2 { font-size: 0.85rem; font-weight: 800; letter-spacing: 1px; display: inline-flex; align-items: center; gap: 6px; }
@@ -92,12 +92,10 @@
             background: var(--gold-gradient); color: #000000; border: none; padding: 0 12px; height: 42px;
             border-radius: 10px; font-weight: 800; cursor: pointer; display: flex; align-items: center;
             justify-content: center; gap: 5px; font-size: 0.60rem; flex-shrink: 0;
-            box-shadow: 0 4px 12px rgba(212,175,55,0.15); white-space: nowrap; font-family: var(--font-main);
-            letter-spacing: 0.3px; transition: all 0.3s ease;
+            white-space: nowrap; font-family: var(--font-main); letter-spacing: 0.3px; transition: all 0.3s ease;
         }
         .btn-saved-address.active-found {
             background: var(--green-gradient) !important; color: #ffffff !important;
-            box-shadow: 0 4px 15px rgba(0, 230, 118, 0.3) !important;
         }
 
         .iti { width: 100% !important; }
@@ -106,7 +104,7 @@
         .iti__country-list { 
             background-color: #0b0b10 !important; border: 1px solid rgba(212, 175, 55, 0.3) !important; 
             color: #ffffff !important; text-transform: none !important; max-height: 220px !important; width: 280px !important; z-index: 99999 !important;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.9); border-radius: 10px;
+            border-radius: 10px;
         }
         .iti__country { padding: 8px 10px; }
         .iti__country:hover { background-color: rgba(212, 175, 55, 0.1) !important; }
@@ -148,7 +146,7 @@
             border-radius: 12px; overflow: hidden; transition: all 0.25s ease; cursor: pointer; width: 100%;
         }
         .payment-method-item.active {
-            border-color: var(--gold-solid); background: rgba(24, 24, 36, 0.85); box-shadow: 0 0 15px rgba(212, 175, 55, 0.12);
+            border-color: var(--gold-solid); background: rgba(24, 24, 36, 0.85);
         }
         .payment-method-header { padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
         .payment-method-title { display: flex; align-items: center; gap: 12px; font-size: 0.78rem; font-weight: 700; color: #fff; }
@@ -171,7 +169,7 @@
             background: var(--gold-gradient); color: #000000; font-weight: 800; font-size: 0.85rem;
             padding: 12px 16px; border-radius: 25px; border: none; display: flex; align-items: center;
             justify-content: center; gap: 8px; cursor: pointer; letter-spacing: 0.8px; width: 100%; max-width: 420px;
-            box-shadow: 0 4px 20px rgba(212,175,55,0.25); transition: transform 0.15s ease-in-out; font-family: var(--font-main);
+            transition: transform 0.15s ease-in-out; font-family: var(--font-main);
         }
         .btn-action-main:active { transform: scale(0.97); }
 
@@ -187,7 +185,7 @@
 
         #toastBox {
             position: fixed; bottom: 75px; left: 50%; transform: translateX(-50%); background: #14141c; color: #ffffff; padding: 10px 16px;
-            border-radius: 8px; border: 1px solid rgba(212, 175, 55, 0.3); box-shadow: 0 5px 20px rgba(0,0,0,0.85); z-index: 9999999; display: none; font-size: 0.72rem; font-weight: 600; text-transform: none !important; width: 90%; max-width: 340px; text-align: center;
+            border-radius: 8px; border: 1px solid rgba(212, 175, 55, 0.3); z-index: 9999999; display: none; font-size: 0.72rem; font-weight: 600; text-transform: none !important; width: 90%; max-width: 340px; text-align: center;
         }
     </style>
 </head>
@@ -759,8 +757,10 @@
                 return sum + (pNum * item.qty);
             }, 0);
 
+            let masterOrderId = 'RRX-RET-' + Math.floor(100000 + Math.random() * 900000);
+
             let cloudflareDbPayload = {
-                master_order_id: 'RRX-RET-' + Math.floor(100000 + Math.random() * 900000),
+                master_order_id: masterOrderId,
                 customer_name: orderPayload.customer.fullName,
                 customer_phone: orderPayload.customer.phone,
                 shipping_address: orderPayload.customer.address,
@@ -784,7 +784,7 @@
             showToast("Submitting order to Cloudflare D1...");
 
             try {
-                let response = await fetch(`${API_BASE_URL}/api/post?table=${targetTable}`, {
+                let response = await fetch(`${API_BASE_URL}/api/orders?table=${targetTable}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(cloudflareDbPayload)
