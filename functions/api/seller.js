@@ -56,13 +56,16 @@ export async function onRequest(context) {
           default_payout_details, logo_url
         } = body;
 
-        // ডেটাবেসের কলামগুলোর সাথে সুনির্দিষ্টভাবে বাইন্ড করা হয়েছে
+        // created_at এবং updated_at হ্যান্ডেল করার জন্য datetime('now') যুক্ত করা হয়েছে
         const query = `
           INSERT OR REPLACE INTO seller_profiles (
             seller_id, brand_name, full_name, business_desc, email, whatsapp, 
             emergency_phone, country, full_address, doc_type, doc_number, 
-            default_payout_method, default_payout_details, logo_url, status
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'ACTIVE')
+            default_payout_method, default_payout_details, logo_url, status, created_at, updated_at
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'ACTIVE', 
+            COALESCE((SELECT created_at FROM seller_profiles WHERE seller_id = ?), datetime('now')), 
+            datetime('now')
+          )
         `;
 
         await env.retail.prepare(query).bind(
@@ -79,7 +82,8 @@ export async function onRequest(context) {
           doc_number || "", 
           default_payout_method || "bKash", 
           default_payout_details || "N/A", 
-          logo_url || ""
+          logo_url || "",
+          seller_id || 1
         ).run();
 
         return new Response(JSON.stringify({ success: true, message: "Seller profile saved successfully!" }), {
