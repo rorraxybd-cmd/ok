@@ -19,15 +19,15 @@
     <style>
         :root {
             --bg-retail: #000000;
-            --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
+            --gold-gradient: linear-gradient(135deg, #dfb75c 0%, #fef3c7 25%, #c59b27 50%, #fef3c7 75%, #b38728 100%);
             --green-gradient: linear-gradient(135deg, #00b09b, #96c93d);
             --gold-solid: #d4af37;
             --danger-red: #ff3b30;
             --text-white: #ffffff;
-            --text-gray: #a0a0b8;
+            --text-gray: #c0c0d0;
             --font-main: 'Poppins', 'Plus Jakarta Sans', sans-serif;
-            --card-bg: #09090d;
-            --input-bg: #12121a;
+            --card-bg: #0b0b10;
+            --input-bg: #14141d;
         }
 
         * { box-sizing: border-box !important; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -39,45 +39,45 @@
         }
 
         .checkout-container {
-            max-width: 780px; width: 100%; margin: 0 auto; padding: 20px 12px 110px 12px; display: flex; flex-direction: column; gap: 16px;
+            max-width: 760px; width: 100%; margin: 0 auto; padding: 20px 12px 110px 12px; display: flex; flex-direction: column; gap: 16px;
         }
 
         .cart-brand-logo {
             width: 105px; height: auto; object-fit: contain; margin: 0 auto; display: block;
-            filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.3));
+            filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.25));
         }
 
         .cart-items-box {
             background: var(--card-bg); border-radius: 14px; padding: 12px; width: 100%;
             display: flex; flex-direction: column; gap: 8px; max-height: 320px; overflow-y: auto;
-            border: 1px solid rgba(212,175,55,0.12);
+            border: 1px solid rgba(212,175,55,0.18);
         }
         .cart-row-item { 
-            display: flex; align-items: center; justify-content: space-between; background: #0f0f17; padding: 8px 10px; border-radius: 10px; gap: 8px;
-            border: 1px solid rgba(255,255,255,0.03);
+            display: flex; align-items: center; justify-content: space-between; background: #12121a; padding: 8px 10px; border-radius: 10px; gap: 8px;
+            border: 1px solid rgba(255,255,255,0.06);
         }
-        .cart-img { width: 42px; height: 42px; object-fit: cover; border-radius: 6px; background: #000; flex-shrink: 0; }
+        .cart-img { width: 40px; height: 40px; object-fit: cover; border-radius: 6px; background: #000; flex-shrink: 0; }
 
         .summary-card-box {
             width: 100%; background: var(--card-bg); padding: 14px; border-radius: 12px;
-            display: flex; flex-direction: column; gap: 8px; border: 1px solid rgba(212,175,55,0.12);
+            display: flex; flex-direction: column; gap: 8px; border: 1px solid rgba(212,175,55,0.18);
         }
-        .summary-row { display: flex; justify-content: space-between; align-items: center; width: 100%; font-size: 0.72rem; }
+        .summary-row { display: flex; justify-content: space-between; align-items: center; width: 100%; font-size: 0.74rem; font-weight: 600; color: var(--text-gray); }
 
         .address-form-section {
             display: flex; background: var(--card-bg); border-radius: 16px; padding: 16px 14px; flex-direction: column; gap: 12px; 
-            border: 1px solid rgba(212,175,55,0.14);
+            border: 1px solid rgba(212,175,55,0.2);
         }
-        .section-center-header { text-align: center; border-bottom: 1px solid rgba(212,175,55,0.08); padding-bottom: 8px; }
-        .section-center-header h2 { font-size: 0.82rem; font-weight: 800; letter-spacing: 1px; display: inline-flex; align-items: center; gap: 6px; }
+        .section-center-header { text-align: center; border-bottom: 1px solid rgba(212,175,55,0.12); padding-bottom: 8px; }
+        .section-center-header h2 { font-size: 0.84rem; font-weight: 800; letter-spacing: 1px; display: inline-flex; align-items: center; gap: 6px; color: #fff; }
 
-        .luxury-form-label { font-size: 0.62rem; color: #ffffff !important; font-weight: 700; letter-spacing: 0.5px; display: block; margin-bottom: 4px; }
+        .luxury-form-label { font-size: 0.64rem; color: #ffffff !important; font-weight: 700; letter-spacing: 0.5px; display: block; margin-bottom: 4px; }
         .luxury-form-input {
-            background: var(--input-bg) !important; border: 1px solid rgba(212, 175, 55, 0.15) !important; 
+            background: var(--input-bg) !important; border: 1px solid rgba(212, 175, 55, 0.25) !important; 
             padding: 11px 12px !important; border-radius: 9px !important; color: #ffffff !important; 
-            font-size: 0.8rem !important; font-family: var(--font-main) !important; width: 100% !important; outline: none !important;
+            font-size: 0.82rem !important; font-family: var(--font-main) !important; width: 100% !important; outline: none !important;
         }
-        .luxury-form-input:focus { border-color: var(--gold-solid) !important; }
+        .luxury-form-input:focus { border-color: var(--gold-solid) !important; box-shadow: 0 0 8px rgba(212,175,55,0.2); }
         .luxury-form-input.input-error { border: 1.5px solid var(--danger-red) !important; }
 
         .phone-check-container { display: flex; flex-direction: column; gap: 6px; width: 100%; }
@@ -93,35 +93,35 @@
         .btn-saved-address.active-found { background: var(--green-gradient) !important; color: #ffffff !important; }
 
         .iti { width: 100% !important; }
-        .iti__selected-flag { background-color: rgba(255, 255, 255, 0.03) !important; border-radius: 9px 0 0 9px !important; border-right: 1px solid rgba(212, 175, 55, 0.15) !important; }
+        .iti__selected-flag { background-color: rgba(255, 255, 255, 0.05) !important; border-radius: 9px 0 0 9px !important; border-right: 1px solid rgba(212, 175, 55, 0.2) !important; }
         .iti input[type="tel"] { padding-left: 88px !important; width: 100% !important; color: #ffffff !important; }
         .iti__country-list { 
-            background-color: #0b0b10 !important; border: 1px solid rgba(212, 175, 55, 0.3) !important; 
+            background-color: #0b0b10 !important; border: 1px solid rgba(212, 175, 55, 0.4) !important; 
             color: #ffffff !important; text-transform: none !important; max-height: 200px !important; width: 260px !important; z-index: 99999 !important;
             border-radius: 9px;
         }
         .iti__country { padding: 8px 10px; }
-        .iti__country:hover { background-color: rgba(212, 175, 55, 0.1) !important; }
+        .iti__country:hover { background-color: rgba(212, 175, 55, 0.15) !important; }
         .iti__selected-dial-code { color: #ffffff !important; font-weight: 700; }
 
         .saved-history-container {
-            display: none; flex-direction: column; gap: 6px; background: #0f0f17; padding: 8px; border-radius: 9px;
-            border: 1px solid rgba(0, 230, 118, 0.3); margin-top: 4px;
+            display: none; flex-direction: column; gap: 6px; background: #12121a; padding: 8px; border-radius: 9px;
+            border: 1px solid rgba(0, 230, 118, 0.4); margin-top: 4px;
         }
         .history-title { font-size: 0.6rem; color: #00e676; font-weight: 700; text-transform: uppercase !important; }
 
         .address-card-item {
-            background: #141420; border: 1px solid rgba(212,175,55,0.15); padding: 6px 8px; border-radius: 7px;
+            background: #181824; border: 1px solid rgba(212,175,55,0.2); padding: 6px 8px; border-radius: 7px;
             cursor: pointer; display: flex; flex-direction: column; gap: 2px;
         }
         .address-card-item:hover, .address-card-item.selected-card { border-color: #00e676; background: #18241c; }
-        .address-card-name { font-size: 0.7rem; font-weight: 700; color: #fff; }
-        .address-card-text { font-size: 0.62rem; color: var(--text-gray); text-transform: none !important; line-height: 1.3; }
+        .address-card-name { font-size: 0.72rem; font-weight: 700; color: #fff; }
+        .address-card-text { font-size: 0.64rem; color: var(--text-gray); text-transform: none !important; line-height: 1.3; }
 
         .or-divider {
             display: flex; align-items: center; text-align: center; margin: 2px 0; color: var(--text-gray); font-size: 0.58rem; font-weight: 700;
         }
-        .or-divider::before, .or-divider::after { content: ''; flex: 1; border-bottom: 1px solid rgba(212,175,55,0.08); }
+        .or-divider::before, .or-divider::after { content: ''; flex: 1; border-bottom: 1px solid rgba(212,175,55,0.12); }
         .or-divider span { padding: 0 8px; color: var(--gold-solid); }
 
         #step2PaymentSection { display: none; flex-direction: column; gap: 14px; animation: fadeIn 0.3s ease-in-out; }
@@ -131,44 +131,56 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .payment-accordion-group { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+        .payment-accordion-group { display: flex; flex-direction: column; gap: 12px; width: 100%; }
 
         .payment-method-item {
-            background: rgba(18, 18, 26, 0.6); border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 12px; overflow: hidden; transition: all 0.2s ease; cursor: pointer; width: 100%;
+            background: rgba(18, 18, 26, 0.8); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px; overflow: hidden; transition: all 0.2s ease; cursor: pointer; width: 100%;
         }
-        .payment-method-item.active { border-color: var(--gold-solid); background: rgba(24, 24, 36, 0.95); }
-        .payment-method-header { padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
-        .payment-method-title { display: flex; align-items: center; justify-content: space-between; font-size: 0.76rem; font-weight: 800; color: #fff; }
+        .payment-method-item.active { border-color: var(--gold-solid); background: rgba(24, 24, 36, 0.98); box-shadow: 0 0 12px rgba(212,175,55,0.15); }
+        .payment-method-header { padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+        .payment-method-title { display: flex; align-items: center; justify-content: space-between; font-size: 0.78rem; font-weight: 800; color: #fff; }
 
-        .badge-global-gold { background: var(--gold-gradient); color: #000; font-size: 0.58rem; font-weight: 900; padding: 3px 8px; border-radius: 5px; letter-spacing: 0.5px; }
-        .badge-local-bd { background: linear-gradient(135deg, #0052d4, #4364f7); color: #fff; font-size: 0.58rem; font-weight: 900; padding: 3px 8px; border-radius: 5px; }
-        .badge-bkash-bd { background: #e2136e; color: #fff; font-size: 0.58rem; font-weight: 900; padding: 3px 8px; border-radius: 5px; }
+        .badge-global-gold { background: var(--gold-gradient); color: #000; font-size: 0.6rem; font-weight: 900; padding: 4px 10px; border-radius: 6px; letter-spacing: 0.5px; cursor: pointer; transition: transform 0.1s; }
+        .badge-global-gold:active { transform: scale(0.95); }
+        .badge-local-bd { background: linear-gradient(135deg, #0052d4, #4364f7); color: #fff; font-size: 0.6rem; font-weight: 900; padding: 4px 10px; border-radius: 6px; }
 
         .payout-icons-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 4px; }
         .payout-badge {
-            display: inline-flex; align-items: center; gap: 4px; background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 6px;
-            font-size: 0.62rem; font-weight: 700; color: #e0e0e0; border: 1px solid rgba(255,255,255,0.08); text-transform: none !important;
+            display: inline-flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.07); padding: 5px 9px; border-radius: 7px;
+            font-size: 0.65rem; font-weight: 700; color: #ffffff; border: 1px solid rgba(255,255,255,0.12); text-transform: none !important;
         }
-        .payout-badge i { font-size: 0.85rem; }
+        .payout-badge i { font-size: 0.9rem; }
+
+        /* CURRENCIES MODAL OVERLAY */
+        #currenciesModal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
+            z-index: 99999999; display: none; align-items: center; justify-content: center; padding: 15px;
+        }
+        .modal-content-box {
+            background: #0f0f18; border: 1px solid var(--gold-solid); border-radius: 16px; width: 100%; max-width: 440px;
+            padding: 20px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.9);
+        }
+        .currency-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-height: 260px; overflow-y: auto; padding-right: 4px; }
+        .currency-tag { background: #181824; border: 1px solid rgba(212,175,55,0.2); padding: 8px; border-radius: 6px; text-align: center; font-size: 0.7rem; font-weight: 700; color: #fff; }
 
         .single-fixed-checkout-wrapper {
             position: fixed; bottom: 0; left: 0; right: 0; z-index: 99999;
-            background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.96); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
             padding: 10px 12px; display: flex; justify-content: center; align-items: center; gap: 8px;
-            border-top: 1px solid rgba(212, 175, 55, 0.15);
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
         }
         .btn-action-main {
-            background: var(--gold-gradient); color: #000000; font-weight: 800; font-size: 0.82rem;
+            background: var(--gold-gradient); color: #000000; font-weight: 800; font-size: 0.84rem;
             padding: 12px 16px; border-radius: 22px; border: none; display: flex; align-items: center;
             justify-content: center; gap: 8px; cursor: pointer; letter-spacing: 0.6px; width: 100%; max-width: 400px;
-            font-family: var(--font-main);
+            font-family: var(--font-main); box-shadow: 0 4px 15px rgba(212,175,55,0.25);
         }
         .btn-action-main:active { transform: scale(0.97); }
 
         .btn-back-step {
-            background: rgba(255, 255, 255, 0.08); color: #ffffff; font-weight: 700; font-size: 0.72rem;
-            padding: 12px 16px; border-radius: 22px; border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.1); color: #ffffff; font-weight: 700; font-size: 0.72rem;
+            padding: 12px 16px; border-radius: 22px; border: 1px solid rgba(255, 255, 255, 0.18);
             display: none; align-items: center; justify-content: center; gap: 5px; cursor: pointer; flex-shrink: 0;
             font-family: var(--font-main);
         }
@@ -177,14 +189,49 @@
         .gold-gradient-price { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; }
 
         #toastBox {
-            position: fixed; bottom: 75px; left: 50%; transform: translateX(-50%); background: #14141c; color: #ffffff; padding: 8px 14px;
-            border-radius: 8px; border: 1px solid rgba(212, 175, 55, 0.3); z-index: 9999999; display: none; font-size: 0.7rem; font-weight: 600; text-transform: none !important; width: 90%; max-width: 320px; text-align: center;
+            position: fixed; bottom: 75px; left: 50%; transform: translateX(-50%); background: #181824; color: #ffffff; padding: 9px 16px;
+            border-radius: 8px; border: 1px solid rgba(212, 175, 55, 0.4); z-index: 9999999; display: none; font-size: 0.72rem; font-weight: 700; text-transform: none !important; width: 90%; max-width: 320px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.8);
         }
     </style>
 </head>
 <body>
 
     <div id="toastBox"></div>
+
+    <!-- 150+ CURRENCIES POPUP MODAL -->
+    <div id="currenciesModal">
+        <div class="modal-content-box">
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(212,175,55,0.2); padding-bottom:8px;">
+                <h3 class="gold-gradient-text" style="font-size:0.85rem;"><i class="fa-solid fa-globe"></i> SUPPORTED CURRENCIES (150+)</h3>
+                <button type="button" onclick="closeCurrenciesModal()" style="background:none; border:none; color:#ff3b30; font-size:1rem; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div style="font-size:0.680rem; color:var(--text-gray); text-transform:none !important; line-height:1.4;">
+                Our global gateway automatically accepts over 150+ international currencies with real-time conversion rates:
+            </div>
+            <div class="currency-grid" id="currencyGridList">
+                <div class="currency-tag">USD ($)</div>
+                <div class="currency-tag">EUR (€)</div>
+                <div class="currency-tag">GBP (£)</div>
+                <div class="currency-tag">CAD ($)</div>
+                <div class="currency-tag">AUD ($)</div>
+                <div class="currency-tag">SGD ($)</div>
+                <div class="currency-tag">AED (د.إ)</div>
+                <div class="currency-tag">SAR (ر.س)</div>
+                <div class="currency-tag">INR (₹)</div>
+                <div class="currency-tag">MYR (RM)</div>
+                <div class="currency-tag">JPY (¥)</div>
+                <div class="currency-tag">CNY (¥)</div>
+                <div class="currency-tag">CHF (Fr)</div>
+                <div class="currency-tag">SEK (kr)</div>
+                <div class="currency-tag">NZD ($)</div>
+                <div class="currency-tag">QAR (ر.ق)</div>
+                <div class="currency-tag">KWD (د.ك)</div>
+                <div class="currency-tag">BHD (د.ب)</div>
+                <div class="currency-tag">+ 130 MORE</div>
+            </div>
+            <button type="button" onclick="closeCurrenciesModal()" style="background:var(--gold-gradient); color:#000; border:none; padding:10px; border-radius:8px; font-weight:800; font-size:0.75rem; cursor:pointer; margin-top:4px;">CLOSE WINDOW</button>
+        </div>
+    </div>
 
     <div class="checkout-container">
         
@@ -207,12 +254,12 @@
                     <span style="font-weight:700; color:var(--text-gray);">TOTAL QUANTITY:</span>
                     <span id="cartTotalQty" style="font-weight:800; color:var(--gold-solid);">0 UNITS</span>
                 </div>
-                <div style="border-top: 1px solid rgba(212,175,55,0.06); margin: 2px 0;"></div>
+                <div style="border-top: 1px solid rgba(212,175,55,0.1); margin: 2px 0;"></div>
                 <div class="summary-row">
                     <span style="font-weight:700; color:var(--text-gray);">TOTAL AMOUNT:</span>
                     <div style="text-align:right;">
                         <span id="cartTotalVal" class="gold-gradient-price" style="font-size:1rem;">$0.00</span>
-                        <span id="cartLocalVal" style="font-size:0.62rem; color:var(--text-gray); font-weight:600; margin-left:5px;">--</span>
+                        <span id="cartLocalVal" style="font-size:0.64rem; color:var(--text-gray); font-weight:600; margin-left:5px;">--</span>
                     </div>
                 </div>
             </div>
@@ -272,51 +319,38 @@
 
                 <div class="payment-accordion-group">
 
-                    <!-- INTERNATIONAL PAYMENT GATEWAY -->
-                    <div class="payment-method-item active" id="method-payoneer" onclick="selectPaymentMethod('International Cards / Wallet', 'method-payoneer')">
+                    <!-- INTERNATIONAL CARDS -->
+                    <div class="payment-method-item active" id="method-intl" onclick="selectPaymentMethod('International Cards', 'method-intl')">
                         <div class="payment-method-header">
                             <div class="payment-method-title">
-                                <span><i class="fa-solid fa-globe" style="color:var(--gold-solid); margin-right:6px;"></i> INTERNATIONAL CARDS & WALLETS</span>
-                                <span class="badge-global-gold">150+ CURRENCIES</span>
+                                <span><i class="fa-solid fa-globe" style="color:var(--gold-solid); margin-right:6px;"></i> INTERNATIONAL CARDS</span>
+                                <span class="badge-global-gold" onclick="event.stopPropagation(); openCurrenciesModal();">150+ CURRENCIES <i class="fa-solid fa-circle-info"></i></span>
                             </div>
                             <div class="payout-icons-row">
-                                <span class="payout-badge"><i class="fa-brands fa-cc-visa" style="color:#fff;"></i> VISA</span>
-                                <span class="payout-badge"><i class="fa-brands fa-cc-mastercard" style="color:#ff5f00;"></i> MASTERCARD</span>
-                                <span class="payout-badge"><i class="fa-brands fa-cc-amex" style="color:#006fcf;"></i> AMEX</span>
-                                <span class="payout-badge"><i class="fa-brands fa-cc-discover" style="color:#f9a01b;"></i> DISCOVER</span>
+                                <span class="payout-badge"><i class="fa-brands fa-cc-visa" style="color:#60a5fa;"></i> VISA</span>
+                                <span class="payout-badge"><i class="fa-brands fa-cc-mastercard" style="color:#f97316;"></i> MASTERCARD</span>
+                                <span class="payout-badge"><i class="fa-brands fa-cc-amex" style="color:#38bdf8;"></i> AMEX</span>
+                                <span class="payout-badge"><i class="fa-brands fa-cc-discover" style="color:#fbbf24;"></i> DISCOVER</span>
                                 <span class="payout-badge"><i class="fa-brands fa-apple-pay" style="color:#fff;"></i> APPLE PAY</span>
-                                <span class="payout-badge"><i class="fa-brands fa-google-pay" style="color:#ea4335;"></i> G PAY</span>
+                                <span class="payout-badge"><i class="fa-brands fa-google-pay" style="color:#ef4444;"></i> G PAY</span>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- BANGLADESH LOCAL GATEWAY -->
-                    <div class="payment-method-item" id="method-ssl" onclick="selectPaymentMethod('BD Local Gateway (SSL)', 'method-ssl')">
+                    <!-- BANGLADESH CARDS -->
+                    <div class="payment-method-item" id="method-bd" onclick="selectPaymentMethod('Bangladesh Cards', 'method-bd')">
                         <div class="payment-method-header">
                             <div class="payment-method-title">
-                                <span><i class="fa-solid fa-building-columns" style="color:#4364f7; margin-right:6px;"></i> BANGLADESH LOCAL CARDS & WALLETS</span>
+                                <span><i class="fa-solid fa-building-columns" style="color:#3b82f6; margin-right:6px;"></i> BANGLADESH CARDS</span>
                                 <span class="badge-local-bd">BDT PAYMENT</span>
                             </div>
                             <div class="payout-icons-row">
-                                <span class="payout-badge" style="color:#e2136e; font-weight:800;"><i class="fa-solid fa-mobile-screen"></i> bKash</span>
-                                <span class="payout-badge" style="color:#f7931e; font-weight:800;"><i class="fa-solid fa-wallet"></i> Nagad</span>
-                                <span class="payout-badge" style="color:#8c3494; font-weight:800;"><i class="fa-solid fa-rocket"></i> Rocket</span>
-                                <span class="payout-badge"><i class="fa-brands fa-cc-visa" style="color:#fff;"></i> Local Visa</span>
-                                <span class="payout-badge"><i class="fa-brands fa-cc-mastercard" style="color:#ff5f00;"></i> Mastercard</span>
+                                <span class="payout-badge" style="color:#f43f5e; font-weight:800;"><i class="fa-solid fa-mobile-screen"></i> bKash</span>
+                                <span class="payout-badge" style="color:#fb923c; font-weight:800;"><i class="fa-solid fa-wallet"></i> Nagad</span>
+                                <span class="payout-badge" style="color:#c084fc; font-weight:800;"><i class="fa-solid fa-rocket"></i> Rocket</span>
+                                <span class="payout-badge"><i class="fa-brands fa-cc-visa" style="color:#60a5fa;"></i> Local Visa</span>
+                                <span class="payout-badge"><i class="fa-brands fa-cc-mastercard" style="color:#f97316;"></i> Mastercard</span>
                                 <span class="payout-badge"><i class="fa-solid fa-money-check-dollar"></i> Net Banking</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- BKASH DIRECT CHECKOUT (BACKUP) -->
-                    <div class="payment-method-item" id="method-bkash" onclick="selectPaymentMethod('bKash Direct Wallet', 'method-bkash')">
-                        <div class="payment-method-header">
-                            <div class="payment-method-title">
-                                <span><i class="fa-solid fa-mobile-screen-button" style="color:#e2136e; margin-right:6px;"></i> BKASH DIRECT CHECKOUT</span>
-                                <span class="badge-bkash-bd">FAST CHECKOUT</span>
-                            </div>
-                            <div class="payout-icons-row">
-                                <span class="payout-badge" style="color:#e2136e; font-weight:800;"><i class="fa-solid fa-check-circle"></i> 1-Tap bKash Personal/Merchant Pay</span>
                             </div>
                         </div>
                     </div>
@@ -326,17 +360,17 @@
 
             <div class="summary-card-box">
                 <div class="summary-row">
-                    <span style="color:var(--text-gray); font-weight:700;">SUBTOTAL:</span>
+                    <span>SUBTOTAL:</span>
                     <span id="summarySubtotal" style="font-weight:800; color:#fff;">$0.00 USD</span>
                 </div>
                 <div class="summary-row">
-                    <span style="color:var(--text-gray); font-weight:700;">SHIPPING:</span>
+                    <span>SHIPPING:</span>
                     <span style="color:#00e676; font-weight:800;">FREE</span>
                 </div>
-                <div style="border-top: 1px dashed rgba(255,255,255,0.08); margin: 3px 0;"></div>
+                <div style="border-top: 1px dashed rgba(212,175,55,0.12); margin: 3px 0;"></div>
                 <div class="summary-row" style="align-items: center;">
                     <span style="font-size:0.78rem; font-weight:800; color:var(--gold-solid);">TOTAL PAYABLE:</span>
-                    <span id="summaryTotalDisplay" class="gold-gradient-price" style="font-size:0.9rem; text-align:right;">$0.00 USD</span>
+                    <span id="summaryTotalDisplay" class="gold-gradient-price" style="font-size:0.92rem; text-align:right;">$0.00 USD</span>
                 </div>
             </div>
 
@@ -361,7 +395,7 @@
         let currentExchangeRate = 120;
         let currentCurrencyCode = "BDT";
         let currentCountryFlag = "🇧🇩";
-        window.selectedPaymentType = "International Cards / Wallet";
+        window.selectedPaymentType = "International Cards";
 
         window.addEventListener('DOMContentLoaded', () => {
             renderCartList();
@@ -382,6 +416,14 @@
                 document.getElementById(id).addEventListener('input', () => clearError(id));
             });
         });
+
+        function openCurrenciesModal() {
+            document.getElementById('currenciesModal').style.display = 'flex';
+        }
+
+        function closeCurrenciesModal() {
+            document.getElementById('currenciesModal').style.display = 'none';
+        }
 
         function clearError(fieldId) {
             document.getElementById(fieldId).classList.remove('input-error');
@@ -728,7 +770,7 @@
                 customer_phone: orderPayload.customer.phone,
                 shipping_address: orderPayload.customer.address,
                 customer_country: "Bangladesh",
-                payment_method: window.selectedPaymentType || "International Cards / Wallet",
+                payment_method: window.selectedPaymentType || "International Cards",
                 payment_status: "Paid",
                 transaction_id: "TRX-" + Math.floor(10000000 + Math.random() * 90000000),
                 total_amount: totalAmountVal,
@@ -770,7 +812,7 @@
         function showToast(msg, isErr = false) {
             let toast = document.getElementById('toastBox');
             toast.innerText = msg;
-            toast.style.borderColor = isErr ? 'var(--danger-red)' : 'rgba(212, 175, 55, 0.3)';
+            toast.style.borderColor = isErr ? 'var(--danger-red)' : 'rgba(212, 175, 55, 0.4)';
             toast.style.color = isErr ? '#ff4d4d' : '#ffffff';
             toast.style.display = 'block';
             setTimeout(() => { toast.style.display = 'none'; }, 3200);
