@@ -58,9 +58,10 @@
             z-index: 99999;
         }
 
+        /* রিলস স্টাইল লম্বালম্বি কন্টেইনার (Vertical Feed Layout) */
         .account-container {
             width: 100%;
-            max-width: 620px;
+            max-width: 440px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -74,7 +75,7 @@
             to { opacity: 1; transform: scale(1); }
         }
 
-        /* Clean Soft Search Bar without harsh borders */
+        /* Clean Soft Search Bar */
         .search-tracking-box {
             width: 100%;
             background: var(--card-bg);
@@ -157,50 +158,54 @@
             cursor: pointer;
         }
 
-        /* MEMO & PREVIEW CARD */
+        /* MEMO & PREVIEW CARD (Vertical Reels Format) */
         .memo-preview-card {
             background: var(--card-bg);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            border-radius: 16px;
-            padding: 18px;
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            border-radius: 18px;
+            padding: 20px;
             width: 100%;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 14px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
         }
 
         .memo-top-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 12px;
         }
 
         .download-pdf-btn {
             background: var(--gold-gradient);
             color: #000;
             border: none;
-            padding: 10px 18px;
-            border-radius: 20px;
-            font-size: 0.72rem;
+            padding: 11px 20px;
+            border-radius: 22px;
+            font-size: 0.74rem;
             font-weight: 900;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
             transition: transform 0.1s;
         }
         .download-pdf-btn:active { transform: scale(0.96); }
 
         .memo-details-grid {
             background: #030305;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            border-radius: 8px;
-            padding: 10px 12px;
-            font-size: 0.68rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 0.7rem;
             color: var(--text-muted);
-            line-height: 1.5;
+            line-height: 1.6;
         }
         .memo-details-grid span { color: #fff; font-weight: 700; }
 
@@ -208,20 +213,21 @@
         .memo-items-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.7rem;
+            font-size: 0.72rem;
             margin-top: 2px;
         }
         .memo-items-table th, .memo-items-table td {
-            padding: 8px 6px;
+            padding: 10px 8px;
             text-align: left;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
         }
+        /* গোল্ডেন গ্রেডিয়েন্ট হেডার টেক্সট */
         .memo-items-table th {
             background: var(--gold-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: 900;
-            font-size: 0.65rem;
+            font-size: 0.7rem;
             letter-spacing: 0.5px;
         }
 
@@ -229,16 +235,16 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: 900;
             color: var(--gold-color);
-            border-top: 1px solid rgba(212, 175, 55, 0.12);
-            padding-top: 8px;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            padding-top: 10px;
             margin-top: 2px;
         }
 
         .section-title {
-            font-size: 0.72rem;
+            font-size: 0.74rem;
             font-weight: 800;
             background: var(--gold-gradient);
             -webkit-background-clip: text;
@@ -258,7 +264,7 @@
         
         <!-- Clean Soft Search Tracking Bar -->
         <div class="search-tracking-box">
-            <input type="text" id="orderSearchInput" class="search-input-field" placeholder="ENTER MASTER ID OR PHONE NUMBER">
+            <input type="text" id="orderSearchInput" class="search-input-field" placeholder="ENTER MASTER ID OR PHONE">
             <button onclick="executeOrderSearch()" class="search-submit-btn"><i class="fa-solid fa-magnifying-glass"></i> TRACK</button>
         </div>
 
@@ -380,7 +386,7 @@
 
                 itemsTableHtml += `
                     <tr>
-                        <td style="font-size:0.7rem; font-weight:700; color:#fff;">${title}</td>
+                        <td style="font-size:0.72rem; font-weight:700; color:#fff;">${title}</td>
                         <td style="text-align:center; font-weight:700;">${item.qty || 1}</td>
                         <td style="text-align:right; color:var(--gold-color); font-weight:900;">$${itemTotal.toFixed(2)}</td>
                     </tr>
@@ -397,15 +403,15 @@
                 <div class="memo-preview-card" id="printableMemoArea">
                     <div class="memo-top-row">
                         <div style="display:flex; align-items:center; gap:8px;">
-                            <img src="${BRAND_LOGO_URL}" crossorigin="anonymous" style="width:34px; height:auto;" alt="Logo">
+                            <img src="${BRAND_LOGO_URL}" crossorigin="anonymous" style="width:36px; height:auto;" alt="Logo">
                             <div>
-                                <h2 style="font-size:0.8rem; font-weight:900; background:var(--gold-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">RORRAXY RETAIL</h2>
-                                <p style="font-size:0.48rem; color:var(--text-muted);">DIGITAL MEMO</p>
+                                <h2 style="font-size:0.82rem; font-weight:900; background:var(--gold-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">RORRAXY RETAIL</h2>
+                                <p style="font-size:0.5rem; color:var(--text-muted);">DIGITAL MEMO</p>
                             </div>
                         </div>
                         <div style="text-align:right;">
-                            <p style="font-size:0.68rem; font-weight:900; color:#fff;">#${mainOrderId}</p>
-                            <p style="font-size:0.48rem; color:var(--text-muted);">${orderDate}</p>
+                            <p style="font-size:0.7rem; font-weight:900; color:#fff;">#${mainOrderId}</p>
+                            <p style="font-size:0.5rem; color:var(--text-muted);">${orderDate}</p>
                         </div>
                     </div>
 
@@ -435,7 +441,7 @@
                     </div>
                 </div>
 
-                <div style="display:flex; justify-content:flex-end; width:100%;">
+                <div style="width:100%;">
                     <button onclick="downloadMemoAsPDF('${mainOrderId}')" class="download-pdf-btn">
                         <i class="fa-solid fa-file-arrow-down"></i> DOWNLOAD MEMO PDF
                     </button>
@@ -446,7 +452,7 @@
         function downloadMemoAsPDF(orderId) {
             const element = document.getElementById('printableMemoArea');
             const options = {
-                margin:       8,
+                margin:       10,
                 filename:     `rorraxy-memo-${orderId}.pdf`,
                 image:        { type: 'jpeg', quality: 0.98 },
                 html2canvas:  { scale: 2, useCORS: true, logging: false },
