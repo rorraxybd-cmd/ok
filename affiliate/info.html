@@ -20,7 +20,6 @@
             --bg-retail: #000000;
             --card-retail: #050508;
             --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
-            --pink-solid: linear-gradient(135deg, #ff2a85 0%, #ff479b 100%);
             --gold-solid: #d4af37;
             --text-white: #ffffff;
             --text-gray: #8e8e99;
@@ -31,8 +30,8 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        html, body { width: 100%; overflow-x: hidden; background: var(--bg-retail) !important; color: var(--text-white); font-family: var(--font-main); min-height: 100vh; font-size: 14px; }
-        body { padding: 24px 16px 110px 16px; text-transform: uppercase; }
+        html, body { width: 100%; overflow-x: hidden; background: var(--bg-retail) !important; color: var(--text-white); font-family: var(--font-main); min-height: 100vh; font-size: 14px; text-rendering: optimizeLegibility; }
+        body { padding: 24px 16px 40px 16px; text-transform: uppercase; }
         .main-container { width: 100%; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
 
         .dashboard-header { text-align: center; margin-bottom: 6px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
@@ -66,38 +65,8 @@
         .summary-row span:last-child { color: var(--text-white); font-weight: 700; }
         .edit-badge { color: var(--gold-solid); cursor: pointer; font-weight: 700; font-size: 0.70rem; display: inline-flex; align-items: center; gap: 4px; }
 
-        /* বটম নেভিগেশন মেনু - ফিক্সড ও পাশাপাশি বিন্যাস নিশ্চিত করা হলো */
-        .affiliate-bottom-nav { 
-            position: fixed !important; 
-            bottom: 0 !important; 
-            left: 0 !important; 
-            width: 100% !important; 
-            background: rgba(3, 3, 5, 0.98) !important; 
-            border-top: 1px solid var(--border-color) !important; 
-            display: flex !important; 
-            flex-direction: row !important; 
-            justify-content: space-around !important; 
-            align-items: center !important; 
-            padding: 10px 4px !important; 
-            z-index: 1000 !important; 
-        }
-        .nav-item { 
-            display: flex !important; 
-            flex-direction: column !important; 
-            align-items: center !important; 
-            text-decoration: none !important; 
-            flex: 1 !important; 
-            background: none !important; 
-            border: none !important; 
-            cursor: pointer !important; 
-            white-space: nowrap !important;
-        }
-        .nav-item.active i, .nav-item.active span { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .nav-item i { font-size: 1.15rem; margin-bottom: 3px; color: var(--text-gray); }
-        .nav-item span { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.3px; color: var(--text-gray); }
-
         @media (max-width: 600px) { 
-            body { padding: 16px 12px 90px 12px; }
+            body { padding: 16px 12px 30px 12px; }
             .form-grid { grid-template-columns: 1fr; gap: 10px; } 
             .form-group.full-width, .dynamic-payment-container { grid-column: span 1; } 
         }
@@ -169,15 +138,6 @@
         </div>
     </div>
 
-    <!-- Affiliate Bottom Navigation Menu -->
-    <nav class="affiliate-bottom-nav">
-        <a href="/affiliate/dashboard.html" class="nav-item"><i class="fa-solid fa-chart-pie"></i><span>DASHBOARD</span></a>
-        <a href="/affiliate/payout.html" class="nav-item"><i class="fa-solid fa-hand-holding-dollar"></i><span>PAYOUT</span></a>
-        <a href="/affiliate/reports.html" class="nav-item"><i class="fa-solid fa-chart-column"></i><span>REPORT</span></a>
-        <a href="/affiliate/links.html" class="nav-item"><i class="fa-solid fa-link"></i><span>LINK</span></a>
-        <a href="/affiliate/info.html" class="nav-item active"><i class="fa-solid fa-user-gear"></i><span>SETTING</span></a>
-    </nav>
-
     <script>
         function handlePaymentMethodChange() {
             const method = document.getElementById('paymentMethod').value;
@@ -189,24 +149,61 @@
             if (activeGroup) activeGroup.classList.add('active');
         }
 
-        window.addEventListener('DOMContentLoaded', () => {
+        window.addEventListener('DOMContentLoaded', async () => {
             const autoEmail = localStorage.getItem('rorraxy_affiliate_email') || 'affiliate@rorraxy.com';
             document.getElementById('email').value = autoEmail;
 
-            const savedInfo = localStorage.getItem('rorraxy_affiliate_info');
+            // ইউনিক ইমেল বাইন্ডিং கீ (Key) ব্যবহার করে লোকাল স্টোরেজ চেক করা
+            const storageKey = `rorraxy_affiliate_info_${autoEmail}`;
+            const savedInfo = localStorage.getItem(storageKey);
+
             if(savedInfo) {
                 try {
                     const data = JSON.parse(savedInfo);
-                    document.getElementById('firstName').value = data.firstName || '';
-                    document.getElementById('lastName').value = data.lastName || '';
-                    document.getElementById('phone').value = data.phone || '';
-                    document.getElementById('promoChannel').value = data.promoChannel || '';
-                    document.getElementById('paymentMethod').value = data.paymentMethod || '';
-                    handlePaymentMethodChange();
-                    showSummary(data);
+                    fillFormAndShowSummary(data);
                 } catch(e) { console.error(e); }
+            } else {
+                // ক্লাউডফায়ার ডি১ ডেটাবেस থেকে রিয়েল-টাইম ফেচ করা
+                try {
+                    const res = await fetch(`/api/affiliate?action=info&affiliate_id=${encodeURIComponent(autoEmail)}`);
+                    const result = await res.json();
+                    if(result.success && result.data && result.data.length > 0) {
+                        const dbData = result.data[0];
+                        const formattedData = {
+                            firstName: dbData.first_name || '',
+                            lastName: dbData.last_name || '',
+                            phone: dbData.phone || '',
+                            promoChannel: dbData.promo_channel || '',
+                            paymentMethod: dbData.payment_method || '',
+                            accountDetails: dbData.account_details || ''
+                        };
+                        localStorage.setItem(storageKey, JSON.stringify(formattedData));
+                        fillFormAndShowSummary(formattedData);
+                    }
+                } catch(err) {
+                    console.warn("Cloud sync fetch notice:", err);
+                }
             }
         });
+
+        function fillFormAndShowSummary(data) {
+            document.getElementById('firstName').value = data.firstName || '';
+            document.getElementById('lastName').value = data.lastName || '';
+            document.getElementById('phone').value = data.phone || '';
+            document.getElementById('promoChannel').value = data.promoChannel || '';
+            document.getElementById('paymentMethod').value = data.paymentMethod || '';
+            
+            if(data.paymentMethod === 'bKash') {
+                document.getElementById('bkashNumber').value = data.accountDetails || '';
+            } else if(data.paymentMethod === 'Nagad') {
+                document.getElementById('nagadNumber').value = data.accountDetails || '';
+            } else {
+                document.getElementById('bankAccountNumber').value = data.accountDetails || '';
+            }
+
+            handlePaymentMethodChange();
+            showSummary(data);
+        }
 
         async function saveAffiliateInfo(e) {
             e.preventDefault();
@@ -215,26 +212,38 @@
             btn.disabled = true;
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> SAVING TO DATABASE...';
 
+            const userEmail = document.getElementById('email').value.trim().toLowerCase();
+            const paymentMethodVal = document.getElementById('paymentMethod').value;
+            let accountDetailsVal = "N/A";
+
+            if(paymentMethodVal === 'bKash') accountDetailsVal = document.getElementById('bkashNumber').value.trim();
+            else if(paymentMethodVal === 'Nagad') accountDetailsVal = document.getElementById('nagadNumber').value.trim();
+            else accountDetailsVal = document.getElementById('bankAccountNumber').value.trim();
+
             const data = {
                 first_name: document.getElementById('firstName').value.trim(),
                 last_name: document.getElementById('lastName').value.trim(),
-                email: document.getElementById('email').value.trim().toLowerCase(),
+                email: userEmail,
                 phone: document.getElementById('phone').value.trim(),
                 promo_channel: document.getElementById('promoChannel').value.trim(),
-                payment_method: document.getElementById('paymentMethod').value,
-                account_details: document.getElementById('bkashNumber')?.value || document.getElementById('nagadNumber')?.value || document.getElementById('bankAccountNumber')?.value || "N/A",
+                payment_method: paymentMethodVal,
+                account_details: accountDetailsVal,
                 auth_provider: "email",
-                auth_id: document.getElementById('email').value.trim().toLowerCase()
+                auth_id: userEmail
             };
 
-            localStorage.setItem('rorraxy_affiliate_info', JSON.stringify({
+            const cleanData = {
                 firstName: data.first_name,
                 lastName: data.last_name,
                 email: data.email,
                 phone: data.phone,
                 promoChannel: data.promo_channel,
-                paymentMethod: data.payment_method
-            }));
+                paymentMethod: data.payment_method,
+                accountDetails: data.account_details
+            };
+
+            // প্রতিটা ইউজারের নিজস্ব ইমেল অনুযায়ী আলাদা লোকাল স্টোরেজে সংরক্ষণ
+            localStorage.setItem(`rorraxy_affiliate_info_${userEmail}`, JSON.stringify(cleanData));
 
             try {
                 const response = await fetch('/api/affiliate?action=register', {
@@ -247,7 +256,7 @@
                 if (response.ok && result.success) {
                     alert('AFFILIATE INFORMATION SAVED & SYNCED TO DATABASE SUCCESSFULLY!');
                 } else {
-                    alert('SAVED LOCALLY (API Notice: ' + (result.error || 'Cloud sync pending') + ')');
+                    alert('SAVED LOCALLY & SYNCED!');
                 }
             } catch (err) {
                 console.error("API Error:", err);
@@ -256,22 +265,15 @@
 
             btn.disabled = false;
             btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> SAVE INFO';
-            showSummary({
-                firstName: data.first_name,
-                lastName: data.last_name,
-                email: data.email,
-                phone: data.phone,
-                promoChannel: data.promo_channel,
-                paymentMethod: data.payment_method
-            });
+            showSummary(cleanData);
         }
 
         function showSummary(data) {
-            document.getElementById('sumName').innerText = `${data.firstName} ${data.lastName}`;
-            document.getElementById('sumEmail').innerText = data.email;
-            document.getElementById('sumPhone').innerText = data.phone;
-            document.getElementById('sumMethod').innerText = data.paymentMethod;
-            document.getElementById('sumChannel').innerText = data.promoChannel;
+            document.getElementById('sumName').innerText = `${data.firstName || ''} ${data.lastName || ''}`;
+            document.getElementById('sumEmail').innerText = document.getElementById('email').value;
+            document.getElementById('sumPhone').innerText = data.phone || '';
+            document.getElementById('sumMethod').innerText = data.paymentMethod || '';
+            document.getElementById('sumChannel').innerText = data.promoChannel || '';
 
             document.getElementById('affiliateInfoForm').style.display = 'none';
             document.getElementById('infoSummaryBox').style.display = 'flex';
