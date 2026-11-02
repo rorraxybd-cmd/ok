@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>Affiliate Portal - rorraxy</title>
    
+    <!-- Favicon Logo -->
+    <link rel="icon" type="image/png" href="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png">
+
     <!-- Ecosystem Core Script -->
     <script src="/ecosystem-core.js"></script>
 
@@ -19,7 +22,7 @@
             --bg-retail: #000000;
             --card-retail: #050508;
             --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
-            --pink-gradient: linear-gradient(135deg, #ff2a8d 0%, #ff758c 50%, #ff7eb3 100%);
+            --pink-solid: linear-gradient(135deg, #ff2a85 0%, #ff479b 100%);
             --gold-solid: #d4af37;
             --text-white: #ffffff;
             --text-gray: #8e8e99;
@@ -41,7 +44,7 @@
         
         .auth-card {
             background: var(--card-retail);
-            border: 1px solid rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(255, 42, 133, 0.12);
             border-radius: 24px;
             width: 100%;
             padding: 38px 26px;
@@ -59,7 +62,7 @@
             object-fit: contain;
             margin: 0 auto;
             background: transparent !important;
-            filter: drop-shadow(0 6px 20px rgba(212, 175, 55, 0.2)) !important;
+            filter: drop-shadow(0 6px 20px rgba(255, 42, 133, 0.2)) !important;
         }
 
         .auth-title {
@@ -92,24 +95,31 @@
             letter-spacing: 0.8px;
         }
 
-        /* একদম সফট, শ্যাডো ছাড়া পিওর ব্ল্যাক ইনপুট ফিল্ড */
+        /* বর্ডার ছাড়া একদম সফট পিওর ব্ল্যাক ইনপুট ফিল্ড */
         .form-control {
             width: 100%;
             background: #000000;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: none;
             border-radius: 14px;
             padding: 14px 16px;
             color: var(--text-white);
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             outline: none;
             font-family: var(--font-main);
             text-transform: none;
             transition: all 0.25s ease;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.8);
         }
 
         .form-control:focus {
-            border-color: var(--gold-solid);
+            background: #030305;
+        }
+
+        .form-control::placeholder {
+            font-size: 0.75rem;
+            color: #555566;
+            text-transform: none;
         }
 
         .email-hint {
@@ -161,10 +171,10 @@
             text-align: center;
         }
 
-        /* পরবর্তী স্টেপের জন্য আকর্ষণীয় পিংক কালার বাটন */
+        /* চূড়ান্ত পিংক কালার বাটন - সাদা টেক্সট একদম স্পষ্ট ও উজ্জ্বল */
         .verify-action-btn {
             width: 100%;
-            background: var(--pink-gradient);
+            background: var(--pink-solid);
             border: none;
             border-radius: 14px;
             padding: 15px;
@@ -179,14 +189,14 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            box-shadow: 0 0 20px rgba(255, 42, 141, 0.35);
+            box-shadow: 0 0 25px rgba(255, 42, 133, 0.4);
             transition: all 0.25s ease;
         }
 
         .verify-action-btn:hover {
-            filter: brightness(1.15);
+            filter: brightness(1.12);
             transform: translateY(-2px);
-            box-shadow: 0 0 30px rgba(255, 42, 141, 0.55);
+            box-shadow: 0 0 35px rgba(255, 42, 133, 0.6);
         }
 
         @media (max-width: 480px) {
@@ -214,13 +224,13 @@
             <form id="magicLinkForm" class="auth-form">
                 <div class="form-group">
                     <label>EMAIL ADDRESS <span style="color:var(--required-red)">*</span></label>
-                    <input type="email" class="form-control" id="affiliateEmail" placeholder="Enter email (Gmail, Yahoo, Outlook...)" required style="text-transform: none;" autocomplete="email">
-                    <span class="email-hint"><i class="fa-solid fa-lock" style="color: var(--gold-solid);"></i> All verified emails supported</span>
+                    <input type="email" class="form-control" id="affiliateEmail" placeholder="Gmail, Yahoo, Outlook, Apple..." required style="text-transform: none;" autocomplete="email">
+                    <span class="email-hint"><i class="fa-solid fa-lock" style="color: #ff2a85;"></i> All verified emails supported</span>
                 </div>
                 
                 <div id="formStatus" class="status-msg"></div>
                 
-                <!-- সফলভাবে ভেরিফাই হওয়ার পর পিংক কালার বাটন দৃশ্যমান হবে -->
+                <!-- পরবর্তী ধাপের পিংক কালার বাটন -->
                 <div id="actionLinkBox" class="action-link-box">
                     <a id="verifyDirectBtn" href="#" target="_blank" class="verify-action-btn">
                         <i class="fa-solid fa-arrow-right-to-bracket"></i> ENTER DASHBOARD
@@ -265,9 +275,8 @@
 
             if (!email) return;
 
-            // হাই সিকিউরিটি চেক: ফেক বা টেম্প মেইল ব্লক করা
             if (!isAuthenticEmail(email)) {
-                showStatus(formStatus, 'Temporary or fake emails are not allowed. Use Gmail, Yahoo, Outlook, etc.', true);
+                showStatus(formStatus, 'Temporary or fake emails are not allowed.', true);
                 return;
             }
 
