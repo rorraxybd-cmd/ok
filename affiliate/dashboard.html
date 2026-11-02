@@ -99,12 +99,35 @@
             height: 100% !important; 
         }
 
-        /* Bottom Fixed Navigation Menu */
-        .seller-bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(3, 3, 5, 0.98); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; align-items: center; padding: 12px 6px; z-index: 1000; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; background: none; border: none; cursor: pointer; }
+        /* Bottom Fixed Navigation Menu - ফিক্সড ও পাশাপাশি বিন্যাস নিশ্চিত করা হলো */
+        .seller-bottom-nav { 
+            position: fixed !important; 
+            bottom: 0 !important; 
+            left: 0 !important; 
+            width: 100% !important; 
+            background: rgba(3, 3, 5, 0.98) !important; 
+            border-top: 1px solid var(--border-color) !important; 
+            display: flex !important; 
+            flex-direction: row !important; 
+            justify-content: space-around !important; 
+            align-items: center !important; 
+            padding: 10px 4px !important; 
+            z-index: 1000 !important; 
+        }
+        .nav-item { 
+            display: flex !important; 
+            flex-direction: column !important; 
+            align-items: center !important; 
+            text-decoration: none !important; 
+            flex: 1 !important; 
+            background: none !important; 
+            border: none !important; 
+            cursor: pointer !important; 
+            white-space: nowrap !important;
+        }
         .nav-item.active i, .nav-item.active span { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .nav-item i { font-size: 1.25rem; margin-bottom: 4px; color: var(--text-gray); }
-        .nav-item span { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.5px; color: var(--text-gray); }
+        .nav-item i { font-size: 1.15rem; margin-bottom: 3px; color: var(--text-gray); }
+        .nav-item span { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.3px; color: var(--text-gray); }
 
         @media (max-width: 1024px) {
             .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
@@ -263,7 +286,6 @@
             }
         }
 
-        // অ্যানিমেশনসহ সুন্দর গোল্ডেন গ্রেডিয়েন্ট গ্রাফ রেন্ডার ফাংশন
         function createDynamicSparkline(canvasId, dataPoints, isBar = false) {
             const canvas = document.getElementById(canvasId);
             if (!canvas) return;
@@ -310,7 +332,6 @@
 
         window.addEventListener('load', () => {
             setTimeout(() => {
-                // জিরো প্রাইস ঠিক রেখেই সুন্দর লাইভ অ্যানিমেশন গ্রাফ প্যাটার্ন যুক্ত করা হয়েছে
                 createDynamicSparkline('chartEarnings', [10, 25, 18, 35, 28, 45, 30]);
                 createDynamicSparkline('chartBalance', [5, 15, 12, 22, 18, 30, 25]);
                 createDynamicSparkline('chartClicks', [20, 45, 35, 60, 50, 80, 65], true);
