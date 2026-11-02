@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <title>Seller Settings - rorraxy Ecosystem</title>
+    <title>Seller Info - rorraxy Ecosystem</title>
     
     <!-- Favicon Logo -->
     <link rel="icon" type="image/png" href="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png">
@@ -18,14 +18,14 @@
     <style>
         :root {
             --bg-retail: #000000;
-            --card-retail: #0a0a0f;
+            --card-retail: #050508;
             --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
             --gold-solid: #d4af37;
             --text-white: #ffffff;
-            --text-gray: #a1a1b0;
+            --text-gray: #9e9eab;
             --font-main: 'Poppins', sans-serif;
             --required-red: #ff4d4d;
-            --border-gold: rgba(212, 175, 55, 0.3);
+            --border-gold: rgba(212, 175, 55, 0.25);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -35,59 +35,29 @@
         .main-container { width: 100%; max-width: 900px; margin: 0 auto; }
         
         .dashboard-header { text-align: center; margin-bottom: 25px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
-        .header-logo-img { width: 85px; height: 85px; object-fit: contain; filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.4)); }
+        .header-logo-img { width: 85px; height: 85px; object-fit: contain; filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.3)); }
         .dashboard-header h1 { font-size: 1.5rem; font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        .accordion-wrapper { display: flex; flex-direction: column; gap: 14px; margin-bottom: 30px; }
-        
-        .accordion-item {
+        .info-card {
             background: var(--card-retail);
             border: 1px solid var(--border-gold);
             border-radius: 16px;
-            overflow: hidden;
-            transition: border-color 0.3s;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+            padding: 24px 20px;
+            margin-bottom: 30px;
         }
 
-        .accordion-item.active { border-color: var(--gold-solid); }
-
-        .accordion-header {
-            padding: 18px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            cursor: pointer;
-            background: var(--card-retail);
-            user-select: none;
-        }
-
-        .accordion-header-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 0.88rem;
+        .info-card-title {
+            font-size: 0.9rem;
             font-weight: 800;
             background: var(--gold-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-        }
-
-        .accordion-header i.arrow-icon { color: var(--gold-solid); font-size: 0.9rem; transition: transform 0.3s ease; }
-        .accordion-item.active .arrow-icon { transform: rotate(180deg); }
-
-        .accordion-body {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease, padding 0.4s ease;
-            padding: 0 20px;
-            background: #030305;
-            border-top: 1px solid transparent;
-        }
-
-        .accordion-item.active .accordion-body {
-            max-height: 1800px;
-            padding: 24px 20px;
-            border-top: 1px solid rgba(212, 175, 55, 0.15);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+            padding-bottom: 12px;
         }
 
         .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-bottom: 16px; }
@@ -103,34 +73,44 @@
         .req-star { color: var(--required-red); margin-left: 4px; font-weight: 900; }
         .char-counter { font-size: 0.62rem; color: var(--text-gray); text-transform: none; }
 
-        /* ঘরগুলো স্পষ্টভাবে ফুটিয়ে তোলার জন্য চমৎকার ব্যাকগ্রাউন্ড ও বর্ডার */
         .form-control, .form-select, textarea.form-control { 
-            width: 100%; background: #0c0c12; border: 1px solid rgba(212, 175, 55, 0.25); 
+            width: 100%; background: #0a0a0f; border: 1px solid var(--border-gold); 
             border-radius: 12px; padding: 12px 16px; color: var(--text-white); font-size: 0.82rem; 
             outline: none; font-family: var(--font-main); text-transform: none; 
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.8);
-            transition: border-color 0.3s, box-shadow 0.3s;
         }
-        .form-control:focus, .form-select:focus { border-color: var(--gold-solid); box-shadow: 0 0 10px rgba(212, 175, 55, 0.25), inset 0 2px 5px rgba(0,0,0,0.8); background: #12121c; }
-        .form-select option { background: #12121c; color: #fff; }
+        .form-control:focus, .form-select:focus { border-color: var(--gold-solid); background: #0f0f17; }
+        .form-select option { background: #0f0f17; color: #fff; }
 
-        .avatar-upload-container { display: flex; align-items: center; gap: 16px; padding: 15px 0; margin-bottom: 20px; border-bottom: 1px solid rgba(212, 175, 55, 0.15); }
-        .avatar-preview { width: 65px; height: 65px; border-radius: 50%; object-fit: cover; border: 2px solid var(--gold-solid); box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); }
-        .avatar-upload-lbl { background: rgba(212, 175, 55, 0.12); border: 1px solid var(--gold-solid); padding: 9px 18px; border-radius: 10px; color: var(--gold-solid); font-size: 0.72rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
-        .avatar-upload-lbl:hover { background: rgba(212, 175, 55, 0.25); }
+        .avatar-upload-container { display: flex; align-items: center; gap: 16px; padding: 10px 0; margin-bottom: 20px; border-bottom: 1px solid rgba(212, 175, 55, 0.15); }
+        .avatar-preview { width: 65px; height: 65px; border-radius: 50%; object-fit: cover; border: 2px solid var(--gold-solid); }
+        .avatar-upload-lbl { background: rgba(212, 175, 55, 0.1); border: 1px solid var(--gold-solid); padding: 9px 18px; border-radius: 10px; color: var(--gold-solid); font-size: 0.72rem; font-weight: 700; cursor: pointer; }
         .file-input-hidden { display: none; }
 
-        .setting-action-row { display: flex; align-items: center; justify-content: space-between; background: #0c0c12; padding: 18px; border-radius: 12px; border: 1px solid rgba(212, 175, 55, 0.25); }
-        .setting-action-info h4 { font-size: 0.82rem; font-weight: 700; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .setting-action-info p { font-size: 0.7rem; color: var(--text-gray); text-transform: none; margin-top: 3px; }
-        
-        .action-sub-btn { background: var(--gold-gradient); border: none; color: #000; padding: 10px 20px; border-radius: 10px; font-size: 0.75rem; font-weight: 800; text-decoration: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); transition: transform 0.2s; }
-        .action-sub-btn:hover { transform: translateY(-1px); filter: brightness(1.1); }
+        .section-save-btn { background: var(--gold-gradient); border: none; border-radius: 12px; padding: 14px 26px; color: #000; font-weight: 800; font-size: 0.82rem; cursor: pointer; text-transform: uppercase; margin-top: 18px; float: right; box-shadow: 0 0 15px rgba(212, 175, 55, 0.25); display: inline-flex; align-items: center; gap: 8px; }
+        .section-save-btn:hover { filter: brightness(1.1); }
 
-        .section-save-btn { background: var(--gold-gradient); border: none; border-radius: 12px; padding: 14px 26px; color: #000; font-weight: 800; font-size: 0.82rem; cursor: pointer; text-transform: uppercase; margin-top: 18px; float: right; box-shadow: 0 0 20px rgba(212, 175, 55, 0.35); transition: transform 0.2s; }
-        .section-save-btn:hover { transform: translateY(-1px); filter: brightness(1.1); }
+        /* ভাসমান অ্যাডমিন চ্যাট লোগো বাটন */
+        .floating-chat-btn {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 55px;
+            height: 55px;
+            background: #050508;
+            border: 2px solid var(--gold-solid);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.4);
+            z-index: 999;
+            transition: transform 0.2s;
+        }
+        .floating-chat-btn:hover { transform: scale(1.08); }
+        .floating-chat-btn img { width: 35px; height: 35px; object-fit: contain; }
 
-        .seller-bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(3, 3, 5, 0.98); border-top: 1px solid rgba(212, 175, 55, 0.2); display: flex; justify-content: space-around; align-items: center; padding: 12px 6px; z-index: 1000; }
+        .seller-bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(3, 3, 5, 0.98); border-top: 1px solid var(--border-gold); display: flex; justify-content: space-around; align-items: center; padding: 12px 6px; z-index: 1000; }
         .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; background: none; border: none; cursor: pointer; }
         .nav-item.active i, .nav-item.active span { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .nav-item i { font-size: 1.25rem; margin-bottom: 4px; color: var(--text-gray); }
@@ -154,148 +134,122 @@
     <div class="main-container">
         <header class="dashboard-header">
             <img src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png" alt="Logo" class="header-logo-img">
-            <h1>SELLER SETTINGS & INFO</h1>
+            <h1>SELLER INFO</h1>
         </header>
 
-        <div class="accordion-wrapper">
-            
-            <!-- ১. বিজনেস ইনফরমেশন ও ভেরিফিকেশন ফর্ম -->
-            <div class="accordion-item active">
-                <div class="accordion-header" onclick="toggleAccordion(this)">
-                    <div class="accordion-header-left">
-                        <i class="fa-solid fa-store"></i>
-                        <span>COMPLETE BUSINESS INFO & VERIFICATION</span>
-                    </div>
-                    <i class="fa-solid fa-chevron-down arrow-icon"></i>
-                </div>
-                <div class="accordion-body">
-                    <form id="businessInfoForm">
-                        <div class="avatar-upload-container">
-                            <img src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png" alt="Logo" class="avatar-preview" id="avatarPreview">
-                            <div class="avatar-upload-info">
-                                <label for="profilePhotoInput" class="avatar-upload-lbl"><i class="fa-solid fa-upload"></i> UPLOAD BRAND LOGO</label>
-                                <input type="file" id="profilePhotoInput" class="file-input-hidden" accept="image/*">
-                            </div>
-                        </div>
-
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label><span class="label-text">BRAND NAME<span class="req-star">*</span></span></label>
-                                <input type="text" class="form-control" id="brandName" placeholder="rorraxy store" required>
-                            </div>
-                            <div class="form-group">
-                                <label><span class="label-text">BUSINESS EMAIL (VERIFIED)<span class="req-star">*</span></span></label>
-                                <input type="email" class="form-control" id="businessEmail" placeholder="seller@gmail.com" required style="text-transform: none;">
-                            </div>
-                            <div class="form-group">
-                                <label><span class="label-text">FULL NAME<span class="req-star">*</span></span></label>
-                                <input type="text" class="form-control" id="fullName" placeholder="Owner full name..." required>
-                            </div>
-                            <div class="form-group">
-                                <label><span class="label-text">WHATSAPP<span class="req-star">*</span></span></label>
-                                <input type="tel" class="form-control" id="whatsappNum" placeholder="+8801700000000" required>
-                            </div>
-                            <div class="form-group full-width">
-                                <label>
-                                    <span class="label-text">BUSINESS DESCRIPTION<span class="req-star">*</span></span>
-                                    <span class="char-counter" id="charCount">0/200</span>
-                                </label>
-                                <textarea class="form-control" id="businessDesc" rows="3" maxlength="200" placeholder="Briefly describe products..." required></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label><span class="label-text">PHONE<span class="req-star">*</span></span></label>
-                                <input type="tel" class="form-control" id="phoneNum" placeholder="+8801800000000" required>
-                            </div>
-                            <div class="form-group">
-                                <label><span class="label-text">COUNTRY<span class="req-star">*</span></span></label>
-                                <select class="form-select" id="countrySelect" required>
-                                    <option value="Bangladesh">Bangladesh</option>
-                                    <option value="India">India</option>
-                                    <option value="Pakistan">Pakistan</option>
-                                    <option value="United Arab Emirates">United Arab Emirates</option>
-                                    <option value="United States">United States</option>
-                                    <option value="United Kingdom">United Kingdom</option>
-                                </select>
-                            </div>
-                            <div class="form-group full-width">
-                                <label><span class="label-text">ADDRESS<span class="req-star">*</span></span></label>
-                                <input type="text" class="form-control" id="fullAddress" placeholder="District, Postal Code..." required>
-                            </div>
-                            <div class="form-group">
-                                <label><span class="label-text">VERIFICATION DOCUMENT<span class="req-star">*</span></span></label>
-                                <select class="form-select" id="docTypeSelect" onchange="updateDocLabel()" required>
-                                    <option value="NID">National ID (NID)</option>
-                                    <option value="BirthCert">Birth Certificate</option>
-                                    <option value="TradeLicense">Trade License</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label><span class="label-text" id="docNumLabel">NID NUMBER<span class="req-star">*</span></span></label>
-                                <input type="text" class="form-control" id="docNumberInput" placeholder="Enter ID number..." required style="text-transform: none;">
-                            </div>
-                        </div>
-                        <button type="submit" class="section-save-btn">VERIFY & SAVE INFO <i class="fa-solid fa-check"></i></button>
-                    </form>
-                </div>
+        <!-- ইনফো ফর্ম কার্ড -->
+        <div class="info-card">
+            <div class="info-card-title">
+                <i class="fa-solid fa-store"></i>
+                <span>COMPLETE BUSINESS INFO & VERIFICATION</span>
             </div>
 
-            <!-- ২. এডমিন অ্যান্ড সাপোর্ট টিম (লাইভ চ্যাট অপশন) -->
-            <div class="accordion-item">
-                <div class="accordion-header" onclick="toggleAccordion(this)">
-                    <div class="accordion-header-left">
-                        <i class="fa-solid fa-headset"></i>
-                        <span>ADMIN & SUPPORT TEAM</span>
-                    </div>
-                    <i class="fa-solid fa-chevron-down arrow-icon"></i>
-                </div>
-                <div class="accordion-body">
-                    <div class="setting-action-row">
-                        <div class="setting-action-info">
-                            <h4>LIVE ADMIN CHAT & HELP</h4>
-                            <p>Direct communication channel with rorraxy management.</p>
-                        </div>
-                        <button type="button" class="action-sub-btn" onclick="openAdminChatModal()"><i class="fa-solid fa-comments"></i> CHAT NOW</button>
+            <form id="businessInfoForm">
+                <div class="avatar-upload-container">
+                    <img src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png" alt="Logo" class="avatar-preview" id="avatarPreview">
+                    <div class="avatar-upload-info">
+                        <label for="profilePhotoInput" class="avatar-upload-lbl"><i class="fa-solid fa-upload"></i> UPLOAD BRAND LOGO</label>
+                        <input type="file" id="profilePhotoInput" class="file-input-hidden" accept="image/*">
                     </div>
                 </div>
-            </div>
 
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label><span class="label-text">BRAND NAME<span class="req-star">*</span></span></label>
+                        <input type="text" class="form-control" id="brandName" placeholder="rorraxy store" required>
+                    </div>
+                    <div class="form-group">
+                        <label><span class="label-text">BUSINESS EMAIL (AUTOMATIC)<span class="req-star">*</span></span></label>
+                        <input type="email" class="form-control" id="businessEmail" readonly style="color: var(--gold-solid); cursor: not-allowed; text-transform: none;">
+                    </div>
+                    <div class="form-group">
+                        <label><span class="label-text">FULL NAME<span class="req-star">*</span></span></label>
+                        <input type="text" class="form-control" id="fullName" placeholder="Owner full name..." required>
+                    </div>
+                    <div class="form-group">
+                        <label><span class="label-text">WHATSAPP<span class="req-star">*</span></span></label>
+                        <input type="tel" class="form-control" id="whatsappNum" placeholder="+8801700000000" required style="text-transform: none;">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>
+                            <span class="label-text">BUSINESS DESCRIPTION<span class="req-star">*</span></span>
+                            <span class="char-counter" id="charCount">0/200</span>
+                        </label>
+                        <textarea class="form-control" id="businessDesc" rows="3" maxlength="200" placeholder="Briefly describe products..." required style="text-transform: none;"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label><span class="label-text">EMERGENCY PHONE<span class="req-star">*</span></span></label>
+                        <input type="tel" class="form-control" id="phoneNum" placeholder="+8801800000000" required style="text-transform: none;">
+                    </div>
+                    <div class="form-group">
+                        <label><span class="label-text">COUNTRY<span class="req-star">*</span></span></label>
+                        <select class="form-select" id="countrySelect" required>
+                            <option value="Bangladesh">Bangladesh</option>
+                            <option value="India">India</option>
+                            <option value="Pakistan">Pakistan</option>
+                            <option value="United Arab Emirates">United Arab Emirates</option>
+                            <option value="United States">United States</option>
+                            <option value="United Kingdom">United Kingdom</option>
+                        </select>
+                    </div>
+                    <div class="form-group full-width">
+                        <label><span class="label-text">ADDRESS<span class="req-star">*</span></span></label>
+                        <input type="text" class="form-control" id="fullAddress" placeholder="District, Postal Code..." required style="text-transform: none;">
+                    </div>
+                    <div class="form-group">
+                        <label><span class="label-text">VERIFICATION DOCUMENT<span class="req-star">*</span></span></label>
+                        <select class="form-select" id="docTypeSelect" onchange="updateDocLabel()" required>
+                            <option value="NID">National ID (NID)</option>
+                            <option value="BirthCert">Birth Certificate</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label><span class="label-text" id="docNumLabel">NID NUMBER<span class="req-star">*</span></span></label>
+                        <input type="text" class="form-control" id="docNumberInput" placeholder="Enter ID number..." required style="text-transform: none;">
+                    </div>
+                    <div class="form-group full-width" style="margin-top: 10px; border-top: 1px solid rgba(212, 175, 55, 0.15); padding-top: 15px;">
+                        <label><span class="label-text">TRADE LICENSE (VERIFICATION FILE / NUMBER)<span class="req-star">*</span></span></label>
+                        <input type="text" class="form-control" id="tradeLicenseInput" placeholder="Enter Trade License number or details..." required style="text-transform: none;">
+                    </div>
+                </div>
+                <button type="submit" class="section-save-btn">SAVE INFO <i class="fa-solid fa-check"></i></button>
+                <div style="clear: both;"></div>
+            </form>
         </div>
     </div>
 
+    <!-- ভাসমান লোগো চ্যাট বাটন -->
+    <div class="floating-chat-btn" onclick="openAdminChatModal()" title="Admin Support">
+        <img src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png" alt="Chat">
+    </div>
+
+    <!-- বটম নেভিগেশন -->
     <nav class="seller-bottom-nav">
         <a href="list.html" class="nav-item"><i class="fa-solid fa-list-check"></i><span>LIST</span></a>
         <a href="payout.html" class="nav-item"><i class="fa-solid fa-hand-holding-dollar"></i><span>PAYOUT</span></a>
         <button type="button" class="nav-item" onclick="location.href='dashboard.html'"><i class="fa-solid fa-house"></i><span>HOME</span></button>
         <a href="shipment.html" class="nav-item"><i class="fa-solid fa-truck-fast"></i><span>SHIPMENT</span></a>
-        <a href="info.html" class="nav-item active"><i class="fa-solid fa-user-gear"></i><span>SETTING</span></a>
+        <a href="info.html" class="nav-item active"><i class="fa-solid fa-user-gear"></i><span>INFO</span></a>
     </nav>
 
     <!-- অ্যাডমিন চ্যাট মডাল বক্স -->
     <div id="adminChatModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:2000; justify-content:center; align-items:center; padding:16px;">
-        <div style="background:#0a0a0f; border:1px solid var(--gold-solid); border-radius:16px; width:100%; max-width:400px; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.9);">
-            <div style="padding:14px 18px; background:#030305; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(212, 175, 55, 0.2);">
+        <div style="background:#050508; border:1px solid var(--gold-solid); border-radius:16px; width:100%; max-width:400px; display:flex; flex-direction:column; overflow:hidden;">
+            <div style="padding:14px 18px; background:#000000; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(212, 175, 55, 0.2);">
                 <h4 style="font-size:0.85rem; font-weight:800; background:var(--gold-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">ADMIN SUPPORT CHAT</h4>
                 <button type="button" onclick="closeAdminChatModal()" style="background:none; border:none; color:#fff; font-size:1.1rem; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div id="chatMessagesBox" style="padding:14px; height:250px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; font-size:0.78rem;">
-                <div style="background:#12121c; border:1px solid rgba(212, 175, 55, 0.2); padding:10px 14px; border-radius:10px; align-self:flex-start; max-width:80%; text-transform:none; color:#fff;">Welcome to rorraxy Admin Support. How can we assist you?</div>
+                <div style="background:#12121c; padding:10px 14px; border-radius:10px; align-self:flex-start; max-width:80%; text-transform:none; color:#fff;">Welcome to rorraxy Admin Support. How can we assist you?</div>
             </div>
-            <div style="padding:12px; background:#030305; display:flex; gap:8px; border-top:1px solid rgba(212, 175, 55, 0.15);">
-                <input type="text" id="chatInputMsg" placeholder="Type message..." style="flex:1; background:#0c0c12; border:1px solid rgba(212, 175, 55, 0.25); border-radius:20px; padding:10px 14px; color:#fff; font-size:0.78rem; outline:none; text-transform:none;">
-                <button type="button" onclick="sendAdminChatMessage()" style="background:var(--gold-gradient); border:none; width:36px; height:36px; border-radius:50%; color:#000; cursor:pointer; font-weight:bold; box-shadow:0 0 10px rgba(212, 175, 55, 0.4);"><i class="fa-solid fa-paper-plane"></i></button>
+            <div style="padding:12px; background:#000000; display:flex; gap:8px; border-top:1px solid rgba(212, 175, 55, 0.15);">
+                <input type="text" id="chatInputMsg" placeholder="Type message..." style="flex:1; background:#0a0a0f; border:1px solid var(--border-gold); border-radius:20px; padding:10px 14px; color:#fff; font-size:0.78rem; outline:none; text-transform:none;">
+                <button type="button" onclick="sendAdminChatMessage()" style="background:var(--gold-gradient); border:none; width:36px; height:36px; border-radius:50%; color:#000; cursor:pointer; font-weight:bold;"><i class="fa-solid fa-paper-plane"></i></button>
             </div>
         </div>
     </div>
 
     <script>
-        function toggleAccordion(header) {
-            const currentItem = header.parentElement;
-            document.querySelectorAll('.accordion-item').forEach(item => {
-                if (item !== currentItem) item.classList.remove('active');
-            });
-            currentItem.classList.toggle('active');
-        }
-
         const businessDesc = document.getElementById('businessDesc');
         const charCount = document.getElementById('charCount');
         businessDesc.addEventListener('input', () => { charCount.innerText = `${businessDesc.value.length}/200`; });
@@ -305,7 +259,6 @@
             const label = document.getElementById('docNumLabel');
             if(type === 'NID') label.innerHTML = 'NID NUMBER<span class="req-star">*</span>';
             else if(type === 'BirthCert') label.innerHTML = 'BIRTH CERTIFICATE NUMBER<span class="req-star">*</span>';
-            else if(type === 'TradeLicense') label.innerHTML = 'TRADE LICENSE NUMBER<span class="req-star">*</span>';
         }
 
         let compressedAvatarData = "https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png";
@@ -336,38 +289,21 @@
             const text = input.value.trim();
             if(!text) return;
             const box = document.getElementById('chatMessagesBox');
-            box.innerHTML += `<div style="background:var(--gold-gradient); color:#000; padding:10px 14px; border-radius:10px; align-self:flex-end; max-width:80%; font-weight:700; text-transform:none; box-shadow:0 0 10px rgba(212, 175, 55, 0.3);">${text}</div>`;
+            box.innerHTML += `<div style="background:var(--gold-gradient); color:#000; padding:10px 14px; border-radius:10px; align-self:flex-end; max-width:80%; font-weight:700; text-transform:none;">${text}</div>`;
             input.value = '';
             box.scrollTop = box.scrollHeight;
         }
 
         document.addEventListener('DOMContentLoaded', async () => {
-            // লোকাল স্টোরেজ থেকে ডাটা লোড
-            let savedData = JSON.parse(localStorage.getItem('rorraxy_seller_profile') || 'null');
-            if (savedData) {
-                if(savedData.brandName) document.getElementById('brandName').value = savedData.brandName;
-                if(savedData.businessEmail) document.getElementById('businessEmail').value = savedData.businessEmail;
-                if(savedData.fullName) document.getElementById('fullName').value = savedData.fullName;
-                if(savedData.businessDesc) {
-                    document.getElementById('businessDesc').value = savedData.businessDesc;
-                    charCount.innerText = `${savedData.businessDesc.length}/200`;
-                }
-                if(savedData.whatsapp) document.getElementById('whatsappNum').value = savedData.whatsapp;
-                if(savedData.phone) document.getElementById('phoneNum').value = savedData.phone;
-                if(savedData.country) document.getElementById('countrySelect').value = savedData.country;
-                if(savedData.address) document.getElementById('fullAddress').value = savedData.address;
-                if(savedData.docType) {
-                    document.getElementById('docTypeSelect').value = savedData.docType;
-                    updateDocLabel();
-                }
-                if(savedData.docNum) document.getElementById('docNumberInput').value = savedData.docNum;
-                if(savedData.logo) {
-                    compressedAvatarData = savedData.logo;
-                    document.getElementById('avatarPreview').src = savedData.logo;
-                }
+            // অটোমেটিক বিজনেস ইমেল সেটআপ (লোকাল স্টোরেজ বা ডিফল্ট থেকে)
+            const savedProfile = JSON.parse(localStorage.getItem('rorraxy_seller_profile') || 'null');
+            if (savedProfile && savedProfile.businessEmail) {
+                document.getElementById('businessEmail').value = savedProfile.businessEmail;
+            } else {
+                document.getElementById('businessEmail').value = "seller@rorraxy.com";
             }
 
-            // ক্লাউডফায়ার D1 ডেটাবেস থেকে রিয়েল-টাইম সিঙ্ক করার জন্য ফেচ রিকোয়েস্ট
+            // ডাটাবেস থেকে ডাটা লোড
             try {
                 const response = await fetch('/api/seller?action=profile&seller_id=1');
                 const result = await response.json();
@@ -389,17 +325,17 @@
                         updateDocLabel();
                     }
                     if(dbProfile.doc_number) document.getElementById('docNumberInput').value = dbProfile.doc_number;
+                    if(dbProfile.default_payout_details) document.getElementById('tradeLicenseInput').value = dbProfile.default_payout_details;
                     if(dbProfile.logo_url) {
                         compressedAvatarData = dbProfile.logo_url;
                         document.getElementById('avatarPreview').src = dbProfile.logo_url;
                     }
                 }
             } catch (err) {
-                console.log("Cloudflare sync notice:", err);
+                console.log("Cloudflare load notice:", err);
             }
         });
 
-        // ফর্ম সাবমিট এবং ক্লাউডফায়ার ডেটাবেসে সেভ করার লজিক
         document.getElementById('businessInfoForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -415,10 +351,10 @@
                 full_address: document.getElementById('fullAddress').value,
                 doc_type: document.getElementById('docTypeSelect').value,
                 doc_number: document.getElementById('docNumberInput').value,
+                default_payout_details: document.getElementById('tradeLicenseInput').value || "N/A",
                 logo_url: compressedAvatarData
             };
 
-            // লোকাল স্টোরেজে ব্যাকআপ সেভ
             localStorage.setItem('rorraxy_seller_profile', JSON.stringify({
                 brandName: profileData.brand_name,
                 businessEmail: profileData.email,
@@ -433,7 +369,6 @@
                 logo: profileData.logo_url
             }));
 
-            // ক্লাউডফায়ারে পাঠানোর চেষ্টা
             try {
                 const response = await fetch('/api/seller?action=profile', {
                     method: 'POST',
@@ -442,15 +377,14 @@
                 });
                 const result = await response.json();
                 if (result.success) {
-                    alert('VERIFICATION & BUSINESS INFORMATION SAVED SUCCESSFULLY TO CLOUDFLARE!');
+                    alert('INFO SAVED SUCCESSFULLY WITH CHECKMARK!');
                     window.location.href = 'dashboard.html';
                 } else {
-                    alert('Saved locally, but Cloudflare sync note: ' + (result.error || 'Unknown error'));
-                    window.location.href = 'dashboard.html';
+                    alert('Cloudflare Sync Warning: ' + (result.error || 'Unknown error'));
                 }
             } catch (err) {
                 console.error(err);
-                alert('VERIFICATION & BUSINESS INFORMATION SAVED SUCCESSFULLY!');
+                alert('INFO SAVED LOCALLY SUCCESSFULLY!');
                 window.location.href = 'dashboard.html';
             }
         });
