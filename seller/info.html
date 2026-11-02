@@ -148,17 +148,17 @@
     <div class="main-container">
         <header class="dashboard-header">
             <img src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png" alt="Logo" class="header-logo-img">
-            <h1>SELLER SETTINGS</h1>
+            <h1>SELLER SETTINGS & INFO</h1>
         </header>
 
         <div class="accordion-wrapper">
             
-            <!-- ১. বিজনেস ইনফরমেশন ও লোগো (এডিট ও আপডেট অপশন সহ) -->
+            <!-- ১. বিজনেস ইনফরমেশন ও ভেরিফিকেশন ফর্ম -->
             <div class="accordion-item active">
                 <div class="accordion-header" onclick="toggleAccordion(this)">
                     <div class="accordion-header-left">
                         <i class="fa-solid fa-store"></i>
-                        <span>BUSINESS INFORMATION & LOGO</span>
+                        <span>COMPLETE BUSINESS INFO & VERIFICATION</span>
                     </div>
                     <i class="fa-solid fa-chevron-down arrow-icon"></i>
                 </div>
@@ -167,7 +167,7 @@
                         <div class="avatar-upload-container">
                             <img src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png" alt="Logo" class="avatar-preview" id="avatarPreview">
                             <div class="avatar-upload-info">
-                                <label for="profilePhotoInput" class="avatar-upload-lbl"><i class="fa-solid fa-upload"></i> UPLOAD / UPDATE BRAND LOGO</label>
+                                <label for="profilePhotoInput" class="avatar-upload-lbl"><i class="fa-solid fa-upload"></i> UPLOAD BRAND LOGO</label>
                                 <input type="file" id="profilePhotoInput" class="file-input-hidden" accept="image/*">
                             </div>
                         </div>
@@ -177,7 +177,6 @@
                                 <label><span class="label-text">BRAND NAME<span class="req-star">*</span></span></label>
                                 <input type="text" class="form-control" id="brandName" placeholder="rorraxy store" required>
                             </div>
-                            <!-- ওটিপি এবং ভেরিফিকেশনের জন্য অপরিহার্য বিজনেস ইমেল ফিল্ড -->
                             <div class="form-group">
                                 <label><span class="label-text">BUSINESS EMAIL (VERIFIED)<span class="req-star">*</span></span></label>
                                 <input type="email" class="form-control" id="businessEmail" placeholder="seller@gmail.com" required style="text-transform: none;">
@@ -229,7 +228,7 @@
                                 <input type="text" class="form-control" id="docNumberInput" placeholder="Enter ID number..." required style="text-transform: none;">
                             </div>
                         </div>
-                        <button type="submit" class="section-save-btn">UPDATE & SAVE INFO <i class="fa-solid fa-check"></i></button>
+                        <button type="submit" class="section-save-btn">VERIFY & SAVE INFO <i class="fa-solid fa-check"></i></button>
                     </form>
                 </div>
             </div>
@@ -377,7 +376,8 @@
             profileData.logo = compressedAvatarData;
 
             localStorage.setItem('rorraxy_seller_profile', JSON.stringify(profileData));
-            alert('BUSINESS INFORMATION UPDATED SUCCESSFULLY!');
+            alert('VERIFICATION & BUSINESS INFORMATION SAVED SUCCESSFULLY!');
+            window.location.href = 'dashboard.html';
         });
     </script>
 </body>
