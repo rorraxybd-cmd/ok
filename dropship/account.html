@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>rorraxy - Retail Account & Order Tracking</title>
+    <title>rorraxy - Dropshipping Account & Order Tracking</title>
 
     <script src="/ecosystem-core.js"></script>
 
@@ -267,7 +267,7 @@
 
     <!-- BOTTOM SEARCH & HOME BAR -->
     <div class="bottom-nav-bar">
-        <a href="/index.html" class="home-icon-btn" title="Home">
+        <a href="/dropshipping/index.html" class="home-icon-btn" title="Home">
             <i class="fa-solid fa-house"></i>
         </a>
         <div class="search-tracking-box">
@@ -281,7 +281,7 @@
         let currentOrderData = null;
 
         window.onload = function() {
-            initRetailAccountFetch();
+            initDropshippingAccountFetch();
             triggerConfetti();
         };
 
@@ -296,8 +296,8 @@
             } catch(e) {}
         }
 
-        async function initRetailAccountFetch() {
-            const lastOrderRaw = localStorage.getItem('rorraxy_last_order');
+        async function initDropshippingAccountFetch() {
+            const lastOrderRaw = localStorage.getItem('rorraxy_dropshipping_last_order');
             if (lastOrderRaw) {
                 try {
                     currentOrderData = JSON.parse(lastOrderRaw);
@@ -307,7 +307,7 @@
             }
 
             try {
-                let response = await fetch(`${API_BASE_URL}/api/get?table=retail_orders&limit=1`);
+                let response = await fetch(`${API_BASE_URL}/api/get?table=dropshipping_orders&limit=1`);
                 let result = await response.json();
 
                 if (result.success && Array.isArray(result.data) && result.data.length > 0) {
@@ -324,12 +324,12 @@
         async function executeOrderSearch() {
             let query = document.getElementById('orderSearchInput').value.trim();
             if(!query) {
-                initRetailAccountFetch();
+                initDropshippingAccountFetch();
                 return;
             }
 
             try {
-                let response = await fetch(`${API_BASE_URL}/api/get?table=retail_orders`);
+                let response = await fetch(`${API_BASE_URL}/api/get?table=dropshipping_orders`);
                 let result = await response.json();
 
                 if (result.success && Array.isArray(result.data)) {
@@ -343,7 +343,7 @@
                         currentOrderData = found;
                         renderOrdersUI(currentOrderData);
                     } else {
-                        alert("No order found matching your search query!");
+                        alert("No dropshipping order found matching your search query!");
                     }
                 }
             } catch(e) {
@@ -355,8 +355,8 @@
             const container = document.getElementById('accountDynamicContent');
             container.innerHTML = `
                 <div class="empty-orders-screen">
-                    <button onclick="window.location.href='/index.html'" class="shop-now-btn">
-                        <i class="fa-solid fa-bag-shopping"></i> START SHOPPING
+                    <button onclick="window.location.href='/dropshipping/index.html'" class="shop-now-btn">
+                        <i class="fa-solid fa-bag-shopping"></i> START DROPSHIPPING
                     </button>
                 </div>
             `;
@@ -365,8 +365,8 @@
         function renderOrdersUI(orderData) {
             const container = document.getElementById('accountDynamicContent');
             const items = orderData.items || [];
-            const mainOrderId = orderData.master_order_id || orderData.id || 'RRX-RET-' + Math.floor(100000 + Math.random() * 900000);
-            const customerName = orderData.customer_name || 'Valued Customer';
+            const mainOrderId = orderData.master_order_id || orderData.id || 'RRX-DROP-' + Math.floor(100000 + Math.random() * 900000);
+            const customerName = orderData.customer_name || 'Valued Reseller';
             const customerPhone = orderData.customer_phone || 'N/A';
             const paymentMethod = orderData.payment_method || 'Online Gateway';
             const orderDate = orderData.created_at ? new Date(orderData.created_at).toLocaleDateString() : '2026';
@@ -378,7 +378,7 @@
                 let itemPriceNum = parseFloat(String(item.price || '0').replace('$', '')) || 0;
                 let itemTotal = itemPriceNum * (item.qty || 1);
                 totalAmt += itemTotal;
-                let title = item.title || item.product_title || 'Retail Product';
+                let title = item.title || item.product_title || 'Dropshipping Product';
 
                 itemsTableHtml += `
                     <tr>
@@ -393,14 +393,14 @@
 
             container.innerHTML = `
                 <div class="section-title">
-                    <i class="fa-solid fa-file-invoice"></i> ORDER MEMO
+                    <i class="fa-solid fa-file-invoice"></i> DROPSHIPPING ORDER MEMO
                 </div>
 
                 <div class="memo-preview-card" id="printableMemoArea">
                     <div class="memo-top-row">
                         <div>
-                            <h2 style="font-size:0.85rem; font-weight:900; background:var(--gold-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">RORRAXY RETAIL</h2>
-                            <p style="font-size:0.48rem; color:var(--text-muted);">DIGITAL MEMO</p>
+                            <h2 style="font-size:0.85rem; font-weight:900; background:var(--gold-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">RORRAXY DROPSHIPPING</h2>
+                            <p style="font-size:0.48rem; color:var(--text-muted);">DIGITAL RESELLER MEMO</p>
                         </div>
                         <div style="text-align:right;">
                             <p style="font-size:0.68rem; font-weight:900; color:#fff;">#${mainOrderId}</p>
@@ -409,7 +409,7 @@
                     </div>
 
                     <div class="memo-details-grid">
-                        <strong>CUSTOMER NAME:</strong> <span>${customerName}</span><br>
+                        <strong>RESELLER / CLIENT:</strong> <span>${customerName}</span><br>
                         <strong>PHONE / WHATSAPP:</strong> <span>${customerPhone}</span><br>
                         <strong>PAYMENT METHOD:</strong> <span>${paymentMethod}</span><br>
                         <strong>ORDER STATUS:</strong> <span style="color:var(--accent-green);">CONFIRMED & FULFILLED</span>
@@ -446,7 +446,7 @@
             const element = document.getElementById('printableMemoArea');
             const options = {
                 margin:       10,
-                filename:     `rorraxy-memo-${orderId}.pdf`,
+                filename:     `rorraxy-dropshipping-memo-${orderId}.pdf`,
                 image:        { type: 'jpeg', quality: 0.98 },
                 html2canvas:  { scale: 2, useCORS: true, logging: false },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
@@ -454,7 +454,7 @@
 
             html2pdf().from(element).set(options).save().then(() => {
                 setTimeout(() => {
-                    window.location.href = '/index.html';
+                    window.location.href = '/dropshipping/index.html';
                 }, 1000);
             });
         }
