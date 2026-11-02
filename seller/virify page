@@ -1,5 +1,0 @@
-<script>
-    if (localStorage.getItem('rorraxy_seller_verified') !== 'true') {
-        window.location.replace('index.html');
-    }
-</script>
