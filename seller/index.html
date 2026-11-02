@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>Seller Portal - rorraxy</title>
    
+    <!-- Favicon Logo -->
+    <link rel="icon" type="image/png" href="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png">
+
     <!-- Ecosystem Core Script -->
     <script src="/ecosystem-core.js"></script>
 
@@ -17,8 +20,9 @@
     <style>
         :root {
             --bg-retail: #000000;
-            --card-retail: #0a0a0f;
-            --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);  
+            --card-retail: #050508;
+            --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
+            --pink-solid: linear-gradient(135deg, #ff2a85 0%, #ff479b 100%);
             --gold-solid: #d4af37;
             --text-white: #ffffff;
             --text-gray: #8e8e99;
@@ -32,50 +36,49 @@
 
         .auth-wrapper {
             width: 100%;
-            max-width: 420px;
+            max-width: 400px;
             display: flex;
             justify-content: center;
             align-items: center;
         }
         
         .auth-card {
-            background: rgba(10, 10, 15, 0.95);
-            border: none !important;
-            border-radius: 28px;
+            background: var(--card-retail);
+            border: 1px solid rgba(255, 42, 133, 0.12);
+            border-radius: 24px;
             width: 100%;
-            padding: 44px 32px;
+            padding: 38px 26px;
             display: flex;
             flex-direction: column;
-            gap: 22px;
+            gap: 20px;
             text-align: center;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
             backdrop-filter: blur(10px);
         }
 
         .auth-logo {
-            width: 150px;
+            width: 130px;
             height: auto;
-            max-height: 150px;
+            max-height: 130px;
             object-fit: contain;
             margin: 0 auto;
             background: transparent !important;
-            filter: drop-shadow(0 6px 20px rgba(212, 175, 55, 0.2)) !important;
+            filter: drop-shadow(0 6px 20px rgba(255, 42, 133, 0.2)) !important;
         }
 
         .auth-title {
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             font-weight: 800;
             background: var(--gold-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            letter-spacing: 1.5px;
-            margin-top: -6px;
+            letter-spacing: 1.2px;
+            margin-top: -4px;
         }
 
         .auth-form {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 15px;
             text-align: left;
         }
 
@@ -92,59 +95,61 @@
             letter-spacing: 0.8px;
         }
 
+        /* সফট পিওর ব্ল্যাক ইনপুট ফিল্ড (বর্ডার ছাড়া) */
         .form-control {
             width: 100%;
-            background: #030305;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 15px 18px;
+            background: #000000;
+            border: none;
+            border-radius: 14px;
+            padding: 14px 16px;
             color: var(--text-white);
+            font-weight: 600;
             font-size: 0.88rem;
             outline: none;
             font-family: var(--font-main);
             text-transform: none;
             transition: all 0.25s ease;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.8);
         }
 
         .form-control:focus {
-            border-color: var(--gold-solid);
-            background: #000000;
-            box-shadow: 0 0 12px rgba(212, 175, 55, 0.15);
+            background: #030305;
+        }
+
+        .form-control::placeholder {
+            font-size: 0.75rem;
+            color: #555566;
+            text-transform: none;
         }
 
         .email-hint {
-            font-size: 0.65rem;
+            font-size: 0.62rem;
             color: var(--text-gray);
             text-transform: none;
-            letter-spacing: 0.3px;
+            letter-spacing: 0.2px;
             margin-top: 2px;
             display: flex;
-            gap: 6px;
+            gap: 5px;
             align-items: center;
-        }
-
-        .otp-input {
-            letter-spacing: 14px;
-            font-size: 1.3rem;
-            text-align: center;
-            font-weight: 800;
-            color: var(--gold-solid);
         }
 
         .auth-btn {
             width: 100%;
             background: var(--gold-gradient);
             border: none;
-            border-radius: 16px;
-            padding: 16px;
+            border-radius: 14px;
+            padding: 15px;
             color: #030305;
             font-weight: 800;
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             cursor: pointer;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.8px;
             transition: transform 0.15s ease, filter 0.2s ease;
-            margin-top: 6px;
+            margin-top: 4px;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
         }
 
         .auth-btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
@@ -153,35 +158,51 @@
         .status-msg {
             font-size: 0.72rem;
             text-transform: none;
-            margin-top: -6px;
+            margin-top: -2px;
             display: none;
+            text-align: center;
         }
-        .status-msg.error { color: #ff4d4d; }
+        .status-msg.error { color: var(--required-red); }
         .status-msg.success { color: #2ecc71; }
 
-        .resend-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.68rem;
-            color: var(--text-gray);
-            text-transform: none;
+        .action-link-box {
+            display: none;
+            margin-top: 6px;
+            text-align: center;
         }
 
-        .resend-btn {
-            color: var(--gold-solid);
-            background: none;
+        /* চূড়ান্ত পিংক কালার এন্টার ড্যাশবোর্ড বাটন */
+        .verify-action-btn {
+            width: 100%;
+            background: var(--pink-solid);
             border: none;
-            font-weight: 700;
+            border-radius: 14px;
+            padding: 15px;
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 0.85rem;
             cursor: pointer;
             text-transform: uppercase;
+            letter-spacing: 0.8px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 0 25px rgba(255, 42, 133, 0.4);
+            transition: all 0.25s ease;
         }
-        .resend-btn:disabled { color: var(--text-gray); cursor: not-allowed; }
+
+        .verify-action-btn:hover {
+            filter: brightness(1.12);
+            transform: translateY(-2px);
+            box-shadow: 0 0 35px rgba(255, 42, 133, 0.6);
+        }
 
         @media (max-width: 480px) {
-            .auth-card { padding: 34px 20px; gap: 18px; }
+            .auth-card { padding: 30px 18px; gap: 16px; }
             .auth-title { font-size: 1.05rem; }
-            .auth-logo { width: 130px; }
+            .auth-logo { width: 110px; }
         }
     </style>
 </head>
@@ -199,49 +220,48 @@
             
             <h2 class="auth-title">SELLER VERIFICATION</h2>
 
-            <!-- Step 1: Email Form -->
-            <form id="emailStepForm" class="auth-form">
+            <!-- Authentication Form -->
+            <form id="magicLinkForm" class="auth-form">
                 <div class="form-group">
                     <label>EMAIL ADDRESS <span style="color:var(--required-red)">*</span></label>
-                    <input type="email" class="form-control" id="sellerEmail" placeholder="Enter your email address..." required style="text-transform: none;" autocomplete="email">
-                    <span class="email-hint"><i class="fa-regular fa-circle-check"></i> Supports Gmail, Yahoo, Outlook, Apple Mail...</span>
+                    <input type="email" class="form-control" id="sellerEmail" placeholder="Gmail, Yahoo, Outlook, Apple..." required style="text-transform: none;" autocomplete="email">
+                    <span class="email-hint"><i class="fa-solid fa-lock" style="color: #ff2a85;"></i> All verified emails supported</span>
                 </div>
-                <div id="emailStatus" class="status-msg"></div>
-                <button type="submit" class="auth-btn" id="sendOtpBtn">GET CODE</button>
-            </form>
+                
+                <div id="formStatus" class="status-msg"></div>
+                
+                <!-- সফলভাবে ভেরিফাই হওয়ার পর দৃশ্যমান পিংক বাটন -->
+                <div id="actionLinkBox" class="action-link-box">
+                    <a id="verifyDirectBtn" href="#" target="_blank" class="verify-action-btn">
+                        <i class="fa-solid fa-arrow-right-to-bracket"></i> ENTER DASHBOARD
+                    </a>
+                </div>
 
-            <!-- Step 2: 6-Digit OTP Form -->
-            <form id="otpStepForm" class="auth-form" style="display: none;">
-                <div class="form-group">
-                    <label>ENTER 6-DIGIT CODE <span style="color:var(--required-red)">*</span></label>
-                    <input type="text" class="form-control otp-input" id="otpCode" maxlength="6" pattern="\d{6}" placeholder="------" required autocomplete="one-time-code">
-                </div>
-                <div class="resend-row">
-                    <span id="timerText">Expires in: <b id="countdown" style="color:var(--gold-solid)">03:00</b></span>
-                    <button type="button" class="resend-btn" id="resendOtpBtn" disabled>RESEND CODE</button>
-                </div>
-                <div id="otpStatus" class="status-msg"></div>
-                <button type="submit" class="auth-btn" id="verifyOtpBtn" style="display:none;">VERIFY</button>
+                <button type="submit" class="auth-btn" id="sendLinkBtn">CONTINUE TO DASHBOARD</button>
             </form>
-
         </div>
     </div>
 
     <script>
         const WORKER_URL = "https://email.rorraxybd.workers.dev";
 
-        const emailStepForm = document.getElementById('emailStepForm');
-        const otpStepForm = document.getElementById('otpStepForm');
+        const magicLinkForm = document.getElementById('magicLinkForm');
         const sellerEmailInput = document.getElementById('sellerEmail');
-        const otpCodeInput = document.getElementById('otpCode');
-        const sendOtpBtn = document.getElementById('sendOtpBtn');
-        const resendOtpBtn = document.getElementById('resendOtpBtn');
-        const emailStatus = document.getElementById('emailStatus');
-        const otpStatus = document.getElementById('otpStatus');
-        const countdownEl = document.getElementById('countdown');
+        const sendLinkBtn = document.getElementById('sendLinkBtn');
+        const formStatus = document.getElementById('formStatus');
+        const actionLinkBox = document.getElementById('actionLinkBox');
+        const verifyDirectBtn = document.getElementById('verifyDirectBtn');
 
-        let activeEmail = '';
-        let timerInterval = null;
+        // ফেক বা টেম্পোরারি মেইল ব্লকার ফাংশন
+        function isAuthenticEmail(email) {
+            const blockedDomains = ['tempmail', '10minutemail', 'throwaway', 'mailinator', 'yopmail', 'disposable', 'trashmail'];
+            const domain = email.split('@')[1];
+            if (!domain) return false;
+            for (let b of blockedDomains) {
+                if (domain.includes(b)) return false;
+            }
+            return true;
+        }
 
         function showStatus(element, message, isError = false) {
             element.innerText = message;
@@ -249,123 +269,49 @@
             element.style.display = 'block';
         }
 
-        function startTimer(durationSeconds) {
-            clearInterval(timerInterval);
-            let timer = durationSeconds;
-            resendOtpBtn.disabled = true;
-
-            timerInterval = setInterval(() => {
-                const minutes = Math.floor(timer / 60);
-                const seconds = timer % 60;
-                countdownEl.innerText = `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-
-                if (--timer < 0) {
-                    clearInterval(timerInterval);
-                    countdownEl.innerText = "EXPIRED";
-                    resendOtpBtn.disabled = false;
-                }
-            }, 1000);
-        }
-
-        emailStepForm.addEventListener('submit', async (e) => {
+        magicLinkForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            activeEmail = sellerEmailInput.value.trim().toLowerCase();
+            const email = sellerEmailInput.value.trim().toLowerCase();
 
-            if (!activeEmail) return;
+            if (!email) return;
 
-            sendOtpBtn.disabled = true;
-            sendOtpBtn.innerText = "SENDING...";
-            emailStatus.style.display = 'none';
+            if (!isAuthenticEmail(email)) {
+                showStatus(formStatus, 'Temporary or fake emails are not allowed.', true);
+                return;
+            }
+
+            sendLinkBtn.disabled = true;
+            sendLinkBtn.innerText = "VERIFYING...";
+            formStatus.style.display = 'none';
+            actionLinkBox.style.display = 'none';
 
             try {
-                const response = await fetch(`${WORKER_URL}/send-otp`, {
+                const response = await fetch(`${WORKER_URL}/api/send-magic-link`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: activeEmail })
+                    body: JSON.stringify({ email: email })
                 });
 
                 const data = await response.json();
 
                 if (response.ok && data.success) {
-                    emailStepForm.style.display = 'none';
-                    otpStepForm.style.display = 'flex';
-                    showStatus(otpStatus, 'Verification code sent to your email!', false);
-                    startTimer(180);
-                    otpCodeInput.focus();
-                } else {
-                    showStatus(emailStatus, data.error || 'Failed to send OTP. Try again.', true);
-                }
-            } catch (err) {
-                showStatus(emailStatus, 'Network error! Please check connection.', true);
-            } finally {
-                sendOtpBtn.disabled = false;
-                sendOtpBtn.innerText = "GET CODE";
-            }
-        });
-
-        // অটো-ভেরিফাই (৬ ডিজিট পূর্ণ হওয়ার সাথে সাথে)
-        otpCodeInput.addEventListener('input', async (e) => {
-            const otpCode = e.target.value.trim();
-            
-            if (otpCode.length === 6) {
-                otpCodeInput.disabled = true;
-                otpStatus.style.display = 'none';
-
-                try {
-                    const response = await fetch(`${WORKER_URL}/verify-otp`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ email: activeEmail, otp: otpCode })
-                    });
-
-                    const data = await response.json();
-
-                    if (response.ok && data.verified) {
-                        localStorage.setItem('rorraxy_seller_verified', 'true');
-                        localStorage.setItem('rorraxy_seller_email', activeEmail);
-                        
-                        showStatus(otpStatus, 'Verification Successful! Redirecting...', false);
-                        setTimeout(() => {
-                            window.location.href = 'dashboard.html';
-                        }, 800);
-                    } else {
-                        showStatus(otpStatus, data.message || 'Invalid or expired code!', true);
-                        otpCodeInput.disabled = false;
-                        otpCodeInput.value = '';
-                        otpCodeInput.focus();
+                    showStatus(formStatus, 'Verified successfully! Click below:', false);
+                    
+                    if (data.magicLink) {
+                        verifyDirectBtn.href = data.magicLink;
+                        actionLinkBox.style.display = 'block';
                     }
-                } catch (err) {
-                    showStatus(otpStatus, 'Verification error! Try again.', true);
-                    otpCodeInput.disabled = false;
-                    otpCodeInput.focus();
-                }
-            }
-        });
-
-        resendOtpBtn.addEventListener('click', async () => {
-            resendOtpBtn.disabled = true;
-            showStatus(otpStatus, 'Resending code...', false);
-
-            try {
-                const response = await fetch(`${WORKER_URL}/send-otp`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: activeEmail })
-                });
-
-                const data = await response.json();
-
-                if (response.ok && data.success) {
-                    showStatus(otpStatus, 'A new code has been sent!', false);
-                    otpCodeInput.value = '';
-                    startTimer(180);
+                    
+                    sendLinkBtn.style.display = 'none';
                 } else {
-                    showStatus(otpStatus, data.error || 'Failed to resend code.', true);
-                    resendOtpBtn.disabled = false;
+                    showStatus(formStatus, data.error || 'Verification failed. Try again.', true);
+                    sendLinkBtn.disabled = false;
+                    sendLinkBtn.innerText = "CONTINUE TO DASHBOARD";
                 }
             } catch (err) {
-                showStatus(otpStatus, 'Network error!', true);
-                resendOtpBtn.disabled = false;
+                showStatus(formStatus, 'Network error! Please check connection.', true);
+                sendLinkBtn.disabled = false;
+                sendLinkBtn.innerText = "CONTINUE TO DASHBOARD";
             }
         });
     </script>
