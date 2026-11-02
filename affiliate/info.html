@@ -134,7 +134,7 @@
                         </div>
                     </div>
                 </div>
-                <button type="submit" class="action-btn"><i class="fa-solid fa-floppy-disk"></i> SAVE INFO</button>
+                <button type="submit" id="saveInfoBtn" class="action-btn"><i class="fa-solid fa-floppy-disk"></i> SAVE INFO</button>
             </form>
 
             <div class="summary-box" id="infoSummaryBox">
@@ -165,10 +165,10 @@
     </div>
 
     <nav class="affiliate-bottom-nav">
-        <a href="index.html" class="nav-item"><i class="fa-solid fa-chart-pie"></i><span>DASHBOARD</span></a>
+        <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-chart-pie"></i><span>DASHBOARD</span></a>
         <a href="payout.html" class="nav-item" onclick="checkPayoutAccess(event)"><i class="fa-solid fa-hand-holding-dollar"></i><span>PAYOUT</span></a>
-        <a href="report.html" class="nav-item"><i class="fa-solid fa-chart-column"></i><span>REPORT</span></a>
-        <a href="link.html" class="nav-item"><i class="fa-solid fa-link"></i><span>LINK</span></a>
+        <a href="reports.html" class="nav-item"><i class="fa-solid fa-chart-column"></i><span>REPORT</span></a>
+        <a href="links.html" class="nav-item"><i class="fa-solid fa-link"></i><span>LINK</span></a>
         <a href="info.html" class="nav-item active"><i class="fa-solid fa-user-gear"></i><span>SETTING</span></a>
     </nav>
 
@@ -200,20 +200,66 @@
             }
         });
 
-        function saveAffiliateInfo(e) {
+        // ক্লাউডফায়ার D1 ডেটাবেসে তথ্য সংরক্ষণের জন্য এপিআই ইন্টিগ্রেশন
+        async function saveAffiliateInfo(e) {
             e.preventDefault();
+            
+            const btn = document.getElementById('saveInfoBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> SAVING TO DATABASE...';
+
             const data = {
-                firstName: document.getElementById('firstName').value.trim(),
-                lastName: document.getElementById('lastName').value.trim(),
+                first_name: document.getElementById('firstName').value.trim(),
+                last_name: document.getElementById('lastName').value.trim(),
                 email: document.getElementById('email').value.trim().toLowerCase(),
                 phone: document.getElementById('phone').value.trim(),
-                promoChannel: document.getElementById('promoChannel').value.trim(),
-                paymentMethod: document.getElementById('paymentMethod').value
+                promo_channel: document.getElementById('promoChannel').value.trim(),
+                payment_method: document.getElementById('paymentMethod').value,
+                account_details: document.getElementById('bkashNumber')?.value || document.getElementById('nagadNumber')?.value || document.getElementById('bankAccountNumber')?.value || "N/A",
+                auth_provider: "email",
+                auth_id: document.getElementById('email').value.trim().toLowerCase()
             };
-            localStorage.setItem('rorraxy_affiliate_info', JSON.stringify(data));
+
+            // লোকাল স্টোরেজে ব্যাকআপ হিসেবে সংরক্ষণ
+            localStorage.setItem('rorraxy_affiliate_info', JSON.stringify({
+                firstName: data.first_name,
+                lastName: data.last_name,
+                email: data.email,
+                phone: data.phone,
+                promoChannel: data.promo_channel,
+                paymentMethod: data.payment_method
+            }));
             localStorage.setItem('rorraxy_affiliate_email', data.email);
-            showSummary(data);
-            alert('AFFILIATE INFORMATION SAVED SUCCESSFULLY!');
+
+            try {
+                // ক্লাউডফায়ার ফাংশন এপিআই কল
+                const response = await fetch('/api/affiliate?action=register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                
+                if (response.ok && result.success) {
+                    alert('AFFILIATE INFORMATION SAVED & SYNCED TO DATABASE SUCCESSFULLY!');
+                } else {
+                    alert('SAVED LOCALLY (API Notice: ' + (result.error || 'Cloud sync pending') + ')');
+                }
+            } catch (err) {
+                console.error("API Error:", err);
+                alert('AFFILIATE INFORMATION SAVED LOCALLY SUCCESSFULLY!');
+            }
+
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> SAVE INFO';
+            showSummary({
+                firstName: data.first_name,
+                lastName: data.last_name,
+                email: data.email,
+                phone: data.phone,
+                promoChannel: data.promo_channel,
+                paymentMethod: data.payment_method
+            });
         }
 
         function showSummary(data) {
