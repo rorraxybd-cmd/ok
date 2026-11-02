@@ -1,5 +1,4 @@
 export async function onRequestPost(context) {
-    // CORS হেডার যুক্ত করা যাতে যেকোনো রিকোয়েস্ট স্মুথলি কাজ করে
     const corsHeaders = {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "POST, OPTIONS",
@@ -9,12 +8,9 @@ export async function onRequestPost(context) {
 
     try {
         const { request, env } = context;
-        
-        // রিকোয়েস্ট থেকে ডাটা পার্স করা
         const data = await request.json();
         const { fullName, email, whatsapp, budget, projectDetails, country, countryCode, ipAddress } = data;
 
-        // ভ্যালিডেশন চেক
         if (!fullName || !email || !whatsapp || !budget || !projectDetails) {
             return new Response(JSON.stringify({ success: false, error: "Missing required fields" }), {
                 status: 400,
@@ -22,13 +18,13 @@ export async function onRequestPost(context) {
             });
         }
 
-        // Cloudflare D1 Database এ ডেটা ইনসার্ট করার কুয়েরি
         const query = `
             INSERT INTO project_requests (fullName, email, whatsapp, budget, projectDetails, country, countryCode, ipAddress, status)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending')
         `;
 
-        await env.DB.prepare(query)
+        // এখানে env.DB এর পরিবর্তে আপনার বাইন্ডিং নেম 'retail' ব্যবহার করা হয়েছে
+        await env.retail.prepare(query)
             .bind(
                 fullName, 
                 email, 
@@ -54,7 +50,6 @@ export async function onRequestPost(context) {
     }
 }
 
-// OPTIONS মেথড হ্যান্ডেল করার জন্য (CORS প্রিফ্লাইট রিকোয়েস্ট)
 export async function onRequestOptions() {
     return new Response(null, {
         status: 204,
