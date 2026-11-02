@@ -206,7 +206,7 @@
 </head>
 <body>
 
-    <!-- যদি ইতিমধ্যে ভেরিফাই করা থাকে তবে সরাসরি ড্যাশবোর্ডে পাঠিয়ে দেবে -->
+    <!-- সেলার ইতিমধ্যে ভেরিফাই করা থাকলে সরাসরি সেলার ড্যাশবোর্ডে যাবে -->
     <script>
         if (localStorage.getItem('rorraxy_seller_verified') === 'true') {
             window.location.replace('dashboard.html');
@@ -284,7 +284,11 @@
             actionLinkBox.style.display = 'none';
 
             try {
-                const response = await fetch(`${WORKER_URL}/api/send-magic-link`, {
+                const response = __await ? await fetch(`${WORKER_URL}/api/send-magic-link`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email })
+                }) : await fetch(`${WORKER_URL}/api/send-magic-link`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email: email })
@@ -292,9 +296,10 @@
 
                 const data = await response.json();
 
-                // সফল হলে লোকালস্টোরেজে টোকেন ও ইমেল সেভ করে ড্যাশবোর্ডে যাওয়ার বাটন এনে দেব
                 if (response.ok) {
+                    // শুধুমাত্র সেলারের নিজস্ব কি (Key) দিয়ে স্টোরেজ আপডেট হবে
                     localStorage.setItem('rorraxy_seller_verified', 'true');
+                    localStorage.setItem('rorraxy_seller_email', email);
                     
                     let profile = JSON.parse(localStorage.getItem('rorraxy_seller_profile') || '{}');
                     profile.businessEmail = email;
@@ -302,7 +307,6 @@
 
                     showStatus(formStatus, 'Verified successfully! Click below:', false);
                     
-                    // যদি ব্যাকএন্ড থেকে আলাদা কোনো ম্যাজিক লিংক দেয় সেটা সেট হবে, নতুবা সরাসরি dashboard.html এ যাবে
                     if (data && data.magicLink) {
                         verifyDirectBtn.href = data.magicLink;
                     } else {
@@ -317,8 +321,9 @@
                     sendLinkBtn.innerText = "CONTINUE TO DASHBOARD";
                 }
             } catch (err) {
-                // নেটওয়ার্ক ফেইল করলে বা অফলাইন মোডেও যেন ইউজার আটকে না যায়, তাই লোকাল ভেরিফাই করে ড্যাশবোর্ড বাটন ওপেন করে দেওয়া হবে
                 localStorage.setItem('rorraxy_seller_verified', 'true');
+                localStorage.setItem('rorraxy_seller_email', email);
+                
                 let profile = JSON.parse(localStorage.getItem('rorraxy_seller_profile') || '{}');
                 profile.businessEmail = email;
                 localStorage.setItem('rorraxy_seller_profile', JSON.stringify(profile));
