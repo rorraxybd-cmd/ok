@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>rorraxy - Wholesale Account & Order Tracking</title>
 
-    <!-- সেন্ট্রাল স্ক্রিপ্ট ট্যাগ -->
     <script src="/ecosystem-core.js"></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,21 +12,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- পার্টিকেল ও অ্যানিমেশন লাইব্রেরি -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
         :root {
             --bg-body: #000000;
-            --card-bg: #08080c;
-            --border-color: rgba(212, 175, 55, 0.35);
+            --card-bg: #07070a;
             --gold-color: #d4af37;
             --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
             --text-main: #ffffff;
             --text-muted: #a0a0b8;
             --font-family: 'Plus Jakarta Sans', sans-serif;
             --accent-green: #00e676;
-            --danger-red: #ff3b30;
         }
 
         * {
@@ -47,32 +44,29 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
-            padding: 16px 16px 90px 16px;
+            justify-content: space-between;
+            padding: 20px 12px 20px 12px;
             text-transform: uppercase !important;
             -webkit-font-smoothing: antialiased;
         }
 
         #confetti-canvas {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
             pointer-events: none;
             z-index: 99999;
         }
 
         .account-container {
             width: 100%;
-            max-width: 900px;
+            max-width: 420px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            gap: 16px;
+            gap: 14px;
             animation: luxurySlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            margin-top: 10px;
+            margin: auto 0;
         }
 
         @keyframes luxurySlideUp {
@@ -80,27 +74,155 @@
             to { opacity: 1; transform: scale(1); }
         }
 
-        /* Search Header Bar */
-        .search-tracking-box {
+        .empty-orders-screen {
             width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 30px 20px;
+            gap: 20px;
+        }
+
+        .shop-now-btn {
+            background: var(--gold-gradient);
+            color: #000;
+            font-weight: 900;
+            font-size: 0.85rem;
+            padding: 12px 35px;
+            border-radius: 25px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+        }
+
+        /* MEMO & PREVIEW CARD */
+        .memo-preview-card {
             background: var(--card-bg);
-            border: 1px solid rgba(212, 175, 55, 0.25);
+            border: 1px solid rgba(212, 175, 55, 0.2);
             border-radius: 16px;
-            padding: 12px 16px;
+            padding: 18px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .memo-top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding-bottom: 10px;
+        }
+
+        .download-pdf-btn {
+            background: var(--gold-gradient);
+            color: #000;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 22px;
+            font-size: 0.74rem;
+            font-weight: 900;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25);
+        }
+        .download-pdf-btn:active { transform: scale(0.96); }
+
+        .memo-details-grid {
+            background: #030305;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+        .memo-details-grid span { color: #fff; font-weight: 700; }
+
+        .memo-items-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.7rem;
+            margin-top: 2px;
+        }
+        .memo-items-table th, .memo-items-table td {
+            padding: 8px 6px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .memo-items-table th {
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+            font-size: 0.68rem;
+            letter-spacing: 0.5px;
+        }
+
+        .memo-total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            font-weight: 900;
+            color: var(--gold-color);
+            border-top: 1px solid rgba(212, 175, 55, 0.12);
+            padding-top: 8px;
+            margin-top: 2px;
+        }
+
+        .section-title {
+            font-size: 0.72rem;
+            font-weight: 800;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 0.6px;
             display: flex;
             align-items: center;
-            gap: 10px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8);
+            gap: 6px;
+        }
+
+        /* BOTTOM SEARCH & HOME BAR */
+        .bottom-nav-bar {
+            width: 100%;
+            max-width: 420px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .search-tracking-box {
+            flex: 1;
+            background: var(--card-bg);
+            border: 1px solid rgba(212, 175, 55, 0.12);
+            border-radius: 12px;
+            padding: 6px 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .search-input-field {
             flex: 1;
-            background: #040407;
-            border: 1px solid rgba(212, 175, 55, 0.15);
-            border-radius: 12px;
-            padding: 10px 14px;
+            background: #030305;
+            border: 1px solid rgba(212, 175, 55, 0.06);
+            border-radius: 8px;
+            padding: 8px 12px;
             color: #fff;
-            font-size: 0.78rem;
+            font-size: 0.7rem;
             outline: none;
             font-family: var(--font-family);
         }
@@ -111,379 +233,27 @@
             border: none;
             color: #000;
             font-weight: 900;
-            font-size: 0.75rem;
-            padding: 10px 18px;
-            border-radius: 12px;
+            font-size: 0.7rem;
+            padding: 8px 12px;
+            border-radius: 8px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
             white-space: nowrap;
         }
 
-        .empty-orders-screen {
-            width: 100%;
+        .home-icon-btn {
+            background: var(--card-bg);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            color: var(--gold-color);
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            text-align: center;
-            padding: 50px 20px;
-            gap: 24px;
-        }
-
-        .top-brand-logo {
-            width: 140px;
-            height: auto;
-            object-fit: contain;
-            filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.6));
-            animation: logoLuxuryGlow 3s infinite alternate ease-in-out;
-        }
-
-        @keyframes logoLuxuryGlow {
-            0% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.4)); }
-            100% { transform: scale(1.05); filter: drop-shadow(0 0 35px rgba(212, 175, 55, 0.85)); }
-        }
-
-        .mode-status-badge {
-            background: rgba(212, 175, 55, 0.1);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            border-radius: 20px;
-            padding: 6px 16px;
-            font-size: 0.68rem;
-            font-weight: 800;
-            color: var(--gold-color);
-            letter-spacing: 1px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .shop-now-btn {
-            background: var(--gold-gradient);
-            color: #000;
-            font-weight: 900;
-            font-size: 0.85rem;
-            padding: 12px 35px;
-            border-radius: 30px;
             text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 8px 30px rgba(212, 175, 55, 0.4);
-            border: none;
-            cursor: pointer;
-        }
-
-        .order-summary-banner {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 16px 18px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8);
-            border: 1px solid rgba(212,175,55,0.2);
-            width: 100%;
-        }
-
-        .order-meta {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .order-meta .main-id {
-            font-size: 0.90rem;
-            font-weight: 800;
-            color: #fff;
-            letter-spacing: 0.5px;
-        }
-
-        .download-memo-btn {
-            background: var(--gold-gradient);
-            color: #000;
-            border: none;
-            padding: 10px 18px;
-            border-radius: 20px;
-            font-size: 0.72rem;
-            font-weight: 900;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.35);
-            transition: all 0.25s ease;
-        }
-
-        .section-title {
-            font-size: 0.80rem;
-            font-weight: 800;
-            background: var(--gold-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: 0.8px;
-            margin-top: 4px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            width: 100%;
-        }
-
-        .product-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            width: 100%;
-        }
-
-        .product-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 18px;
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .product-card-top {
-            display: flex;
-            gap: 14px;
-            align-items: center;
-        }
-
-        .product-img {
-            width: 70px;
-            height: 70px;
-            border-radius: 12px;
-            object-fit: cover;
-            background: #040407;
-            border: 1px solid rgba(212,175,55,0.15);
-        }
-
-        .product-info {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            flex: 1;
-        }
-
-        .product-title {
-            font-size: 0.85rem;
-            font-weight: 800;
-            color: #fff;
-            line-height: 1.3;
-        }
-
-        .product-specs {
-            font-size: 0.65rem;
-            color: var(--text-muted);
-            display: flex;
-            gap: 12px;
-            font-weight: 600;
-        }
-
-        .product-price {
-            font-size: 0.90rem;
-            font-weight: 900;
-            color: var(--gold-color);
-        }
-
-        .seller-info-strip {
-            background: #040407;
-            border-radius: 10px;
-            padding: 10px 14px;
-            font-size: 0.68rem;
-            color: var(--text-muted);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid rgba(255,255,255,0.03);
-        }
-
-        .card-details-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-            gap: 8px;
-            background: #040407;
-            padding: 12px;
-            border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.03);
-        }
-
-        .detail-item {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .detail-item label {
-            font-size: 0.58rem;
-            color: var(--text-muted);
-            font-weight: 700;
-        }
-
-        .detail-item span {
-            font-size: 0.72rem;
-            font-weight: 800;
-            color: #fff;
-        }
-
-        .product-card-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 8px;
-            border-top: 1px solid rgba(255,255,255,0.06);
-            padding-top: 10px;
-        }
-
-        .chat-seller-btn {
-            background: var(--gold-gradient);
-            color: #000;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.68rem;
-            font-weight: 800;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25);
-        }
-
-        /* SELLER CHAT MODAL */
-        .chat-modal-backdrop {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.88);
-            backdrop-filter: blur(8px);
-            z-index: 999999;
-            align-items: center;
-            justify-content: center;
-            padding: 12px;
-        }
-        .chat-modal-card {
-            background: var(--card-bg);
-            border: 1px solid rgba(212,175,55,0.3);
-            border-radius: 18px;
-            width: 100%;
-            max-width: 440px;
-            display: flex;
-            flex-direction: column;
-            height: 480px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.9);
-            overflow: hidden;
-        }
-        .chat-header {
-            background: #040407;
-            padding: 14px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(212,175,55,0.2);
-        }
-        .chat-body {
-            flex: 1;
-            padding: 14px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            font-size: 0.75rem;
-            text-transform: none !important;
-        }
-        .chat-msg {
-            max-width: 80%;
-            padding: 10px 12px;
-            border-radius: 12px;
-            line-height: 1.4;
-        }
-        .chat-msg.seller { background: #14141e; align-self: flex-start; color: #fff; border: 1px solid rgba(255,255,255,0.06); }
-        .chat-msg.customer { background: var(--gold-gradient); color: #000; align-self: flex-end; font-weight: 700; }
-        .chat-footer {
-            padding: 12px;
-            background: #040407;
-            display: flex;
-            gap: 8px;
-            border-top: 1px solid rgba(255,255,255,0.06);
-        }
-        .chat-input {
-            flex: 1;
-            background: #12121a;
-            border: 1px solid rgba(212,175,55,0.2);
-            border-radius: 10px;
-            padding: 10px;
-            color: #fff;
-            font-size: 0.75rem;
-            outline: none;
-            text-transform: none !important;
-        }
-        .chat-send-btn {
-            background: var(--gold-gradient);
-            border: none;
-            color: #000;
-            font-weight: 900;
-            padding: 0 16px;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-
-        /* MEMO MODAL */
-        .memo-modal-backdrop {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.92);
-            backdrop-filter: blur(10px);
-            z-index: 99999;
-            align-items: center;
-            justify-content: center;
-            padding: 12px;
-        }
-        .memo-modal-card {
-            background: #08080c;
-            color: #ffffff;
-            width: 100%;
-            max-width: 520px;
-            border-radius: 20px;
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.9);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        .memo-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            padding-bottom: 12px;
-        }
-        .memo-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.75rem;
-        }
-        .memo-table th, .memo-table td {
-            padding: 10px 4px;
-            text-align: left;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-        }
-        .memo-table th { color: var(--gold-color); font-weight: 800; }
-
-        @media print {
-            body * { visibility: hidden; }
-            .memo-modal-card, .memo-modal-card * { visibility: visible; }
-            .memo-modal-card { position: absolute; left: 0; top: 0; width: 100%; background: #000; color: #fff; }
-            .memo-actions { display: none !important; }
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            flex-shrink: 0;
         }
     </style>
 </head>
@@ -491,121 +261,43 @@
 
     <canvas id="confetti-canvas"></canvas>
 
-    <div class="account-container">
-        
-        <!-- SEARCH TRACKING BAR -->
+    <div class="account-container" id="accountDynamicContent">
+        <!-- Dynamic Content Loaded Here -->
+    </div>
+
+    <!-- BOTTOM SEARCH & HOME BAR -->
+    <div class="bottom-nav-bar">
+        <a href="/wholesale/index.html" class="home-icon-btn" title="Home">
+            <i class="fa-solid fa-house"></i>
+        </a>
         <div class="search-tracking-box">
-            <input type="text" id="orderSearchInput" class="search-input-field" placeholder="ENTER WHOLESALE MASTER ID, SUB ORDER OR TRACKING #">
+            <input type="text" id="orderSearchInput" class="search-input-field" placeholder="ENTER ORDER ID">
             <button onclick="executeOrderSearch()" class="search-submit-btn"><i class="fa-solid fa-magnifying-glass"></i> TRACK</button>
-        </div>
-
-        <div id="accountDynamicContent" style="width: 100%; display: flex; flex-direction: column; gap: 16px;">
-            <!-- Dynamic Content Loaded Here -->
-        </div>
-
-    </div>
-
-    <!-- SELLER CHAT MODAL -->
-    <div class="chat-modal-backdrop" id="chatModal">
-        <div class="chat-modal-card" onclick="event.stopPropagation();">
-            <div class="chat-header">
-                <div>
-                    <h3 style="font-size:0.85rem; font-weight:800; color:var(--gold-color);" id="chatSellerTitle">WHOLESALE VENDOR SUPPORT</h3>
-                    <p style="font-size:0.58rem; color:var(--text-muted);" id="chatOrderIdSub">ORDER: --</p>
-                </div>
-                <button onclick="closeChatModal()" style="background:none; border:none; color:#fff; font-size:1.1rem; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="chat-body" id="chatMsgContainer">
-                <div class="chat-msg seller">Hello! Welcome to rorraxy Wholesale Support. How can I assist you with your bulk order?</div>
-            </div>
-            <div class="chat-footer">
-                <input type="text" id="chatInputText" class="chat-input" placeholder="Type your message here...">
-                <button onclick="sendChatMessage()" class="chat-send-btn"><i class="fa-solid fa-paper-plane"></i></button>
-            </div>
-        </div>
-    </div>
-
-    <!-- VIP MEMO MODAL -->
-    <div class="memo-modal-backdrop" id="memoModal">
-        <div class="memo-modal-card" onclick="event.stopPropagation();">
-            <div class="memo-header">
-                <div>
-                    <h2 style="font-size:1.1rem; font-weight:900; background:var(--gold-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">RORRAXY WHOLESALE</h2>
-                    <p style="font-size:0.60rem; color:var(--text-muted);">VIP BULK DIGITAL ORDER MEMO</p>
-                </div>
-                <div style="text-align:right;">
-                    <p style="font-size:0.75rem; font-weight:900; color:#fff;" id="memoInvoiceId">#RRX-000000</p>
-                    <p style="font-size:0.60rem; color:var(--text-muted);" id="memoDate">2026-10-31</p>
-                </div>
-            </div>
-
-            <div style="font-size:0.72rem; color:var(--text-muted); line-height:1.5;">
-                <strong>CUSTOMER NAME / COMPANY:</strong> <span id="memoCustomerName" style="color:#fff;">--</span><br>
-                <strong>PHONE NUMBER:</strong> <span id="memoCustomerPhone" style="color:#fff;">--</span><br>
-                <strong>PAYMENT METHOD:</strong> <span id="memoPaymentMethod" style="color:#fff;">Card / Mobile Banking</span><br>
-                <strong>STATUS:</strong> <span id="memoStatus" style="color:var(--accent-green); font-weight:bold;">CONFIRMED</span>
-            </div>
-
-            <table class="memo-table">
-                <thead>
-                    <tr>
-                        <th>BULK PRODUCT</th>
-                        <th>QTY</th>
-                        <th>PRICE</th>
-                    </tr>
-                </thead>
-                <tbody id="memoItemsTable">
-                    <!-- Dynamic Items -->
-                </tbody>
-            </table>
-
-            <div style="display:flex; justify-content:space-between; font-weight:900; font-size:0.90rem; border-top:1px solid rgba(255,255,255,0.08); padding-top:8px; color:var(--gold-color);">
-                <span>TOTAL PAYABLE:</span>
-                <span id="memoTotalDisplay">$0.00</span>
-            </div>
-
-            <div style="background:#040407; padding:12px; border-radius:12px; text-align:center; border:1px solid rgba(212,175,55,0.15);">
-                <p style="font-size:0.65rem; color:var(--text-muted); margin-bottom:8px;">LIVE WHOLESALE FULFILLMENT TRACKING</p>
-                <a href="/wholesale/index.html" style="background:var(--gold-gradient); color:#000; text-decoration:none; padding:8px 18px; border-radius:15px; font-weight:800; font-size:0.68rem; display:inline-block; box-shadow:0 4px 15px rgba(212,175,55,0.25);">
-                    <i class="fa-solid fa-location-crosshairs"></i> RETURN TO WHOLESALE SHOP
-                </a>
-            </div>
-
-            <div class="memo-actions" style="display:flex; justify-content:flex-end; gap:10px; margin-top:8px;">
-                <button onclick="triggerDownloadAnimation()" class="download-memo-btn" style="padding:8px 16px; font-size:0.72rem;">
-                    <i class="fa-solid fa-file-pdf"></i> PRINT / SAVE PDF
-                </button>
-                <button onclick="closeMemoModal()" style="background:#222; color:#fff; border:none; padding:8px 16px; border-radius:20px; font-weight:800; cursor:pointer; font-size:0.72rem;">CLOSE</button>
-            </div>
         </div>
     </div>
 
     <script>
-        // ডাইরেক্ট ক্লাউডফ্লেয়ার পেজ ফাংশন কানেকশন
-        const API_BASE_URL = '';
+        const API_BASE_URL = ''; 
         let currentOrderData = null;
 
         window.onload = function() {
-            triggerLuxuryPartyEffect();
             initWholesaleAccountFetch();
+            triggerConfetti();
         };
 
-        function triggerLuxuryPartyEffect() {
+        function triggerConfetti() {
             try {
-                var myCanvas = document.getElementById('confetti-canvas');
-                var myConfetti = confetti.create(myCanvas, { resize: true, useWorker: true });
-                myConfetti({
-                    particleCount: 60,
+                confetti({
+                    particleCount: 75,
                     spread: 70,
                     origin: { y: 0.5 },
-                    colors: ['#bf953f', '#fcf6ba', '#b38728', '#ffffff']
+                    colors: ['#d4af37', '#fcf6ba', '#b38728', '#ffffff']
                 });
-            } catch(e) { console.error(e); }
+            } catch(e) {}
         }
 
         async function initWholesaleAccountFetch() {
-            const lastOrderRaw = localStorage.getItem('rorraxy_last_order');
-
+            const lastOrderRaw = localStorage.getItem('rorraxy_wholesale_last_order');
             if (lastOrderRaw) {
                 try {
                     currentOrderData = JSON.parse(lastOrderRaw);
@@ -625,7 +317,6 @@
                     renderEmptyOrdersUI();
                 }
             } catch(err) {
-                console.warn("Cloudflare D1 Wholesale Order Fetch Error:", err);
                 renderEmptyOrdersUI();
             }
         }
@@ -644,20 +335,19 @@
                 if (result.success && Array.isArray(result.data)) {
                     let found = result.data.find(o => 
                         (o.master_order_id && o.master_order_id.toLowerCase().includes(query.toLowerCase())) ||
-                        (o.id && String(o.id).includes(query)) ||
-                        (o.items && o.items.some(i => (i.orderId && i.orderId.toLowerCase().includes(query.toLowerCase())) || (i.trackingId && i.trackingId.toLowerCase().includes(query.toLowerCase()))))
+                        (o.customer_phone && o.customer_phone.includes(query)) ||
+                        (o.id && String(o.id).includes(query))
                     );
 
                     if (found) {
                         currentOrderData = found;
                         renderOrdersUI(currentOrderData);
                     } else {
-                        alert("No wholesale order found matching your query ID!");
+                        alert("No wholesale order found matching your search query!");
                     }
                 }
             } catch(e) {
-                console.error("Search error:", e);
-                alert("Error searching wholesale orders from database.");
+                alert("Error searching database.");
             }
         }
 
@@ -665,13 +355,8 @@
             const container = document.getElementById('accountDynamicContent');
             container.innerHTML = `
                 <div class="empty-orders-screen">
-                    <img src="https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png" class="top-brand-logo" alt="rorraxy Logo">
-                    <div class="mode-status-badge">
-                        <i class="fa-solid fa-circle-check"></i> ACTIVE CHANNEL: WHOLESALE
-                    </div>
-                    <p style="font-size:0.75rem; color:var(--text-muted);">NO ACTIVE WHOLESALE ORDERS FOUND</p>
                     <button onclick="window.location.href='/wholesale/index.html'" class="shop-now-btn">
-                        <i class="fa-solid fa-boxes-stacked"></i> START BULK SHOPPING
+                        <i class="fa-solid fa-bag-shopping"></i> START WHOLESALE SHOPPING
                     </button>
                 </div>
             `;
@@ -680,166 +365,98 @@
         function renderOrdersUI(orderData) {
             const container = document.getElementById('accountDynamicContent');
             const items = orderData.items || [];
-            const mainOrderId = orderData.master_order_id || orderData.mainOrderId || orderData.id || 'RRX-WHOLE-' + Math.floor(100000 + Math.random() * 900000);
-            const orderTime = orderData.created_at ? new Date(orderData.created_at).toLocaleString() : new Date().toLocaleString();
+            const mainOrderId = orderData.master_order_id || orderData.id || 'RRX-WHOLE-' + Math.floor(100000 + Math.random() * 900000);
+            const customerName = orderData.customer_name || 'Valued Partner';
+            const customerPhone = orderData.customer_phone || 'N/A';
+            const paymentMethod = orderData.payment_method || 'Online Gateway';
+            const orderDate = orderData.created_at ? new Date(orderData.created_at).toLocaleDateString() : '2026';
 
-            let html = `
-                <div class="order-summary-banner">
-                    <div class="order-meta">
-                        <span class="main-id"><i class="fa-solid fa-boxes-stacked" style="color:var(--gold-color);"></i> WHOLESALE ORDER ID: ${mainOrderId}</span>
-                        <span style="font-size:0.68rem; color:var(--text-muted);"><i class="fa-regular fa-clock"></i> ${orderTime} | ${orderData.payment_method || orderData.paymentMethod || 'Online Payment'}</span>
-                    </div>
-                    <button onclick="event.stopPropagation(); openMemoModal();" class="download-memo-btn">
-                        <i class="fa-solid fa-file-arrow-down"></i> VIEW / DOWNLOAD MEMO
-                    </button>
-                </div>
-
-                <div class="section-title">
-                    <i class="fa-solid fa-truck-fast"></i> BULK ORDER ITEM TRACKING (${items.length})
-                </div>
-
-                <div class="product-grid">
-            `;
-
-            items.forEach((item, index) => {
-                const itemOrderId = item.orderId || `${mainOrderId}-${index + 1}`;
-                const itemTrackingId = item.trackingId || `TRK-${Math.floor(10000000 + Math.random() * 90000000)}`;
-                const sellerName = item.sellerName || item.sellerId || 'rorraxy Wholesale Vendor';
-                const title = item.title || item.product_title || 'Wholesale Bulk Item';
-                const price = item.price ? (typeof item.price === 'number' ? `$${item.price.toFixed(2)}` : item.price) : '$0.00';
-                const qty = item.qty || 1;
-                const size = item.size || 'Bulk Spec';
-                const image = item.img || item.image_url || item.imageUrl || 'https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png';
-
-                html += `
-                    <div class="product-card" onclick="event.stopPropagation();">
-                        <div class="product-card-top">
-                            <img src="${image}" class="product-img" alt="${title}" onerror="this.src='https://pub-508ef1e45bab487aadde85a1dba202c4.r2.dev/rorraxyfree/mr%20masudar%20logo%20(3).png';">
-                            <div class="product-info">
-                                <span class="product-title">${title}</span>
-                                <div class="product-specs">
-                                    <span>QTY: ${qty}</span>
-                                    <span>SPEC: ${size}</span>
-                                </div>
-                                <span class="product-price">${price}</span>
-                            </div>
-                        </div>
-
-                        <div class="seller-info-strip">
-                            <span><i class="fa-solid fa-store" style="color:var(--gold-color);"></i> SELLER: <strong>${sellerName}</strong></span>
-                            <span><i class="fa-solid fa-shield" style="color:var(--accent-green);"></i> VERIFIED BULK VENDOR</span>
-                        </div>
-
-                        <div class="card-details-grid">
-                            <div class="detail-item">
-                                <label>ITEM ORDER ID</label>
-                                <span>${itemOrderId}</span>
-                            </div>
-                            <div class="detail-item">
-                                <label>TRACKING NUMBER</label>
-                                <span style="color:var(--gold-color);">${itemTrackingId}</span>
-                            </div>
-                            <div class="detail-item">
-                                <label>STATUS</label>
-                                <span style="color:var(--accent-green);"><i class="fa-solid fa-circle-dot" style="font-size:0.5rem;"></i> PROCESSING</span>
-                            </div>
-                        </div>
-
-                        <div class="product-card-actions">
-                            <button class="chat-seller-btn" onclick="openSellerChat('${sellerName}', '${itemOrderId}')">
-                                <i class="fa-solid fa-comments"></i> CHAT WITH SELLER
-                            </button>
-                            <a href="/wholesale/index.html" style="font-size:0.68rem; color:var(--text-muted); text-decoration:none; font-weight:800;">
-                                LIVE TRACKING <i class="fa-solid fa-chevron-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                `;
-            });
-
-            html += `</div>`;
-            container.innerHTML = html;
-        }
-
-        // Live Chat Modal Functions
-        function openSellerChat(seller, orderId) {
-            document.getElementById('chatSellerTitle').innerText = seller;
-            document.getElementById('chatOrderIdSub').innerText = `ORDER: ${orderId}`;
-            document.getElementById('chatModal').style.display = 'flex';
-        }
-
-        function closeChatModal() {
-            document.getElementById('chatModal').style.display = 'none';
-        }
-
-        function sendChatMessage() {
-            let input = document.getElementById('chatInputText');
-            let text = input.value.trim();
-            if(!text) return;
-
-            let container = document.getElementById('chatMsgContainer');
-            container.innerHTML += `<div class="chat-msg customer">${text}</div>`;
-            input.value = '';
-            container.scrollTop = container.scrollHeight;
-
-            setTimeout(() => {
-                container.innerHTML += `<div class="chat-msg seller">Thank you for your bulk inquiry. Our wholesale support representative will address your shipment requirements shortly.</div>`;
-                container.scrollTop = container.scrollHeight;
-            }, 1000);
-        }
-
-        function openMemoModal() {
-            if(!currentOrderData) return;
-
-            document.getElementById('memoInvoiceId').innerText = `#${currentOrderData.master_order_id || currentOrderData.mainOrderId || currentOrderData.id || 'RRX-000000'}`;
-            document.getElementById('memoDate').innerText = new Date().toLocaleDateString();
-            document.getElementById('memoPaymentMethod').innerText = currentOrderData.payment_method || currentOrderData.paymentMethod || 'Online Payment';
-
-            if(currentOrderData.customer) {
-                document.getElementById('memoCustomerName').innerText = currentOrderData.customer.fullName || 'Valued Company';
-                document.getElementById('memoCustomerPhone').innerText = currentOrderData.customer.phone || 'N/A';
-            } else {
-                document.getElementById('memoCustomerName').innerText = currentOrderData.customer_name || 'Valued Company';
-                document.getElementById('memoCustomerPhone').innerText = currentOrderData.customer_phone || 'N/A';
-            }
-
+            let itemsTableHtml = '';
             let totalAmt = 0;
-            let tbodyHtml = '';
 
-            (currentOrderData.items || []).forEach(item => {
-                let itemPriceNum = parseFloat(String(item.price).replace('$', '')) || 0;
+            items.forEach((item) => {
+                let itemPriceNum = parseFloat(String(item.price || '0').replace('$', '')) || 0;
                 let itemTotal = itemPriceNum * (item.qty || 1);
                 totalAmt += itemTotal;
-                tbodyHtml += `
+                let title = item.title || item.product_title || 'Wholesale Product';
+
+                itemsTableHtml += `
                     <tr>
-                        <td>${item.title || item.product_title || 'Wholesale Bulk Item'}</td>
-                        <td>${item.qty || 1}</td>
-                        <td style="color:var(--gold-color); font-weight:800;">$${itemPriceNum.toFixed(2)}</td>
+                        <td style="font-size:0.7rem; font-weight:700; color:#fff;">${title}</td>
+                        <td style="text-align:center; font-weight:700;">${item.qty || 1}</td>
+                        <td style="text-align:right; color:var(--gold-color); font-weight:900;">$${itemTotal.toFixed(2)}</td>
                     </tr>
                 `;
             });
 
-            document.getElementById('memoItemsTable').innerHTML = tbodyHtml;
-            document.getElementById('memoTotalDisplay').innerText = `$${currentOrderData.total_amount || totalAmt.toFixed(2)} USD`;
+            let finalTotal = orderData.total_amount ? parseFloat(orderData.total_amount).toFixed(2) : totalAmt.toFixed(2);
 
-            document.getElementById('memoModal').style.display = 'flex';
+            container.innerHTML = `
+                <div class="section-title">
+                    <i class="fa-solid fa-file-invoice"></i> WHOLESALE ORDER MEMO
+                </div>
+
+                <div class="memo-preview-card" id="printableMemoArea">
+                    <div class="memo-top-row">
+                        <div>
+                            <h2 style="font-size:0.85rem; font-weight:900; background:var(--gold-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">RORRAXY WHOLESALE</h2>
+                            <p style="font-size:0.48rem; color:var(--text-muted);">DIGITAL B2B MEMO</p>
+                        </div>
+                        <div style="text-align:right;">
+                            <p style="font-size:0.68rem; font-weight:900; color:#fff;">#${mainOrderId}</p>
+                            <p style="font-size:0.48rem; color:var(--text-muted);">${orderDate}</p>
+                        </div>
+                    </div>
+
+                    <div class="memo-details-grid">
+                        <strong>PARTNER NAME:</strong> <span>${customerName}</span><br>
+                        <strong>PHONE / WHATSAPP:</strong> <span>${customerPhone}</span><br>
+                        <strong>PAYMENT METHOD:</strong> <span>${paymentMethod}</span><br>
+                        <strong>ORDER STATUS:</strong> <span style="color:var(--accent-green);">CONFIRMED & FULFILLED</span>
+                    </div>
+
+                    <table class="memo-items-table">
+                        <thead>
+                            <tr>
+                                <th>PRODUCT ITEM</th>
+                                <th style="text-align:center;">QTY</th>
+                                <th style="text-align:right;">AMOUNT</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${itemsTableHtml}
+                        </tbody>
+                    </table>
+
+                    <div class="memo-total-row">
+                        <span>TOTAL PAYABLE:</span>
+                        <span>$${finalTotal} USD</span>
+                    </div>
+                </div>
+
+                <div style="width:100%;">
+                    <button onclick="downloadMemoAsPDF('${mainOrderId}')" class="download-pdf-btn">
+                        <i class="fa-solid fa-file-arrow-down"></i> DOWNLOAD MEMO PDF
+                    </button>
+                </div>
+            `;
         }
 
-        function closeMemoModal() {
-            document.getElementById('memoModal').style.display = 'none';
-        }
+        function downloadMemoAsPDF(orderId) {
+            const element = document.getElementById('printableMemoArea');
+            const options = {
+                margin:       10,
+                filename:     `rorraxy-wholesale-memo-${orderId}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, logging: false },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
 
-        function triggerDownloadAnimation() {
-            try {
-                confetti({
-                    particleCount: 40,
-                    spread: 50,
-                    origin: { y: 0.8 }
-                });
-            } catch(e) {}
-            setTimeout(() => {
-                window.print();
-            }, 300);
+            html2pdf().from(element).set(options).save().then(() => {
+                setTimeout(() => {
+                    window.location.href = '/wholesale/index.html';
+                }, 1000);
+            });
         }
     </script>
 </body>
