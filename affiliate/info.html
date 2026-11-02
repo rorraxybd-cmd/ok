@@ -50,6 +50,7 @@
 
         .form-control, .form-select { width: 100%; background: #000000; border: none; border-radius: 12px; padding: 12px 14px; color: var(--text-white); font-size: 0.78rem; outline: none; font-family: var(--font-main); text-transform: none; box-shadow: inset 0 2px 4px rgba(0,0,0,0.8); }
         .form-control:focus, .form-select:focus { background: #030305; }
+        .form-control[readonly] { color: var(--gold-solid); cursor: not-allowed; opacity: 0.85; }
         .form-select option { background: #08080c; color: #fff; }
 
         .dynamic-payment-container { grid-column: span 2; display: flex; flex-direction: column; gap: 10px; background: #000000; padding: 14px; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: inset 0 2px 4px rgba(0,0,0,0.8); }
@@ -64,12 +65,6 @@
         .summary-row span:first-child { color: var(--text-gray); font-weight: 600; }
         .summary-row span:last-child { color: var(--text-white); font-weight: 700; }
         .edit-badge { color: #ff2a85; cursor: pointer; font-weight: 700; font-size: 0.70rem; display: inline-flex; align-items: center; gap: 4px; }
-
-        .security-box { display: flex; flex-direction: column; gap: 10px; text-align: center; }
-        .security-desc { font-size: 0.70rem; color: var(--text-gray); text-transform: none; margin-bottom: 4px; }
-        .status-alert { font-size: 0.72rem; padding: 8px 10px; border-radius: 8px; display: none; text-transform: none; }
-        .status-alert.error { background: rgba(255, 77, 77, 0.15); border: 1px solid #ff4d4d; color: #ff4d4d; }
-        .status-alert.success { background: rgba(34, 197, 94, 0.15); border: 1px solid #22c55e; color: #22c55e; }
 
         .affiliate-bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(3, 3, 5, 0.95); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; align-items: center; padding: 10px 6px; z-index: 1000; }
         .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; background: none; border: none; cursor: pointer; }
@@ -89,7 +84,7 @@
     <!-- সিকিউরিটি গার্ড চেক -->
     <script>
         if (localStorage.getItem('rorraxy_affiliate_verified') !== 'true') {
-            window.location.replace('index.html');
+            window.location.replace('/affiliate/index.html');
         }
     </script>
 
@@ -109,7 +104,7 @@
                 <div class="form-grid">
                     <div class="form-group"><label>FIRST NAME <span class="req-star">*</span></label><input type="text" id="firstName" class="form-control" placeholder="First Name" required style="text-transform:none;"></div>
                     <div class="form-group"><label>LAST NAME <span class="req-star">*</span></label><input type="text" id="lastName" class="form-control" placeholder="Last Name" required style="text-transform:none;"></div>
-                    <div class="form-group"><label>EMAIL <span class="req-star">*</span></label><input type="email" id="email" class="form-control" placeholder="name@gmail.com" required style="text-transform:none;"></div>
+                    <div class="form-group"><label>EMAIL (AUTOMATIC) <span class="req-star">*</span></label><input type="email" id="email" class="form-control" readonly style="text-transform:none;"></div>
                     <div class="form-group"><label>PHONE / WHATSAPP <span class="req-star">*</span></label><input type="tel" id="phone" class="form-control" placeholder="+8801700000000" required style="text-transform:none;"></div>
                     <div class="form-group full-width"><label>PROMO CHANNEL <span class="req-star">*</span></label><input type="text" id="promoChannel" class="form-control" placeholder="YouTube, Facebook or Website URL" required style="text-transform:none;"></div>
                     
@@ -148,28 +143,14 @@
                 </div>
             </div>
         </div>
-
-        <div class="sector-card">
-            <div class="section-title"><i class="fa-solid fa-shield-halved"></i> 2-STEP BIOMETRIC SECURITY</div>
-            <div class="security-box">
-                <p class="security-desc">Verify your hardware biometric passkey to access payout.</p>
-                <div id="statusAlert" class="status-alert"></div>
-                <button type="button" class="action-btn" onclick="registerAffiliatePasskey()" style="background: rgba(255,42,133,0.12); border:1px solid var(--border-color); color:#ff2a85; box-shadow:none;">
-                    <i class="fa-solid fa-fingerprint"></i> <span>REGISTER PASSKEY</span>
-                </button>
-                <button type="button" class="action-btn" onclick="authenticateAffiliatePasskey()">
-                    <i class="fa-solid fa-lock-open"></i> <span>VERIFY & PAYOUT</span>
-                </button>
-            </div>
-        </div>
     </div>
 
     <nav class="affiliate-bottom-nav">
-        <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-chart-pie"></i><span>DASHBOARD</span></a>
-        <a href="payout.html" class="nav-item" onclick="checkPayoutAccess(event)"><i class="fa-solid fa-hand-holding-dollar"></i><span>PAYOUT</span></a>
-        <a href="reports.html" class="nav-item"><i class="fa-solid fa-chart-column"></i><span>REPORT</span></a>
-        <a href="links.html" class="nav-item"><i class="fa-solid fa-link"></i><span>LINK</span></a>
-        <a href="info.html" class="nav-item active"><i class="fa-solid fa-user-gear"></i><span>SETTING</span></a>
+        <a href="/affiliate/dashboard.html" class="nav-item"><i class="fa-solid fa-chart-pie"></i><span>DASHBOARD</span></a>
+        <a href="/affiliate/payout.html" class="nav-item"><i class="fa-solid fa-hand-holding-dollar"></i><span>PAYOUT</span></a>
+        <a href="/affiliate/reports.html" class="nav-item"><i class="fa-solid fa-chart-column"></i><span>REPORT</span></a>
+        <a href="/affiliate/links.html" class="nav-item"><i class="fa-solid fa-link"></i><span>LINK</span></a>
+        <a href="/affiliate/info.html" class="nav-item active"><i class="fa-solid fa-user-gear"></i><span>SETTING</span></a>
     </nav>
 
     <script>
@@ -184,13 +165,16 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
+            // অটোমেটিক ভেরিফাইড ইমেইল সেটআপ
+            const autoEmail = localStorage.getItem('rorraxy_affiliate_email') || 'affiliate@rorraxy.com';
+            document.getElementById('email').value = autoEmail;
+
             const savedInfo = localStorage.getItem('rorraxy_affiliate_info');
             if(savedInfo) {
                 try {
                     const data = JSON.parse(savedInfo);
                     document.getElementById('firstName').value = data.firstName || '';
                     document.getElementById('lastName').value = data.lastName || '';
-                    document.getElementById('email').value = data.email || '';
                     document.getElementById('phone').value = data.phone || '';
                     document.getElementById('promoChannel').value = data.promoChannel || '';
                     document.getElementById('paymentMethod').value = data.paymentMethod || '';
@@ -200,7 +184,6 @@
             }
         });
 
-        // ক্লাউডফায়ার D1 ডেটাবেসে তথ্য সংরক্ষণের জন্য এপিআই ইন্টিগ্রেশন
         async function saveAffiliateInfo(e) {
             e.preventDefault();
             
@@ -220,7 +203,7 @@
                 auth_id: document.getElementById('email').value.trim().toLowerCase()
             };
 
-            // লোকাল স্টোরেজে ব্যাকআপ হিসেবে সংরক্ষণ
+            // লোকাল স্টোরেজে সংরক্ষণ
             localStorage.setItem('rorraxy_affiliate_info', JSON.stringify({
                 firstName: data.first_name,
                 lastName: data.last_name,
@@ -229,7 +212,6 @@
                 promoChannel: data.promo_channel,
                 paymentMethod: data.payment_method
             }));
-            localStorage.setItem('rorraxy_affiliate_email', data.email);
 
             try {
                 // ক্লাউডফায়ার ফাংশন এপিআই কল
@@ -278,79 +260,6 @@
             document.getElementById('affiliateInfoForm').style.display = 'block';
             document.getElementById('infoSummaryBox').style.display = 'none';
             document.getElementById('infoCheckMark').style.display = 'none';
-        }
-
-        function showAlert(msg, isError = true) {
-            const box = document.getElementById('statusAlert');
-            box.style.display = 'block';
-            box.className = 'status-alert ' + (isError ? 'error' : 'success');
-            box.innerText = msg;
-        }
-
-        async function registerAffiliatePasskey() {
-            if (!window.PublicKeyCredential) {
-                showAlert("Passkey is not supported on this browser.");
-                return;
-            }
-            try {
-                showAlert("Activating Device Biometrics...", false);
-                const challenge = new Uint8Array(32);
-                window.crypto.getRandomValues(challenge);
-                const userId = new Uint8Array(16);
-                window.crypto.getRandomValues(userId);
-
-                const credential = await navigator.credentials.create({
-                    publicKey: {
-                        challenge: challenge,
-                        rp: { name: "rorraxy Affiliate Portal", id: window.location.hostname },
-                        user: { id: userId, name: "affiliate_" + Date.now(), displayName: "Verified Affiliate" },
-                        pubKeyCredParams: [{ alg: -7, type: "public-key" }, { alg: -257, type: "public-key" }],
-                        timeout: 60000,
-                        authenticatorSelection: { authenticatorAttachment: "platform", userVerification: "required", residentKey: "required" }
-                    }
-                });
-
-                if (credential) {
-                    localStorage.setItem('rorraxy_affiliate_passkey_enrolled', 'true');
-                    showAlert("Passkey Registered Successfully!", false);
-                }
-            } catch (error) {
-                showAlert("Registration failed: Biometric verification required.");
-            }
-        }
-
-        async function authenticateAffiliatePasskey() {
-            const isEnrolled = localStorage.getItem('rorraxy_affiliate_passkey_enrolled');
-            if (!isEnrolled) {
-                showAlert("Please click 'REGISTER PASSKEY' first.");
-                return;
-            }
-            try {
-                showAlert("Waiting for Biometric Signature...", false);
-                const challenge = new Uint8Array(32);
-                window.crypto.getRandomValues(challenge);
-
-                const assertion = await navigator.credentials.get({
-                    publicKey: { challenge: challenge, rpId: window.location.hostname, userVerification: "required" }
-                });
-
-                if (assertion) {
-                    localStorage.setItem('rorraxy_affiliate_auth_verified', 'true');
-                    showAlert("Verification Successful! Redirecting...", false);
-                    setTimeout(() => { window.location.replace('payout.html'); }, 600);
-                }
-            } catch (error) {
-                showAlert("Verification failed or cancelled.");
-            }
-        }
-
-        function checkPayoutAccess(e) {
-            const isVerified = localStorage.getItem('rorraxy_affiliate_auth_verified');
-            if (isVerified !== 'true') {
-                e.preventDefault();
-                alert('MANDATORY: PLEASE COMPLETE THE 2-STEP BIOMETRIC VERIFICATION IN SETTINGS BEFORE ACCESSING PAYOUT!');
-                window.location.href = 'info.html';
-            }
         }
     </script>
 </body>
